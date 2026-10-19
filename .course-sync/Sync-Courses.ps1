@@ -20,7 +20,7 @@ function Invoke-CourseGit([string[]]$GitArguments) {
     $savedErrorPreference = $ErrorActionPreference
     try {
         $ErrorActionPreference = 'Continue'
-        $result = @(& $gitCommand -C $RepositoryRoot -c 'http.proxy=' -c 'credential.interactive=never' @GitArguments 2>&1)
+        $result = @(& $gitCommand -C $RepositoryRoot -c 'credential.interactive=never' @GitArguments 2>&1)
         $gitExitCode = $LASTEXITCODE
     } finally { $ErrorActionPreference = $savedErrorPreference }
     if ($gitExitCode -ne 0) { throw (($GitArguments -join ' ') + ': ' + ($result -join "`n")) }

@@ -8,7 +8,7 @@
 
 1. 安装 [Git for Windows](https://git-scm.com/download/win)，并安装 GitHub Desktop 登录有本仓库写入权限的 GitHub 账号。
 2. 将本仓库克隆到本地，例如 `C:\University Courses`。如果这个目录已经有资料，先克隆到一个新的空文件夹，避免覆盖已有文件。
-3. 在新克隆的文件夹中工作。首次先用 GitHub Desktop 推送一次，确认本机已经完成 GitHub 登录并能正常推送。
+3. 在新克隆的文件夹中工作。打开 `.course-sync`，双击“首次授权.cmd”；如果弹出 GitHub 登录页面，完成登录。显示推送成功或 `Everything up-to-date` 后继续。此步骤为 Git for Windows 保存本机授权，和 GitHub Desktop 登录分别确认。
 4. 打开仓库的 `.course-sync` 文件夹，双击“启用自动同步.cmd”。每台电脑分别启用一次。
 5. 双击“立即同步.cmd”可手动同步并查看结果。
 
