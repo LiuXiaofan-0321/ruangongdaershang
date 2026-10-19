@@ -2,13 +2,15 @@
 $ErrorActionPreference = 'Stop'
 $RepositoryRoot = [IO.Path]::GetFullPath($RepositoryRoot)
 $syncScript = Join-Path $RepositoryRoot '.course-sync\Sync-Courses.ps1'
+$hiddenLauncher = Join-Path $RepositoryRoot '.course-sync\Run-Hidden.vbs'
 if (-not (Test-Path -LiteralPath $syncScript)) { throw 'Course synchronization script is missing.' }
+if (-not (Test-Path -LiteralPath $hiddenLauncher)) { throw 'Hidden synchronization launcher is missing.' }
 if (-not (Test-Path -LiteralPath (Join-Path $RepositoryRoot '.git') -PathType Container)) { throw 'Clone the course repository before installing auto sync.' }
 $taskName = 'UniversityCourses-GitHub-Sync-ruangongdaershang'
 $existingTask = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
 if ($existingTask -and $existingTask.Actions.Arguments -notlike ('*' + $syncScript + '*')) { throw 'A course sync task already points to another folder. Remove that task before switching folders.' }
-$arguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + $syncScript + '"'
-$action = New-ScheduledTaskAction -Execute (Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe') -Argument $arguments -WorkingDirectory $RepositoryRoot
+$arguments = '//B //NoLogo "' + $hiddenLauncher + '" "' + $syncScript + '"'
+$action = New-ScheduledTaskAction -Execute (Join-Path $env:SystemRoot 'System32\wscript.exe') -Argument $arguments -WorkingDirectory $RepositoryRoot
 $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent().Name
 $onLogon = New-ScheduledTaskTrigger -AtLogOn -User $currentUser
 $everyTenMinutes = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(2) -RepetitionInterval (New-TimeSpan -Minutes 10)
