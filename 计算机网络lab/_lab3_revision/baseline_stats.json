@@ -1,0 +1,86 @@
+[
+  {
+    "page": 1,
+    "last_body_y": 740.8119506835938,
+    "image_count": 0,
+    "words": 167,
+    "text_start": "华东师范大学软件学院实验报告 \n第 1 页 共 12 页 \n华东师范大学软件学院实验报告 \n \n \n一、实验目的 \n \n二、实验内容与实验步骤 \n \n三、实验环境 \n \n四、实验过程与分析 \n本次实验围绕 IPv4 协议展开，目的是通过抓取并逐字段检查真实的 IPv4 数据报，掌"
+  },
+  {
+    "page": 2,
+    "last_body_y": 657.8919677734375,
+    "image_count": 1,
+    "words": 88,
+    "text_start": "华东师范大学软件学院实验报告 \n第 2 页 共 12 页 \n项目 \n实测配置 \n操作系统 \nWindows 11 25H2（build 26200），64 位 \n抓包与分析 \nWireshark / TShark 4.6.8，Npcap 1.88 \n命令行工具 \ncurl 8.2"
+  },
+  {
+    "page": 3,
+    "last_body_y": 768.7679443359375,
+    "image_count": 2,
+    "words": 111,
+    "text_start": "华东师范大学软件学院实验报告 \n第 3 页 共 12 页 \n \n图 2  网络名称解析已启用，地址列可显示可识别的主机名（来源：同一次抓包设置） \n开始捕获后重新执行 curl，命令成功后停止捕获。原始迹线共 108 帧，包含背景流量；按 \ntcp.stream == 0 导出目"
+  },
+  {
+    "page": 4,
+    "last_body_y": 757.9679565429688,
+    "image_count": 2,
+    "words": 148,
+    "text_start": "华东师范大学软件学院实验报告 \n第 4 页 共 12 页 \n \n图 4  跟随 TCP 流的实际内容：GET / HTTP/1.1 与 HTTP/1.1 200 OK、Content-Length 2381（来源：Lab3_HTTP_target.pcapng \n第 4 帧与第 "
+  },
+  {
+    "page": 5,
+    "last_body_y": 752.2079467773438,
+    "image_count": 1,
+    "words": 99,
+    "text_start": "华东师范大学软件学院实验报告 \n第 5 页 共 12 页 \n字段 \n字节 \n长度 \n实测值 \n说明 \nHeader Checksum \n10–11 \n2 B \n0x0000 \n抓包点为网卡卸载，未填值 \nSource Address \n12–15 \n4 B \n172.31.165"
+  },
+  {
+    "page": 6,
+    "last_body_y": 631.9719848632812,
+    "image_count": 0,
+    "words": 244,
+    "text_start": "华东师范大学软件学院实验报告 \n第 6 页 共 12 页 \n5.2  必做题目二：IPv4 六道问题 \n题目原文（Step 3）：结合迹线中的 IP 包回答以下六个问题。逐题作答如下。 \n问题 1：本机与远端服务器的 IP 地址是什么？本机 WLAN 接口地址为 172.31.1"
+  },
+  {
+    "page": 7,
+    "last_body_y": 733.6119384765625,
+    "image_count": 3,
+    "words": 148,
+    "text_start": "华东师范大学软件学院实验报告 \n第 7 页 共 12 页 \n \n图 7  ICMP Time Exceeded（Type 11 / Code 0）：外层源地址 10.100.4.1，内部引用本机发往 182.61.200.108 的原始 Echo 请求\n（来源：Lab3_Path"
+  },
+  {
+    "page": 8,
+    "last_body_y": 756.7679443359375,
+    "image_count": 1,
+    "words": 113,
+    "text_start": "华东师范大学软件学院实验报告 \n第 8 页 共 12 页 \n \n图 10  到 182.61.200.108 的 Internet 路径，共 17 跳，“无应答”为 900 ms 内未收到回复（本图为依据 source_trace.json 绘制的\n示意图） \n关于组织标注的来源"
+  },
+  {
+    "page": 9,
+    "last_body_y": 703.6119995117188,
+    "image_count": 1,
+    "words": 126,
+    "text_start": "华东师范大学软件学院实验报告 \n第 9 页 共 12 页 \n把首部按 16 位切成 10 个字，用普通加法累计，并在每一步标注对应的 IPv4 字段，结果如表 \n3。 \n序号 \n16 位字 \n对应 IPv4 字段 \n累计和 \n1 \n0x4500 \nVersion、IHL、DS \n"
+  },
+  {
+    "page": 10,
+    "last_body_y": 769.1279907226562,
+    "image_count": 1,
+    "words": 135,
+    "text_start": "华东师范大学软件学院实验报告 \n第 10 页 共 12 页 \n \n图 12  19 帧的源/目的地址、Identification、TTL、IP Length、DF、MF、Offset 全列表，用于核对分片标志与标识变化（来源：\nLab3_HTTP_target.pcapng） "
+  },
+  {
+    "page": 11,
+    "last_body_y": 762.0479736328125,
+    "image_count": 0,
+    "words": 160,
+    "text_start": "华东师范大学软件学院实验报告 \n第 11 页 共 12 页 \n关于校验和：接收方向首部校验和经两次独立计算确认正确；本机方向校验和为 0 是校验和卸载造\n成的观测现象，不代表线上首部有误。 \n关于与教材的差异：结构上没有发现差异，但有一处实现层面的现象值得记住——协议规定的字段\n"
+  },
+  {
+    "page": 12,
+    "last_body_y": 149.37196350097656,
+    "image_count": 0,
+    "words": 49,
+    "text_start": "华东师范大学软件学院实验报告 \n第 12 页 共 12 页 \n[2] RFC 6864: Updated Specification for the IPv4 ID Field. https://www.rfc-editor.org/rfc/rfc6864.html（atomic"
+  }
+]

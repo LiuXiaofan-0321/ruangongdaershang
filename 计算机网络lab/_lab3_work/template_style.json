@@ -1,0 +1,143 @@
+{
+  "input": "C:\\University Courses\\\u8ba1\u7b97\u673a\u7f51\u7edclab\\_lab3_work\\template.docx",
+  "fonts_by_char_count": {},
+  "direct_run_formatting_runs": 56,
+  "direct_paragraph_formatting_paragraphs": 20,
+  "heading_like_paragraphs_not_heading_style": [
+    {
+      "para_index": 1,
+      "text": "\u534e\u4e1c\u5e08\u8303\u5927\u5b66\u8f6f\u4ef6\u5b66\u9662\u5b9e\u9a8c\u62a5\u544a",
+      "style": "Normal"
+    },
+    {
+      "para_index": 4,
+      "text": "\u4e00\u3001\u5b9e\u9a8c\u76ee\u7684",
+      "style": "Normal"
+    },
+    {
+      "para_index": 7,
+      "text": "\u4e8c\u3001\u5b9e\u9a8c\u5185\u5bb9\u4e0e\u5b9e\u9a8c\u6b65\u9aa4",
+      "style": "Normal"
+    },
+    {
+      "para_index": 10,
+      "text": "\u4e09\u3001\u5b9e\u9a8c\u73af\u5883",
+      "style": "Normal"
+    },
+    {
+      "para_index": 13,
+      "text": "\u56db\u3001\u5b9e\u9a8c\u8fc7\u7a0b\u4e0e\u5206\u6790",
+      "style": "Normal"
+    },
+    {
+      "para_index": 17,
+      "text": "\u4e94\u3001\u5b9e\u9a8c\u7ed3\u679c\u603b\u7ed3",
+      "style": "Normal"
+    },
+    {
+      "para_index": 20,
+      "text": "\u516d\u3001\u9644\u5f55",
+      "style": "Normal"
+    },
+    {
+      "para_index": 22,
+      "text": "\u5b9e\u9a8c\u8bfe\u7a0b\uff1a\u8ba1\u7b97\u673a\u7f51\u7edc",
+      "style": "Normal"
+    },
+    {
+      "para_index": 23,
+      "text": "\u5e74\u7ea7\uff1a",
+      "style": "Normal"
+    },
+    {
+      "para_index": 24,
+      "text": "\u5b9e\u9a8c\u6210\u7ee9\uff1a",
+      "style": "Normal"
+    },
+    {
+      "para_index": 26,
+      "text": "\u59d3\u540d\uff1a ",
+      "style": "Normal"
+    },
+    {
+      "para_index": 27,
+      "text": "\u5b9e\u9a8c\u65e5\u671f\uff1a",
+      "style": "Normal"
+    },
+    {
+      "para_index": 28,
+      "text": "\u5b9e\u9a8c\u7f16\u53f7\uff1a",
+      "style": "Normal"
+    },
+    {
+      "para_index": 29,
+      "text": "\u5b66\u53f7\uff1a",
+      "style": "Normal"
+    },
+    {
+      "para_index": 30,
+      "text": "\u5b9e\u9a8c\u65f6\u95f4\uff1a2\u5b66\u65f6",
+      "style": "Normal"
+    }
+  ],
+  "examples": {
+    "direct_paragraph_formatting": [
+      {
+        "para_index": 1,
+        "text": "\u534e\u4e1c\u5e08\u8303\u5927\u5b66\u8f6f\u4ef6\u5b66\u9662\u5b9e\u9a8c\u62a5\u544a",
+        "style": "Normal"
+      },
+      {
+        "para_index": 2,
+        "text": "",
+        "style": "Normal"
+      },
+      {
+        "para_index": 4,
+        "text": "\u4e00\u3001\u5b9e\u9a8c\u76ee\u7684",
+        "style": "Normal"
+      },
+      {
+        "para_index": 7,
+        "text": "\u4e8c\u3001\u5b9e\u9a8c\u5185\u5bb9\u4e0e\u5b9e\u9a8c\u6b65\u9aa4",
+        "style": "Normal"
+      },
+      {
+        "para_index": 10,
+        "text": "\u4e09\u3001\u5b9e\u9a8c\u73af\u5883",
+        "style": "Normal"
+      }
+    ],
+    "direct_run_formatting": [
+      {
+        "para_index": 1,
+        "run_text": "\u534e\u4e1c\u5e08\u8303\u5927\u5b66",
+        "style": "Normal"
+      },
+      {
+        "para_index": 1,
+        "run_text": "\u8f6f\u4ef6\u5b66\u9662",
+        "style": "Normal"
+      },
+      {
+        "para_index": 1,
+        "run_text": "\u5b9e\u9a8c\u62a5\u544a",
+        "style": "Normal"
+      },
+      {
+        "para_index": 4,
+        "run_text": "\u4e00\u3001\u5b9e\u9a8c\u76ee\u7684",
+        "style": "Normal"
+      },
+      {
+        "para_index": 5,
+        "run_text": "\u672c\u6b21\u5b9e\u9a8c\u6240\u6d89\u53ca\u5e76\u8981\u6c42\u638c\u63e1\u7684\u77e5\u8bc6\u70b9\u3002",
+        "style": "\u4e2d\u6587\u9996\u884c\u7f29\u8fdb"
+      }
+    ]
+  },
+  "notes": [
+    "Direct formatting is not always wrong, but it often causes inconsistent output when templates change.",
+    "Heading-like paragraphs not using Heading styles can break TOC and accessibility."
+  ]
+}

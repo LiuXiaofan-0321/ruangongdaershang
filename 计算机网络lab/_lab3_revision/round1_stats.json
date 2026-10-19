@@ -1,0 +1,100 @@
+[
+  {
+    "page": 1,
+    "last_body_y": 612.261962890625,
+    "image_count": 0,
+    "words": 94,
+    "text_start": "华东师范大学软件学院实验报告 \n第 1 页 共 14 页 \n华东师范大学软件学院实验报告 \nLab3 IPv4 数据报与网络路径 \n实验课程：计算机网络 \n年级：2024 级 \n实验成绩： \n实验名称: IPv4 \n姓名：刘小凡 \n实验日期：2026-10-13 \n实验编号：La"
+  },
+  {
+    "page": 2,
+    "last_body_y": 590.5419311523438,
+    "image_count": 0,
+    "words": 131,
+    "text_start": "华东师范大学软件学院实验报告 \n第 2 页 共 14 页 \n三、实验环境 \n表 1  实验环境与通信端点 \n项目 \n实测配置 \n操作系统 \nWindows 11 25H2（build 26200），64 位 \n抓包与分析 \nWireshark / TShark 4.6.8，Npc"
+  },
+  {
+    "page": 3,
+    "last_body_y": 701.3319702148438,
+    "image_count": 2,
+    "words": 106,
+    "text_start": "华东师范大学软件学院实验报告 \n第 3 页 共 14 页 \n \n图 1  抓包前的实际设置：WLAN、Ethernet、tcp port 80，混杂模式关闭。 \n \n图 2  同一次捕获设置中 Resolve network names 已勾选；此图为原始窗口的局部截图。 \n开始"
+  },
+  {
+    "page": 4,
+    "last_body_y": 531.1419677734375,
+    "image_count": 3,
+    "words": 65,
+    "text_start": "华东师范大学软件学院实验报告 \n第 4 页 共 14 页 \n \n \n图 3  原始迹线中 tcp.stream == 0 的列表局部及同一视图统计栏：108 帧中显示 19 帧。 \n \n图 4  同一 TCP 流的实际内容：GET / HTTP/1.1、HTTP/1.1 200 "
+  },
+  {
+    "page": 5,
+    "last_body_y": 721.6119384765625,
+    "image_count": 1,
+    "words": 127,
+    "text_start": "华东师范大学软件学院实验报告 \n第 5 页 共 14 页 \n \n图 5  第 4 帧 HTTP GET：Total Length=117 B、TTL=128，捕获到的首部校验和为 0x0000。 \n表 3  第 4 帧 IPv4 首部字段与字节偏移 \n字段 \n字节 \n长度 \n实测"
+  },
+  {
+    "page": 6,
+    "last_body_y": 530.5419311523438,
+    "image_count": 1,
+    "words": 72,
+    "text_start": "华东师范大学软件学院实验报告 \n第 6 页 共 14 页 \n4.3 IPv4 数据报的字节布局 \n手册要求标出首部各字段的字节位置与长度，并合并共享字节的字段。图 6 将 20 B 首部按每\n行 4 B 展开；下方完整帧条带按字节数等比绘制，区分以太网首部、IPv4 首部、TCP"
+  },
+  {
+    "page": 7,
+    "last_body_y": 716.6919555664062,
+    "image_count": 1,
+    "words": 128,
+    "text_start": "华东师范大学软件学院实验报告 \n第 7 页 共 14 页 \n \n图 7  目标连接全部 19 帧的双向字段：MF 均未设置、Offset 均为 0；IP ID 与 TTL 的变化可直接比较。 \n1 本机与远端 IPv4 地址 \n本机 WLAN 地址为 172.31.165.86，"
+  },
+  {
+    "page": 8,
+    "last_body_y": 764.12060546875,
+    "image_count": 1,
+    "words": 185,
+    "text_start": "华东师范大学软件学院实验报告 \n第 8 页 共 14 页 \n5 未分片报文的判据 \nMF=0 且 Fragment Offset=0 表示本包未分片。19 帧均满足该判据。DF=1 是禁止后续分片的指\n示，不是判断未分片的必要条件；DF=0 的短包也可能不分片。MF=0 但 Of"
+  },
+  {
+    "page": 9,
+    "last_body_y": 766.9679565429688,
+    "image_count": 3,
+    "words": 70,
+    "text_start": "华东师范大学软件学院实验报告 \n第 9 页 共 14 页 \n引用的内层 Echo 请求；图 9 的过滤条件同时排除了外层 Type 11，因此显示 51 帧，而不是包含\n引用的 74 帧。 \n \n \n图 9  TTL 1、2、3 各三次 Echo Request 的列表局部，以及"
+  },
+  {
+    "page": 10,
+    "last_body_y": 536.1819458007812,
+    "image_count": 1,
+    "words": 74,
+    "text_start": "华东师范大学软件学院实验报告 \n第 10 页 共 14 页 \n可确认的是：所响应的公网地址先后落在 CERNET 与百度的登记范围，目标 182.61.200.108 \n在第 17 跳回复。现有 PTR 和登记资料不能确认具体校园设备、上海交通大学节点或路由器地理位\n置，因此不作"
+  },
+  {
+    "page": 11,
+    "last_body_y": 755.68798828125,
+    "image_count": 0,
+    "words": 186,
+    "text_start": "华东师范大学软件学院实验报告 \n第 11 页 共 14 页 \n表 4  接收首部的十个 16 位字与普通累计和 \n序号 \n16 位字 \n对应 IPv4 字段 \n累计和 \n1 \n0x4500 \nVersion、IHL、DS \n0x4500 \n2 \n0x0028 \nTotal Len"
+  },
+  {
+    "page": 12,
+    "last_body_y": 702.531982421875,
+    "image_count": 0,
+    "words": 82,
+    "text_start": "华东师范大学软件学院实验报告 \n第 12 页 共 14 页 \n关于校验和：接收包首部以实收值求和回卷得到 0xffff，置零生成复算得到 0xcb73；发送包捕\n获值为零与校验和卸载现象相符，不能据此判定线上错误。 \n关于与教材的差异：结构上没有发现差异，但有一处实现层面的现象值"
+  },
+  {
+    "page": 13,
+    "last_body_y": 758.0879516601562,
+    "image_count": 0,
+    "words": 230,
+    "text_start": "华东师范大学软件学院实验报告 \n第 13 页 共 14 页 \n附录 B 完整逐跳测量输出 \n以下为 source_trace.txt 保存的真实输出。每行对应一个 TTL，星号为超时；终点在第 17 跳收\n到回复。 \nIPv4 source-bound traceroute  1"
+  },
+  {
+    "page": 14,
+    "last_body_y": 103.7719955444336,
+    "image_count": 0,
+    "words": 13,
+    "text_start": "华东师范大学软件学院实验报告 \n第 14 页 共 14 页 \n[6] Wireshark User Guide Checksums \nhttps://www.wireshark.org/docs/wsug_html_chunked/ChAdvChecksums.html \n"
+  }
+]

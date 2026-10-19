@@ -1,0 +1,345 @@
+PAGE 1
+华东师范大学软件学院实验报告
+华东师范大学软件学院实验报告
+实验课程：计算机网络
+年级：2024 级
+实验成绩：
+实验名称：IPv4
+姓名：张荣昊
+实验编号：Lab3
+学号：10245101445
+实验日期：2025.12.3
+指导教师：王廷
+组号：
+实验时间：2 学时
+一、实验目的
+本次实验主要目的包括：
+1. 掌握使用Wireshark 捕获并分析IPv4 数据包的方法，理解IP 协议的核心工作机制；
+2. 熟悉IPv4 数据报的完整结构，掌握IP 头部各字段的含义、取值规则及作用；
+3. 理解IP 分片、TTL（生存时间）、首部校验和等关键机制的设计逻辑，掌握IP 头部校验和的计
+算方法；
+4. 学会使用tracert 命令追踪Internet 网络路径，直观认识IP 数据包的跨网传输过程。
+二、实验内容与实验步骤
+本次实验围绕IPv4 协议展开，核心内容包括：
+1. 使用Wireshark 捕获HTTP 请求相关的IPv4 数据包，结合wget 命令触发流量、tracert 命
+令记录网络路径；
+2. 解析IPv4 数据包头部字段，绘制数据报结构示意图；
+3. 回答IPv4 协议关键问题（如IP 地址、TTL 初始值、分片判断等）；
+4. 根据tracert 结果绘制Internet 网络路径；
+5. 按1s 补码算法计算IP 头部校验和并验证。
+三、实验环境
+1. 操作系统：Windows 11 ，64 位；
+2. 分析工具：Wireshark 4.6.1, wget 1.11.4。
+四、实验过程与分析
+Step 1 Capture a Trace 捕获数据包跟踪
+1. 测试URL 获取与tracert 路径验证
+打开Power Shell，输入wget www.baidu.com ，测试能否成功获取Web 资源。若显示“200 OK”
+等信息，表示成功获取Web 资源，如图1所示；
+第1 页，共9 页
+
+PAGE 2
+华东师范大学软件学院实验报告
+图1: 成功获取Web 资源
+继续在Power Shell 中输入tracert www.baidu.com，记录输出的网络路径信息，如图2所示，保
+存该输出用于后续绘制路径。
+图2: 网络路径信息
+2. 配置Wireshark 捕获参数
+启动Wireshark，点击菜单栏「捕获」→「选项」，进入捕获配置界面：
+(1) 选择捕获接口：在“捕获接口”列表中，勾选WLAN；
+第2 页，共9 页
+
+PAGE 3
+华东师范大学软件学院实验报告
+(2) 设置捕获过滤器：在“捕获过滤器”输入框中填写“tcp port 80”，捕获标准HTTP（80 端
+口）相关的TCP 流量，确保仅记录IPv4 数据包，排除其他无关流量；
+(3) 关闭混杂模式：取消勾选“在所有接口上使用混杂模式”，仅捕获本机发送/接收的数据包，
+避免监听其他设备流量；
+(4) 启用名称解析：勾选“Resolve network names”，将IP 地址转换为可读域名，便于识别设
+备。
+3. 启动捕获并生成IPv4 流量
+点击Wireshark“捕获选项”界面的“开始”按钮，进入实时捕获状态，回到Power Shell，再次
+执行wget www.baidu.com，触发HTTP 请求，生成IPv4 数据包流量，待wget 执行完成，立
+即回到Wireshark，点击顶部“停止”按钮结束捕获, 如图3所示。
+图3: 捕获成功
+Step 2 Inspect the Trace 检查数据包跟踪
+1. 筛选并展开IPv4 数据包
+在Wireshark 主界面“Filter”输入框中填写“ip.version == 4”，筛选出所有IPv4 数据包，选
+中任意一个IPv4 数据包，点击中间面板“Internet Protocol Version 4”，展开IPv4 头部的所有
+字段，逐一查看各字段的名称、取值及描述如图4。
+第3 页，共9 页
+
+PAGE 4
+华东师范大学软件学院实验报告
+图4: IPv4 头部细节
+2. IPv4 头部字段详细分析
+结合捕获到的IPv4 数据包分析关键字段，结构如表1：
+第4 页，共9 页
+
+PAGE 5
+华东师范大学软件学院实验报告
+字段名称
+长度
+取值(Value)
+作用
+网络层(IP Header)
+版本(Version)
+4 bits
+4 (0100)
+明确标识为IPv4 协议
+首部长度(Header Length)
+4 bits
+5 (0101)
+5 × 4 = 20 字节，为IPv4 头部
+最小长度(无可选字段)
+区分服务
+(Differentiated
+Services Field)
+8 bits
+0x00
+表示默认服务质量
+(DSCP: CS0，ECN: Not-ECT)
+总长度(Total Length)
+16 bits
+52 字节
+整个IPv4 数据包(头部+
+负载) 的总字节数
+标识(Identification)
+16 bits
+0x8e47 (36423)
+用于IP 分片时标识同一原始
+数据包
+标志(Flags)
+3 bits
+0x2 (010)
+DF = 1 (禁止分片)，MF = 0
+(无后续分片)
+片偏移(Fragment Offset)
+13 bits
+0
+-
+生存时间(TTL)
+8 bits
+128
+数据包最多可经过的路由器跳
+数
+协议(Protocol)
+8 bits
+6 (TCP)
+对应上层协议为TCP
+首部校验和(Header Check-
+sum)
+16 bits
+0x0000
+用于验证IPv4 头的完整性
+源IP 地址(Source Ad-
+dress)
+32 bits
+172.31.55.169
+数据包发送方IP 地址
+目的IP 地址(Destination
+Address)
+32 bits
+182.61.200.110
+数据包接收方IP 地址
+表1: IPv4 头部字段详细解析
+Step 3 IP Packet Structure IPv4 数据包结构
+1. 绘制IPv4 数据包结构示意图
+根据Step 2 中分析的IPv4 头部字段及长度，绘制结构示意图如图5。
+第5 页，共9 页
+
+PAGE 6
+华东师范大学软件学院实验报告
+0
+8
+16
+24
+31
+版本
+(4 bits)
+首部长度
+(4 bits)
+区分服务
+字段(8 bits)
+总长度(16 bits)
+标识(16 bits)
+标志
+(3 bits)
+片偏移(13 bits)
+生存时间
+(8 bits)
+协议
+(8 bits)
+首部检验和
+(16 bits)
+源地址(32 bits)
+目的地址(32 bits)
+图5: IPv4 结构图
+2. 回答问题
+(1)
+结合捕获的数据包及结构分析，回答实验指导手册中提出的中的6 个问题：
+What are the IP addresses of your computer and the remote server?
+答：本机IP 地址为172.31.55.169；远程服务器IP 地址为182.61.200.110。
+(2) Does the Total Length field include the IP header plus IP payload, or just the IP payload?
+答：总长度字段包含IP 头部+ 负载。总长度（Total Length）的定义为“整个IPv4 数据
+包的字节数”，即“IP 头部长度+IP 负载长度”，例如本次实验中总长度52 字节= 头部
+20 字节+ 负载32 字节。
+(3) How does the value of the Identification field change or stay the same for different packets?
+For instance, does it hold the same value for all packets in a TCP connection or does it
+differ for each packet? Is it the same in both directions? Can you see any pattern if the
+value does change?
+答：未分片数据包中，不同数据包的标识字段取值不同，且同一TCP 连接中，本机→服
+务器、服务器→本机两个方向的取值无关联；同一方向的未分片数据包，标识字段随数据
+包生成逐次递增1（操作系统通过内部计数器维护，每次生成新数据包计数器+1，赋值给
+标识字段）；分片数据包中，同一原始数据包的所有分片，标识字段取值相同（便于接收端
+重组）。
+(4) What is the initial value of the TTL field for packets sent from your computer? Is it the
+maximum possible value, or some lower value?
+答：本机发送数据包的TTL 初始值及是否为最大值：初始值128；TTL 字段为8bit，最大
+值为255，因此该初始值为较低值（非最大值），不同操作系统默认TTL 不同，Windows
+默认128，Linux/Mac 默认64。
+(5) How can you tell from looking at a packet that it has not been fragmented? Most often IP
+packets in normal operation are not fragmented. But the receiver must have a way to be
+sure. Hint: you may need to read your text to confirm a guess.
+答：结合Flags 字段与片偏移字段，Flags 字段中“DF=1”（禁止分片）表示路由器不可对
+第6 页，共9 页
+
+PAGE 7
+华东师范大学软件学院实验报告
+该数据包分片，“MF=0”（无后续分片）表示该数据包不是分片的一部分，片偏移=0 进一
+步确认无分片，满足以上三点即可判断数据包未被分片。
+(6) What is the length of the IP Header and how is this encoded in the header length field?
+Hint: notice that only 4 bits are used for this field, as the version takes up the other 4 bits
+of the byte. You may guess and check your text.
+答：本次实验中IP 头部长度为20 字节；编码规则为首部长度字段为4bit，以“32 位（4 字
+节）”为单位，因此“实际头部长度= 首部长度字段取值×4 字节”，例如字段取值为5 时，
+实际长度=5×4=20 字节（因4bit 最大取值为15，头部最大长度为15×4=60 字节，含可
+选字段）。
+Step 4 Internet Paths 互联网路径
+绘制Internet 网络路径示意图
+回顾Step 1 中tracert www.baidu.com 的输出（图2），根据整理的跃点信息，绘制从本机到百
+度服务器的网络路径示意图如图6，图中* 号表示当前路由的ICMP 返回时间超时，无法得知确切IP
+地址。
+172.30.156.1
+我的计算机
+*
+*
+*
+*
+*
+*
+182.61.200.108
+远程服务器
+10.100.4.1
+202.120.95.246
+202.120.95.254
+10.255.16.1
+10.255.249.253
+10.255.38.254
+202.112.27.13
+101.4.117.58
+101.4.115.201
+219.224.103.65
+101.4.129.138
+182.61.255.38
+182.61.254.177
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+图6: Tracert 网络路径拓扑图
+Step 5 IP Header Checksum IP 头部校验和
+1. 选择计算对象
+根据Step1 中抓取的数据包结果，选择Step2 中研究IPv4 数据包作为计算对象。
+头部长度(Header Length): 20 bytes (5)，无可选字段。
+首部校验和(Header Checksum): 0x0000 [Validation disabled]。由于协议卸载，实际计算时
+将校验和字段记为0x0000, 以模拟发送方计算正确的校验和。
+2. 按1s 补码算法计算校验和
+第7 页，共9 页
+
+PAGE 8
+华东师范大学软件学院实验报告
+IP 头部20 字节数据对应的10 个16 位分组及取值如表2：
+序号
+16 位分组（十六进制）
+对应IPv4 字段
+1
+0x4500
+版本+ 首部长度+ 区分服务
+2
+0x0034
+总长度
+3
+0x8E47
+标识
+4
+0x4000
+标志+ 片偏移
+5
+0x8006
+TTL+ 协议
+6
+0x0000
+校验和（暂置0x0000）
+7
+0xAC1F
+源IP 地址（前2 字节：172.31）
+8
+0x37A9
+源IP 地址（后2 字节：55.169）
+9
+0xB63D
+目的IP 地址（前2 字节：182.61）
+10
+0xC86E
+目的IP 地址（后2 字节：200.110）
+表2: IP 头部16 位分组及取值
+(1) 求和：将10 个16 位分组用32 位加法求和：
+S = 0x4500 + 0x0034 + 0x8E47 + 0x4000 + 0x8006 + 0x0000
++ 0xAC1F + 0x37A9 + 0xB63D + 0xC86E
+S = 0x420B8
+(2) 处理进位：将求和结果的高16 位(0x0004) 与低16 位(0x20B8) 相加：
+S′ = 0x0004 + 0x20B8 = 0x20BC
+(3) 按位取反（1s 补码）：对0x20BC 按位取反，即为校验和：
+Checksum =∼(0x20BC) = 0xFFFF −0x20BC = 0xDF43
+则该数据包正确的IP 头部校验和应为0xDF43。
+3. 接收方校验逻辑验证
+接收方收到数据包后（假设校验和字段为0xDF43），按以下步骤验证：
+(1) 求和（16 位）：将IP 头部所有10 个16 位分组求和。（利用第2 步处理进位后的求和结果
+S′ = 0x20BC）：
+Stotal = S′ + Checksum
+Stotal = 0x20BC + 0xDF43
+Stotal = 0xFFFF
+(2) 按位取反：对最终求和结果0xFFFF 进行1s 补码取反：
+∼(0xFFFF) = 0x0000
+最终结果为0x0000，验证通过，接收该数据包。
+第8 页，共9 页
+
+PAGE 9
+华东师范大学软件学院实验报告
+五、实验结果总结
+通过本次实验，深入了解了IPv4 的结构和追踪的网络路径：
+1. 通过Wireshark 成功捕获并解析了IPv4 数据包，验证了IPv4 头部各字段的取值规则（如版本
+=4、首部长度=20 字节、TTL=128 等），明确了“总长度包含头部+ 负载”“标识字段用于分
+片重组”等关键机制；
+2. 掌握了IP 头部校验和的1s 补码计算方法，通过手动计算与数据包实际取值的一致性，验证了
+校验和对头部完整性的保障作用；
+3. 利用tracert 命令追踪到从本机到百度服务器的网络路径，直观认识到IP 数据包需经过“内
+网网关→运营商路由器→目标服务器”等多跃点传输，其中“*”号对应禁用ICMP 响应的路
+由器。
+第9 页，共9 页

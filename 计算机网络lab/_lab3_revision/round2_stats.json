@@ -1,0 +1,86 @@
+[
+  {
+    "page": 1,
+    "last_body_y": 592.7019653320312,
+    "image_count": 0,
+    "words": 94,
+    "text_start": "华东师范大学软件学院实验报告 \n第 1 页 共 12 页 \n华东师范大学软件学院实验报告 \nLab3 IPv4 数据报与网络路径 \n实验课程：计算机网络 \n年级：2024 级 \n实验成绩： \n实验名称: IPv4 \n姓名：刘小凡 \n实验日期：2026-10-13 \n实验编号：La"
+  },
+  {
+    "page": 2,
+    "last_body_y": 720.9313354492188,
+    "image_count": 2,
+    "words": 139,
+    "text_start": "华东师范大学软件学院实验报告 \n第 2 页 共 12 页 \n三、实验环境 \n表 1  实验环境与通信端点 \n项目 \n实测配置 \n操作系统 \nWindows 11 25H2（build 26200），64 位 \n抓包与分析 \nWireshark / TShark 4.6.8，Npc"
+  },
+  {
+    "page": 3,
+    "last_body_y": 716.371337890625,
+    "image_count": 2,
+    "words": 110,
+    "text_start": "华东师范大学软件学院实验报告 \n第 3 页 共 12 页 \n \n图 2  同一次捕获设置中 Resolve network names 已勾选；此图为原始窗口的局部截图。 \n开始捕获后执行上述 GET，结束后停止并保存迹线。原始 Lab3_HTTP.pcapng 共 108 帧；"
+  },
+  {
+    "page": 4,
+    "last_body_y": 605.9413452148438,
+    "image_count": 2,
+    "words": 64,
+    "text_start": "华东师范大学软件学院实验报告 \n第 4 页 共 12 页 \n \n图 4  同一 TCP 流的实际内容：GET / HTTP/1.1、HTTP/1.1 200 OK 和 Content-Length: 2381。 \n列表中的 Previous segment not capture"
+  },
+  {
+    "page": 5,
+    "last_body_y": 762.5673828125,
+    "image_count": 1,
+    "words": 147,
+    "text_start": "华东师范大学软件学院实验报告 \n第 5 页 共 12 页 \n表 3  第 4 帧 IPv4 首部字段与字节偏移 \n字段 \n字节 \n长度 \n实测值 \n说明 \nVersion + IHL \n0 \n1 B \n0x45 \nVersion=4，IHL=5 \nDifferentiated S"
+  },
+  {
+    "page": 6,
+    "last_body_y": 730.491943359375,
+    "image_count": 0,
+    "words": 206,
+    "text_start": "华东师范大学软件学院实验报告 \n第 6 页 共 12 页 \nVersion 与 IHL 是两个独立的 4 位字段，共享第 0 字节；Flags 的 3 位与 Fragment Offset \n的 13 位共享第 6、7 字节。不能把“共享字节”写成“不是独立字段”。本次无 Opt"
+  },
+  {
+    "page": 7,
+    "last_body_y": 608.1819458007812,
+    "image_count": 1,
+    "words": 140,
+    "text_start": "华东师范大学软件学院实验报告 \n第 7 页 共 12 页 \n4.5 Internet 路径与隧道影响的排查 \n首先对与 HTTP 相同的服务器运行 tracert -4 -h 30 -w 700 182.61.200.108，原始输出只显示两\n跳： \n1    *        "
+  },
+  {
+    "page": 8,
+    "last_body_y": 719.2119750976562,
+    "image_count": 3,
+    "words": 58,
+    "text_start": "华东师范大学软件学院实验报告 \n第 8 页 共 12 页 \n \n \n图 8  TTL 1、2、3 各三次 Echo Request 的列表局部，以及同一视图的统计栏；过滤后显示 51 个请求。 \n \n图 9  依据 source_trace.json 绘制的 17 跳测量路径，含"
+  },
+  {
+    "page": 9,
+    "last_body_y": 530.1819458007812,
+    "image_count": 1,
+    "words": 74,
+    "text_start": "华东师范大学软件学院实验报告 \n第 9 页 共 12 页 \n可确认的是：所响应的公网地址先后落在 CERNET 与百度的登记范围，目标 182.61.200.108 \n在第 17 跳回复。现有 PTR 和登记资料不能确认具体校园设备、上海交通大学节点或路由器地理位\n置，因此不作这"
+  },
+  {
+    "page": 10,
+    "last_body_y": 741.0519409179688,
+    "image_count": 0,
+    "words": 186,
+    "text_start": "华东师范大学软件学院实验报告 \n第 10 页 共 12 页 \n表 4  接收首部的十个 16 位字与普通累计和 \n序号 \n16 位字 \n对应 IPv4 字段 \n累计和 \n1 \n0x4500 \nVersion、IHL、DS \n0x4500 \n2 \n0x0028 \nTotal Len"
+  },
+  {
+    "page": 11,
+    "last_body_y": 765.7679443359375,
+    "image_count": 0,
+    "words": 92,
+    "text_start": "华东师范大学软件学院实验报告 \n第 11 页 共 12 页 \n关于校验和：接收包首部以实收值求和回卷得到 0xffff，置零生成复算得到 0xcb73；发送包捕\n获值为零与校验和卸载现象相符，不能据此判定线上错误。 \n关于与教材的差异：结构上没有发现差异，但有一处实现层面的现象值"
+  },
+  {
+    "page": 12,
+    "last_body_y": 710.3319702148438,
+    "image_count": 0,
+    "words": 226,
+    "text_start": "华东师范大学软件学院实验报告 \n第 12 页 共 12 页 \nIPv4 source-bound traceroute  172.31.165.86 -> 182.61.200.108 \nWindows IcmpSendEcho2Ex  |  3 probes per hop  "
+  }
+]

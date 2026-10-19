@@ -1,0 +1,32 @@
+# Only this semester's courses and synchronization helpers
+/*
+!/.gitignore
+!/README.md
+!/.course-sync/
+!/操作系统/
+!/操作系统lab/
+!/概率论与数理统计/
+!/高端软件开发方法/
+!/计算机网络/
+!/计算机网络lab/
+!/密码与网络安全导论/
+!/软件质量分析/
+
+# Large capture stays on the local computer
+/计算机网络lab/lab1.pcapng
+
+# Local environments, caches, temporary outputs and operating logs
+**/.git/
+**/node_modules/
+**/.venv/
+**/venv/
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+**/.skills/
+**/tmp/
+**/artifacts/
+**/logs/
+**/~$*
+**/.env
+**/.env.*
