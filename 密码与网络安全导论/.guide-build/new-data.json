@@ -1,0 +1,1558 @@
+{
+  "modules": [
+    {
+      "id": "t01",
+      "title": "对称加密：接口、分组与设计语言",
+      "lecture": "第四讲",
+      "pages": "P1–10",
+      "summary": "理解共享密钥、Gen/Enc/Dec、正确性与双射，分清算法内部的轮和处理长消息的模式。"
+    },
+    {
+      "id": "t02",
+      "title": "混淆、扩散、Feistel 与完整 SPN 演算",
+      "lecture": "第四讲",
+      "pages": "P11–16",
+      "summary": "看清可逆性从哪里来，完整走完16位SPN的加密和解密，并用实验台检查每一轮。"
+    },
+    {
+      "id": "t03",
+      "title": "DES：位表、轮函数与可逆结构",
+      "lecture": "第四讲",
+      "pages": "P18–27",
+      "summary": "按位跟踪DES，完整保留课件中的IP、E、S₁/S₂、P表与课堂查表题。"
+    },
+    {
+      "id": "t04",
+      "title": "DES 密钥编排与多重加密的安全陷阱",
+      "lecture": "第四讲",
+      "pages": "P28–32",
+      "summary": "完整核对PC表与首轮子密钥，理解穷举、中间相遇和EEE/EDE的组合顺序。"
+    },
+    {
+      "id": "t05",
+      "title": "AES：状态矩阵、有限域与四种轮变换",
+      "lecture": "第四讲",
+      "pages": "P33–39",
+      "summary": "从位、字节、行列坐标开始，理解AES-128流程，并手算列混淆的每个输出字节。"
+    },
+    {
+      "id": "t06",
+      "title": "AES 密钥扩展与原课件作业完整解答",
+      "lecture": "第四讲",
+      "pages": "P40–41、P55",
+      "summary": "掌握字递推、RotWord/SubWord/Rcon，并完成课件中两个不同主密钥的首轮展开。"
+    },
+    {
+      "id": "t07",
+      "title": "SM4：四字窗口、S 盒、线性层与密钥编排",
+      "lecture": "第四讲",
+      "pages": "P42–52",
+      "summary": "逐个区分字、字节、循环移位、公开常量与轮密钥，推导加密和解密的一致结构。"
+    },
+    {
+      "id": "t08",
+      "title": "SM4 完整32轮验算与选择明文攻击作业",
+      "lecture": "第四讲",
+      "pages": "P53–57",
+      "summary": "从首轮位运算到完整密文，核对32轮数据，并证明缺陷密钥编排的攻击。"
+    },
+    {
+      "id": "m01",
+      "title": "ECB 与 CBC：长消息、填充与重复泄露",
+      "lecture": "第五讲",
+      "pages": "P1–8、P13–14",
+      "summary": "用四位玩具密码学习完整分组调用、CBC链式依赖与填充规则，理解图像轮廓为何泄露。"
+    },
+    {
+      "id": "m02",
+      "title": "CFB、OFB、CTR：反馈对象与 IV 条件",
+      "lecture": "第五讲",
+      "pages": "P9–12",
+      "summary": "比较三种密钥流模式，区分串行生成、可并行解密和跨消息的唯一性约束。"
+    },
+    {
+      "id": "m03",
+      "title": "模式演算实验、错误传播与完整作业",
+      "lecture": "第五讲",
+      "pages": "P13–14、P33、P45",
+      "summary": "完成CBC/CTR作业，比较玩具算法与真实分组密码的错误传播，用交互实验验证差异。"
+    },
+    {
+      "id": "f01",
+      "title": "流密码：一次一密、密钥流重用与 hello 作业",
+      "lecture": "第五讲",
+      "pages": "P15–19、P33、P46",
+      "summary": "理解计算安全与信息论安全的差别，完成重复密钥流作业，并推导已知明文与定向篡改。"
+    },
+    {
+      "id": "z01",
+      "title": "ZUC 基础：三层结构、31位模运算与装入",
+      "lecture": "第五讲",
+      "pages": "P20–25",
+      "summary": "补足ZUC符号与位宽基础，推导密钥装入、LFSR反馈以及快速模乘和模加。"
+    },
+    {
+      "id": "z02",
+      "title": "ZUC 完整运行顺序与机密性算法参数题",
+      "lecture": "第五讲",
+      "pages": "P26–32",
+      "summary": "展开BR、F和初始化时序，逐位构造EEA3的IV，完成1000比特课堂例题。"
+    },
+    {
+      "id": "a01",
+      "title": "MAC 与 HMAC：来源、完整性与完整计算流程",
+      "lecture": "第五讲",
+      "pages": "P34–41",
+      "summary": "区分加密、裸哈希与消息认证，掌握HMAC内外层、64字节密钥处理和全部课堂题。"
+    },
+    {
+      "id": "a02",
+      "title": "CBC-MAC、KDF 与 HKDF：条件、推导和作业",
+      "lecture": "第五讲",
+      "pages": "P42–44、P47–48",
+      "summary": "证明变长CBC-MAC的反例，修正熵的误解，完整推导HKDF并完成600位派生作业。"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "t01-q1",
+      "module": "t01",
+      "type": "single",
+      "question": "AES-256 中的“256”表示什么？",
+      "options": [
+        {
+          "text": "分组长度256位。",
+          "correct": false,
+          "reason": "AES的分组长度始终128位。"
+        },
+        {
+          "text": "主密钥长度256位。",
+          "correct": true,
+          "reason": "数字后缀标识密钥长度；AES-256有14轮。"
+        },
+        {
+          "text": "执行256轮。",
+          "correct": false,
+          "reason": "轮数不是后缀值。"
+        },
+        {
+          "text": "最多加密256字节。",
+          "correct": false,
+          "reason": "消息量限制需要结合模式等条件判断。"
+        }
+      ],
+      "explanation": "先把分组长度、密钥长度、轮数分开。",
+      "source": "第四讲 P1–10；原例改编或依重难点原创"
+    },
+    {
+      "id": "t01-q2",
+      "module": "t01",
+      "type": "multi",
+      "question": "关于 Gen、Enc、Dec，哪些说法成立？",
+      "options": [
+        {
+          "text": "正确性保证合法先加密再解密恢复原文。",
+          "correct": true,
+          "reason": "这是定义等式的含义。"
+        },
+        {
+          "text": "正确性本身就证明保密。",
+          "correct": false,
+          "reason": "恒等变换就是反例。"
+        },
+        {
+          "text": "Gen需要按方案要求生成合法密钥。",
+          "correct": true,
+          "reason": "合法性及密钥随机性影响安全。"
+        },
+        {
+          "text": "IV必须与密钥一起保密。",
+          "correct": false,
+          "reason": "许多模式允许IV公开，约束是不可预测或唯一等。"
+        }
+      ],
+      "explanation": "接口说明怎样运算，安全还需另行分析。",
+      "source": "第四讲 P1–10；原例改编或依重难点原创"
+    },
+    {
+      "id": "t01-q3",
+      "module": "t01",
+      "type": "single",
+      "question": "AES-CBC 中的 CBC 负责什么？",
+      "options": [
+        {
+          "text": "规定AES内部第几轮查S盒。",
+          "correct": false,
+          "reason": "这是AES算法层。"
+        },
+        {
+          "text": "把128位密钥变成256位密钥。",
+          "correct": false,
+          "reason": "模式不改变AES密钥规格。"
+        },
+        {
+          "text": "规定多个完整分组调用怎样链接。",
+          "correct": true,
+          "reason": "CBC使当前明文先异或前一密文。"
+        },
+        {
+          "text": "把密文直接变成消息认证标签。",
+          "correct": false,
+          "reason": "CBC加密本身不提供认证。"
+        }
+      ],
+      "explanation": "一次完整E_K与内部一轮是不同层次。",
+      "source": "第四讲 P1–10；原例改编或依重难点原创"
+    },
+    {
+      "id": "t02-q1",
+      "module": "t02",
+      "type": "single",
+      "question": "为什么DES的6进4出 S 盒不妨碍解密？",
+      "options": [
+        {
+          "text": "6位与4位的集合大小相同。",
+          "correct": false,
+          "reason": "分别64种与16种，不相同。"
+        },
+        {
+          "text": "每个S盒都是双射。",
+          "correct": false,
+          "reason": "6进4出无法单射。"
+        },
+        {
+          "text": "Feistel逆推保留一半，并重新计算F后异或。",
+          "correct": true,
+          "reason": "不需要求S盒或F的逆。"
+        },
+        {
+          "text": "解密靠穷举被丢弃的位。",
+          "correct": false,
+          "reason": "标准Feistel逆推是确定性操作。"
+        }
+      ],
+      "explanation": "可逆性取决于整体结构。",
+      "source": "第四讲 P11–16；原例改编或依重难点原创"
+    },
+    {
+      "id": "t02-q2",
+      "module": "t02",
+      "type": "single",
+      "question": "SPN原例中，45D1经P置换以及最终密文分别是什么？",
+      "options": [
+        {
+          "text": "2E07与BCD6。",
+          "correct": true,
+          "reason": "P是4×4转置，末轮白化得到BCD6。"
+        },
+        {
+          "text": "2E07与6AE9。",
+          "correct": false,
+          "reason": "6AE9只是末轮S输出，尚未⊕K5。"
+        },
+        {
+          "text": "1C23与BCD6。",
+          "correct": false,
+          "reason": "1C23是第一轮密钥加后，不是P输出。"
+        },
+        {
+          "text": "45D1与D63F。",
+          "correct": false,
+          "reason": "前者没有执行P，后者是K5。"
+        }
+      ],
+      "explanation": "分清u、v、w与最终y。",
+      "source": "第四讲 P11–16；原例改编或依重难点原创"
+    },
+    {
+      "id": "t02-q3",
+      "module": "t02",
+      "type": "multi",
+      "question": "哪些说法成立？",
+      "options": [
+        {
+          "text": "雪崩效应是统计性质，不能独自证明安全。",
+          "correct": true,
+          "reason": "局部扩散测试不能替代完整密码分析。"
+        },
+        {
+          "text": "密钥扩展把128位密钥变成独立的1408位秘密。",
+          "correct": false,
+          "reason": "确定性展开不增加独立熵。"
+        },
+        {
+          "text": "纯比特置换保持1的个数。",
+          "correct": true,
+          "reason": "只移动位置。"
+        },
+        {
+          "text": "SPN中不可逆的独立S层也能无条件唯一解密。",
+          "correct": false,
+          "reason": "整层丢失信息后后续可逆层不能补回。"
+        }
+      ],
+      "explanation": "把混淆、扩散和安全结论分层判断。",
+      "source": "第四讲 P11–16；原例改编或依重难点原创"
+    },
+    {
+      "id": "t03-q1",
+      "module": "t03",
+      "type": "single",
+      "question": "S₁输入011011时，行号、列号、输出依次是？",
+      "options": [
+        {
+          "text": "1、13、0101。",
+          "correct": true,
+          "reason": "首尾01，中间1101，查得5。"
+        },
+        {
+          "text": "1、11、1011。",
+          "correct": false,
+          "reason": "把中间位误读成1011。"
+        },
+        {
+          "text": "3、3、0010。",
+          "correct": false,
+          "reason": "首两位不能直接作行号。"
+        },
+        {
+          "text": "0、27、11011。",
+          "correct": false,
+          "reason": "列号最多15，输出只有4位。"
+        }
+      ],
+      "explanation": "6位S盒输入的首尾和中间承担不同索引角色。",
+      "source": "第四讲 P18–27；原例改编或依重难点原创"
+    },
+    {
+      "id": "t03-q2",
+      "module": "t03",
+      "type": "multi",
+      "question": "关于DES长度，哪些成立？",
+      "options": [
+        {
+          "text": "明文分组64位。",
+          "correct": true,
+          "reason": "经过完整DES后仍64位。"
+        },
+        {
+          "text": "每轮子密钥56位。",
+          "correct": false,
+          "reason": "每轮48位，56位是有效主密钥。"
+        },
+        {
+          "text": "E把32位变48位。",
+          "correct": true,
+          "reason": "部分输入位重复选取。"
+        },
+        {
+          "text": "8个校验位带来额外8位秘密。",
+          "correct": false,
+          "reason": "校验位由其他位确定。"
+        }
+      ],
+      "explanation": "读每个部件时同时标输入与输出宽度。",
+      "source": "第四讲 P18–27；原例改编或依重难点原创"
+    },
+    {
+      "id": "t03-q3",
+      "module": "t03",
+      "type": "single",
+      "question": "DES解密的正确安排是什么？",
+      "options": [
+        {
+          "text": "改用逆S盒。",
+          "correct": false,
+          "reason": "6进4出S盒没有唯一逆；整体Feistel不需要它。"
+        },
+        {
+          "text": "保留结构，K₁₆到K₁逆序使用。",
+          "correct": true,
+          "reason": "配合首尾置换和交换可还原。"
+        },
+        {
+          "text": "只做一次IP逆置换。",
+          "correct": false,
+          "reason": "那只撤销位置重排，不能撤销16轮。"
+        },
+        {
+          "text": "所有轮都用K₁。",
+          "correct": false,
+          "reason": "无法与原来对应轮的F抵消。"
+        }
+      ],
+      "explanation": "逆序的是轮密钥，不是把F四步逐项求逆。",
+      "source": "第四讲 P18–27；原例改编或依重难点原创"
+    },
+    {
+      "id": "t04-q1",
+      "module": "t04",
+      "type": "single",
+      "question": "主密钥133457799BBCDFF1的首轮DES子密钥是什么？",
+      "options": [
+        {
+          "text": "F0CCAAF556678F。",
+          "correct": false,
+          "reason": "这是PC-1后的56位。"
+        },
+        {
+          "text": "1B02EFFC7072。",
+          "correct": true,
+          "reason": "移位后再PC-2得到48位子密钥。"
+        },
+        {
+          "text": "E19955FAACCF1E。",
+          "correct": false,
+          "reason": "这是左移后的56位拼接。"
+        },
+        {
+          "text": "133457799BBCDFF1。",
+          "correct": false,
+          "reason": "这是含校验位的64位输入。"
+        }
+      ],
+      "explanation": "每个中间量都有不同长度和用途。",
+      "source": "第四讲 P28–32；原例改编或依重难点原创"
+    },
+    {
+      "id": "t04-q2",
+      "module": "t04",
+      "type": "multi",
+      "question": "双重DES的中间相遇分析，哪些正确？",
+      "options": [
+        {
+          "text": "时间约2⁵⁶+2⁵⁶次分组操作。",
+          "correct": true,
+          "reason": "忽略查表排序等额外开销。"
+        },
+        {
+          "text": "不需要任何已知明密文。",
+          "correct": false,
+          "reason": "两端计算需要M和C。"
+        },
+        {
+          "text": "匹配候选仍应由更多数据验证。",
+          "correct": true,
+          "reason": "64位中间值可能带来误配。"
+        },
+        {
+          "text": "两把56位钥就必然112位安全。",
+          "correct": false,
+          "reason": "具体攻击可低于遍历全部密钥对的成本。"
+        }
+      ],
+      "explanation": "密钥空间大小只是穷举上界的一部分。",
+      "source": "第四讲 P28–32；原例改编或依重难点原创"
+    },
+    {
+      "id": "t04-q3",
+      "module": "t04",
+      "type": "single",
+      "question": "三把密钥相同的EDE为什么等价单次DES？",
+      "options": [
+        {
+          "text": "中间D撤销内层E。",
+          "correct": true,
+          "reason": "E(D(E(M)))=E(M)。"
+        },
+        {
+          "text": "任意三次E都等于一次E。",
+          "correct": false,
+          "reason": "EEE没有相邻逆操作抵消。"
+        },
+        {
+          "text": "把分组长度扩大了三倍。",
+          "correct": false,
+          "reason": "仍处理64位分组。"
+        },
+        {
+          "text": "K₃=K₁就一定等价单DES。",
+          "correct": false,
+          "reason": "若K₂不同，不能抵消；需三把都相同。"
+        }
+      ],
+      "explanation": "从右向左读复合公式，从左向右读执行顺序。",
+      "source": "第四讲 P28–32；原例改编或依重难点原创"
+    },
+    {
+      "id": "t05-q1",
+      "module": "t05",
+      "type": "single",
+      "question": "AES输入前四字节在状态矩阵的哪里？",
+      "options": [
+        {
+          "text": "第0行。",
+          "correct": false,
+          "reason": "连续四个输入字节装入第0列。"
+        },
+        {
+          "text": "第0列。",
+          "correct": true,
+          "reason": "s[r,c]=input[4c+r]。"
+        },
+        {
+          "text": "主对角线。",
+          "correct": false,
+          "reason": "没有按对角线填充。"
+        },
+        {
+          "text": "任意放置都不影响AES结果。",
+          "correct": false,
+          "reason": "布局决定行移位和列混淆作用对象。"
+        }
+      ],
+      "explanation": "矩阵显示方式必须与序列化约定一致。",
+      "source": "第四讲 P33–39；原例改编或依重难点原创"
+    },
+    {
+      "id": "t05-q2",
+      "module": "t05",
+      "type": "multi",
+      "question": "关于AES操作，哪些正确？",
+      "options": [
+        {
+          "text": "SubBytes改变字节值。",
+          "correct": true,
+          "reason": "位置保持，逐字节查表。"
+        },
+        {
+          "text": "ShiftRows把字节内比特左移。",
+          "correct": false,
+          "reason": "移动的是整字节。"
+        },
+        {
+          "text": "第10轮AES-128省略MixColumns。",
+          "correct": true,
+          "reason": "仍有SubBytes、ShiftRows和密钥加。"
+        },
+        {
+          "text": "GF(2⁸)乘法就是整数乘法mod256。",
+          "correct": false,
+          "reason": "按多项式模11B约减。"
+        }
+      ],
+      "explanation": "值的代换、位置的移动和域内混合承担不同角色。",
+      "source": "第四讲 P33–39；原例改编或依重难点原创"
+    },
+    {
+      "id": "t05-q3",
+      "module": "t05",
+      "type": "single",
+      "question": "GF(2⁸)中02×E0等于什么？",
+      "options": [
+        {
+          "text": "C0。",
+          "correct": false,
+          "reason": "只截断丢了约减项1B。"
+        },
+        {
+          "text": "DB。",
+          "correct": true,
+          "reason": "1C0⊕11B=DB。"
+        },
+        {
+          "text": "1C0。",
+          "correct": false,
+          "reason": "这是约减前9位结果，尚非字节。"
+        },
+        {
+          "text": "E2。",
+          "correct": false,
+          "reason": "把乘法误当普通加法。"
+        }
+      ],
+      "explanation": "最高位为1时，左移后必须处理x⁸项。",
+      "source": "第四讲 P33–39；原例改编或依重难点原创"
+    },
+    {
+      "id": "t06-q1",
+      "module": "t06",
+      "type": "single",
+      "question": "AES-128初始密钥加加上10轮，一共需要几个128位轮密钥？",
+      "options": [
+        {
+          "text": "10个。",
+          "correct": false,
+          "reason": "漏掉初始rk0。"
+        },
+        {
+          "text": "11个。",
+          "correct": true,
+          "reason": "rk0到rk10，共44个32位字。"
+        },
+        {
+          "text": "44个。",
+          "correct": false,
+          "reason": "44是字数而非128位轮密钥数。"
+        },
+        {
+          "text": "128个。",
+          "correct": false,
+          "reason": "128表示主密钥比特长度。"
+        }
+      ],
+      "explanation": "不要把字数、轮密钥数与轮数混用。",
+      "source": "第四讲 P40–41、P55；原例改编或依重难点原创"
+    },
+    {
+      "id": "t06-q2",
+      "module": "t06",
+      "type": "single",
+      "question": "P55作业按列读出的W₃是什么？",
+      "options": [
+        {
+          "text": "A07DC921。",
+          "correct": false,
+          "reason": "这是矩阵最后一行。"
+        },
+        {
+          "text": "D0445221。",
+          "correct": true,
+          "reason": "最后一列依次D0、44、52、21。"
+        },
+        {
+          "text": "A1B594D0。",
+          "correct": false,
+          "reason": "这是第一行。"
+        },
+        {
+          "text": "214452D0。",
+          "correct": false,
+          "reason": "颠倒了列中字节顺序。"
+        }
+      ],
+      "explanation": "先固定状态的列方向，再计算。",
+      "source": "第四讲 P40–41、P55；原例改编或依重难点原创"
+    },
+    {
+      "id": "t06-q3",
+      "module": "t06",
+      "type": "multi",
+      "question": "哪些操作正确？",
+      "options": [
+        {
+          "text": "RotWord(0C0D0E0F)=0D0E0F0C。",
+          "correct": true,
+          "reason": "循环左移一字节。"
+        },
+        {
+          "text": "Rcon会对四字节都异或01。",
+          "correct": false,
+          "reason": "第一轮Rcon是01000000。"
+        },
+        {
+          "text": "W₅=W₁⊕W₄。",
+          "correct": true,
+          "reason": "不是W1⊕W3。"
+        },
+        {
+          "text": "SubWord使用SM4的S盒也一样。",
+          "correct": false,
+          "reason": "两种密码的S盒不同。"
+        }
+      ],
+      "explanation": "轮密钥的依赖顺序必须逐步推进。",
+      "source": "第四讲 P40–41、P55；原例改编或依重难点原创"
+    },
+    {
+      "id": "t07-q1",
+      "module": "t07",
+      "type": "single",
+      "question": "SM4最终密文输出顺序是什么？",
+      "options": [
+        {
+          "text": "X₃₂‖X₃₃‖X₃₄‖X₃₅。",
+          "correct": false,
+          "reason": "漏掉最后的四字反序。"
+        },
+        {
+          "text": "X₃₅‖X₃₄‖X₃₃‖X₃₂。",
+          "correct": true,
+          "reason": "字内部的字节次序不改。"
+        },
+        {
+          "text": "每个字的32位也反转。",
+          "correct": false,
+          "reason": "反序变换针对四个字。"
+        },
+        {
+          "text": "仅输出X₃₅。",
+          "correct": false,
+          "reason": "密文128位，需要4个32位字。"
+        }
+      ],
+      "explanation": "窗口末状态与密文序列不同。",
+      "source": "第四讲 P42–52；原例改编或依重难点原创"
+    },
+    {
+      "id": "t07-q2",
+      "module": "t07",
+      "type": "multi",
+      "question": "SM4的L与L′，哪些正确？",
+      "options": [
+        {
+          "text": "L用于加密轮，移位2、10、18、24。",
+          "correct": true,
+          "reason": "还包含未移位的B。"
+        },
+        {
+          "text": "L′用于编排，移位13、23。",
+          "correct": true,
+          "reason": "同样与B自身异或。"
+        },
+        {
+          "text": "二者都调用AES的S盒。",
+          "correct": false,
+          "reason": "τ查SM4 S盒。"
+        },
+        {
+          "text": "解密必须先求L的逆。",
+          "correct": false,
+          "reason": "广义Feistel逆推只需重算T再异或。"
+        }
+      ],
+      "explanation": "两个线性层不同，整体解密也不是逐项逆T。",
+      "source": "第四讲 P42–52；原例改编或依重难点原创"
+    },
+    {
+      "id": "t07-q3",
+      "module": "t07",
+      "type": "single",
+      "question": "τ(8283CB69)等于什么？",
+      "options": [
+        {
+          "text": "8AD24122。",
+          "correct": true,
+          "reason": "82、83、CB、69依次查SM4表。"
+        },
+        {
+          "text": "01040405。",
+          "correct": false,
+          "reason": "这是L(00000001)。"
+        },
+        {
+          "text": "F12186F9。",
+          "correct": false,
+          "reason": "这是标准例rk0。"
+        },
+        {
+          "text": "8283CB69。",
+          "correct": false,
+          "reason": "没有执行代换。"
+        }
+      ],
+      "explanation": "逐字节查表，保留高到低拼接顺序。",
+      "source": "第四讲 P42–52；原例改编或依重难点原创"
+    },
+    {
+      "id": "t08-q1",
+      "module": "t08",
+      "type": "single",
+      "question": "SM4国标示例密文第一字为什么是681EDF34？",
+      "options": [
+        {
+          "text": "它就是明文X₀。",
+          "correct": false,
+          "reason": "明文首字是01234567。"
+        },
+        {
+          "text": "它是最后生成的X₃₅，因反序输出排在第一。",
+          "correct": true,
+          "reason": "不是按X32到X35正序输出。"
+        },
+        {
+          "text": "它是第一个轮密钥。",
+          "correct": false,
+          "reason": "rk0是F12186F9。"
+        },
+        {
+          "text": "只需要算一轮就得到它。",
+          "correct": false,
+          "reason": "这是32轮后结果。"
+        }
+      ],
+      "explanation": "轮状态、轮密钥和输出字序分别跟踪。",
+      "source": "第四讲 P53–57；原例改编或依重难点原创"
+    },
+    {
+      "id": "t08-q2",
+      "module": "t08",
+      "type": "multi",
+      "question": "对于课件的对称轮密钥SM4变体，哪些成立？",
+      "options": [
+        {
+          "text": "同钥下Enc=Dec。",
+          "correct": true,
+          "reason": "正反轮密钥序列相同。"
+        },
+        {
+          "text": "对截获C请求一次同钥加密可得到M。",
+          "correct": true,
+          "reason": "Enc(C)=Dec(C)。"
+        },
+        {
+          "text": "证明了所有标准SM4密钥都如此。",
+          "correct": false,
+          "reason": "课件讨论缺陷变体的额外条件。"
+        },
+        {
+          "text": "必须先恢复128位主密钥。",
+          "correct": false,
+          "reason": "直接使用加密接口，不必恢复密钥。"
+        }
+      ],
+      "explanation": "攻击利用接口能力和结构缺陷，不是穷举。",
+      "source": "第四讲 P53–57；原例改编或依重难点原创"
+    },
+    {
+      "id": "t08-q3",
+      "module": "t08",
+      "type": "single",
+      "question": "DES、AES、SM4对照哪项正确？",
+      "options": [
+        {
+          "text": "三者分组均128位。",
+          "correct": false,
+          "reason": "DES是64位。"
+        },
+        {
+          "text": "AES解密只需原样使用加密轮。",
+          "correct": false,
+          "reason": "AES还需要相应逆部件。"
+        },
+        {
+          "text": "SM4有32轮，每轮使用32位轮密钥。",
+          "correct": true,
+          "reason": "主密钥与分组均128位。"
+        },
+        {
+          "text": "SM4轮数更多就必然比AES更安全。",
+          "correct": false,
+          "reason": "轮复杂度和结构不同，不能只比轮数。"
+        }
+      ],
+      "explanation": "算法参数要在具体结构下理解。",
+      "source": "第四讲 P53–57；原例改编或依重难点原创"
+    },
+    {
+      "id": "m01-q1",
+      "module": "m01",
+      "type": "single",
+      "question": "课堂题CBC的C₁、C₂、C₃是什么？",
+      "options": [
+        {
+          "text": "0110、0110、1111。",
+          "correct": false,
+          "reason": "这是ECB输出。"
+        },
+        {
+          "text": "1010、0011、1001。",
+          "correct": true,
+          "reason": "每块先异或前块，再调用玩具密码。"
+        },
+        {
+          "text": "1111、0011、0110。",
+          "correct": false,
+          "reason": "这是CBC进入E前的中间量。"
+        },
+        {
+          "text": "0101、1001、1100。",
+          "correct": false,
+          "reason": "尚未执行最后循环左移。"
+        }
+      ],
+      "explanation": "每一层中间值都应清楚标名。",
+      "source": "第五讲 P1–8、P13–14；原例改编或依重难点原创"
+    },
+    {
+      "id": "m01-q2",
+      "module": "m01",
+      "type": "multi",
+      "question": "关于CBC，哪些正确？",
+      "options": [
+        {
+          "text": "密文全部已知时可并行解密。",
+          "correct": true,
+          "reason": "前一密文是已知输入，不必等前块解密结果。"
+        },
+        {
+          "text": "CBC能自动发现恶意篡改。",
+          "correct": false,
+          "reason": "它只提供相应条件下的保密，未提供认证。"
+        },
+        {
+          "text": "IV可以公开，但应满足不可预测性并受认证保护。",
+          "correct": true,
+          "reason": "公开与可修改是不同概念。"
+        },
+        {
+          "text": "相同明文块保证得到互不相同的CBC密文块。",
+          "correct": false,
+          "reason": "不是绝对保证，异或后的分组输入仍可能相等。"
+        }
+      ],
+      "explanation": "链式依赖隐藏重复的条件性，不能替代认证。",
+      "source": "第五讲 P1–8、P13–14；原例改编或依重难点原创"
+    },
+    {
+      "id": "m01-q3",
+      "module": "m01",
+      "type": "single",
+      "question": "AES采用PKCS#7，明文长度正好16字节时怎样填充？",
+      "options": [
+        {
+          "text": "不补任何字节。",
+          "correct": false,
+          "reason": "该填充约定需要整块填充以避免歧义。"
+        },
+        {
+          "text": "补16个十六进制10。",
+          "correct": true,
+          "reason": "每个字节值16，整块补齐。"
+        },
+        {
+          "text": "补1个00。",
+          "correct": false,
+          "reason": "长度仍非整块且规则错误。"
+        },
+        {
+          "text": "删去末字节。",
+          "correct": false,
+          "reason": "会破坏消息。"
+        }
+      ],
+      "explanation": "这是PKCS#7的具体约定，不是所有模式都需要填充。",
+      "source": "第五讲 P1–8、P13–14；原例改编或依重难点原创"
+    },
+    {
+      "id": "m02-q1",
+      "module": "m02",
+      "type": "single",
+      "question": "哪种模式把上一次E_K的输出再次送进E_K？",
+      "options": [
+        {
+          "text": "CBC。",
+          "correct": false,
+          "reason": "CBC先把当前明文与前一密文异或。"
+        },
+        {
+          "text": "CFB。",
+          "correct": false,
+          "reason": "CFB反馈密文。"
+        },
+        {
+          "text": "OFB。",
+          "correct": true,
+          "reason": "O_i=E_K(O_{i-1})。"
+        },
+        {
+          "text": "CTR。",
+          "correct": false,
+          "reason": "CTR加密独立构造的计数器块。"
+        }
+      ],
+      "explanation": "通过E的输入判断模式。",
+      "source": "第五讲 P9–12；原例改编或依重难点原创"
+    },
+    {
+      "id": "m02-q2",
+      "module": "m02",
+      "type": "multi",
+      "question": "哪些约束正确？",
+      "options": [
+        {
+          "text": "CBC与CFB的IV应不可预测。",
+          "correct": true,
+          "reason": "单纯可见递增值通常不能满足该要求。"
+        },
+        {
+          "text": "CTR可以每条消息都从0开始，只要消息内部不重。",
+          "correct": false,
+          "reason": "同钥跨消息也必须避免重复。"
+        },
+        {
+          "text": "OFB同钥下IV不得重复。",
+          "correct": true,
+          "reason": "否则产生重复密钥流。"
+        },
+        {
+          "text": "CFB解密要调用D_K。",
+          "correct": false,
+          "reason": "CFB两端都用E_K产生掩码。"
+        }
+      ],
+      "explanation": "IV一般公开，其生成规则仍关系保密性。",
+      "source": "第五讲 P9–12；原例改编或依重难点原创"
+    },
+    {
+      "id": "m02-q3",
+      "module": "m02",
+      "type": "single",
+      "question": "需独立读取文件中第100块时，哪种模式最直接？",
+      "options": [
+        {
+          "text": "CTR：构造该块计数器并算E_K。",
+          "correct": true,
+          "reason": "无需先计算前99段密钥流。"
+        },
+        {
+          "text": "OFB：每块密钥流互不依赖。",
+          "correct": false,
+          "reason": "OFB流是串行反馈生成的。"
+        },
+        {
+          "text": "CBC加密：无需前一密文。",
+          "correct": false,
+          "reason": "CBC加密依赖前一密文。"
+        },
+        {
+          "text": "CFB加密：可随意跳过前99块。",
+          "correct": false,
+          "reason": "产生密文前需对应反馈输入。"
+        }
+      ],
+      "explanation": "“可提前生成”不自动表示“任意段能独立生成”。",
+      "source": "第五讲 P9–12；原例改编或依重难点原创"
+    },
+    {
+      "id": "m03-q1",
+      "module": "m03",
+      "type": "single",
+      "question": "P45作业CBC密文与CTR密文分别是？",
+      "options": [
+        {
+          "text": "1001 0000 1100；0100 0010 1111。",
+          "correct": true,
+          "reason": "按IV和起始计数器逐块计算。"
+        },
+        {
+          "text": "0100 0010 1111；1001 0000 1100。",
+          "correct": false,
+          "reason": "颠倒两模式。"
+        },
+        {
+          "text": "1001 1001 1100；0111 0001 0011。",
+          "correct": false,
+          "reason": "前者反馈计算错误，后者仅为密钥流。"
+        },
+        {
+          "text": "0011 0011 1100；相同。",
+          "correct": false,
+          "reason": "没有执行加密。"
+        }
+      ],
+      "explanation": "掩码与密文分开记录。",
+      "source": "第五讲 P13–14、P33、P45；原例改编或依重难点原创"
+    },
+    {
+      "id": "m03-q2",
+      "module": "m03",
+      "type": "multi",
+      "question": "CBC密文C₂最高位翻转，哪些判断正确？",
+      "options": [
+        {
+          "text": "M₃最高位会定向翻转。",
+          "correct": true,
+          "reason": "前块异或直接把差分带入下一明文。"
+        },
+        {
+          "text": "所有后续明文都会损坏。",
+          "correct": false,
+          "reason": "只改一块密文且对齐未变时，M4起恢复。"
+        },
+        {
+          "text": "玩具密码下M₂从左第2位翻转。",
+          "correct": true,
+          "reason": "4位右循环把1000差分变0100。"
+        },
+        {
+          "text": "AES下M₂必定精确翻64位。",
+          "correct": false,
+          "reason": "约一半是统计趋势，不保证精确数值。"
+        }
+      ],
+      "explanation": "区分代数必然结论和实际密码的统计扩散。",
+      "source": "第五讲 P13–14、P33、P45；原例改编或依重难点原创"
+    },
+    {
+      "id": "m03-q3",
+      "module": "m03",
+      "type": "single",
+      "question": "哪种说法说明了完整性问题？",
+      "options": [
+        {
+          "text": "CTR一位密文篡改会被自动拒绝。",
+          "correct": false,
+          "reason": "没有标签时不会自动发现。"
+        },
+        {
+          "text": "CBC出现错误传播就相当于MAC。",
+          "correct": false,
+          "reason": "乱码不等于验证。"
+        },
+        {
+          "text": "CTR中c′=c⊕Δ会使m′=m⊕Δ。",
+          "correct": true,
+          "reason": "攻击者可定向修改而无需知道密钥流。"
+        },
+        {
+          "text": "填充消除了所有篡改。",
+          "correct": false,
+          "reason": "填充是长度约定，不是认证。"
+        }
+      ],
+      "explanation": "正确解密与验证来源完整性是不同功能。",
+      "source": "第五讲 P13–14、P33、P45；原例改编或依重难点原创"
+    },
+    {
+      "id": "f01-q1",
+      "module": "f01",
+      "type": "single",
+      "question": "hello与重复99字节流异或的密文是？",
+      "options": [
+        {
+          "text": "F1 FC F5 F5 F6。",
+          "correct": true,
+          "reason": "68、65、6C、6C、6F分别⊕99。"
+        },
+        {
+          "text": "F1 FC F5 F6 F5。",
+          "correct": false,
+          "reason": "最后两个字节位置错误。"
+        },
+        {
+          "text": "68 65 6C 6C 6F。",
+          "correct": false,
+          "reason": "这是ASCII明文。"
+        },
+        {
+          "text": "99 99 99 99 99。",
+          "correct": false,
+          "reason": "这是密钥流。"
+        }
+      ],
+      "explanation": "按字节异或，密文不必是可打印字符。",
+      "source": "第五讲 P15–19、P33、P46；原例改编或依重难点原创"
+    },
+    {
+      "id": "f01-q2",
+      "module": "f01",
+      "type": "multi",
+      "question": "哪些说法成立？",
+      "options": [
+        {
+          "text": "密钥流复用时，已知一条明文可恢复另一条对应位置。",
+          "correct": true,
+          "reason": "由流抵消等式推出。"
+        },
+        {
+          "text": "统计检测通过就足以当密码流。",
+          "correct": false,
+          "reason": "可预测序列也可能呈现不错的统计外观。"
+        },
+        {
+          "text": "短种子确定性扩展一般只主张计算安全。",
+          "correct": true,
+          "reason": "独立信息熵不会凭空增长。"
+        },
+        {
+          "text": "四个LCG输出对任意情况都唯一确定m、a、c。",
+          "correct": false,
+          "reason": "需要可逆性等条件，未知模数也可能多解。"
+        }
+      ],
+      "explanation": "不要把测试外观或特例恢复方法当普遍保证。",
+      "source": "第五讲 P15–19、P33、P46；原例改编或依重难点原创"
+    },
+    {
+      "id": "f01-q3",
+      "module": "f01",
+      "type": "single",
+      "question": "知道金额首字符1的位置，想改成9，流密码攻击者怎样改密文？",
+      "options": [
+        {
+          "text": "把对应密文字节异或08。",
+          "correct": true,
+          "reason": "31⊕39=08，密文差分直接传给明文。"
+        },
+        {
+          "text": "必须先知道种子密钥。",
+          "correct": false,
+          "reason": "定向异或篡改无需密钥。"
+        },
+        {
+          "text": "把整个密文反转。",
+          "correct": false,
+          "reason": "不能产生所需局部字符变化。"
+        },
+        {
+          "text": "异或99。",
+          "correct": false,
+          "reason": "99是hello作业流，不是1到9的差分。"
+        }
+      ],
+      "explanation": "消息认证用于阻止这种可检测性缺失。",
+      "source": "第五讲 P15–19、P33、P46；原例改编或依重难点原创"
+    },
+    {
+      "id": "z01-q1",
+      "module": "z01",
+      "type": "single",
+      "question": "key₀=01、iv₀=02、d₀=44D7时，s₀为？",
+      "options": [
+        {
+          "text": "00C4D702。",
+          "correct": true,
+          "reason": "01左移23位，44D7左移8位，再拼入02。"
+        },
+        {
+          "text": "0144D702。",
+          "correct": false,
+          "reason": "误把15位d当16位，变成8+16+8。"
+        },
+        {
+          "text": "44D70102。",
+          "correct": false,
+          "reason": "拼接顺序错误。"
+        },
+        {
+          "text": "0044D702。",
+          "correct": false,
+          "reason": "遗漏key0的高8位贡献。"
+        }
+      ],
+      "explanation": "按8+15+8位拼接，不能直接拼三段十六进制文本。",
+      "source": "第五讲 P20–25；原例改编或依重难点原创"
+    },
+    {
+      "id": "z01-q2",
+      "module": "z01",
+      "type": "multi",
+      "question": "ZUC中哪些说法成立？",
+      "options": [
+        {
+          "text": "LFSR的模数是2³¹−1。",
+          "correct": true,
+          "reason": "不是2³¹或2³²。"
+        },
+        {
+          "text": "F中的⊞按mod2³²。",
+          "correct": true,
+          "reason": "保留32位字。"
+        },
+        {
+          "text": "31位sᵢ的高16位是31到16位。",
+          "correct": false,
+          "reason": "最高有效位是30，应取30到15位。"
+        },
+        {
+          "text": "W≫1把最低位循环回最高位。",
+          "correct": false,
+          "reason": "这里是逻辑右移。"
+        }
+      ],
+      "explanation": "必须同时看运算符、位宽和所属层。",
+      "source": "第五讲 P20–25；原例改编或依重难点原创"
+    },
+    {
+      "id": "z01-q3",
+      "module": "z01",
+      "type": "single",
+      "question": "7FFFFFF0与20做ZUC式模加，结果是什么？",
+      "options": [
+        {
+          "text": "10。",
+          "correct": false,
+          "reason": "遗漏2³¹进位回加。"
+        },
+        {
+          "text": "11。",
+          "correct": true,
+          "reason": "80000010低31位10加进位1。"
+        },
+        {
+          "text": "80000010。",
+          "correct": false,
+          "reason": "尚未模约减。"
+        },
+        {
+          "text": "0。",
+          "correct": false,
+          "reason": "该和值不属于零类。"
+        }
+      ],
+      "explanation": "mod(2³¹−1)与简单位掩码不同。",
+      "source": "第五讲 P20–25；原例改编或依重难点原创"
+    },
+    {
+      "id": "z02-q1",
+      "module": "z02",
+      "type": "single",
+      "question": "ZUC完成32次初始化后下一步是什么？",
+      "options": [
+        {
+          "text": "马上把第32次W当Z₁输出。",
+          "correct": false,
+          "reason": "初始化输出不作为流。"
+        },
+        {
+          "text": "工作模式运行一拍并舍弃F输出，再开始输出Z。",
+          "correct": true,
+          "reason": "避免漏掉额外丢弃拍。"
+        },
+        {
+          "text": "每个Z输出前都重新初始化32次。",
+          "correct": false,
+          "reason": "正常工作连续更新状态。"
+        },
+        {
+          "text": "清空R₁、R₂再输出。",
+          "correct": false,
+          "reason": "会破坏初始化后的内部状态。"
+        }
+      ],
+      "explanation": "初始化、舍弃拍和输出拍是三个阶段。",
+      "source": "第五讲 P26–32；原例改编或依重难点原创"
+    },
+    {
+      "id": "z02-q2",
+      "module": "z02",
+      "type": "single",
+      "question": "课堂题16字节IV中iv₄及iv₁₂是什么？",
+      "options": [
+        {
+          "text": "都为78。",
+          "correct": true,
+          "reason": "iv12复制iv4，01111‖0‖00=78。"
+        },
+        {
+          "text": "分别78和00。",
+          "correct": false,
+          "reason": "后8字节重复前8。"
+        },
+        {
+          "text": "都为0F。",
+          "correct": false,
+          "reason": "没有把BEARER移到字节高5位。"
+        },
+        {
+          "text": "都为F0。",
+          "correct": false,
+          "reason": "拼接位移错误。"
+        }
+      ],
+      "explanation": "BEARER占高5位，方向占第2位，末两位为0。",
+      "source": "第五讲 P26–32；原例改编或依重难点原创"
+    },
+    {
+      "id": "z02-q3",
+      "module": "z02",
+      "type": "multi",
+      "question": "LENGTH=1000位时，哪些正确？",
+      "options": [
+        {
+          "text": "生成32个32位字。",
+          "correct": true,
+          "reason": "向上取整1000/32。"
+        },
+        {
+          "text": "最后一字使用最高8位。",
+          "correct": true,
+          "reason": "1000−31×32=8。"
+        },
+        {
+          "text": "共使用1000字节。",
+          "correct": false,
+          "reason": "题目单位为比特。"
+        },
+        {
+          "text": "应把初始化阶段32个W直接当作消息流。",
+          "correct": false,
+          "reason": "初始化W不能输出。"
+        }
+      ],
+      "explanation": "先判断单位，再计算总字数和末字取位。",
+      "source": "第五讲 P26–32；原例改编或依重难点原创"
+    },
+    {
+      "id": "a01-q1",
+      "module": "a01",
+      "type": "single",
+      "question": "HMAC-SM3使用100字节密钥，K′怎样构造？",
+      "options": [
+        {
+          "text": "截取前64字节。",
+          "correct": false,
+          "reason": "规则要求先哈希，不是截断。"
+        },
+        {
+          "text": "SM3(K)的32字节后补32个00。",
+          "correct": true,
+          "reason": "先压缩至摘要长，再补到分组长。"
+        },
+        {
+          "text": "K后补28个00。",
+          "correct": false,
+          "reason": "不能因超过B就补到128。"
+        },
+        {
+          "text": "SM3(K)后再补64个00。",
+          "correct": false,
+          "reason": "最终应64字节，不是96。"
+        }
+      ],
+      "explanation": "K′总长必须等于哈希输入分组长。",
+      "source": "第五讲 P34–41；原例改编或依重难点原创"
+    },
+    {
+      "id": "a01-q2",
+      "module": "a01",
+      "type": "single",
+      "question": "HMAC-SM3中K′首字节4B与ipad、opad异或结果依次是？",
+      "options": [
+        {
+          "text": "7D、17。",
+          "correct": true,
+          "reason": "4B⊕36=7D，4B⊕5C=17。"
+        },
+        {
+          "text": "17、7D。",
+          "correct": false,
+          "reason": "颠倒内外填充值。"
+        },
+        {
+          "text": "81、A7。",
+          "correct": false,
+          "reason": "误用整数加法。"
+        },
+        {
+          "text": "36、5C。",
+          "correct": false,
+          "reason": "那是ipad和opad原字节。"
+        }
+      ],
+      "explanation": "异或按比特无进位。",
+      "source": "第五讲 P34–41；原例改编或依重难点原创"
+    },
+    {
+      "id": "a01-q3",
+      "module": "a01",
+      "type": "multi",
+      "question": "关于MAC，哪些成立？",
+      "options": [
+        {
+          "text": "验证共享密钥控制下的消息完整性与来源。",
+          "correct": true,
+          "reason": "仍依赖安全密钥分发与正确实现。"
+        },
+        {
+          "text": "MAC天然阻止所有重放。",
+          "correct": false,
+          "reason": "旧消息旧标签仍匹配。"
+        },
+        {
+          "text": "接收方也能生成标签。",
+          "correct": true,
+          "reason": "共享K，所以不能用MAC区分双方的不可否认性。"
+        },
+        {
+          "text": "标签正确就证明内容从未被读取。",
+          "correct": false,
+          "reason": "MAC没有保密性。"
+        }
+      ],
+      "explanation": "验证目标要和协议中的身份及新鲜性分开。",
+      "source": "第五讲 P34–41；原例改编或依重难点原创"
+    },
+    {
+      "id": "a02-q1",
+      "module": "a02",
+      "type": "single",
+      "question": "已知单块M的CBC-MAC标签T，直接接受变长消息的基本构造会怎样？",
+      "options": [
+        {
+          "text": "M‖(M⊕T)也具有标签T。",
+          "correct": true,
+          "reason": "第二块入E的值是M⊕T⊕T=M。"
+        },
+        {
+          "text": "把IV随机化就自动完全修复。",
+          "correct": false,
+          "reason": "基本CBC-MAC要求固定零IV，随意随机化可能引入其他伪造。"
+        },
+        {
+          "text": "补到整块就一定安全。",
+          "correct": false,
+          "reason": "长度变化本身仍需处理。"
+        },
+        {
+          "text": "MAC本来就是保密加密，无需分析。",
+          "correct": false,
+          "reason": "它提供认证，且构造条件必须满足。"
+        }
+      ],
+      "explanation": "原始CBC-MAC的固定长度条件有实质作用。",
+      "source": "第五讲 P42–44、P47–48；原例改编或依重难点原创"
+    },
+    {
+      "id": "a02-q2",
+      "module": "a02",
+      "type": "multi",
+      "question": "HKDF-SM3派生600位，哪些正确？",
+      "options": [
+        {
+          "text": "N=3。",
+          "correct": true,
+          "reason": "向上取整600/256。"
+        },
+        {
+          "text": "T(3)输入包含T(2)、info与单字节03。",
+          "correct": true,
+          "reason": "Expand递推链接前一个块。"
+        },
+        {
+          "text": "第三块取全部32字节。",
+          "correct": false,
+          "reason": "只需前11字节，输出总75字节。"
+        },
+        {
+          "text": "Extract把σ当HMAC密钥、salt当消息。",
+          "correct": false,
+          "reason": "顺序相反：salt是密钥，σ是消息。"
+        }
+      ],
+      "explanation": "位与字节单位、参数方向都不能省略。",
+      "source": "第五讲 P42–44、P47–48；原例改编或依重难点原创"
+    },
+    {
+      "id": "a02-q3",
+      "module": "a02",
+      "type": "single",
+      "question": "把100万种可能口令通过KDF输出256位密钥，哪项成立？",
+      "options": [
+        {
+          "text": "自动获得256位秘密熵。",
+          "correct": false,
+          "reason": "公开参数下仍可枚举原100万候选。"
+        },
+        {
+          "text": "输出比输入长，所以无法穷举。",
+          "correct": false,
+          "reason": "攻击者枚举输入并重算。"
+        },
+        {
+          "text": "确定性派生不能凭空增加秘密熵。",
+          "correct": true,
+          "reason": "成本参数可增加猜一次的代价，但不增加独立秘密信息。"
+        },
+        {
+          "text": "公开salt使输出必然可直接反解。",
+          "correct": false,
+          "reason": "salt公开不等于泄露输入；其作用不同于密钥。"
+        }
+      ],
+      "explanation": "输出位数、伪随机性、输入熵与猜测成本是不同指标。",
+      "source": "第五讲 P42–44、P47–48；原例改编或依重难点原创"
+    }
+  ]
+}
