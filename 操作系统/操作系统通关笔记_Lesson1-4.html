@@ -1,0 +1,1854 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>操作系统通关笔记·Lesson 1–4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column (~46rem) under a sticky chapter bar; every network layer keeps its own color everywhere it appears. */
+:root{
+  --bg:#F2F5F7; --surface:#FFFFFF; --surface-2:#E7EDF1; --ink:#14202B; --muted:#56646F; --line:#D2DBE2;
+  --accent:#0A6A8C; --accent-soft:#DCEEF4;
+  --exam:#B9460E; --exam-soft:#FBE8DB;
+  --trap:#B4232F; --trap-soft:#FBE3E5;
+  --ex:#2C7A4B; --ex-soft:#DFF1E6;
+  --l1:#A86A12; --l2:#2C7A4B; --l3:#2963A8; --l4:#7550C4; --l5:#B8306B;
+  --l1s:#F6E9D3; --l2s:#DCEFE3; --l3s:#DDE8F6; --l4s:#EAE3F8; --l5s:#F7DFEA;
+  --f-display:"Noto Serif SC","Songti SC","STSong",serif;
+  --f-body:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E151B; --surface:#16202A; --surface-2:#1E2A35; --ink:#E2E9EF; --muted:#95A4B1; --line:#2B3946;
+  --accent:#55B9DD; --accent-soft:#123241;
+  --exam:#F2914F; --exam-soft:#3A2415;
+  --trap:#F0737D; --trap-soft:#3B1A1E;
+  --ex:#6CCB93; --ex-soft:#15301F;
+  --l1:#E2A447; --l2:#62C58C; --l3:#6FA6EE; --l4:#AB8BF0; --l5:#EE79A9;
+  --l1s:#33270F; --l2s:#13301F; --l3s:#152639; --l4s:#251C3A; --l5s:#38172A;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E151B; --surface:#16202A; --surface-2:#1E2A35; --ink:#E2E9EF; --muted:#95A4B1; --line:#2B3946;
+  --accent:#55B9DD; --accent-soft:#123241;
+  --exam:#F2914F; --exam-soft:#3A2415;
+  --trap:#F0737D; --trap-soft:#3B1A1E;
+  --ex:#6CCB93; --ex-soft:#15301F;
+  --l1:#E2A447; --l2:#62C58C; --l3:#6FA6EE; --l4:#AB8BF0; --l5:#EE79A9;
+  --l1s:#33270F; --l2s:#13301F; --l3s:#152639; --l4s:#251C3A; --l5s:#38172A;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75}
+.wrap{max-width:48rem;margin:0 auto;padding-inline:16px;padding-block:0 4rem}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;line-height:1.3;margin:0}
+h2{font-size:1.6rem;font-weight:900}
+h3{font-size:1.22rem;font-weight:900;margin-top:2.4rem;margin-bottom:.6rem;scroll-margin-top:4.5rem}
+h4{font-size:1.04rem;font-weight:600;margin-top:1.6rem;margin-bottom:.4rem}
+p{margin:.6rem 0}
+a{color:var(--accent)}
+strong{font-weight:700}
+.muted{color:var(--muted)}
+code,.mono{font-family:var(--f-mono);font-size:.92em}
+code{background:var(--surface-2);padding:.08em .35em;border-radius:4px}
+ul,ol{padding-left:1.3rem;margin:.5rem 0}
+li{margin:.2rem 0}
+li::marker{color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* header */
+.top{padding-block:2.6rem 1.4rem}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;color:var(--muted);font-weight:600}
+.top h1{font-size:clamp(2rem,7vw,3rem);font-weight:900;margin-top:.4rem;letter-spacing:.01em}
+.top h1 span{color:var(--accent)}
+.lede{font-size:1.05rem;color:var(--muted);max-width:40rem}
+.legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.tag{display:inline-flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:700;padding:.12rem .55rem;border-radius:999px;letter-spacing:.04em;white-space:nowrap}
+.tag.exam{background:var(--exam-soft);color:var(--exam)}
+.tag.trap{background:var(--trap-soft);color:var(--trap)}
+.tag.tip{background:var(--accent-soft);color:var(--accent)}
+.tag.ex{background:var(--ex-soft);color:var(--ex)}
+.stars{color:var(--exam);font-size:.85rem;letter-spacing:.1em;font-weight:700;margin-left:.3rem;white-space:nowrap}
+
+/* sticky nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:48rem;margin:0 auto;padding:.55rem 16px;display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.nav a{flex:none;text-decoration:none;color:var(--ink);font-size:.86rem;padding:.3rem .75rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);white-space:nowrap}
+.nav a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* chapter opener */
+.chap{margin-top:3.5rem;padding-top:1.4rem;border-top:2px solid var(--ink);scroll-margin-top:3.6rem}
+.chap-head{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+.chap-no{font-family:var(--f-mono);font-size:.85rem;color:var(--muted);font-weight:600}
+.chap .sub{color:var(--muted);margin-top:.3rem}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.3rem 1.2rem;margin:1rem 0 0;padding:0;list-style:none;font-size:.92rem}
+.toc a{text-decoration:none;color:var(--ink);display:block;padding:.15rem 0;border-bottom:1px dashed var(--line)}
+.toc a span{font-family:var(--f-mono);color:var(--muted);font-size:.8rem;margin-right:.4rem}
+
+/* callouts */
+.box{border-radius:10px;padding:.8rem 1rem;margin:1rem 0;background:var(--surface);border:1px solid var(--line)}
+.box>.tag{margin-bottom:.2rem}
+.box p:first-of-type{margin-top:.3rem}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+.box.exam{background:var(--exam-soft);border-color:transparent}
+.box.trap{background:var(--trap-soft);border-color:transparent}
+.box.tip{background:var(--accent-soft);border-color:transparent}
+.box.ex{background:var(--surface);border-color:var(--line)}
+.box.exam .tag{background:var(--surface);}
+.box.trap .tag{background:var(--surface)}
+.box.tip .tag{background:var(--surface)}
+
+/* formula */
+.formula{font-family:var(--f-mono);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;margin:1rem 0;overflow-x:auto;font-size:1.02rem;line-height:1.9}
+.formula .big{font-size:1.25rem;font-weight:600;color:var(--accent)}
+.formula .cap{display:block;font-family:var(--f-body);font-size:.85rem;color:var(--muted)}
+
+/* tables */
+.tbl{overflow-x:auto;margin:1rem 0;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:.5rem .7rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--surface-2);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.c,th.c{text-align:center}
+.dot{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;background:var(--exam)}
+.dot.lo{background:transparent;border:2px solid var(--exam)}
+
+/* figures */
+figure{margin:1.2rem 0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.8rem}
+figure .svgbox{overflow-x:auto}
+figure svg{display:block;max-width:100%;height:auto;margin:0 auto}
+figure svg.wide{max-width:none}
+figcaption{font-size:.84rem;color:var(--muted);margin-top:.5rem;text-align:center}
+svg text{font-family:var(--f-body);fill:var(--ink)}
+svg .mono{font-family:var(--f-mono)}
+svg .mut{fill:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.8rem}
+.grid2>*{min-width:0}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:.6rem}
+.mini{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.6rem .7rem;font-size:.86rem}
+.mini h5{margin:0 0 .2rem;font-size:.95rem;font-family:var(--f-display)}
+.mini svg{display:block;width:100%;height:auto;max-height:110px}
+
+/* answers / details */
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:.8rem 0}
+details>summary{cursor:pointer;padding:.7rem 1rem;font-weight:600;list-style:none;display:flex;gap:.6rem;align-items:flex-start}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"+";font-family:var(--f-mono);color:var(--accent);font-weight:700;flex:none}
+details[open]>summary::before{content:"−"}
+details>.ans{padding:0 1rem .9rem;border-top:1px dashed var(--line)}
+.src{font-size:.75rem;color:var(--muted);font-weight:400;font-family:var(--f-mono);white-space:nowrap}
+
+/* tools */
+.tool{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1rem;margin:1.2rem 0}
+.tool h5{margin:0 0 .6rem;font-family:var(--f-display);font-size:1rem}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end}
+.row>label{display:flex;flex-direction:column;font-size:.8rem;color:var(--muted);gap:.2rem;min-width:0}
+input[type=text],input[type=number],select{font:inherit;font-size:.95rem;padding:.4rem .55rem;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);max-width:100%}
+input[type=number]{width:8.5rem}
+input.bits{font-family:var(--f-mono);width:14rem;letter-spacing:.08em}
+input[type=range]{width:min(16rem,100%);accent-color:var(--accent)}
+.out{font-family:var(--f-mono);font-size:.92rem;margin-top:.8rem;line-height:1.9;overflow-x:auto}
+.out b{color:var(--accent)}
+.btn{font:inherit;font-size:.88rem;padding:.4rem .8rem;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--surface);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+
+/* quiz */
+.quiz{display:grid;gap:.8rem;margin:1rem 0}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.8rem 1rem}
+.q .qt{font-weight:600}
+.q .opts{display:grid;gap:.35rem;margin-top:.5rem}
+.q button.opt{font:inherit;text-align:left;padding:.45rem .7rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.q button.opt:hover{border-color:var(--accent)}
+.q button.opt.right{background:var(--ex-soft);border-color:var(--ex);color:var(--ink)}
+.q button.opt.wrong{background:var(--trap-soft);border-color:var(--trap);color:var(--ink)}
+.q .why{margin-top:.5rem;font-size:.9rem;color:var(--muted)}
+.score{font-family:var(--f-mono);font-size:.9rem;color:var(--muted)}
+
+/* layer chips */
+.ly{display:inline-block;font-size:.78rem;font-weight:700;padding:.05rem .45rem;border-radius:5px}
+.ly1{background:var(--l1s);color:var(--l1)} .ly2{background:var(--l2s);color:var(--l2)} .ly3{background:var(--l3s);color:var(--l3)} .ly4{background:var(--l4s);color:var(--l4)} .ly5{background:var(--l5s);color:var(--l5)}
+
+/* checklist */
+.check{list-style:none;padding:0;display:grid;gap:.3rem}
+.check label{display:flex;gap:.6rem;align-items:flex-start;cursor:pointer;padding:.35rem .5rem;border-radius:8px}
+.check label:hover{background:var(--surface-2)}
+.check input{margin-top:.4rem;accent-color:var(--ex);flex:none}
+.check input:checked+span{color:var(--muted);text-decoration:line-through}
+.progress{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin:.6rem 0}
+.progress i{display:block;height:100%;background:var(--ex);width:0;transition:width .3s}
+
+.cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.7rem}
+.cheat>div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.7rem .85rem;min-width:0}
+.cheat h5{margin:0 0 .3rem;font-size:.82rem;letter-spacing:.06em;color:var(--muted);font-family:var(--f-body)}
+.cheat .mono{font-size:.95rem;line-height:1.7;overflow-wrap:anywhere}
+footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}
+</style>
+<style>
+.code{font-family:var(--f-mono);font-size:.86rem;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.8rem 1rem;margin:1rem 0;overflow-x:auto;white-space:pre;line-height:1.6}
+.code .c{color:var(--muted)}
+.code .k{color:var(--l4);font-weight:600}
+.judge{display:flex;gap:.5rem;align-items:baseline}
+.judge b{font-family:var(--f-mono);flex:none}
+.sim{display:grid;gap:.6rem}
+.sim .btns{display:flex;flex-wrap:wrap;gap:.4rem}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.log{font-family:var(--f-mono);font-size:.85rem;color:var(--muted);min-height:1.5em}
+.buf{display:flex;gap:.4rem;flex-wrap:wrap}
+.buf span{width:3.2rem;height:3.2rem;border-radius:8px;border:2px dashed var(--line);display:grid;place-items:center;font-family:var(--f-mono);font-weight:700}
+.buf span.full{border-style:solid;border-color:var(--ex);background:var(--ex-soft);color:var(--ex)}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="章节导航"><div class="nav-in" id="navIn">
+  <a href="#start">开始</a>
+  <a href="#ch0">课程与考情</a>
+  <a href="#l1">L1 导论</a>
+  <a href="#l2">L2 服务与结构</a>
+  <a href="#l3">L3 进程</a>
+  <a href="#l4">L4 线程</a>
+  <a href="#cheat">一页纸</a>
+  <a href="#exam">真题精讲</a>
+  <a href="#quiz">自测</a>
+  <a href="#todo">掌握清单</a>
+</div></nav>
+
+<div class="wrap">
+
+<header class="top" id="start">
+  <div class="eyebrow">OPERATING SYSTEMS · 华东师大软件工程 · 周炽金老师课件</div>
+  <h1>操作系统通关笔记 <span>Lesson 1–4</span></h1>
+  <p class="lede">把 <code>lesson1-intro</code>、<code>lesson2-service</code>、<code>lesson3-processes</code>、<code>lesson4-threads</code> 四份课件重新讲一遍，写给零基础的同学。每个概念配图或小工具，并对照 2018、2019、2020 三年期中真题标出考点。</p>
+  <div class="legend" aria-label="图例">
+    <span class="tag exam">考点</span>
+    <span class="tag trap">易错</span>
+    <span class="tag tip">比喻 / 直觉</span>
+    <span class="tag ex">例题</span>
+    <span class="tag" style="background:var(--surface-2)">★ 越多越常考</span>
+  </div>
+  <div class="box tip" style="margin-top:1.2rem">
+    <span class="tag tip">怎么用</span>
+    <ol>
+      <li>第一遍：按顺序读，看懂比喻和图，玩一玩页面里的小工具（进程状态机、fork 进程树、生产者-消费者缓冲区、Amdahl 计算器）。</li>
+      <li>第二遍：背 <span class="tag exam">考点</span> 框；判断题一定要会<strong>说出理由</strong>（往年判断题错了要写原因，否则不给分）。</li>
+      <li>考前：看「一页纸」和「真题精讲」，做「自测」，在「掌握清单」里打勾。</li>
+    </ol>
+  </div>
+</header>
+
+<!-- ============ 课程与考情 ============ -->
+<section class="chap" id="ch0">
+  <div class="chap-head"><span class="chap-no">CH 0</span><h2>课程信息与考情地图</h2></div>
+  <h3 id="c0-grade">成绩怎么算</h3>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 110" role="img" aria-label="成绩构成：日常学习 20%，期中考试 20%，期末考试 60%">
+      <g font-size="13">
+        <rect x="0" y="20" width="128" height="44" fill="var(--accent-soft)"/>
+        <rect x="128" y="20" width="128" height="44" fill="var(--exam-soft)"/>
+        <rect x="256" y="20" width="384" height="44" fill="var(--exam)"/>
+        <text x="64" y="47" text-anchor="middle">日常学习 20%</text>
+        <text x="192" y="47" text-anchor="middle" font-weight="700">期中 20%</text>
+        <text x="448" y="47" text-anchor="middle" font-weight="700" style="fill:var(--surface)">期末 60%（卷面）</text>
+        <text x="128" y="88" text-anchor="middle" class="mut">平时 40%：作业签到、课堂问答、论文阅读 + 期中（约第 10 周）</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>课件 lesson1 第 4 页。题型：选择、判断、应用、综合。老师说允许用 AI 辅助编程，但考试考的是“解释机制、分析执行过程”，例如“这把锁保护了什么？去掉会怎样？”</figcaption>
+  </figure>
+  <p>往年期中卷结构（100 分）：<strong>判断题 20 分</strong>（错的要写理由）＋ <strong>不定项选择 20–30 分</strong>（多选、少选都不给分）＋ <strong>辨析/简答 15–20 分</strong> ＋ <strong>综合题 35–40 分</strong>。</p>
+
+  <h3 id="c0-map">考情地图：Lesson 1–4 的知识点哪年考过</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>知识点</th><th class="c">2018</th><th class="c">2019</th><th class="c">2020</th><th>位置</th></tr></thead>
+    <tbody>
+      <tr><td>进程状态与转换（哪些不可能、时间片到/打开文件后去哪）</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#l3-state">3.3</a></td></tr>
+      <tr><td>进程 vs 线程：各自保存什么、谁是调度单位</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#l4-share">4.1</a></td></tr>
+      <tr><td>内核态/用户态、系统调用是程序员接口</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"></td><td><a href="#l1-mode">1.5</a></td></tr>
+      <tr><td>微内核里有什么（IPC 必在内核）</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#l2-struct">2.6</a></td></tr>
+      <tr><td>中断的作用（多道程序的必要条件、优先级由硬件定）</td><td class="c"><i class="dot"></i></td><td class="c"></td><td class="c"><i class="dot lo"></i></td><td><a href="#l1-mode">1.5</a></td></tr>
+      <tr><td>fork / 文件描述符 / 线程写文件的输出分析（综合 10 分）</td><td class="c"></td><td class="c"></td><td class="c"><i class="dot"></i></td><td><a href="#l3-fork">3.6</a></td></tr>
+      <tr><td>多线程的好处、Amdahl 定律</td><td class="c"></td><td class="c"></td><td class="c"><i class="dot"></i></td><td><a href="#l4-amdahl">4.4</a></td></tr>
+      <tr><td>并发 vs 并行</td><td class="c"><i class="dot"></i></td><td class="c"></td><td class="c"></td><td><a href="#l4-cp">4.3</a></td></tr>
+      <tr><td>用户级线程阻塞、线程映射模型</td><td class="c"></td><td class="c"><i class="dot"></i></td><td class="c"></td><td><a href="#l4-model">4.5</a></td></tr>
+      <tr><td>上下文切换及减少开销的方法</td><td class="c"></td><td class="c"></td><td class="c"><i class="dot"></i></td><td><a href="#l3-cs">3.5</a></td></tr>
+      <tr><td>地址空间各段（代码在 text 段）</td><td class="c"></td><td class="c"></td><td class="c"><i class="dot"></i></td><td><a href="#l3-mem">3.2</a></td></tr>
+      <tr><td>IPC：共享内存 vs 消息传递、生产者-消费者</td><td class="c"></td><td class="c"><i class="dot lo"></i></td><td class="c"><i class="dot"></i></td><td><a href="#l3-ipc">3.8</a></td></tr>
+      <tr><td>作业调度/进程调度（高级/低级调度）</td><td class="c"><i class="dot"></i></td><td class="c"></td><td class="c"></td><td><a href="#l3-queue">3.4</a></td></tr>
+      <tr><td>UNIX 是分时系统；OS 发展史</td><td class="c"></td><td class="c"><i class="dot"></i></td><td class="c"></td><td><a href="#l1-hist">1.3</a></td></tr>
+      <tr><td><code>count++</code> 不是原子操作</td><td class="c"></td><td class="c"></td><td class="c"><i class="dot"></i></td><td><a href="#l4-pthread">4.6</a></td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">重要提醒</span>
+    <p>往年期中还有<strong>一半以上的分数</strong>来自 Lesson 4 之后的章节，四年都考：</p>
+    <ul>
+      <li><strong>CPU 调度算法</strong>：FCFS / SJF / 优先级 / RR / 多级反馈队列，画甘特图、算周转时间和等待时间（每年 10–15 分）。</li>
+      <li><strong>进程同步</strong>：信号量 P/V 操作（售票厅、生产者-消费者）、互斥量 vs 信号量、管程（每年 10–15 分）。</li>
+      <li><strong>死锁</strong>：四个必要条件、预防 vs 避免、银行家算法求安全序列、资源分配图。</li>
+    </ul>
+    <p>这些内容不在 lesson1–4 里，本笔记只在相关处埋了伏笔（比如生产者-消费者、<code>count++</code>）。等后面的课件发了，再按同样方式补上。</p>
+  </div>
+</section>
+
+<!-- ============ Lesson 1 ============ -->
+<section class="chap" id="l1">
+  <div class="chap-head"><span class="chap-no">LESSON 1</span><h2>导论：操作系统是什么、管什么</h2></div>
+  <p class="sub">对应教材 Operating System Concepts 第 1 章。</p>
+  <ul class="toc">
+    <li><a href="#l1-why"><span>1.1</span>一道“保存配置”的题</a></li>
+    <li><a href="#l1-what"><span>1.2</span>操作系统的定义</a></li>
+    <li><a href="#l1-hist"><span>1.3</span>发展史：批处理到分时</a></li>
+    <li><a href="#l1-res"><span>1.4</span>程序需要的资源</a></li>
+    <li><a href="#l1-mode"><span>1.5</span>用户态、内核态、中断</a></li>
+    <li><a href="#l1-map"><span>1.6</span>OS 管的五件事</a></li>
+  </ul>
+
+  <h3 id="l1-why">1.1 为什么要学 OS：一道“保存配置”的题</h3>
+  <p>老师用一个例子开课：实现 <code>save_config(path, data)</code>，把新配置写进文件。正常跑一次没问题，但有三个追问：</p>
+  <div class="grid4">
+    <div class="mini"><h5>① 写到一半程序崩了</h5>用 <code>"w"</code> 打开文件会先把它<strong>截成 0 长度</strong>，再写。写一半退出，旧配置没了，新配置也不完整，只剩 <code>{"theme":"da</code>。</div>
+    <div class="mini"><h5>② 显示“保存成功”后断电</h5>数据可能还在 Python 缓冲区或内核的<strong>页缓存</strong>里，没真正落到磁盘上。</div>
+    <div class="mini"><h5>③ 两个请求同时改</h5>A 改主题、B 改字号，都先读旧版本再各自写回，后写的会<strong>覆盖</strong>先写的，A 的修改丢了。</div>
+  </div>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 150" role="img" aria-label="写文件的数据路径：应用缓冲区，flush 到内核页缓存，fsync 到存储设备">
+      <defs><marker id="o1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <g font-size="13" text-anchor="middle">
+        <rect x="20" y="30" width="160" height="56" rx="10" fill="var(--l5s)" stroke="var(--l5)"/><text x="100" y="54" font-weight="700" style="fill:var(--l5)">应用缓冲区</text><text x="100" y="74" font-size="11" class="mut">Python / C 库，用户态</text>
+        <rect x="250" y="30" width="160" height="56" rx="10" fill="var(--l4s)" stroke="var(--l4)"/><text x="330" y="54" font-weight="700" style="fill:var(--l4)">内核页缓存</text><text x="330" y="74" font-size="11" class="mut">内存里，断电就没</text>
+        <rect x="480" y="30" width="160" height="56" rx="10" fill="var(--l1s)" stroke="var(--l1)"/><text x="560" y="54" font-weight="700" style="fill:var(--l1)">存储设备</text><text x="560" y="74" font-size="11" class="mut">SSD / 磁盘，断电还在</text>
+        <line x1="182" y1="58" x2="246" y2="58" stroke="var(--accent)" stroke-width="2" marker-end="url(#o1)"/>
+        <line x1="412" y1="58" x2="476" y2="58" stroke="var(--accent)" stroke-width="2" marker-end="url(#o1)"/>
+        <text x="214" y="50" class="mono" style="fill:var(--accent)">flush</text>
+        <text x="444" y="50" class="mono" style="fill:var(--accent)">fsync</text>
+        <text x="330" y="120" class="mut" font-size="12">close() 或 write() 成功，只代表数据到了内核，不代表断电后还在</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <p><strong>正确思路</strong>：先写到同目录的<strong>临时文件</strong> → <code>flush</code> → <code>fsync(临时文件)</code> → <code>os.replace(tmp, path)</code> 原子替换 → <code>fsync(父目录)</code> → 才返回成功。并发修改要再定义冲突策略（加锁、版本检查、合并）。</p>
+  <div class="box tip"><span class="tag tip">这一节想说明什么</span><p>程序到底会不会出错，取决于<strong>操作系统接口到底保证了什么</strong>。AI 能写代码，但要判断它考虑漏了“中途失败、断电、并发”哪种情况，就得懂文件、缓存和并发的机制。大模型是按概率生成下一个 token，<strong>概率模型给不了正确性保证</strong>；没有外部反馈的反复“自查”也不保证变好。</p></div>
+
+  <h3 id="l1-what">1.2 什么是操作系统<span class="stars">★★</span></h3>
+  <div class="grid2">
+    <div>
+      <p>教材定义：操作系统是<strong>管理计算机硬件的程序</strong>。它还<strong>为应用程序提供运行基础</strong>，并且是<strong>用户与硬件之间的中介</strong>。</p>
+      <p>两个角度理解：</p>
+      <ul>
+        <li><strong>资源管理者</strong>：CPU、内存、磁盘、设备都有限，OS 决定谁用、用多少、什么时候用。</li>
+        <li><strong>扩展机器 / 抽象</strong>：把难用的硬件包装成好用的概念（文件、进程、地址空间），程序员不用直接操作磁盘扇区。</li>
+      </ul>
+    </div>
+    <figure style="margin:0">
+      <svg viewBox="0 0 260 220" role="img" aria-label="计算机系统四层：用户、应用程序、操作系统、硬件">
+        <g font-size="14" text-anchor="middle" font-weight="700">
+          <rect x="20" y="10" width="220" height="44" rx="8" fill="var(--surface-2)"/><text x="130" y="38">用户</text>
+          <rect x="20" y="60" width="220" height="44" rx="8" fill="var(--l5s)" stroke="var(--l5)"/><text x="130" y="88" style="fill:var(--l5)">应用程序</text>
+          <rect x="20" y="110" width="220" height="44" rx="8" fill="var(--l4s)" stroke="var(--l4)"/><text x="130" y="138" style="fill:var(--l4)">操作系统</text>
+          <rect x="20" y="160" width="220" height="44" rx="8" fill="var(--l1s)" stroke="var(--l1)"/><text x="130" y="188" style="fill:var(--l1)">硬件</text>
+        </g>
+      </svg>
+      <figcaption>OS 夹在应用和硬件之间。</figcaption>
+    </figure>
+  </div>
+  <div class="box exam"><span class="tag exam">真题 · 2020 选择</span><p>“哪个组件定义了使用系统资源解决计算问题的方法？”原卷答案是 <strong>B 操作系统</strong>。注意教材原文的分工是：<strong>应用程序</strong>定义用资源解决用户问题的方式，<strong>操作系统</strong>控制和协调硬件在各应用之间的使用。考试遇到原题按老师答案选 B，但要知道这个分工。</p></div>
+
+  <h3 id="l1-hist">1.3 发展史：从人工操作到分时<span class="stars">★★</span></h3>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 200" role="img" aria-label="单道批处理与多道批处理的 CPU 和 I/O 时间线">
+      <g font-size="12">
+        <text x="10" y="22" font-weight="700">单道批处理</text>
+        <text x="60" y="52" text-anchor="end" class="mut">CPU</text><text x="60" y="80" text-anchor="end" class="mut">I/O</text>
+        <g stroke="var(--surface)" stroke-width="1.5">
+          <rect x="70" y="38" width="80" height="22" fill="var(--l3)"/><rect x="150" y="38" width="80" height="22" fill="var(--surface-2)"/><rect x="230" y="38" width="80" height="22" fill="var(--l3)"/>
+          <rect x="310" y="38" width="80" height="22" fill="var(--l5)"/><rect x="390" y="38" width="80" height="22" fill="var(--surface-2)"/><rect x="470" y="38" width="80" height="22" fill="var(--l5)"/>
+          <rect x="150" y="66" width="80" height="22" fill="var(--l3)"/><rect x="390" y="66" width="80" height="22" fill="var(--l5)"/>
+        </g>
+        <g text-anchor="middle" font-weight="700" style="fill:var(--surface)"><text x="110" y="54" style="fill:var(--surface)">A</text><text x="270" y="54" style="fill:var(--surface)">A</text><text x="350" y="54" style="fill:var(--surface)">B</text><text x="510" y="54" style="fill:var(--surface)">B</text><text x="190" y="82" style="fill:var(--surface)">A</text><text x="430" y="82" style="fill:var(--surface)">B</text></g>
+        <text x="190" y="54" text-anchor="middle" class="mut">空闲</text><text x="430" y="54" text-anchor="middle" class="mut">空闲</text>
+        <text x="560" y="54" style="fill:var(--exam)" font-weight="700">6 格完成</text>
+        <text x="10" y="122" font-weight="700">多道批处理</text>
+        <text x="60" y="152" text-anchor="end" class="mut">CPU</text><text x="60" y="180" text-anchor="end" class="mut">I/O</text>
+        <g stroke="var(--surface)" stroke-width="1.5">
+          <rect x="70" y="138" width="80" height="22" fill="var(--l3)"/><rect x="150" y="138" width="80" height="22" fill="var(--l5)"/><rect x="230" y="138" width="80" height="22" fill="var(--l3)"/><rect x="310" y="138" width="80" height="22" fill="var(--l5)"/>
+          <rect x="150" y="166" width="80" height="22" fill="var(--l3)"/><rect x="230" y="166" width="80" height="22" fill="var(--l5)"/>
+        </g>
+        <g text-anchor="middle" font-weight="700"><text x="110" y="154" style="fill:var(--surface)">A</text><text x="190" y="154" style="fill:var(--surface)">B</text><text x="270" y="154" style="fill:var(--surface)">A</text><text x="350" y="154" style="fill:var(--surface)">B</text><text x="190" y="182" style="fill:var(--surface)">A</text><text x="270" y="182" style="fill:var(--surface)">B</text></g>
+        <text x="400" y="154" style="fill:var(--ex)" font-weight="700">4 格完成，CPU 不空等</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>单道：一个作业等 I/O 时 CPU 只能干等。多道：内存里放多个作业，A 等 I/O 时 CPU 去跑 B。</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>年代</th><th>阶段</th><th>关键变化</th></tr></thead>
+    <tbody>
+      <tr><td>早期</td><td>人工操作</td><td>人手装入程序，换作业要等</td></tr>
+      <tr><td>1950s</td><td><strong>单道批处理</strong></td><td>作业自动依次执行；一个完成才运行下一个；等 I/O 时 CPU 空闲</td></tr>
+      <tr><td>1960s</td><td><strong>多道批处理</strong></td><td>多个作业同时驻留内存，一个等 I/O，CPU 运行另一个 → 提高 CPU 利用率</td></tr>
+      <tr><td>1960s</td><td><strong>分时</strong></td><td>在多个用户任务间快速切换（时间片），多人通过终端<strong>交互</strong>使用</td></tr>
+      <tr><td>1970s</td><td><strong>UNIX</strong></td><td>1973 年用 C 重写内核，便于移植；UNIX 是典型的<strong>分时系统</strong></td></tr>
+      <tr><td>1980s</td><td>个人电脑与 GUI</td><td>Macintosh（1984）窗口、图标、鼠标</td></tr>
+      <tr><td>1990s</td><td>Linux 与开源</td><td>Linux 内核 1991 年发布</td></tr>
+      <tr><td>2000s~</td><td>智能手机</td><td>兼顾交互、续航、安全</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点</span><ul>
+    <li>2019 选择：UNIX 是典型的 → <strong>分时系统</strong>。</li>
+    <li>多道程序的目的：<strong>提高 CPU（资源）利用率</strong>；分时的目的：<strong>交互、及时响应</strong>。</li>
+    <li>2018 选择：<strong>中断技术是多道程序并发处理的必要条件</strong>（没有中断，OS 无法在 I/O 完成、时间片到时夺回 CPU）。</li>
+  </ul></div>
+
+  <h3 id="l1-res">1.4 程序运行需要哪些资源</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>资源</th><th>作用</th><th>编辑文档时的例子</th></tr></thead>
+    <tbody>
+      <tr><td>CPU</td><td>执行指令</td><td>计算排版、处理输入</td></tr>
+      <tr><td>内存</td><td>存放正在使用的指令和数据（断电丢失）</td><td>文档内容、撤销记录</td></tr>
+      <tr><td>持久存储</td><td>长期保存数据</td><td>SSD 上的文档文件</td></tr>
+      <tr><td>输入输出设备</td><td>与外界交换信息</td><td>键盘、屏幕</td></tr>
+    </tbody>
+  </table></div>
+  <p>多个应用共享这些资源；CPU 计算和设备工作可以<strong>重叠</strong>进行。编辑中的数据在内存里，不一定已经保存到文件。</p>
+
+  <h3 id="l1-mode">1.5 用户态、内核态、系统调用与中断<span class="stars">★★★</span></h3>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 230" role="img" aria-label="系统调用过程：用户态应用调用 read，经库封装陷入内核，内核检查并处理后返回">
+      <defs><marker id="o2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <rect x="10" y="10" width="640" height="95" rx="10" fill="var(--l3s)"/>
+      <rect x="10" y="120" width="640" height="95" rx="10" fill="var(--l4s)"/>
+      <g font-size="13">
+        <text x="24" y="32" font-weight="700" style="fill:var(--l3)">用户态 user mode（模式位 = 1）</text>
+        <text x="24" y="142" font-weight="700" style="fill:var(--l4)">内核态 kernel mode（模式位 = 0）</text>
+        <g text-anchor="middle">
+          <rect x="40" y="50" width="130" height="40" rx="8" fill="var(--surface)" stroke="var(--l3)"/><text x="105" y="75">应用调用 read()</text>
+          <rect x="230" y="50" width="130" height="40" rx="8" fill="var(--surface)" stroke="var(--l3)"/><text x="295" y="75">C 库封装</text>
+          <rect x="230" y="160" width="130" height="40" rx="8" fill="var(--surface)" stroke="var(--l4)"/><text x="295" y="185">系统调用入口</text>
+          <rect x="420" y="160" width="130" height="40" rx="8" fill="var(--surface)" stroke="var(--l4)"/><text x="485" y="185">检查并处理</text>
+          <rect x="500" y="50" width="130" height="40" rx="8" fill="var(--surface)" stroke="var(--l3)"/><text x="565" y="75">拿到返回值</text>
+        </g>
+        <g stroke="var(--accent)" stroke-width="2" fill="none" marker-end="url(#o2)">
+          <line x1="172" y1="70" x2="226" y2="70"/><line x1="295" y1="92" x2="295" y2="156"/><line x1="362" y1="180" x2="416" y2="180"/><path d="M550 160 L565 94"/>
+        </g>
+        <text x="305" y="128" style="fill:var(--accent)" font-size="12" font-weight="700">trap 陷入：模式位 1→0</text>
+        <text x="575" y="128" style="fill:var(--accent)" font-size="12" font-weight="700">返回：0→1</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>CPU 有一个模式位区分两种状态。特权指令（如关中断、I/O 指令、修改页表）只能在内核态执行；用户程序想要内核服务，只能通过<strong>系统调用</strong>这个受控入口进去。</figcaption>
+  </figure>
+  <ul>
+    <li><strong>系统调用</strong>：应用请求内核服务的入口，例如读写文件、创建进程。</li>
+    <li><strong>用户态与内核态</strong>：执行权限不同，普通应用不能执行特权操作，也不能访问别人的内存。</li>
+    <li>应用调用的普通函数（如 <code>strlen</code>）<strong>不一定</strong>触发系统调用。</li>
+  </ul>
+  <h4>OS 什么时候拿到 CPU 的控制权？中断！</h4>
+  <p>教材原话：<em>An operating system is interrupt driven.</em> OS 平时并不一直在跑；应用正在执行时，是<strong>中断</strong>让控制权转到内核。</p>
+  <div class="grid2">
+    <div class="mini"><h5>硬中断 hardware interrupt</h5>由<strong>硬件设备</strong>发出：时钟到期（时间片用完）、磁盘/网卡完成 I/O。异步发生，与当前指令无关。</div>
+    <div class="mini"><h5>软中断 software interrupt（trap）</h5>由<strong>程序执行</strong>引起：<br>· <strong>系统调用</strong>：主动请求服务，如读文件；<br>· <strong>异常</strong>：执行指令出错，如除零、缺页。</div>
+  </div>
+  <p>例：时钟中断 → 内核获得控制 → 决定哪个任务继续运行。这就是防止一个程序霸占 CPU 的方法。</p>
+  <div class="box exam"><span class="tag exam">考点 · 三年真题</span><ul>
+    <li><strong>2018 选择</strong>：OS 提供给<strong>程序员</strong>的接口是 → <strong>系统调用</strong>（不是库函数、不是 Shell；Shell 是给用户的命令接口）。</li>
+    <li><strong>2018 简答</strong>：比较核心态和用户态 → 核心态是 OS 内核执行时的受保护状态，可执行特权指令、访问全部内存；用户态是用户进程执行的状态，只能访问自己的地址空间；用户态要通过<strong>中断或系统调用</strong>才能进入核心态。</li>
+    <li><strong>2019 选择</strong>：CPU 执行操作系统代码时处于 → <strong>内核态</strong>。</li>
+    <li><strong>2018 不定项</strong>：中断优先级由<strong>硬件</strong>规定 ✓；中断是多道并发的必要条件 ✓；“只有硬件中断发生时内核才运行” ✗（系统调用、异常也会进入内核）。</li>
+    <li>2018：单处理机系统里操作的“原子性”可通过<strong>屏蔽中断</strong>实现（关了中断就不会被切走）。但<strong>多处理器上关中断不能保证互斥</strong>（2019、2020 判断题都考了，只关了自己这颗 CPU 的中断，别的 CPU 照样跑）。</li>
+  </ul></div>
+
+  <h3 id="l1-map">1.6 操作系统管的五件事（课程地图）</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>主题</th><th>核心问题</th><th>关键概念</th><th>章节</th></tr></thead>
+    <tbody>
+      <tr><td>服务与结构</td><td>程序怎样获得系统服务？</td><td>系统调用、内核结构</td><td>L2</td></tr>
+      <tr><td>进程与线程</td><td>多个任务怎样运行？</td><td><strong>进程</strong> = 程序运行时的实例；<strong>线程</strong> = 进程内的一条执行流；<strong>调度</strong> = 决定谁用 CPU</td><td>L3、L4、调度</td></tr>
+      <tr><td>同步与死锁</td><td>共享资源怎样协调？</td><td><strong>同步</strong>：互斥、等待、通知；<strong>死锁</strong>：互相等待对方占着的资源</td><td>后续</td></tr>
+      <tr><td>内存管理</td><td>程序怎样用内存？</td><td>地址映射与隔离（两个进程都用地址 0x1000，指向不同物理位置）、虚拟内存</td><td>后续</td></tr>
+      <tr><td>存储与 I/O</td><td>数据怎样保存和传输？</td><td>文件系统、I/O 子系统、驱动</td><td>后续</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>保护与安全</strong>贯穿始终：地址空间限制内存访问；用户态/内核态限制特权操作；身份与访问控制限制文件访问。保护 = “谁能访问什么”，安全还包括防范攻击。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 120" role="img" aria-label="单核上多个任务轮流执行形成并发">
+      <g font-size="13" text-anchor="middle" font-weight="700">
+        <g stroke="var(--surface)" stroke-width="2">
+          <rect x="20" y="30" width="100" height="36" fill="var(--l3)"/><rect x="120" y="30" width="100" height="36" fill="var(--l5)"/><rect x="220" y="30" width="100" height="36" fill="var(--l3)"/><rect x="320" y="30" width="100" height="36" fill="var(--l2)"/><rect x="420" y="30" width="100" height="36" fill="var(--l5)"/><rect x="520" y="30" width="100" height="36" fill="var(--surface-2)"/>
+        </g>
+        <text x="70" y="54" style="fill:var(--surface)">A</text><text x="170" y="54" style="fill:var(--surface)">B</text><text x="270" y="54" style="fill:var(--surface)">A</text><text x="370" y="54" style="fill:var(--surface)">C</text><text x="470" y="54" style="fill:var(--surface)">B</text><text x="570" y="54" class="mut">…</text>
+        <text x="320" y="96" font-weight="400" class="mut">单核：同一时刻只有一个在跑，但一段时间内大家都有进展 = 并发</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+</section>
+
+<!-- ============ Lesson 2 ============ -->
+<section class="chap" id="l2">
+  <div class="chap-head"><span class="chap-no">LESSON 2</span><h2>操作系统服务与结构</h2></div>
+  <p class="sub">对应教材第 2 章。五个问题：用户和程序能得到什么服务？程序怎样请求内核？程序怎样运行起来？内核怎样组织？系统怎样启动？</p>
+  <ul class="toc">
+    <li><a href="#l2-svc"><span>2.1</span>OS 提供哪些服务</a></li>
+    <li><a href="#l2-ui"><span>2.2</span>用户界面：Shell 与 GUI</a></li>
+    <li><a href="#l2-sys"><span>2.3</span>系统调用（重点）</a></li>
+    <li><a href="#l2-link"><span>2.4</span>编译、链接、装载</a></li>
+    <li><a href="#l2-mp"><span>2.5</span>机制与策略</a></li>
+    <li><a href="#l2-struct"><span>2.6</span>内核结构（重点）</a></li>
+    <li><a href="#l2-boot"><span>2.7</span>构建、引导、调试</a></li>
+    <li><a href="#l2-ex"><span>2.8</span>课堂练习答案</a></li>
+  </ul>
+
+  <h3 id="l2-svc">2.1 操作系统提供哪些服务<span class="stars">★★</span></h3>
+  <p>以 <code>cp source.txt target.txt</code> 为例，复制一个文件就要用到：启动程序、访问文件、分配 CPU 和内存、处理失败（没权限、文件不存在、磁盘满）、报告结果。</p>
+  <div class="grid2">
+    <div class="box ex" style="margin:0"><span class="tag ex">对用户有帮助的服务</span>
+      <ul>
+        <li><strong>用户界面</strong> UI：命令行、图形、触控</li>
+        <li><strong>程序执行</strong>：装入、运行、正常或异常结束</li>
+        <li><strong>I/O 操作</strong>：读输入、写输出、访问设备</li>
+        <li><strong>文件系统操作</strong>：创建删除、读写定位、目录、权限</li>
+        <li><strong>通信</strong>：进程间交换数据（共享内存或消息传递）</li>
+        <li><strong>错误检测</strong>：发现并处理程序/设备/硬件错误</li>
+      </ul></div>
+    <div class="box tip" style="margin:0"><span class="tag tip">保证系统本身高效、安全的服务</span>
+      <ul>
+        <li><strong>资源分配</strong>：CPU 时间、内存、文件空间、设备</li>
+        <li><strong>记录与统计</strong>（logging / accounting）</li>
+        <li><strong>保护</strong>：谁能访问什么，避免相互干扰</li>
+        <li><strong>安全</strong>：身份认证、防范攻击</li>
+      </ul></div>
+  </div>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 520 250" role="img" aria-label="使用服务的层次：用户操作、用户空间程序、库与运行时、系统调用接口、内核与硬件">
+      <g font-size="13" text-anchor="middle">
+        <rect x="20" y="10" width="480" height="38" rx="8" fill="var(--surface-2)"/><text x="260" y="34">用户操作：命令、点击、触控</text>
+        <rect x="20" y="55" width="480" height="38" rx="8" fill="var(--l5s)" stroke="var(--l5)"/><text x="260" y="79" style="fill:var(--l5)">用户空间：Shell、桌面、应用与系统程序</text>
+        <rect x="20" y="100" width="480" height="38" rx="8" fill="var(--l3s)" stroke="var(--l3)"/><text x="260" y="124" style="fill:var(--l3)">库与运行时：向程序提供 API（libc、JVM）</text>
+        <rect x="20" y="145" width="480" height="38" rx="8" fill="var(--exam-soft)" stroke="var(--exam)"/><text x="260" y="169" font-weight="700" style="fill:var(--exam)">系统调用接口：进入内核的受控入口</text>
+        <rect x="20" y="190" width="480" height="38" rx="8" fill="var(--l4s)" stroke="var(--l4)"/><text x="260" y="214" style="fill:var(--l4)">内核与硬件：资源管理与 I/O</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>界面决定怎样“表达”请求，服务决定系统“能提供”什么。同一个文件操作可以从命令行发起，也可以从图形界面发起，最后都走系统调用。</figcaption>
+  </figure>
+
+  <h3 id="l2-ui">2.2 用户界面：Shell、GUI、触控</h3>
+  <ul>
+    <li><strong>Shell（命令解释器）</strong>读取并解析命令，然后执行<strong>内建命令</strong>或<strong>启动外部程序</strong>。
+      <ul><li>内建命令：如 Bash 的 <code>cd</code>，因为它要改变 Shell 自己的工作目录，必须由 Shell 本身执行。</li>
+      <li>外部程序：如 <code>/bin/ls</code>，增加新命令不用改 Shell。</li></ul></li>
+    <li><strong>Shell 是普通程序</strong>，运行在<strong>用户态</strong>，不是内核的一部分。</li>
+    <li><strong>GUI</strong>：窗口、图标、菜单 + 鼠标键盘，重要早期研究来自 Xerox PARC。<strong>触控界面</strong>：手势、虚拟键盘、语音。</li>
+    <li>界面怎么变，程序访问资源的基本路径不变：都要经过系统提供的接口。</li>
+  </ul>
+
+  <h3 id="l2-sys">2.3 系统调用<span class="stars">★★★</span></h3>
+  <p><strong>系统调用（System call）</strong>：程序请求内核服务的<strong>受控接口</strong>。用户程序不能把内核函数当普通函数随便跳过去执行，必须走体系结构规定的入口（trap 指令）。</p>
+  <h4>API、库函数、系统调用：三个层次</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 150" role="img" aria-label="printf 先进入 C 库缓冲区，fflush 时调用 write 系统调用进入内核">
+      <defs><marker id="o3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <g font-size="12" text-anchor="middle">
+        <rect x="10" y="40" width="140" height="56" rx="8" fill="var(--l5s)" stroke="var(--l5)"/><text x="80" y="64" font-weight="700" style="fill:var(--l5)">程序</text><text x="80" y="82" class="mono">printf("AB\n")</text>
+        <rect x="190" y="40" width="160" height="56" rx="8" fill="var(--l3s)" stroke="var(--l3)"/><text x="270" y="64" font-weight="700" style="fill:var(--l3)">C 库（API 实现）</text><text x="270" y="82">格式化 + 放进缓冲区</text>
+        <rect x="390" y="40" width="120" height="56" rx="8" fill="var(--exam-soft)" stroke="var(--exam)"/><text x="450" y="64" font-weight="700" style="fill:var(--exam)">系统调用</text><text x="450" y="82" class="mono">write(1,…)</text>
+        <rect x="550" y="40" width="100" height="56" rx="8" fill="var(--l4s)" stroke="var(--l4)"/><text x="600" y="72" font-weight="700" style="fill:var(--l4)">内核</text>
+        <g stroke="var(--accent)" stroke-width="2" marker-end="url(#o3)"><line x1="152" y1="68" x2="186" y2="68"/><line x1="352" y1="68" x2="386" y2="68"/><line x1="512" y1="68" x2="546" y2="68"/></g>
+        <text x="370" y="30" style="fill:var(--accent)">缓冲满 / 换行 / fflush 时</text>
+        <text x="330" y="128" class="mut">一个 API 调用可能对应 0 次、1 次或多次系统调用</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>概念</th><th>规定什么</th><th>例子</th></tr></thead>
+    <tbody>
+      <tr><td><strong>API</strong></td><td>源代码怎样调用功能</td><td>POSIX <code>read()</code>、Windows API、Java API</td></tr>
+      <tr><td><strong>库 / 运行时</strong></td><td>参数处理、缓冲、发起底层调用</td><td>C 标准库、JVM</td></tr>
+      <tr><td><strong>系统调用</strong></td><td>用户程序怎样受控进入内核</td><td>Linux 文件读写、进程操作</td></tr>
+    </tbody>
+  </table></div>
+  <p>为什么程序员一般用 API 而不直接用系统调用？<strong>可移植</strong>（同一套 API 在不同系统上都能编译）、<strong>好用</strong>（隐藏寄存器等细节）。<code>strlen</code> 这种函数根本不进内核；<code>printf</code> 先进 C 库缓冲区，不一定立刻 <code>write</code>。</p>
+  <h4>读懂 read 接口</h4>
+  <div class="code"><span class="k">ssize_t</span> read(<span class="k">int</span> fd, <span class="k">void</span> *buf, <span class="k">size_t</span> count);
+<span class="c">/* fd：从哪个已打开的文件描述符读；buf：放到哪；count：最多读多少字节
+   返回 &gt; 0：实际读到的字节数（可能比 count 少，叫“短读”，不是错误）
+   返回 0  ：到达文件末尾 EOF
+   返回 -1 ：失败，错误原因在 errno */</span></div>
+  <h4>一次系统调用怎样进入内核</h4>
+  <ol>
+    <li>库把<strong>系统调用号</strong>和参数放到约定位置，执行 trap 指令。</li>
+    <li>CPU 切换到内核态，保存必要状态，跳到系统调用入口。</li>
+    <li>入口按调用号<strong>查表分派</strong>到对应处理函数（系统调用表）。</li>
+    <li>内核<strong>检查参数</strong>后处理；完成后返回用户态，返回值交给程序。必要时中途会等待或被调度。</li>
+  </ol>
+  <p class="muted">“进入内核”不等于“换了一个进程”，还是同一个进程，只是在内核态执行。</p>
+  <h4>参数怎么传给内核（教材经典考点）</h4>
+  <div class="grid4">
+    <div class="mini"><h5>① 寄存器</h5>把参数值放进约定寄存器。最快，但数量受限。Linux x86-64 常用。</div>
+    <div class="mini"><h5>② 内存块（表）</h5>参数放在内存里一个块/表中，把<strong>块的地址</strong>放进寄存器传给内核。参数多时用。</div>
+    <div class="mini"><h5>③ 栈</h5>程序把参数压入栈，内核从栈中弹出。</div>
+  </div>
+  <p>后两种方式不限制参数个数和长度。不管哪种，<strong>内核都必须检查参数</strong>：fd 是否有效、缓冲区地址是否属于这个进程且可写、长度是否越界/溢出、有没有权限。用户给的指针<strong>不能直接信任</strong>，否则恶意程序可以让内核替它改写内核内存。</p>
+  <h4>系统调用的六大类<span class="stars">★★</span></h4>
+  <div class="tbl"><table>
+    <thead><tr><th>类别</th><th>做什么</th><th>Unix 例子</th><th>Windows 例子</th></tr></thead>
+    <tbody>
+      <tr><td><strong>进程控制</strong></td><td>创建、执行、终止、等待</td><td><code>fork() exec() exit() wait()</code></td><td><code>CreateProcess() ExitProcess() WaitForSingleObject()</code></td></tr>
+      <tr><td><strong>文件管理</strong></td><td>创建删除、打开关闭、读写定位、属性</td><td><code>open() read() write() lseek() close()</code></td><td><code>CreateFile() ReadFile() WriteFile() CloseHandle()</code></td></tr>
+      <tr><td><strong>设备管理</strong></td><td>请求/释放、读写、配置设备</td><td><code>ioctl() read() write()</code></td><td><code>SetConsoleMode()</code></td></tr>
+      <tr><td><strong>信息维护</strong></td><td>查询/设置时间、PID、系统状态</td><td><code>getpid() alarm() sleep()</code></td><td><code>GetCurrentProcessID()</code></td></tr>
+      <tr><td><strong>通信</strong></td><td>建立连接、收发消息、共享内存</td><td><code>pipe() shm_open() mmap()</code></td><td><code>CreatePipe() MapViewOfFile()</code></td></tr>
+      <tr><td><strong>保护</strong></td><td>查询和设置权限</td><td><code>chmod() umask() chown()</code></td><td><code>SetFileSecurity()</code></td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">注意：Windows 的 <code>CreateProcess()</code> 同时创建进程和初始线程并装入程序，不能简单等同于 <code>fork()</code>。</p>
+  <p><strong>strace</strong> 能看到程序真正发生的系统调用：<code>strace -e trace=write ./hello_io</code> 输出 <code>write(1, "AB\n", 3) = 3</code>，左边是调用和参数，右边是返回值。它看不到 <code>printf</code> 这种库函数。</p>
+
+  <h3 id="l2-link">2.4 系统程序；编译、链接、装载</h3>
+  <p><strong>系统程序</strong>（文件管理、编辑器、编译器、Shell、日志服务……）一般运行在<strong>用户空间</strong>，通过系统调用使用内核服务，它们不是内核本身。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 120" role="img" aria-label="源文件编译为目标文件，链接为可执行文件，装载后开始执行">
+      <defs><marker id="o4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <g font-size="13" text-anchor="middle">
+        <rect x="10" y="30" width="120" height="44" rx="8" fill="var(--surface-2)"/><text x="70" y="57" class="mono">main.c</text>
+        <rect x="185" y="30" width="120" height="44" rx="8" fill="var(--surface-2)"/><text x="245" y="57" class="mono">main.o</text>
+        <rect x="360" y="30" width="120" height="44" rx="8" fill="var(--surface-2)"/><text x="420" y="57" class="mono">a.out</text>
+        <rect x="535" y="30" width="120" height="44" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="595" y="57">运行中的进程</text>
+        <g stroke="var(--accent)" stroke-width="2" marker-end="url(#o4)"><line x1="132" y1="52" x2="181" y2="52"/><line x1="307" y1="52" x2="356" y2="52"/><line x1="482" y1="52" x2="531" y2="52"/></g>
+        <text x="157" y="24" style="fill:var(--accent)" font-weight="700">编译</text><text x="332" y="24" style="fill:var(--accent)" font-weight="700">链接</text><text x="507" y="24" style="fill:var(--accent)" font-weight="700">装载</text>
+        <text x="157" y="100" class="mut" font-size="11">源码→目标代码</text><text x="332" y="100" class="mut" font-size="11">合并、解析符号、重定位</text><text x="507" y="100" class="mut" font-size="11">建立地址空间、映射</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>编译 main.c 时只知道要调用 add，不知道它在哪；链接器找到 add 的定义并修正引用。文件在磁盘上存在 ≠ 进程已经开始执行。</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>静态链接</th><th>动态链接</th></tr></thead>
+    <tbody>
+      <tr><td>库代码</td><td>并入可执行文件</td><td>运行时装入或映射共享库（.so / .dll）</td></tr>
+      <tr><td>部署依赖</td><td>少</td><td>需要兼容的库</td></tr>
+      <tr><td>更新库</td><td>要重新链接</td><td>换共享库即可，但要保持兼容</td></tr>
+      <tr><td>空间</td><td>多个程序各存一份重复代码</td><td>多个进程可共享只读代码页（可写数据仍各自隔离）</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>为什么同一个程序不能直接跨系统运行？</strong>即使 CPU 相同，还要看：指令集、<strong>可执行文件格式</strong>（Linux 用 ELF，Windows 用 PE）、系统调用和库接口、<strong>ABI</strong>（应用二进制接口：二进制层面的调用约定、数据布局）。<strong>API</strong> 面向源代码，<strong>ABI</strong> 关系到编译后的代码能否配合。跨平台办法：解释器（Python）、虚拟机（Java 字节码 + JVM）、针对各平台分别编译（C/C++）。</p>
+
+  <h3 id="l2-mp">2.5 设计目标；机制与策略</h3>
+  <p>用户目标（方便、响应快、可靠）和系统目标（高效利用资源、易维护、易移植扩展）常常冲突，要权衡。例如隔离越强，通信开销可能越大。</p>
+  <div class="tbl"><table>
+    <thead><tr><th>场景</th><th>机制 Mechanism：“能怎样做”</th><th>策略 Policy：“何时做、选谁、做多少”</th></tr></thead>
+    <tbody>
+      <tr><td>CPU 调度</td><td>时钟中断、保存和恢复执行状态</td><td>下一次运行哪个任务</td></tr>
+      <tr><td>内存分配</td><td>页表与映射、分配和回收操作</td><td>给谁多少、何时回收</td></tr>
+    </tbody>
+  </table></div>
+  <p>把机制和策略<strong>分离</strong>，改决策时不用动底层实现。（定时器是机制，“给每个用户多长时间片”是策略。）</p>
+
+  <h3 id="l2-struct">2.6 内核结构<span class="stars">★★★</span></h3>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 260" role="img" aria-label="单体内核与微内核对比：单体内核中文件系统、驱动、调度都在内核态；微内核只保留 IPC、基本调度和内存管理，其余服务在用户态通过消息通信">
+      <defs><marker id="o5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <g font-size="12" text-anchor="middle">
+        <text x="160" y="18" font-weight="700" font-size="14">单体内核 Monolithic</text>
+        <text x="500" y="18" font-weight="700" font-size="14">微内核 Microkernel</text>
+        <!-- mono -->
+        <rect x="20" y="30" width="280" height="50" rx="8" fill="var(--l3s)"/><text x="160" y="60" style="fill:var(--l3)">用户态：应用程序</text>
+        <rect x="20" y="88" width="280" height="130" rx="8" fill="var(--l4s)" stroke="var(--l4)"/>
+        <text x="160" y="106" style="fill:var(--l4)" font-weight="700">内核态（一整块，直接函数调用）</text>
+        <g fill="var(--surface)" stroke="var(--l4)"><rect x="32" y="116" width="80" height="40" rx="6"/><rect x="120" y="116" width="80" height="40" rx="6"/><rect x="208" y="116" width="80" height="40" rx="6"/><rect x="32" y="164" width="80" height="40" rx="6"/><rect x="120" y="164" width="80" height="40" rx="6"/><rect x="208" y="164" width="80" height="40" rx="6"/></g>
+        <text x="72" y="140">文件系统</text><text x="160" y="140">设备驱动</text><text x="248" y="140">网络协议</text><text x="72" y="188">CPU 调度</text><text x="160" y="188">内存管理</text><text x="248" y="188">IPC</text>
+        <rect x="20" y="226" width="280" height="28" rx="6" fill="var(--l1s)"/><text x="160" y="245" style="fill:var(--l1)">硬件</text>
+        <!-- micro -->
+        <rect x="360" y="30" width="280" height="110" rx="8" fill="var(--l3s)"/><text x="500" y="48" style="fill:var(--l3)">用户态：服务也是普通进程</text>
+        <g fill="var(--surface)" stroke="var(--l3)"><rect x="372" y="58" width="80" height="34" rx="6"/><rect x="460" y="58" width="80" height="34" rx="6"/><rect x="548" y="58" width="80" height="34" rx="6"/><rect x="372" y="98" width="80" height="34" rx="6"/></g>
+        <text x="412" y="80">应用程序</text><text x="500" y="80">文件服务</text><text x="588" y="80">设备驱动</text><text x="412" y="120">网络服务</text>
+        <rect x="360" y="148" width="280" height="70" rx="8" fill="var(--l4s)" stroke="var(--l4)"/>
+        <text x="500" y="170" style="fill:var(--l4)" font-weight="700">微内核（尽量小）</text>
+        <text x="500" y="192"><tspan font-weight="700" style="fill:var(--exam)">IPC 消息传递</tspan> · 基本 CPU 调度 · 底层内存管理</text>
+        <rect x="360" y="226" width="280" height="28" rx="6" fill="var(--l1s)"/><text x="500" y="245" style="fill:var(--l1)">硬件</text>
+        <path d="M412 92 C412 150 500 150 500 158" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#o5)"/>
+        <path d="M500 158 C500 150 500 120 500 94" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#o5)"/>
+        <text x="585" y="150" font-size="11" style="fill:var(--accent)">经内核转发消息</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>应用想读文件：单体内核里直接调用内核中的文件系统函数；微内核里要发消息给“文件服务”进程，由微内核转发，回复也要转发一次。</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>结构</th><th>做法</th><th>优点</th><th>缺点</th><th>例子</th></tr></thead>
+    <tbody>
+      <tr><td><strong>单体</strong></td><td>核心服务都在同一内核地址空间，直接调用</td><td>内部交互快、开销小</td><td>一个错误可能弄垮整个内核；难维护</td><td>传统 UNIX、Linux（主体）</td></tr>
+      <tr><td><strong>分层</strong></td><td>每层只用下层服务、向上提供接口（第 0 层硬件，第 N 层用户接口）</td><td>易理解、易逐层验证调试</td><td>层的边界难划分；逐层调用开销大</td><td>THE 系统（教学经典）</td></tr>
+      <tr><td><strong>微内核</strong></td><td>把非必需服务移到用户空间，靠 <strong>IPC（消息传递）</strong>协作</td><td>易扩展、易移植；隔离好，服务崩溃可重启；内核小更可靠安全</td><td>跨地址空间通信和切换有开销，性能可能下降</td><td>Mach、QNX</td></tr>
+      <tr><td><strong>模块化</strong></td><td>核心内核 + 可动态加载/卸载的模块（LKM）</td><td>灵活，按需加载驱动和文件系统</td><td>模块拥有内核权限，<strong>不等于</strong>微内核的隔离</td><td>Linux、Solaris</td></tr>
+      <tr><td><strong>混合</strong></td><td>以上组合</td><td colspan="2">兼顾性能、安全与可用性</td><td>Windows NT、macOS/iOS 的 XNU（Mach + BSD + I/O Kit）、Android（Linux 内核 + ART）</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点 · 三年都考微内核</span><ul>
+    <li><strong>2018 不定项</strong>：“进程间通信机制是微内核的一部分” → ✓。</li>
+    <li><strong>2019 判断</strong>：“微内核结构中，虚拟内存管理在微内核内部” → ✗。按答案：<strong>只有 CPU 调度和进程间通信</strong>是必须在微内核内部的（虚存的分页策略等可以放在用户态服务里）。</li>
+    <li><strong>2020 判断</strong>：“微内核中进程间通信可以不在微内核内” → ✗。IPC 是微内核的核心功能。<strong>2020 选择</strong>：微内核中使用的 IPC 方式 → <strong>消息传递</strong>。</li>
+    <li>“Linux 可以加载模块，所以是微内核吗？” → <strong>不是</strong>。模块加载后在内核空间、拥有内核权限，没有微内核那种进程隔离；Linux 是单体内核 + 模块化。</li>
+  </ul></div>
+
+  <h3 id="l2-boot">2.7 构建、引导、调试</h3>
+  <p><strong>生成操作系统</strong>：选择目标架构与配置（驱动和功能：内建 / 模块 / 不启用）→ 编译内核和模块 → 准备根文件系统 → 在目标环境启动验证。同一套源码可以生成面向不同硬件的系统。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 110" role="img" aria-label="开机流程：固件初始化，引导程序装入内核，内核初始化，运行 init，启动服务，登录">
+      <defs><marker id="o6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <g font-size="12" text-anchor="middle">
+        <g fill="var(--surface-2)"><rect x="5" y="30" width="95" height="50" rx="8"/><rect x="115" y="30" width="95" height="50" rx="8"/><rect x="225" y="30" width="95" height="50" rx="8" style="fill:var(--l4s)"/><rect x="335" y="30" width="95" height="50" rx="8" style="fill:var(--l3s)"/><rect x="445" y="30" width="95" height="50" rx="8" style="fill:var(--l3s)"/><rect x="555" y="30" width="100" height="50" rx="8" style="fill:var(--l3s)"/></g>
+        <text x="52" y="52" font-weight="700">固件</text><text x="52" y="69" font-size="11" class="mut">BIOS/UEFI 初始化</text>
+        <text x="162" y="52" font-weight="700">引导程序</text><text x="162" y="69" font-size="11" class="mut">装入内核+参数</text>
+        <text x="272" y="52" font-weight="700">内核初始化</text><text x="272" y="69" font-size="11" class="mut">内存、中断、调度</text>
+        <text x="382" y="52" font-weight="700">第一个用户进程</text><text x="382" y="69" font-size="11" class="mut">init / systemd</text>
+        <text x="492" y="52" font-weight="700">系统服务</text><text x="492" y="69" font-size="11" class="mut">日志、网络</text>
+        <text x="605" y="52" font-weight="700">登录/Shell</text><text x="605" y="69" font-size="11" class="mut">用户可用</text>
+        <g stroke="var(--accent)" stroke-width="1.6" marker-end="url(#o6)"><line x1="100" y1="55" x2="113" y2="55"/><line x1="210" y1="55" x2="223" y2="55"/><line x1="320" y1="55" x2="333" y2="55"/><line x1="430" y1="55" x2="443" y2="55"/><line x1="540" y1="55" x2="553" y2="55"/></g>
+        <text x="330" y="102" class="mut">紫色在内核态，蓝色在用户态。“内核已运行”和“用户能用整套系统”是两个阶段</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>问题</th><th>需要的证据</th><th>工具</th></tr></thead>
+    <tbody>
+      <tr><td>结果错、程序崩溃</td><td>出错位置、变量、调用栈</td><td>日志、GDB、core dump</td></tr>
+      <tr><td>内核故障</td><td>内核日志、崩溃状态</td><td>内核日志、crash dump</td></tr>
+      <tr><td>程序慢</td><td>CPU、等待与 I/O 分布</td><td>top、vmstat、perf、strace</td></tr>
+    </tbody>
+  </table></div>
+  <p>性能观测三种方式：<strong>计数</strong>（事件发生了几次）、<strong>采样</strong>（定期看在执行哪里，估计热点）、<strong>跟踪</strong>（记录事件及顺序，如 strace）。CPU 占用低不代表没瓶颈，可能在等 I/O 或锁。</p>
+
+  <h3 id="l2-ex">2.8 课堂练习参考答案</h3>
+  <details><summary>调用 printf() 是否一定立刻发生一次 write()？</summary><div class="ans"><p>不一定。printf 先格式化并放进 C 库的用户态缓冲区，缓冲区满、遇到换行（行缓冲时）、调用 fflush 或程序退出时才调用 write。所以 0 次、1 次或几次 printf 合并成 1 次 write 都可能。依据：stdio 缓冲机制，用 strace 观察。</p></div></details>
+  <details><summary>一个函数参数是用户指针，内核为什么不能直接信任它？</summary><div class="ans"><p>指针可能无效、指向别的进程无权访问的区域，甚至指向内核内存。若内核直接写入，恶意程序就能借内核之手改写内核数据、提权。所以内核要检查地址是否属于该进程、是否可读写、长度是否越界。</p></div></details>
+  <details><summary>两台机器 CPU 相同，为什么仍可能不能运行同一个可执行文件？</summary><div class="ans"><p>还取决于可执行文件格式（ELF/PE）、系统调用接口、所依赖的库及版本、ABI（调用约定、数据布局）。指令集相同只是必要条件。</p></div></details>
+  <details><summary>Linux 可以加载模块，是否就属于微内核？</summary><div class="ans"><p>不是。判断依据是服务运行在哪里、怎样协作：Linux 的模块加载后运行在内核空间、拥有内核权限、通过函数调用协作；微内核把服务放到用户空间独立进程、经 IPC 协作。Linux 是单体 + 模块化。</p></div></details>
+  <details><summary>从按下电源到出现 Shell，至少经过哪些阶段？</summary><div class="ans"><p>固件初始化 → 引导程序装入内核 → 内核初始化子系统 → 挂载根文件系统、运行第一个用户进程 init（如 systemd）→ 启动系统服务 → 提供登录 / Shell。</p></div></details>
+</section>
+
+<!-- ============ Lesson 3 ============ -->
+<section class="chap" id="l3">
+  <div class="chap-head"><span class="chap-no">LESSON 3</span><h2>进程</h2></div>
+  <p class="sub">对应教材第 3 章。本课是期中的重中之重：状态转换、PCB、上下文切换、fork/exec/wait、进程通信。</p>
+  <ul class="toc">
+    <li><a href="#l3-def"><span>3.1</span>程序 vs 进程</a></li>
+    <li><a href="#l3-mem"><span>3.2</span>进程的地址空间</a></li>
+    <li><a href="#l3-state"><span>3.3</span>五种状态与转换</a></li>
+    <li><a href="#l3-queue"><span>3.4</span>PCB、队列与调度程序</a></li>
+    <li><a href="#l3-cs"><span>3.5</span>上下文切换</a></li>
+    <li><a href="#l3-fork"><span>3.6</span>fork / exec / wait</a></li>
+    <li><a href="#l3-exit"><span>3.7</span>终止、僵尸、孤儿</a></li>
+    <li><a href="#l3-ipc"><span>3.8</span>进程间通信 IPC</a></li>
+    <li><a href="#l3-pipe"><span>3.9</span>管道、Socket、RPC</a></li>
+    <li><a href="#l3-ex"><span>3.10</span>课堂练习答案</a></li>
+  </ul>
+
+  <h3 id="l3-def">3.1 程序与进程<span class="stars">★★</span></h3>
+  <p>教材定义：<strong>A process is a program in execution.</strong> 进程是执行中的程序。</p>
+  <div class="grid2">
+    <div class="mini"><h5>程序 Program</h5>磁盘上的指令和数据，是<strong>静态</strong>的文件（被动实体）。像一份菜谱。</div>
+    <div class="mini"><h5>进程 Process</h5>程序的<strong>一次执行</strong>，有运行状态和资源，是<strong>动态</strong>的（主动实体）。像照着菜谱做菜的过程。</div>
+  </div>
+  <p>同一个程序可以对应多个进程，各有自己的 PID 和执行进度（开两个终端 = 同一个 Shell 程序的两个进程）。</p>
+  <p>一个进程包含：<strong>执行进度</strong>（程序计数器 PC、寄存器）、<strong>代码与数据</strong>、<strong>栈</strong>、<strong>堆</strong>、<strong>系统资源</strong>（打开的文件、身份、通信端点）。</p>
+
+  <h3 id="l3-mem">3.2 进程的地址空间<span class="stars">★★</span></h3>
+  <div class="grid2">
+    <figure style="margin:0">
+      <svg viewBox="0 0 280 330" role="img" aria-label="进程地址空间从低到高：text、已初始化数据、未初始化数据、堆、空洞、栈、命令行参数">
+        <g font-size="13" text-anchor="middle">
+          <rect x="60" y="10" width="160" height="34" fill="var(--surface-2)" stroke="var(--line)"/><text x="140" y="32">argc、argv、环境变量</text>
+          <rect x="60" y="44" width="160" height="50" fill="var(--l5s)" stroke="var(--l5)"/><text x="140" y="66" font-weight="700" style="fill:var(--l5)">栈 stack ↓</text><text x="140" y="84" font-size="11" class="mut">局部变量、参数、返回地址</text>
+          <rect x="60" y="94" width="160" height="70" fill="var(--surface)" stroke="var(--line)" stroke-dasharray="4 3"/><text x="140" y="133" class="mut">空闲（两者相向增长）</text>
+          <rect x="60" y="164" width="160" height="50" fill="var(--l2s)" stroke="var(--l2)"/><text x="140" y="186" font-weight="700" style="fill:var(--l2)">堆 heap ↑</text><text x="140" y="204" font-size="11" class="mut">malloc / new</text>
+          <rect x="60" y="214" width="160" height="34" fill="var(--l3s)" stroke="var(--l3)"/><text x="140" y="236" style="fill:var(--l3)">未初始化数据 bss</text>
+          <rect x="60" y="248" width="160" height="34" fill="var(--l3s)" stroke="var(--l3)"/><text x="140" y="270" style="fill:var(--l3)">已初始化数据 data</text>
+          <rect x="60" y="282" width="160" height="38" fill="var(--exam-soft)" stroke="var(--exam)"/><text x="140" y="306" font-weight="700" style="fill:var(--exam)">代码 text</text>
+          <text x="30" y="20" font-size="11" class="mut">高</text><text x="30" y="316" font-size="11" class="mut">低</text>
+          <line x1="30" y1="28" x2="30" y2="300" stroke="var(--muted)" stroke-dasharray="2 3"/>
+        </g>
+      </svg>
+      <figcaption>从低地址到高地址。</figcaption>
+    </figure>
+    <div class="code" style="margin:0;white-space:pre-wrap"><span class="k">#include</span> &lt;stdlib.h&gt;
+<span class="k">int</span> x;          <span class="c">// 未初始化全局 → bss</span>
+<span class="k">int</span> y = 15;     <span class="c">// 已初始化全局 → data</span>
+
+<span class="k">int</span> main(<span class="k">int</span> argc, <span class="k">char</span> *argv[])
+{                <span class="c">// argc、argv → 最高处</span>
+  <span class="k">int</span> *values;   <span class="c">// 局部变量 → 栈</span>
+  <span class="k">int</span> i;         <span class="c">// 局部变量 → 栈</span>
+  values = malloc(<span class="k">sizeof</span>(<span class="k">int</span>)*5);
+                 <span class="c">// 5 个 int 本体 → 堆</span>
+  <span class="k">for</span> (i = 0; i &lt; 5; i++)
+    values[i] = i;
+  <span class="k">return</span> 0;      <span class="c">// main 的机器指令 → text</span>
+}</div>
+  </div>
+  <div class="box exam"><span class="tag exam">真题 · 2020 选择</span><p>“下面哪一个包含可执行代码？” → <strong>A 文本（text）部分</strong>。data 放全局变量，heap 放动态分配，stack 放函数调用的局部数据。</p><p class="muted">易错：<code>values</code> 这个指针变量本身在栈上，它指向的 5 个 int 在堆上；<code>static</code> 局部变量在 data/bss，不在栈上。</p></div>
+
+  <h3 id="l3-state">3.3 进程的五种状态<span class="stars">★★★★</span></h3>
+  <div class="tbl"><table>
+    <thead><tr><th>状态</th><th>含义</th><th>比喻（排队打饭）</th></tr></thead>
+    <tbody>
+      <tr><td><strong>New</strong> 新建</td><td>正在创建</td><td>刚进食堂</td></tr>
+      <tr><td><strong>Ready</strong> 就绪</td><td>万事俱备，<strong>只差 CPU</strong></td><td>排在窗口队伍里</td></tr>
+      <tr><td><strong>Running</strong> 运行</td><td>正在 CPU 上执行（单核同一时刻只有一个）</td><td>正在窗口打饭</td></tr>
+      <tr><td><strong>Waiting</strong> 等待（阻塞）</td><td>在等 <strong>I/O 或某个事件</strong>，给它 CPU 也没用</td><td>饭卡没钱，去充值了</td></tr>
+      <tr><td><strong>Terminated</strong> 终止</td><td>执行结束，等待清理回收</td><td>打完饭离开</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tool">
+    <h5>状态机模拟器：点事件，看进程能不能这样走</h5>
+    <div class="svgbox"><svg id="stSvg" viewBox="0 0 660 300" role="img" aria-label="进程五状态转换图"></svg></div>
+    <div class="sim">
+      <div class="btns" id="stBtns"></div>
+      <div class="log" id="stLog" aria-live="polite">当前：New。点一个事件试试。</div>
+    </div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>转换</th><th>典型原因</th></tr></thead>
+    <tbody>
+      <tr><td>New → Ready</td><td>创建完成，被系统接纳（admitted）</td></tr>
+      <tr><td>Ready → Running</td><td>调度程序从就绪队列选中它（scheduler dispatch）</td></tr>
+      <tr><td>Running → Ready</td><td><strong>时间片用完</strong>，或被更高优先级抢占（中断）</td></tr>
+      <tr><td>Running → Waiting</td><td>请求 I/O、等待事件（如等子进程、等消息、等锁）</td></tr>
+      <tr><td>Waiting → Ready</td><td><strong>I/O 完成或事件发生</strong></td></tr>
+      <tr><td>Running → Terminated</td><td>执行完毕（exit）或出错被终止</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box trap"><span class="tag trap">易错 · 不可能的转换</span>
+    <ul>
+      <li><strong>Waiting → Running</strong> 不可能：事件完成后必须先回到<strong>就绪</strong>队列，再等调度程序选中（2018 选择）。</li>
+      <li><strong>Ready → Waiting</strong> 不可能：就绪的进程没在执行，不会发出 I/O 请求。</li>
+      <li><strong>New → Running</strong> 不可能：要先进就绪队列。</li>
+    </ul>
+  </div>
+  <div class="box exam"><span class="tag exam">考点 · 三年真题</span><ul>
+    <li><strong>2019</strong>：正在运行的进程时间片用完，挂到 → <strong>就绪队列</strong>。</li>
+    <li><strong>2020 判断</strong>：“进程请求打开的文件打开后，进程从运行态变为就绪态” → ✗。请求打开文件时它进了<strong>等待态</strong>，文件打开（I/O 完成）后是 <strong>等待态 → 就绪态</strong>。</li>
+    <li><strong>2020 不定项</strong>：哪些情况可能让进程离开 CPU？I/O 请求、创建子进程（父进程可能被放回就绪或等待子进程）、中断或时间片到期 → <strong>ABCD 全选</strong>。</li>
+    <li><strong>2020 简答</strong>：线程有 Ready、Running、Waiting 三态，列出所有可能转换和条件 → 就是上表中间 4 行。</li>
+    <li>调度时机（第 5 章伏笔）：Running→Waiting、Running→Terminated 时调度是<strong>非抢占</strong>的；Running→Ready、Waiting→Ready 时调度是<strong>抢占式</strong>的（2020 选择：抢占式调度可发生在 <strong>等待→就绪</strong> 时）。</li>
+    <li>2018 判断：“进程执行的相对速度不能由进程自己控制” ✓（取决于调度和资源）。2019 判断：“进程执行的相对速度与资源无关” ✗（资源不够就得等）。</li>
+  </ul></div>
+
+  <h3 id="l3-queue">3.4 PCB、调度队列与调度程序<span class="stars">★★★</span></h3>
+  <p><strong>PCB（进程控制块）</strong>是内核为每个进程保存的数据结构，是进程存在的<strong>唯一标志</strong>。进程不在 CPU 上时，靠 PCB 记住它的一切，以便之后恢复。</p>
+  <div class="grid2">
+    <div class="tbl" style="margin:0"><table>
+      <thead><tr><th>PCB 里有什么</th></tr></thead>
+      <tbody>
+        <tr><td><strong>进程状态</strong>（new/ready/running…）</td></tr>
+        <tr><td><strong>标识</strong>：PID、父进程</td></tr>
+        <tr><td><strong>程序计数器 PC</strong>：下一条指令地址</td></tr>
+        <tr><td><strong>CPU 寄存器</strong></td></tr>
+        <tr><td><strong>CPU 调度信息</strong>：优先级、队列指针</td></tr>
+        <tr><td><strong>内存管理信息</strong>：页表、基址/界限</td></tr>
+        <tr><td><strong>记账信息</strong>：CPU 用时、时间限制</td></tr>
+        <tr><td><strong>I/O 状态信息</strong>：打开的文件列表、分配的设备</td></tr>
+      </tbody></table></div>
+    <div>
+      <p>Linux 用 <code>task_struct</code> 结构表示进程，用双向链表把它们串起来；<code>current</code> 指向当前正在运行的任务。</p>
+      <p>观察：<code>ps -o pid,ppid,stat,comm</code>、<code>cat /proc/$$/status</code>。状态字母：<strong>R</strong> 运行或可运行、<strong>S</strong> 可中断睡眠（等待）、<strong>Z</strong> 僵尸。</p>
+    </div>
+  </div>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 240" role="img" aria-label="排队图：就绪队列送进程上 CPU，CPU 上的进程因 I/O 请求、时间片到期、创建子进程、等待中断而离开，之后回到就绪队列">
+      <defs><marker id="o7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <g font-size="12">
+        <rect x="40" y="20" width="200" height="34" fill="var(--l2s)" stroke="var(--l2)"/>
+        <g stroke="var(--l2)"><line x1="80" y1="20" x2="80" y2="54"/><line x1="120" y1="20" x2="120" y2="54"/><line x1="160" y1="20" x2="160" y2="54"/><line x1="200" y1="20" x2="200" y2="54"/></g>
+        <text x="140" y="74" text-anchor="middle" font-weight="700" style="fill:var(--l2)">就绪队列</text>
+        <circle cx="330" cy="37" r="28" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/><text x="330" y="42" text-anchor="middle" font-weight="700" style="fill:var(--accent)">CPU</text>
+        <line x1="242" y1="37" x2="298" y2="37" stroke="var(--accent)" stroke-width="2" marker-end="url(#o7)"/>
+        <line x1="360" y1="37" x2="420" y2="37" stroke="var(--accent)" stroke-width="2"/>
+        <text x="430" y="41">终止</text>
+        <g stroke="var(--accent)" stroke-width="1.6" fill="none">
+          <path d="M390 37 V110 H260"/><path d="M390 110 V150 H260"/><path d="M390 150 V190 H260"/><path d="M390 190 V226 H260"/>
+          <path d="M150 110 H20 V37 H36" marker-end="url(#o7)"/><path d="M150 150 H20"/><path d="M150 190 H20"/><path d="M150 226 H20"/>
+        </g>
+        <g fill="var(--l1s)" stroke="var(--l1)"><rect x="150" y="98" width="110" height="24"/><rect x="150" y="138" width="110" height="24"/><rect x="150" y="178" width="110" height="24"/><rect x="150" y="214" width="110" height="24"/></g>
+        <g text-anchor="middle"><text x="205" y="114">I/O 等待队列</text><text x="205" y="154" class="mut">（直接回就绪）</text><text x="205" y="194">等待子进程结束</text><text x="205" y="230">等待中断</text></g>
+        <g><text x="400" y="106">I/O 请求</text><text x="400" y="146">时间片到期</text><text x="400" y="186">fork 子进程</text><text x="400" y="222">等待事件</text></g>
+      </g>
+    </svg>
+    </div>
+    <figcaption>进程在各队列之间移动：就绪队列 → CPU → 因各种原因离开 → 事件完成后<strong>回到就绪队列</strong>。用什么数据结构组织队列（单链表、双链表、循环链表）和“先调度谁”是两个问题。</figcaption>
+  </figure>
+  <h4>三级调度（2018 判断题）</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>调度</th><th>别名</th><th>做什么</th><th>频率</th></tr></thead>
+    <tbody>
+      <tr><td><strong>长程调度</strong></td><td><strong>作业调度、高级调度</strong></td><td>决定哪些作业从外存进入内存、创建为进程；控制多道程度</td><td>低（分钟级）</td></tr>
+      <tr><td>中程调度</td><td>中级调度</td><td>把进程暂时换出到外存（swap），内存宽松时再换入</td><td>中</td></tr>
+      <tr><td><strong>短程调度</strong></td><td><strong>CPU 调度、进程调度、低级调度</strong></td><td>从就绪队列选一个进程分配 CPU</td><td>非常高（毫秒级），必须快</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">2018 判断“作业调度是高级调度，进程调度是低级调度” → ✓。</p>
+
+  <h3 id="l3-cs">3.5 上下文切换<span class="stars">★★★</span></h3>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 230" role="img" aria-label="上下文切换：P0 执行，中断后保存 P0 状态到 PCB0、从 PCB1 恢复 P1，P1 执行，之后再反向切换">
+      <g font-size="12">
+        <text x="80" y="20" text-anchor="middle" font-weight="700">进程 P0</text>
+        <text x="330" y="20" text-anchor="middle" font-weight="700">操作系统</text>
+        <text x="580" y="20" text-anchor="middle" font-weight="700">进程 P1</text>
+        <rect x="60" y="30" width="40" height="50" fill="var(--l3)"/><text x="110" y="60">执行</text>
+        <rect x="270" y="80" width="120" height="30" fill="var(--l4s)" stroke="var(--l4)"/><text x="330" y="100" text-anchor="middle">保存状态到 PCB0</text>
+        <rect x="270" y="112" width="120" height="30" fill="var(--l4s)" stroke="var(--l4)"/><text x="330" y="132" text-anchor="middle">从 PCB1 恢复状态</text>
+        <rect x="560" y="142" width="40" height="50" fill="var(--l5)"/><text x="550" y="172" text-anchor="end">执行</text>
+        <g stroke="var(--muted)" stroke-dasharray="3 3"><line x1="80" y1="80" x2="80" y2="225"/><line x1="580" y1="30" x2="580" y2="142"/><line x1="580" y1="192" x2="580" y2="225"/></g>
+        <path d="M100 80 L266 86" stroke="var(--accent)" fill="none" stroke-width="1.6"/><text x="150" y="76" style="fill:var(--accent)">中断或系统调用</text>
+        <path d="M392 142 L556 146" stroke="var(--accent)" fill="none" stroke-width="1.6"/>
+        <rect x="100" y="80" width="460" height="62" fill="var(--exam-soft)" opacity=".35"/>
+        <text x="470" y="72" style="fill:var(--exam)" font-weight="700">CPU 在切换，两个进程都不在跑 → 纯开销</text>
+        <text x="80" y="218" text-anchor="middle" class="mut">P0 空闲（就绪/等待）</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>上下文（context）= 恢复执行所需的寄存器、PC、状态等，保存在 PCB 里。切换期间系统不做有用工作。</figcaption>
+  </figure>
+  <ul>
+    <li>切换的时间是<strong>纯开销</strong>，速度取决于硬件（寄存器数量、是否有多组寄存器）和内存速度；切换后缓存、TLB 失效还带来后续开销。</li>
+    <li>但不能“避免所有切换”：等 I/O 时切换能让别人用 CPU；时间片切换保证交互响应、防止独占。</li>
+    <li><strong>进入内核 ≠ 切换进程</strong>：系统调用处理完可以直接返回原进程（只是模式切换，开销小得多）。</li>
+  </ul>
+  <div class="box exam"><span class="tag exam">真题 · 2020 简答：列举 3 种减少上下文切换开销的方法</span>
+    <ul><li>使用较少的内核线程（事件驱动编程、有界线程池）。</li>
+    <li>减少模式切换次数（用户级线程/用户级调度，切换不进内核）。</li>
+    <li>使用切换较少的调度算法（如 FIFO 而不是时间片很小的 RR；适当增大时间片）。</li>
+    <li>硬件支持：多组寄存器，切换时只换寄存器组指针。</li></ul>
+    <p>另见 2018 判断：“时间片越小，响应时间越小，系统效率越高” → ✗。响应快了，但切换开销占比增大，<strong>效率降低</strong>。</p>
+  </div>
+
+  <h3 id="l3-fork">3.6 进程创建：fork、exec、wait<span class="stars">★★★★</span></h3>
+  <p>已有进程（父进程）可以创建新进程（子进程），形成<strong>进程树</strong>。Linux 中根是 <code>systemd</code>（PID 1）。</p>
+  <div class="code"><span class="k">pid_t</span> pid = fork();
+<span class="k">if</span> (pid &lt; 0)       { <span class="c">/* 创建失败，只有父进程得到 -1 */</span> }
+<span class="k">else if</span> (pid == 0) { <span class="c">/* 子进程：fork 返回 0 */</span> }
+<span class="k">else</span>               { <span class="c">/* 父进程：fork 返回子进程的 PID */</span> }</div>
+  <div class="box tip"><span class="tag tip">为什么 fork “返回两次”</span><p>调用一次 fork，内核复制出一个几乎一样的子进程。从这一刻起有<strong>两个进程</strong>，都从 fork 返回的地方继续往下跑，只是拿到的返回值不同：子进程拿到 0，父进程拿到子进程 PID。<strong>父子谁先执行没有保证</strong>。</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>fork 之后</th><th>父子关系</th></tr></thead>
+    <tbody>
+      <tr><td>普通变量</td><td>初值相同，之后<strong>各改各的</strong>，互不可见（地址空间独立，Linux 用<strong>写时复制 COW</strong> 实现）</td></tr>
+      <tr><td>继承的文件描述符</td><td>指向<strong>同一个打开文件描述</strong>，<strong>共享文件偏移量</strong></td></tr>
+      <tr><td>PID、执行进度</td><td>PID 不同，之后独立推进</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><strong>exec 系列</strong>（<code>execlp</code>、<code>execve</code>…）：在<strong>当前进程</strong>中装入新程序，替换掉代码、数据、栈。<strong>成功后不返回</strong>，原程序 exec 之后的代码不会执行；PID 不变。</li>
+    <li><strong>wait / waitpid</strong>：父进程等待子进程状态变化，取得并<strong>回收</strong>其退出信息。</li>
+    <li><strong>exit</strong>：结束进程，退出码交给系统。</li>
+    <li>Shell 的套路：<strong>fork 子进程 → 子进程 exec 命令 → 父进程 wait</strong>（前台）或继续（后台 <code>&amp;</code>）。</li>
+  </ul>
+  <div class="tool">
+    <h5>fork 进程树：<code>for (i = 0; i &lt; n; i++) fork();</code></h5>
+    <div class="row"><label for="fkN">循环次数 n = <span id="fkNv" class="mono">3</span><input type="range" id="fkN" min="1" max="4" value="3"></label></div>
+    <div class="svgbox" style="margin-top:.5rem"><svg id="fkSvg" class="wide" role="img" aria-label="fork 生成的进程树"></svg></div>
+    <div class="out" id="fkOut"></div>
+  </div>
+  <div class="box ex"><span class="tag ex">例题 · 课件第 27 页：打印顺序可能是什么？</span>
+    <div class="code" style="margin:.5rem 0">pid_t pid = fork();
+printf("[0] Hello from %d\n", pid);
+<span class="k">if</span> (pid == 0) {
+  printf("[1] [Child] before exec\n");
+  execlp("echo", "echo", "[2] Hello from echo", NULL);
+  printf("[3] [Child] after exec\n");
+} <span class="k">else</span> {
+  waitpid(pid, &amp;status, 0);
+  printf("[4] [Parent] child exited with code %d\n", WEXITSTATUS(status));
+}</div>
+    <ul>
+      <li>父、子各打印一次 <code>[0]</code>（父的 pid 是子进程号，子的是 0），两者先后不定。</li>
+      <li>子进程依次：<code>[0]</code> → <code>[1]</code> → echo 打印 <code>[2]</code>。</li>
+      <li><strong><code>[3]</code> 永远不会打印</strong>：exec 成功后原程序被替换（除非 exec 失败）。</li>
+      <li><strong><code>[4]</code> 一定最后</strong>：父进程 waitpid 等子进程结束才打印，退出码 0。</li>
+      <li>可能顺序：<code>[0]父 [0]子 [1] [2] [4]</code>、<code>[0]子 [0]父 [1] [2] [4]</code>、<code>[0]子 [1] [0]父 [2] [4]</code>、<code>[0]子 [1] [2] [0]父 [4]</code>。</li>
+    </ul>
+  </div>
+  <div class="box exam"><span class="tag exam">真题 · 2020 综合（10 分）：file.txt 最终可能是什么？</span>
+    <p>前提：file.txt 初始为空，<code>open(..., O_WRONLY)</code> 不清空不追加，从偏移 0 开始写；调度顺序不定。</p>
+    <details><summary>程序一：fork 之后父子<strong>各自 open</strong>，子写 "a"，父写 "b"</summary><div class="ans">
+      <p>两次 open 得到两个<strong>独立的打开文件描述</strong>，各自偏移都从 0 开始，都写在第 0 个字节，后写的覆盖先写的。</p>
+      <p>结果：<strong>B（a）或 C（b）</strong>。</p></div></details>
+    <details><summary>程序二：<strong>先 open 再 fork</strong>，子写 'a'，父写 'b'（buffer 是全局变量）</summary><div class="ans">
+      <p>fd 继承自同一次 open，父子<strong>共享文件偏移</strong>：先写的写在位置 0，偏移变 1，后写的写在位置 1。全局 buffer 在 fork 后各自独立，子的是 'a'，父的是 'b'，不会互相影响。</p>
+      <p>结果：<strong>E（ab）或 F（ba）</strong>。</p></div></details>
+    <details><summary>程序三：open 后 <strong>pthread_create</strong>，新线程写 "a"，主线程写 "b"</summary><div class="ans">
+      <p>线程共享 fd 和偏移，所以两者都写了就是 ab 或 ba。但主线程写完后 <code>main</code> 返回 → 整个进程退出，<strong>新线程可能还没来得及写</strong>，此时只有 b。</p>
+      <p>结果：<strong>C（b）、E（ab）、F（ba）</strong>。</p></div></details>
+  </div>
+
+  <h3 id="l3-exit">3.7 进程终止；僵尸与孤儿<span class="stars">★★</span></h3>
+  <ul>
+    <li><strong>正常结束</strong>：从 main 返回或调用 exit，把退出状态交给系统。<strong>异常终止</strong>：收到未处理的致命信号（如段错误 SIGSEGV、被 <code>kill</code>）。</li>
+    <li>内核释放大部分资源，但<strong>保留 PCB 中的退出信息</strong>，等父进程来取。</li>
+    <li>取退出码要先判断：<code>WIFEXITED(status)</code> 为真才用 <code>WEXITSTATUS(status)</code>；<code>WIFSIGNALED</code> 为真用 <code>WTERMSIG</code>。status 是编码过的，不能直接当退出码。</li>
+  </ul>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>含义</th><th>处理</th></tr></thead>
+    <tbody>
+      <tr><td><strong>僵尸进程 Zombie</strong></td><td>子进程<strong>已结束</strong>，但父进程<strong>还没 wait</strong> 回收它的退出信息（ps 显示 Z）</td><td>父进程调用 wait 后彻底消失</td></tr>
+      <tr><td><strong>孤儿进程 Orphan</strong></td><td><strong>父进程先结束</strong>，子进程还在运行</td><td>Linux 中被重新托管（由 init/systemd 或指定的收养进程接管，它会定期 wait）</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">有些系统采用<strong>级联终止</strong>：父进程结束，子进程也被强制结束。Linux 默认不这样。</p>
+  <div class="grid2">
+    <div class="mini"><h5>手机为何限制后台</h5>看不见的应用仍耗 CPU、内存、电量。Android 按重要性（前台、可见、服务、缓存）回收进程；iOS 只允许受限的后台任务。应用要保存可恢复状态：在后台 ≠ 一直运行。</div>
+    <div class="mini"><h5>浏览器为何多进程</h5>Chrome：浏览器进程（界面与协调）+ 渲染进程（每个页面，在沙箱里）+ GPU/网络等服务进程。好处：<strong>故障隔离、安全边界、并行</strong>；代价：更多内存和 IPC。</div>
+  </div>
+
+  <h3 id="l3-ipc">3.8 进程间通信 IPC<span class="stars">★★★</span></h3>
+  <p>进程彼此<strong>隔离</strong>，要合作就得约定怎样共享或传递信息。为什么要合作：信息共享、计算加速、模块化、方便。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 230" role="img" aria-label="两种 IPC 模型：共享内存（两个进程映射同一区域）与消息传递（经内核中的消息队列）">
+      <defs><marker id="o8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <g font-size="12" text-anchor="middle">
+        <text x="160" y="18" font-weight="700" font-size="14">(a) 共享内存</text>
+        <text x="500" y="18" font-weight="700" font-size="14">(b) 消息传递</text>
+        <rect x="40" y="30" width="240" height="36" rx="6" fill="var(--l3s)" stroke="var(--l3)"/><text x="160" y="53">进程 A</text>
+        <rect x="40" y="72" width="240" height="40" rx="6" fill="var(--exam-soft)" stroke="var(--exam)"/><text x="160" y="97" font-weight="700" style="fill:var(--exam)">共享内存区（双方直接读写）</text>
+        <rect x="40" y="118" width="240" height="36" rx="6" fill="var(--l5s)" stroke="var(--l5)"/><text x="160" y="141">进程 B</text>
+        <rect x="40" y="166" width="240" height="40" rx="6" fill="var(--l4s)" stroke="var(--l4)"/><text x="160" y="191" style="fill:var(--l4)">内核（只在建立映射时参与）</text>
+        <rect x="380" y="30" width="240" height="36" rx="6" fill="var(--l3s)" stroke="var(--l3)"/><text x="500" y="53">进程 A：send(M)</text>
+        <rect x="380" y="118" width="240" height="36" rx="6" fill="var(--l5s)" stroke="var(--l5)"/><text x="500" y="141">进程 B：receive(M)</text>
+        <rect x="380" y="166" width="240" height="40" rx="6" fill="var(--l4s)" stroke="var(--l4)"/><text x="470" y="191" style="fill:var(--l4)">内核：消息队列</text>
+        <g fill="var(--surface)" stroke="var(--l4)"><rect x="540" y="176" width="16" height="20"/><rect x="558" y="176" width="16" height="20"/><rect x="576" y="176" width="16" height="20"/></g>
+        <path d="M400 66 V186" stroke="var(--accent)" stroke-width="1.8" fill="none" marker-end="url(#o8)"/>
+        <path d="M600 166 V158" stroke="var(--accent)" stroke-width="1.8" fill="none" marker-end="url(#o8)"/>
+        <text x="500" y="222" class="mut">每次收发都要经过内核（系统调用）</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>比较</th><th>共享内存</th><th>消息传递</th></tr></thead>
+    <tbody>
+      <tr><td>数据在哪</td><td>多个进程共同映射的区域</td><td>发送缓冲、通道、接收端</td></tr>
+      <tr><td>怎么用</td><td>像读写普通内存一样</td><td>调用 send / receive 接口</td></tr>
+      <tr><td>速度</td><td><strong>快</strong>：建立后不用每次进内核</td><td>较慢：每条消息都要系统调用</td></tr>
+      <tr><td>麻烦在哪</td><td>要自己约定布局，并<strong>自己做同步</strong></td><td>要约定格式、寻址、等待和容量</td></tr>
+      <tr><td>适合</td><td>本机大量数据</td><td>少量数据、<strong>跨机器</strong>（分布式）通信；无需避免冲突</td></tr>
+    </tbody>
+  </table></div>
+  <h4>生产者-消费者与有界缓冲区（同步章节的伏笔）</h4>
+  <p>生产者生成数据放进缓冲区，消费者取出处理。<strong>缓冲区空时消费者要等</strong>，<strong>满时生产者要等</strong>。两者速度可以不同，缓冲区吸收差异。比如摄像头产生视频帧，编码进程取出处理。</p>
+  <div class="tool">
+    <h5>有界缓冲区模拟器（容量 4）</h5>
+    <div class="sim">
+      <div class="buf" id="bbSlots"></div>
+      <div class="btns"><button class="btn" type="button" id="bbP">生产者放一个</button><button class="btn" type="button" id="bbC">消费者取一个</button><button class="btn ghost" type="button" id="bbR">重置</button></div>
+      <div class="out" id="bbState"></div>
+      <div class="log" id="bbLog" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="box exam"><span class="tag exam">考点</span>
+    <ul>
+      <li>2019/2020 判断：“生产者-消费者问题只要解决互斥访问即可” → ✗。还要解决<strong>同步</strong>：缓冲区空时消费者必须等生产者生产出产品，满时生产者要等。</li>
+      <li>模拟器里的 <code>empty</code>、<code>full</code> 就是以后 P/V 操作要用的两个信号量：值为负时，绝对值 = 正在等待的进程数。</li>
+    </ul>
+  </div>
+  <h4>POSIX 共享内存的步骤</h4>
+  <div class="code">fd = shm_open("/ipc_example", O_CREAT | O_EXCL | O_RDWR, 0600); <span class="c">// ① 创建共享对象</span>
+ftruncate(fd, sizeof(struct message));                           <span class="c">// ② 设置大小</span>
+shared = mmap(NULL, sizeof *shared, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0); <span class="c">// ③ 映射</span>
+sem_init(&amp;shared-&gt;ready, 1, 0);   <span class="c">// 第 2 个参数 1 = 进程间共享；初值 0 = 消费者先等</span>
+<span class="c">/* 父进程（生产者）*/</span> snprintf(shared-&gt;text, …, "hello"); sem_post(&amp;shared-&gt;ready);
+<span class="c">/* 子进程（消费者）*/</span> sem_wait(&amp;shared-&gt;ready); printf("%s\n", shared-&gt;text);
+<span class="c">// ④ 用完 munmap，shm_unlink 删除</span></div>
+  <p>要点：共享的只是映射的那块区域，不是整个堆栈；各进程映射到的地址可以不同，所以共享区里别存指针，存偏移；必须<strong>先写完整再通知</strong>，否则消费者会读到一半的数据。</p>
+  <h4>消息传递的三个设计问题</h4>
+  <div class="grid4">
+    <div class="mini"><h5>① 寻址：直接 vs 间接</h5><strong>直接</strong>：<code>send(P, msg)</code> 指名道姓发给进程 P，每对进程一条链路。<br><strong>间接</strong>：<code>send(A, msg)</code> 发到<strong>邮箱/端口</strong> A，多个进程可共用一个邮箱；一条消息被谁取走要有规则。</div>
+    <div class="mini"><h5>② 同步：阻塞 vs 非阻塞</h5><strong>阻塞发送</strong>：等对方收到才返回；<strong>非阻塞发送</strong>：发出就返回。<br><strong>阻塞接收</strong>：没消息就等；<strong>非阻塞接收</strong>：没消息立即返回“暂无”。发送和接收都阻塞叫<strong>会合 rendezvous</strong>。</div>
+    <div class="mini"><h5>③ 缓冲：容量</h5><strong>零容量</strong>：不暂存，发送者必须等接收者。<br><strong>有界</strong>：满了发送者阻塞/报错。<br><strong>无界</strong>：理论上发送者从不等（实际仍受内存限制）。</div>
+  </div>
+
+  <h3 id="l3-pipe">3.9 管道、Socket 与 RPC<span class="stars">★★</span></h3>
+  <div class="tbl"><table>
+    <thead><tr><th>机制</th><th>怎样找到对方</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td><strong>普通管道</strong></td><td>继承文件描述符（一般父子进程）</td><td>本机相关进程，<strong>单向</strong>字节流</td></tr>
+      <tr><td><strong>命名管道 FIFO</strong></td><td>文件系统路径名</td><td>本机<strong>不相关</strong>进程按名字通信</td></tr>
+      <tr><td><strong>Socket</strong></td><td>IP 地址 + 端口（或本机路径）</td><td>本机或<strong>跨机器</strong>通信</td></tr>
+    </tbody>
+  </table></div>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 160" role="img" aria-label="普通管道：父进程写端 fd[1] 写入，子进程读端 fd[0] 读出">
+      <defs><marker id="o9" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <g font-size="13" text-anchor="middle">
+        <rect x="20" y="30" width="170" height="90" rx="10" fill="var(--l3s)" stroke="var(--l3)"/><text x="105" y="56" font-weight="700" style="fill:var(--l3)">父进程</text><text x="105" y="80" class="mono">fd[1] 写端 ✓</text><text x="105" y="102" class="mono mut">fd[0] 已 close</text>
+        <rect x="470" y="30" width="170" height="90" rx="10" fill="var(--l5s)" stroke="var(--l5)"/><text x="555" y="56" font-weight="700" style="fill:var(--l5)">子进程</text><text x="555" y="80" class="mono">fd[0] 读端 ✓</text><text x="555" y="102" class="mono mut">fd[1] 已 close</text>
+        <rect x="230" y="58" width="200" height="34" rx="17" fill="var(--surface-2)" stroke="var(--muted)"/><text x="330" y="80">管道（内核缓冲区）</text>
+        <line x1="192" y1="75" x2="228" y2="75" stroke="var(--accent)" stroke-width="2" marker-end="url(#o9)"/>
+        <line x1="432" y1="75" x2="466" y2="75" stroke="var(--accent)" stroke-width="2" marker-end="url(#o9)"/>
+        <text x="330" y="146" class="mut">先 pipe(fd) 再 fork，父子都继承两个端；各自关掉不用的那一端</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <ul>
+    <li><code>pipe(fd)</code>：<strong>fd[0] 是读端，fd[1] 是写端</strong>。Linux 普通管道是单向字节流，没有消息边界；双向通信要两条管道。</li>
+    <li><strong>什么时候 read 返回 0（EOF）</strong>：管道空了<strong>并且所有写端都关闭</strong>。只要还有一个写端开着（包括子进程自己忘了关的那个继承来的写端），读端就会一直阻塞等待。</li>
+    <li>命名管道有路径，但数据不存进普通文件；Linux FIFO 也是半双工。</li>
+    <li><strong>Socket</strong> = 通信端点，由 <strong>IP 地址 + 端口</strong> 标识；<code>127.0.0.1</code> 是本机回环地址。TCP 服务端：<code>socket → bind → listen → accept → 收发</code>；客户端：<code>socket → connect → 收发</code>。accept 返回一个新的已连接 socket，监听 socket 继续监听。TCP 是有序字节流，应用要自己定消息边界（如以换行分隔）。</li>
+  </ul>
+  <h4>RPC 远程过程调用</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 130" role="img" aria-label="RPC 流程：客户端调用存根，编组参数，网络发送，服务端存根解组并调用，再返回结果">
+      <defs><marker id="o10" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <g font-size="12" text-anchor="middle">
+        <rect x="5" y="40" width="100" height="44" rx="8" fill="var(--l3s)"/><text x="55" y="60">客户端</text><text x="55" y="76" class="mono">add(2,3)</text>
+        <rect x="135" y="40" width="110" height="44" rx="8" fill="var(--l3s)" stroke="var(--l3)"/><text x="190" y="60" font-weight="700">客户端 stub</text><text x="190" y="76" font-size="11">编组参数</text>
+        <rect x="275" y="40" width="110" height="44" rx="8" fill="var(--surface-2)"/><text x="330" y="66">网络消息</text>
+        <rect x="415" y="40" width="110" height="44" rx="8" fill="var(--l5s)" stroke="var(--l5)"/><text x="470" y="60" font-weight="700">服务端 stub</text><text x="470" y="76" font-size="11">解组、调用</text>
+        <rect x="555" y="40" width="100" height="44" rx="8" fill="var(--l5s)"/><text x="605" y="60">服务端</text><text x="605" y="76">执行 add → 5</text>
+        <g stroke="var(--accent)" stroke-width="1.6" marker-end="url(#o10)"><line x1="105" y1="56" x2="131" y2="56"/><line x1="245" y1="56" x2="271" y2="56"/><line x1="385" y1="56" x2="411" y2="56"/><line x1="525" y1="56" x2="551" y2="56"/></g>
+        <text x="330" y="112" class="mut">结果 5 按相反方向编组、发送、解组后返回给客户端</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <ul>
+    <li>RPC 把“编码请求 → 传输 → 解码 → 执行 → 返回”封装成像本地函数调用一样的接口。<strong>stub（存根）</strong>负责编组。</li>
+    <li><strong>编组 / 序列化（marshalling）</strong>：不同机器字节序（大端/小端）、类型宽度不同，要编码成统一格式，如 <strong>XDR</strong>（外部数据表示）。不能把本机指针直接发过去。</li>
+    <li><strong>超时与重试</strong>：超时不能说明服务端没执行（可能执行了但回复丢了）。<strong>至多一次</strong>：带请求编号去重，可能没完成；<strong>至少一次</strong>：重试直到成功，可能重复执行。<strong>幂等</strong>操作重复执行效果相同；扣款、下单不是幂等的，需要去重。RPC 本身不保证“恰好一次”。</li>
+  </ul>
+
+  <h3 id="l3-ex">3.10 课堂练习参考答案</h3>
+  <details><summary>I/O 完成后，进程为什么通常先回到就绪状态？</summary><div class="ans"><p>I/O 完成时 CPU 可能正被其他进程使用，由调度程序决定谁运行；该进程只是重新具备了运行条件，所以进入就绪队列等待调度，而不是直接抢 CPU。</p></div></details>
+  <details><summary>fork 后子进程修改普通变量，父进程能看到吗？</summary><div class="ans"><p>不能。fork 后父子地址空间独立（写时复制），子进程修改的是自己的副本。要共享数据需用共享内存等 IPC。</p></div></details>
+  <details><summary>exec 成功后，为什么原程序后面的打印没有执行？</summary><div class="ans"><p>exec 用新程序替换了当前进程的代码、数据和栈，原程序已不在内存中，exec 成功不会返回。只有 exec 失败时才会继续执行后面的语句。</p></div></details>
+  <details><summary>管道中已经没有数据，read 为什么仍可能等待？</summary><div class="ans"><p>只要还有任何进程持有该管道的写端（可能是自己忘关的继承副本），内核就认为以后可能还有数据，阻塞读会继续等。只有所有写端都关闭，read 才返回 0（EOF）。</p></div></details>
+  <details><summary>RPC 调用超时，能认定服务端没有执行吗？</summary><div class="ans"><p>不能。可能是请求没到，也可能是已执行但回复丢失或太慢。所以非幂等操作重试前要用请求编号去重。</p></div></details>
+</section>
+
+<!-- ============ Lesson 4 ============ -->
+<section class="chap" id="l4">
+  <div class="chap-head"><span class="chap-no">LESSON 4</span><h2>线程与并发</h2></div>
+  <p class="sub">对应教材第 4 章。重点：线程共享什么/私有什么、并发 vs 并行、Amdahl 定律、多线程模型、Pthreads。</p>
+  <ul class="toc">
+    <li><a href="#l4-share"><span>4.1</span>线程：共享与私有</a></li>
+    <li><a href="#l4-why"><span>4.2</span>多线程的好处；进程 vs 线程</a></li>
+    <li><a href="#l4-cp"><span>4.3</span>并发与并行、多核编程</a></li>
+    <li><a href="#l4-amdahl"><span>4.4</span>Amdahl 定律</a></li>
+    <li><a href="#l4-model"><span>4.5</span>用户线程、内核线程、映射模型</a></li>
+    <li><a href="#l4-pthread"><span>4.6</span>线程库：Pthreads / Java / Windows</a></li>
+    <li><a href="#l4-implicit"><span>4.7</span>线程池、Fork-Join、OpenMP、GCD</a></li>
+    <li><a href="#l4-issue"><span>4.8</span>fork、信号、取消、TLS</a></li>
+    <li><a href="#l4-os"><span>4.9</span>Windows 与 Linux 的实现</a></li>
+    <li><a href="#l4-ex"><span>4.10</span>课堂练习与讨论答案</a></li>
+  </ul>
+
+  <h3 id="l4-share">4.1 线程：共享什么、私有什么<span class="stars">★★★★</span></h3>
+  <p>只有一个线程时，一个操作阻塞就卡住整个进程。编辑器要同时响应按键、检查拼写、自动保存；服务器在等一个请求的数据时还要接收别的请求。所以把一个进程拆成多条<strong>执行流</strong>，就是线程。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 250" role="img" aria-label="单线程进程与多线程进程：多线程进程中代码、数据、文件共享，每个线程有自己的寄存器、栈和执行流">
+      <g font-size="12" text-anchor="middle">
+        <text x="120" y="18" font-weight="700" font-size="14">单线程进程</text>
+        <text x="440" y="18" font-weight="700" font-size="14">多线程进程</text>
+        <rect x="30" y="30" width="180" height="210" rx="10" fill="var(--surface)" stroke="var(--line)"/>
+        <g fill="var(--l3s)" stroke="var(--l3)"><rect x="40" y="40" width="50" height="34"/><rect x="95" y="40" width="50" height="34"/><rect x="150" y="40" width="50" height="34"/></g>
+        <text x="65" y="62">代码</text><text x="120" y="62">数据</text><text x="175" y="62">文件</text>
+        <g fill="var(--l5s)" stroke="var(--l5)"><rect x="40" y="82" width="75" height="30"/><rect x="125" y="82" width="75" height="30"/></g>
+        <text x="77" y="102">寄存器</text><text x="162" y="102">栈</text>
+        <path d="M120 125 q10 12 0 24 t0 24 t0 24 t0 24" fill="none" stroke="var(--l5)" stroke-width="2.5"/>
+        <rect x="260" y="30" width="370" height="210" rx="10" fill="var(--surface)" stroke="var(--line)"/>
+        <rect x="270" y="40" width="350" height="34" fill="var(--l3s)" stroke="var(--l3)"/>
+        <text x="445" y="62" style="fill:var(--l3)" font-weight="700">共享：代码 · 全局数据 · 堆 · 打开的文件 · 地址空间</text>
+        <g fill="var(--l5s)" stroke="var(--l5)"><rect x="280" y="84" width="100" height="26"/><rect x="280" y="112" width="100" height="26"/><rect x="395" y="84" width="100" height="26"/><rect x="395" y="112" width="100" height="26"/><rect x="510" y="84" width="100" height="26"/><rect x="510" y="112" width="100" height="26"/></g>
+        <text x="330" y="102">寄存器+PC</text><text x="330" y="130">栈</text><text x="445" y="102">寄存器+PC</text><text x="445" y="130">栈</text><text x="560" y="102">寄存器+PC</text><text x="560" y="130">栈</text>
+        <g fill="none" stroke="var(--l5)" stroke-width="2.5"><path d="M330 148 q10 12 0 24 t0 24 t0 24"/><path d="M445 148 q10 12 0 24 t0 24 t0 24"/><path d="M560 148 q10 12 0 24 t0 24 t0 24"/></g>
+        <text x="445" y="236" class="mut">每个线程一份：线程 ID、PC、寄存器、栈、状态</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>同一进程内的线程<strong>共享</strong></th><th>每个线程<strong>私有</strong></th></tr></thead>
+    <tbody>
+      <tr><td>代码段、全局数据、<strong>堆</strong></td><td>程序计数器 PC、<strong>寄存器</strong></td></tr>
+      <tr><td>地址空间、<strong>打开的文件</strong></td><td><strong>栈</strong>、线程 ID</td></tr>
+      <tr><td>进程的其他资源和属性（信号处置等）</td><td>调度状态、线程局部存储 TLS、信号屏蔽字</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点 · 必背</span>
+    <ul>
+      <li><strong>2020 判断</strong>：“线程都保存有各自的栈、CPU 状态、<strong>堆信息、打开文件列表</strong>” → ✗。线程只保存栈和 CPU 状态；堆和打开文件列表是<strong>进程</strong>的（线程实现了<strong>资源单位与调度单位的分离</strong>）。</li>
+      <li><strong>2018 简答：进程与线程的关系</strong> → 单线程进程中，进程既是资源管理单位也是调度单位；多线程进程中，<strong>线程是调度（CPU 分配）的单位，进程是资源分配的单位</strong>。线程相关的是寄存器和栈，进程相关的是栈以外的内存、打开文件列表等。</li>
+      <li><strong>2019 选择</strong>：线程控制块（TCB）中包含 CPU 寄存器状态 ✓；在支持核心态线程的系统中，CPU 调度单位仍是进程 ✗（是线程）。</li>
+    </ul>
+  </div>
+
+  <h3 id="l4-why">4.2 多线程的四个好处；进程 vs 线程<span class="stars">★★★</span></h3>
+  <div class="grid4">
+    <div class="mini"><h5>响应性 Responsiveness</h5>一个线程等 I/O 或做长计算，界面线程仍能响应用户。</div>
+    <div class="mini"><h5>资源共享 Resource sharing</h5>线程默认共享进程的内存和文件，不用像进程那样专门建 IPC。</div>
+    <div class="mini"><h5>经济 Economy</h5>创建线程、切换线程比进程便宜（不用切地址空间）。</div>
+    <div class="mini"><h5>可扩展性 Scalability</h5>多个线程可以在多核上<strong>并行</strong>。</div>
+  </div>
+  <p class="muted">2020 选择：多线程编程的好处 → 反应性、资源共享、经济、可扩展性，<strong>全选</strong>。代价：多个线程访问同一份可写数据时<strong>需要同步</strong>。</p>
+  <div class="tbl"><table>
+    <thead><tr><th>比较项</th><th>不同进程</th><th>同一进程的线程</th></tr></thead>
+    <tbody>
+      <tr><td>资源</td><td>各自拥有</td><td>复用进程的资源</td></tr>
+      <tr><td>地址空间</td><td>彼此独立</td><td>共享同一地址空间</td></tr>
+      <tr><td>数据交换</td><td>要 IPC 或显式共享映射</td><td>直接访问共享对象（仍需同步）</td></tr>
+      <tr><td>创建与切换</td><td>开销大</td><td>开销小（不是零）</td></tr>
+      <tr><td>故障影响</td><td><strong>相互隔离</strong></td><td>一个线程出错可能<strong>搞垮整个进程</strong></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="l4-cp">4.3 并发与并行；多核编程<span class="stars">★★★</span></h3>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 200" role="img" aria-label="单核上 T1 到 T4 交替执行是并发；双核上同时执行是并行">
+      <g font-size="12">
+        <text x="10" y="22" font-weight="700">单核：并发（交替执行）</text>
+        <text x="60" y="56" text-anchor="end" class="mut">核 0</text>
+        <g stroke="var(--surface)" stroke-width="2">
+          <rect x="70" y="38" width="70" height="28" fill="var(--l3)"/><rect x="140" y="38" width="70" height="28" fill="var(--l2)"/><rect x="210" y="38" width="70" height="28" fill="var(--l5)"/><rect x="280" y="38" width="70" height="28" fill="var(--l4)"/><rect x="350" y="38" width="70" height="28" fill="var(--l3)"/><rect x="420" y="38" width="70" height="28" fill="var(--l2)"/><rect x="490" y="38" width="70" height="28" fill="var(--l5)"/><rect x="560" y="38" width="70" height="28" fill="var(--l4)"/>
+        </g>
+        <g text-anchor="middle" font-weight="700"><text x="105" y="57" style="fill:var(--surface)">T1</text><text x="175" y="57" style="fill:var(--surface)">T2</text><text x="245" y="57" style="fill:var(--surface)">T3</text><text x="315" y="57" style="fill:var(--surface)">T4</text><text x="385" y="57" style="fill:var(--surface)">T1</text><text x="455" y="57" style="fill:var(--surface)">T2</text><text x="525" y="57" style="fill:var(--surface)">T3</text><text x="595" y="57" style="fill:var(--surface)">T4</text></g>
+        <text x="10" y="102" font-weight="700">双核：并行（同一时刻真的同时执行）</text>
+        <text x="60" y="136" text-anchor="end" class="mut">核 0</text><text x="60" y="170" text-anchor="end" class="mut">核 1</text>
+        <g stroke="var(--surface)" stroke-width="2">
+          <rect x="70" y="118" width="140" height="28" fill="var(--l3)"/><rect x="210" y="118" width="140" height="28" fill="var(--l5)"/><rect x="350" y="118" width="140" height="28" fill="var(--l3)"/><rect x="490" y="118" width="140" height="28" fill="var(--l5)"/>
+          <rect x="70" y="152" width="140" height="28" fill="var(--l2)"/><rect x="210" y="152" width="140" height="28" fill="var(--l4)"/><rect x="350" y="152" width="140" height="28" fill="var(--l2)"/><rect x="490" y="152" width="140" height="28" fill="var(--l4)"/>
+        </g>
+        <g text-anchor="middle" font-weight="700"><text x="140" y="137" style="fill:var(--surface)">T1</text><text x="280" y="137" style="fill:var(--surface)">T3</text><text x="420" y="137" style="fill:var(--surface)">T1</text><text x="560" y="137" style="fill:var(--surface)">T3</text><text x="140" y="171" style="fill:var(--surface)">T2</text><text x="280" y="171" style="fill:var(--surface)">T4</text><text x="420" y="171" style="fill:var(--surface)">T2</text><text x="560" y="171" style="fill:var(--surface)">T4</text></g>
+        <text x="350" y="196" text-anchor="middle" class="mut">时间 →</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <div class="box exam"><span class="tag exam">真题 · 2018 简答：比较并发与并行</span>
+    <p><strong>并发（concurrency）</strong>：一段<strong>时间间隔</strong>内有多个任务都在推进（宏观上“同时”，单核轮流也算）。</p>
+    <p><strong>并行（parallelism）</strong>：同一<strong>时刻</strong>有多个任务在执行（微观上同时，必须有多个处理器/核）。</p>
+    <p>并行一定是并发，并发不一定是并行。</p>
+  </div>
+  <p><strong>多核编程的五个挑战</strong>：任务划分（哪些可独立执行）、负载均衡（别让有的核早早闲着）、数据划分、数据依赖（必须等别人的结果）、测试调试（不同调度顺序结果还对不对）。</p>
+  <div class="grid2">
+    <div class="mini"><h5>数据并行</h5>把<strong>数据</strong>分成几份，每个核对自己那份做<strong>相同操作</strong>。例：4 个线程各调整图片的 1/4 像素。</div>
+    <div class="mini"><h5>任务并行</h5>把<strong>任务（操作）</strong>分给不同核，各做<strong>不同操作</strong>。例：一个线程解码、一个加滤镜、一个编码。</div>
+  </div>
+
+  <h3 id="l4-amdahl">4.4 Amdahl 定律<span class="stars">★★★</span></h3>
+  <p>就算一部分能并行，<strong>必须串行的部分</strong>会卡住整体加速比。设串行比例为 S，核数为 N：</p>
+  <div class="formula"><span class="big">加速比 ≤ 1 / ( S + (1 − S) / N )</span>
+<span class="cap">N → ∞ 时，加速比趋近 <strong>1/S</strong>。串行 25% 的程序，再多核也快不过 4 倍。</span></div>
+  <div class="tool">
+    <h5>Amdahl 计算器与曲线</h5>
+    <div class="row">
+      <label for="amS">串行比例 S = <span id="amSv" class="mono">0.25</span><input type="range" id="amS" min="0" max="0.9" step="0.01" value="0.25"></label>
+      <label for="amN">核数 N<input type="number" id="amN" value="2" min="1" max="1024"></label>
+    </div>
+    <div class="out" id="amOut"></div>
+    <div class="svgbox" style="margin-top:.5rem"><svg id="amSvg" viewBox="0 0 640 260" role="img" aria-label="不同串行比例下加速比随核数变化的曲线"></svg></div>
+  </div>
+  <div class="box ex"><span class="tag ex">例题</span>
+    <ul>
+      <li>课件：S = 0.25，N = 2 → 1/(0.25 + 0.75/2) = 1/0.625 = <strong>1.6</strong>。</li>
+      <li>课堂练习：S = 0.2，N = 4 → 1/(0.2 + 0.8/4) = 1/0.4 = <strong>2.5</strong>。</li>
+      <li>100 核：S = 0.10 → <strong>9.17</strong>（上限 10）；S = 0.25 → <strong>3.88</strong>（上限 4）；S = 0 → 100。</li>
+    </ul>
+    <p>Amdahl 是理想模型，没算线程创建、同步、通信、缓存竞争、负载不均的开销，实际更低。它假设问题规模固定。2020 选择：计算“给有串行和并行部分的程序加核能提升多少” → <strong>Amdahl 定律</strong>。</p>
+  </div>
+
+  <h3 id="l4-model">4.5 用户线程、内核线程与映射模型<span class="stars">★★★</span></h3>
+  <ul>
+    <li><strong>用户级线程</strong>：由用户空间的线程库管理，内核不知道它们的存在。切换快（不进内核）。</li>
+    <li><strong>内核级线程</strong>：内核保存状态并直接调度。Windows、Linux、macOS 都支持。</li>
+    <li>用户线程最终要<strong>映射</strong>到内核线程上才能被 CPU 执行。Pthreads、Java 线程只是接口，看名字判断不了底层模型。</li>
+  </ul>
+  <div class="grid4">
+    <div class="mini"><h5>多对一</h5>
+      <svg viewBox="0 0 140 110" aria-hidden="true"><g fill="var(--l3s)" stroke="var(--l3)"><circle cx="30" cy="20" r="11"/><circle cx="70" cy="20" r="11"/><circle cx="110" cy="20" r="11"/></g><g stroke="var(--muted)"><line x1="30" y1="31" x2="70" y2="80"/><line x1="70" y1="31" x2="70" y2="80"/><line x1="110" y1="31" x2="70" y2="80"/></g><rect x="56" y="80" width="28" height="22" rx="4" fill="var(--l4)"/></svg>
+      多个用户线程 → 1 个内核线程（GNU Pth）。<br><strong>一个线程阻塞，全部阻塞</strong>；<strong>不能利用多核</strong>。</div>
+    <div class="mini"><h5>一对一</h5>
+      <svg viewBox="0 0 140 110" aria-hidden="true"><g fill="var(--l3s)" stroke="var(--l3)"><circle cx="30" cy="20" r="11"/><circle cx="70" cy="20" r="11"/><circle cx="110" cy="20" r="11"/></g><g stroke="var(--muted)"><line x1="30" y1="31" x2="30" y2="80"/><line x1="70" y1="31" x2="70" y2="80"/><line x1="110" y1="31" x2="110" y2="80"/></g><g fill="var(--l4)"><rect x="16" y="80" width="28" height="22" rx="4"/><rect x="56" y="80" width="28" height="22" rx="4"/><rect x="96" y="80" width="28" height="22" rx="4"/></g></svg>
+      每个用户线程 → 1 个内核线程（<strong>Linux NPTL、Windows</strong>）。<br>并发性好、能多核；线程数受限（每个都要内核资源）。</div>
+    <div class="mini"><h5>多对多</h5>
+      <svg viewBox="0 0 140 110" aria-hidden="true"><g fill="var(--l3s)" stroke="var(--l3)"><circle cx="20" cy="20" r="10"/><circle cx="53" cy="20" r="10"/><circle cx="87" cy="20" r="10"/><circle cx="120" cy="20" r="10"/></g><g stroke="var(--muted)"><line x1="20" y1="30" x2="45" y2="80"/><line x1="53" y1="30" x2="45" y2="80"/><line x1="87" y1="30" x2="95" y2="80"/><line x1="120" y1="30" x2="95" y2="80"/><line x1="53" y1="30" x2="95" y2="80"/></g><g fill="var(--l4)"><rect x="31" y="80" width="28" height="22" rx="4"/><rect x="81" y="80" width="28" height="22" rx="4"/></g></svg>
+      多个用户线程复用较少的内核线程（<strong>Go goroutine、Java 虚拟线程</strong>）。<br>能多核，又控制内核线程数。</div>
+    <div class="mini"><h5>两级</h5>
+      <svg viewBox="0 0 140 110" aria-hidden="true"><g fill="var(--l3s)" stroke="var(--l3)"><circle cx="20" cy="20" r="10"/><circle cx="53" cy="20" r="10"/><circle cx="87" cy="20" r="10"/><circle cx="120" cy="20" r="10" style="stroke:var(--exam)"/></g><g stroke="var(--muted)"><line x1="20" y1="30" x2="45" y2="80"/><line x1="53" y1="30" x2="45" y2="80"/><line x1="87" y1="30" x2="45" y2="80"/></g><line x1="120" y1="30" x2="110" y2="80" stroke="var(--exam)" stroke-width="2"/><g fill="var(--l4)"><rect x="31" y="80" width="28" height="22" rx="4"/><rect x="96" y="80" width="28" height="22" rx="4"/></g></svg>
+      多对多 + 允许某个用户线程<strong>绑定</strong>到专用内核线程（Solaris 8）。</div>
+  </div>
+  <div class="box exam"><span class="tag exam">考点 · 2019 不定项</span>
+    <ul>
+      <li>“用户态线程（没有核心态线程或 LWP 支持）阻塞，可能会阻塞整个进程” → ✓。因为内核只看到一个执行实体，它一阻塞，所有用户线程都停了。</li>
+      <li>“多处理器环境下，线程间同步不能使用关中断实现” → ✓。</li>
+      <li>一对一模型里一个线程等 I/O，<strong>不会</strong>让整个进程停住，其他线程照样被调度。</li>
+    </ul>
+  </div>
+
+  <h3 id="l4-pthread">4.6 线程库：Pthreads、Java、Windows<span class="stars">★★</span></h3>
+  <div class="code"><span class="k">void</span> *work(<span class="k">void</span> *arg) {
+    <span class="k">int</span> id = *(<span class="k">int</span> *)arg;
+    <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; 3; i++) { printf("Thread %d: iteration %d\n", id, i); sleep(1); }
+    <span class="k">return</span> NULL;               <span class="c">// 线程函数返回 = 线程结束（或调用 pthread_exit）</span>
+}
+<span class="k">int</span> main(<span class="k">void</span>) {
+    pthread_t t1, t2;  <span class="k">int</span> id1 = 1, id2 = 2;
+    pthread_create(&amp;t1, NULL, work, &amp;id1);   <span class="c">// 新线程从 work(&amp;id1) 开始</span>
+    pthread_create(&amp;t2, NULL, work, &amp;id2);
+    pthread_join(t1, NULL);                   <span class="c">// 等 t1 结束</span>
+    pthread_join(t2, NULL);
+    printf("All threads finished.\n");
+}</div>
+  <p><strong>输出顺序</strong>：同一线程自己的 iteration 0→1→2 一定按顺序；两个线程之间的交错每次可能不同；<code>All threads finished.</code> 一定在最后（两次 join 之后）。</p>
+  <div class="box trap"><span class="tag trap">创建线程后要保证的三件事</span>
+    <ul>
+      <li><strong>参数有效</strong>：线程用参数期间，参数对象必须还活着；别把循环变量 <code>&amp;i</code> 传给多个线程（i 会被改掉）。</li>
+      <li><strong>访问同步</strong>：多个线程改同一变量要同步。<strong><code>count++</code> 不是原子的</strong>，它是“读 → 加 1 → 写回”三步，两个线程交错执行会丢失更新（2020 选择：count++ 和 count-- 都不是原子的 → <strong>D 两者都不是</strong>）。</li>
+      <li><strong>等待完成</strong>：用 join 等线程结束，不要用 sleep 猜。join 只保证“等结束”，不保证执行期间的互斥。</li>
+    </ul>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>接口</th><th>创建</th><th>等待</th><th>注意</th></tr></thead>
+    <tbody>
+      <tr><td>POSIX Pthreads</td><td><code>pthread_create</code></td><td><code>pthread_join</code></td><td>是标准（规范），由库实现；大多返回错误码而不是设 errno</td></tr>
+      <tr><td>Java</td><td><code>t.start()</code></td><td><code>t.join()</code></td><td><strong>start() 才启动新线程，直接调 run() 只是普通方法调用</strong></td></tr>
+      <tr><td>Windows</td><td><code>CreateThread</code></td><td><code>WaitForSingleObject</code></td><td><code>CloseHandle</code> 只关句柄，不会终止线程</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="l4-implicit">4.7 隐式线程：线程池、Fork-Join、OpenMP、GCD<span class="stars">★★</span></h3>
+  <p><strong>显式线程</strong>：程序自己创建、传参、等待、清理。<strong>隐式线程</strong>：程序只描述“有哪些任务”，由库或运行时安排线程。</p>
+  <h4>线程池</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 170" role="img" aria-label="3 个工作线程处理 6 个各约 1 秒的任务，约 2 秒完成">
+      <g font-size="12">
+        <g class="mono" text-anchor="middle" font-size="11"><text x="90" y="22">0 s</text><text x="330" y="22">1 s</text><text x="570" y="22">2 s</text></g>
+        <g stroke="var(--line)" stroke-dasharray="3 3"><line x1="90" y1="28" x2="90" y2="150"/><line x1="330" y1="28" x2="330" y2="150"/><line x1="570" y1="28" x2="570" y2="150"/></g>
+        <text x="80" y="56" text-anchor="end">线程 1</text><text x="80" y="96" text-anchor="end">线程 2</text><text x="80" y="136" text-anchor="end">线程 3</text>
+        <g stroke="var(--surface)" stroke-width="2">
+          <rect x="90" y="38" width="240" height="28" fill="var(--l3)"/><rect x="330" y="38" width="240" height="28" fill="var(--l3)" opacity=".7"/>
+          <rect x="90" y="78" width="240" height="28" fill="var(--l2)"/><rect x="330" y="78" width="240" height="28" fill="var(--l2)" opacity=".7"/>
+          <rect x="90" y="118" width="240" height="28" fill="var(--l5)"/><rect x="330" y="118" width="240" height="28" fill="var(--l5)" opacity=".7"/>
+        </g>
+        <g text-anchor="middle" font-weight="700"><text x="210" y="57" style="fill:var(--surface)">Task 0</text><text x="450" y="57" style="fill:var(--surface)">Task 3</text><text x="210" y="97" style="fill:var(--surface)">Task 1</text><text x="450" y="97" style="fill:var(--surface)">Task 4</text><text x="210" y="137" style="fill:var(--surface)">Task 2</text><text x="450" y="137" style="fill:var(--surface)">Task 5</text></g>
+        <text x="330" y="166" text-anchor="middle" class="mut">同一个工作线程先后处理多个任务；谁先空闲谁就去队列里取下一个</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <ul>
+    <li>请求先进<strong>任务队列</strong>，工作线程从队列取任务，做完再取下一个。</li>
+    <li>好处：<strong>复用线程</strong>省去反复创建销毁的开销；<strong>限制线程数</strong>，防止请求暴增把系统拖垮。任务队列长度也要管理。</li>
+    <li><strong>Python 的 GIL</strong>：CPython 同一时刻只有一个线程执行 Python 字节码。所以线程池能让<strong>等待型</strong>任务（网络、文件、sleep）重叠，6 个 1 秒的 sleep 任务约 2 秒完成；但<strong>纯 Python 计算</strong>用多线程用不上多核，应考虑多进程。</li>
+  </ul>
+  <h4>Fork-Join</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 200" role="img" aria-label="Fork-Join 任务树：求和 1 到 10000 拆成两半，再各拆两半，最后合并">
+      <g font-size="12" text-anchor="middle">
+        <g stroke="var(--muted)"><line x1="330" y1="44" x2="170" y2="96"/><line x1="330" y1="44" x2="490" y2="96"/><line x1="170" y1="124" x2="90" y2="166"/><line x1="170" y1="124" x2="250" y2="166"/><line x1="490" y1="124" x2="410" y2="166"/><line x1="490" y1="124" x2="570" y2="166"/></g>
+        <rect x="250" y="16" width="160" height="28" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="330" y="35">sum(1..10000)</text>
+        <rect x="100" y="96" width="140" height="28" rx="6" fill="var(--l3s)" stroke="var(--l3)"/><text x="170" y="115">sum(1..5000)</text>
+        <rect x="420" y="96" width="140" height="28" rx="6" fill="var(--l3s)" stroke="var(--l3)"/><text x="490" y="115">sum(5001..10000)</text>
+        <g fill="var(--l2s)" stroke="var(--l2)"><rect x="40" y="166" width="100" height="26" rx="6"/><rect x="200" y="166" width="100" height="26" rx="6"/><rect x="360" y="166" width="100" height="26" rx="6"/><rect x="520" y="166" width="100" height="26" rx="6"/></g>
+        <text x="90" y="184">1..2500</text><text x="250" y="184">2501..5000</text><text x="410" y="184">5001..7500</text><text x="570" y="184">7501..10000</text>
+        <text x="610" y="70" class="mut">fork 拆分 ↓ / join 合并 ↑</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>问题够小就直接算，否则拆成子任务，<strong>等子任务完成（join）后合并结果</strong>。用长度阈值控制粒度、递归深度上限控制线程数（深度 2 → 最多 4 条执行流）。各子任务结果分开保存，避免同时改一个累加器。</figcaption>
+  </figure>
+  <h4>OpenMP 与 GCD</h4>
+  <div class="code"><span class="k">#pragma omp parallel</span>               <span class="c">// 创建一组线程，各自执行这块代码</span>
+{ printf("I am a parallel region.\n"); }
+
+<span class="k">long long</span> total = 0;
+<span class="k">#pragma omp parallel for reduction(+:total)</span>   <span class="c">// 循环迭代分给各线程；各线程私有累加再合并</span>
+<span class="k">for</span> (<span class="k">int</span> i = 1; i &lt;= 10000; ++i) total += i;   <span class="c">// 结果 50005000</span></div>
+  <ul>
+    <li>OpenMP 用<strong>编译指令</strong>标出并行区域，线程由编译器和运行时管理。不加 <code>reduction</code> 让所有线程直接改 total 会产生<strong>数据竞争</strong>。</li>
+    <li>2020 选择：OpenMP 的 <code>critical</code> 指令比标准互斥锁好用，因为<strong>进入和退出代码由 OpenMP 管理，减少编程错误</strong>（不是“不会死锁”“不用担心竞争”）。</li>
+    <li><strong>GCD</strong>（苹果）：把任务（block）提交到<strong>调度队列</strong>，系统从线程池选线程执行；串行队列一次一个，并发队列可多个；队列和线程不是一一对应。</li>
+  </ul>
+
+  <h3 id="l4-issue">4.8 多线程带来的问题<span class="stars">★★</span></h3>
+  <h4>多线程进程调用 fork / exec</h4>
+  <ul>
+    <li><strong>fork()</strong>：子进程<strong>只保留调用 fork 的那个线程</strong>，其他线程不会被复制。但地址空间被复制了，别的线程持有的<strong>锁状态</strong>也被复制，持锁者却不在了，可能永远等不到解锁。</li>
+    <li><strong>exec()</strong>：替换整个程序映像，<strong>所有线程都被终止</strong>。所以 fork 后马上 exec 时，只复制调用线程就够了。</li>
+  </ul>
+  <h4>信号</h4>
+  <p>信号通知进程发生了某事件。<strong>同步信号</strong>由当前执行引起（除零、非法访问），递送给引发它的线程；<strong>异步信号</strong>来自外部（Ctrl+C、kill）。默认处置可能是终止、停止、继续或忽略；<strong>SIGKILL、SIGSTOP 不能被捕获、阻塞或忽略</strong>。</p>
+  <div class="tbl"><table>
+    <thead><tr><th>情形</th><th>谁接收</th></tr></thead>
+    <tbody>
+      <tr><td>发给特定线程的信号、线程触发的同步故障</td><td>指定线程 / 引发故障的线程</td></tr>
+      <tr><td>发给进程的信号</td><td>任选一个没屏蔽该信号的线程（不是每个线程广播一次）</td></tr>
+      <tr><td>想统一处理</td><td>其他线程都屏蔽它，由一个专门线程调 <code>sigwait</code></td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">信号<strong>处置</strong>（怎么处理）属于进程；信号<strong>屏蔽字</strong>属于每个线程。</p>
+  <h4>线程取消</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>取消方式</th><th>何时响应</th><th>特点</th></tr></thead>
+    <tbody>
+      <tr><td><strong>异步取消</strong></td><td>立即，任意位置</td><td>资源可能来不及释放（如正在更新共享数据），危险</td></tr>
+      <tr><td><strong>延迟取消</strong>（默认）</td><td>到达<strong>取消点</strong>才响应（如 <code>pthread_testcancel()</code>、部分阻塞调用）</td><td>可安全清理（<code>pthread_cleanup_push/pop</code>）</td></tr>
+      <tr><td>禁用取消</td><td>请求被挂起，暂不响应</td><td>重新启用后才处理</td></tr>
+    </tbody>
+  </table></div>
+  <p><code>pthread_cancel</code> 返回成功只代表<strong>请求已发出</strong>，不代表目标线程已经结束；要用 join 等它退出。</p>
+  <h4>线程局部存储 TLS</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>声明</th><th>实例与生命周期</th><th>多线程下</th></tr></thead>
+    <tbody>
+      <tr><td>普通局部变量</td><td>每次调用创建，离开作用域销毁</td><td>在当前线程的栈上</td></tr>
+      <tr><td><code>static</code> 变量</td><td>整个程序运行期间一个实例</td><td><strong>所有线程共享</strong></td></tr>
+      <tr><td><code>_Thread_local</code>（TLS）</td><td><strong>每个线程一份</strong>，线程退出时销毁</td><td>同一线程跨多次函数调用可用</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">线程池里 TLS 跟着工作线程走，<strong>不会随任务自动重置</strong>，下一个任务开始前要清掉上一个任务留下的值。</p>
+
+  <h3 id="l4-os">4.9 Windows 与 Linux 怎样实现线程</h3>
+  <div class="grid2">
+    <div class="mini"><h5>Windows（一对一）</h5>每个线程有 ID、寄存器、用户栈、内核栈、私有存储。<br><strong>ETHREAD</strong>：内核中的线程对象（执行线程块）；<br><strong>KTHREAD</strong>：调度和同步信息（内核线程块）；<br><strong>TEB</strong>：<strong>用户空间</strong>的线程环境块，含 TLS。</div>
+    <div class="mini"><h5>Linux（task）</h5>不严格区分进程和线程，统称 <strong>task</strong>，每个线程都有自己的 <code>task_struct</code>。用 <code>clone()</code> 的标志决定和创建者共享什么。同一进程的线程 TID 不同、<strong>TGID</strong>（线程组 ID，即 getpid 的值）相同。</div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>clone 标志</th><th>共享</th></tr></thead>
+    <tbody>
+      <tr><td><code>CLONE_VM</code></td><td>虚拟地址空间</td></tr>
+      <tr><td><code>CLONE_FILES</code></td><td>文件描述符表</td></tr>
+      <tr><td><code>CLONE_FS</code></td><td>当前目录、根目录等文件系统信息</td></tr>
+      <tr><td><code>CLONE_SIGHAND</code></td><td>信号处置表</td></tr>
+      <tr><td><code>CLONE_THREAD</code></td><td>加入同一线程组</td></tr>
+    </tbody>
+  </table></div>
+  <p>都不设 → 相当于 fork（新进程）；都设 → 相当于创建线程。查看线程：<code>ps -L -p &lt;PID&gt;</code>、<code>ls /proc/&lt;PID&gt;/task</code>。</p>
+
+  <h3 id="l4-ex">4.10 课堂练习与讨论</h3>
+  <details><summary>一个线程有自己的栈，是否意味着其他线程绝对不能访问它？</summary><div class="ans"><p>不是。线程栈在进程共享的地址空间里，别的线程只要拿到指向它的指针就能读写，没有硬件隔离。“私有”指每个线程有自己的一份，不是受保护。</p></div></details>
+  <details><summary>串行部分占 20%，用 4 个核，理想加速比？</summary><div class="ans"><p>1 / (0.2 + 0.8/4) = 1 / 0.4 = <strong>2.5</strong>。</p></div></details>
+  <details><summary>一对一模型中一个线程等待 I/O，整个进程都无法运行吗？</summary><div class="ans"><p>不会。每个用户线程有自己的内核线程，内核只把等 I/O 的那个阻塞，其他可运行线程照样被调度。多对一模型才会全部阻塞。</p></div></details>
+  <details><summary>在线程池中用 TLS 保存请求编号，下一个任务开始时要注意什么？</summary><div class="ans"><p>TLS 属于工作线程而不是任务，上一个任务的请求编号还留着。每个任务开始时要重新设置，结束时要清理，否则会串号。</p></div></details>
+  <details><summary>pthread_cancel 成功返回后，目标线程一定结束了吗？</summary><div class="ans"><p>不一定。它只是发出取消请求；默认是延迟取消，要等目标线程到达取消点才响应，取消也可能被禁用。要确认结束得 pthread_join。</p></div></details>
+  <details><summary>讨论：如果 Chrome 只用一个进程，每个页面和插件用一个线程，好处和坏处？</summary><div class="ans">
+    <p><strong>好处</strong>：线程创建和切换开销小；共享地址空间，页面间通信和共享缓存方便；总内存占用更少。</p>
+    <p><strong>坏处</strong>：一个页面或插件崩溃（如非法访问内存）会让整个浏览器崩溃；无法给每个页面单独的沙箱权限，恶意网页利用漏洞后能访问其他页面的数据，安全性差；一个页面的内存泄漏或死循环拖累所有页面；共享数据需要大量同步，容易出竞争和死锁。</p>
+  </div></details>
+</section>
+
+<!-- ============ 一页纸 ============ -->
+<section class="chap" id="cheat">
+  <div class="chap-head"><span class="chap-no">SHEET</span><h2>考前一页纸</h2></div>
+  <div class="cheat">
+    <div><h5>OS 定义</h5><div class="mono">管理硬件的程序<br>应用的运行基础<br>用户与硬件的中介</div></div>
+    <div><h5>进入内核的三种方式</h5><div class="mono">硬中断（时钟、I/O 完成）<br>系统调用（trap）<br>异常（除零、缺页）</div></div>
+    <div><h5>给程序员的接口</h5><div class="mono">系统调用（不是库函数/Shell）</div></div>
+    <div><h5>系统调用传参</h5><div class="mono">寄存器 / 内存块地址 / 栈</div></div>
+    <div><h5>系统调用六类</h5><div class="mono">进程控制 文件 设备<br>信息维护 通信 保护</div></div>
+    <div><h5>内核结构</h5><div class="mono">单体 分层 微内核 模块 混合<br>微内核必含：IPC + 基本调度<br>Linux = 单体 + 模块 ≠ 微内核</div></div>
+    <div><h5>五状态</h5><div class="mono">New→Ready→Running→Terminated<br>Running⇄Ready（时间片/抢占）<br>Running→Waiting→Ready<br>✗ Waiting→Running</div></div>
+    <div><h5>PCB</h5><div class="mono">状态 PID PC 寄存器<br>调度信息 内存信息<br>记账 I/O 状态（打开文件）</div></div>
+    <div><h5>三级调度</h5><div class="mono">长程 = 作业 = 高级<br>中程 = 换入换出<br>短程 = 进程/CPU = 低级</div></div>
+    <div><h5>fork</h5><div class="mono">子返回 0，父返回子 PID，失败 −1<br>n 次循环 fork → 2ⁿ 个进程<br>变量各自独立；fd 共享偏移</div></div>
+    <div><h5>exec / wait</h5><div class="mono">exec 成功不返回，PID 不变<br>wait 回收；未回收 = 僵尸<br>父先死 = 孤儿</div></div>
+    <div><h5>IPC</h5><div class="mono">共享内存：快，自己同步<br>消息传递：经内核，适合跨机<br>pipe：fd[0] 读 fd[1] 写</div></div>
+    <div><h5>线程私有 / 共享</h5><div class="mono">私有：PC 寄存器 栈 TID<br>共享：代码 数据 堆 文件</div></div>
+    <div><h5>调度单位 / 资源单位</h5><div class="mono">线程 = 调度单位<br>进程 = 资源分配单位</div></div>
+    <div><h5>Amdahl</h5><div class="mono">1 / (S + (1−S)/N)<br>N→∞：1/S</div></div>
+    <div><h5>线程模型</h5><div class="mono">多对一：一阻塞全阻塞、不能多核<br>一对一：Linux、Windows<br>多对多：Go、Java 虚拟线程</div></div>
+  </div>
+</section>
+
+<!-- ============ 真题 ============ -->
+<section class="chap" id="exam">
+  <div class="chap-head"><span class="chap-no">EXAM</span><h2>真题精讲</h2></div>
+  <p class="sub">2018、2019、2020 三份期中卷。先列 Lesson 1–4 范围内的题，再列后续章节的题（附答案，先混个眼熟）。判断题错的一定要写理由。</p>
+
+  <h3 id="e-judge">判断题（本范围）</h3>
+  <details><summary>作业调度是高级调度，进程调度是低级调度。<span class="src">2018</span></summary><div class="ans"><p><strong>✓</strong></p></div></details>
+  <details><summary>时间片越小，系统的响应时间就越小，系统的效率就越高。<span class="src">2018</span></summary><div class="ans"><p><strong>✗</strong> 时间片小能缩短响应时间，但进程切换开销占比增大，系统效率降低。</p></div></details>
+  <details><summary>进程执行的相对速度不能由进程自己来控制。<span class="src">2018</span></summary><div class="ans"><p><strong>✓</strong> 由调度和资源情况决定。</p></div></details>
+  <details><summary>进程执行的相对速度与资源无关。<span class="src">2019</span></summary><div class="ans"><p><strong>✗</strong> 有关：需要的资源得不到满足时只能等待。</p></div></details>
+  <details><summary>在多处理器系统中，通过关中断的方式可以解决进程间互斥访问的问题。<span class="src">2019·2020</span></summary><div class="ans"><p><strong>✗</strong> 关中断只对当前 CPU 有效，其他 CPU 上的进程仍可进入临界区。</p></div></details>
+  <details><summary>在微内核结构中，虚拟内存管理是在微内核内部的。<span class="src">2019</span></summary><div class="ans"><p><strong>✗</strong> 只有 CPU 调度和进程间通信必须在微内核内部。</p></div></details>
+  <details><summary>在微内核结构中，进程间通讯可以不在微内核内。<span class="src">2020</span></summary><div class="ans"><p><strong>✗</strong> 进程通信是微内核的核心功能，必须在微内核内实现。</p></div></details>
+  <details><summary>线程都保存有各自的栈信息、CPU 状态、堆信息，以及打开文件列表等。<span class="src">2020</span></summary><div class="ans"><p><strong>✗</strong> 线程只保存栈和 CPU 状态；堆和打开文件列表由进程保存。</p></div></details>
+  <details><summary>进程所请求打开的文件打开后，将使进程状态从运行态变为就绪态。<span class="src">2020</span></summary><div class="ans"><p><strong>✗</strong> 应是从等待态变为就绪态。</p></div></details>
+  <details><summary>在生产者-消费者问题中，生产者和消费者只要解决互斥访问的问题即可。<span class="src">2019·2020</span></summary><div class="ans"><p><strong>✗</strong> 还要解决同步：缓冲区空时消费者要等生产者生产后才能消费（满时生产者要等）。</p></div></details>
+
+  <h3 id="e-choice">选择题（本范围）</h3>
+  <details><summary>操作系统提供给程序员的接口是：进程 / 系统调用 / 库函数 / SHELL<span class="src">2018</span></summary><div class="ans"><p><strong>B 系统调用</strong>。</p></div></details>
+  <details><summary>不可能发生的进程状态变化：运行→就绪 / 运行→等待 / 等待→运行 / 等待→就绪<span class="src">2018</span></summary><div class="ans"><p><strong>C 等待→运行</strong>。</p></div></details>
+  <details><summary>正确的是：A 中断优先级由硬件规定 B IPC 是微内核的一部分 C 只有硬件中断发生时内核才会运行 D 中断是多道程序并发的必要条件<span class="src">2018</span></summary><div class="ans"><p><strong>ABD</strong>。C 错：系统调用和异常也会让内核运行。</p></div></details>
+  <details><summary>单处理机系统中，操作的“原子”性可以通过（ ）实现：特权指令 / 访管指令 / 屏蔽中断 / 系统调用<span class="src">2018</span></summary><div class="ans"><p><strong>C 屏蔽中断</strong>。</p></div></details>
+  <details><summary>CPU 执行操作系统代码时，处理器处于：执行态 / 用户态 / 就绪态 / 内核态<span class="src">2019</span></summary><div class="ans"><p><strong>D 内核态</strong>。</p></div></details>
+  <details><summary>UNIX 是典型的：多道批处理 / 分时 / 实时 / 分布式系统<span class="src">2019</span></summary><div class="ans"><p><strong>B 分时系统</strong>。</p></div></details>
+  <details><summary>关于线程正确的是：A 用户态线程阻塞可能阻塞（整个进程）B 多处理器下线程同步不能用关中断 C TCB 含 CPU 寄存器状态 D 支持内核线程的系统中 CPU 调度单位仍是进程<span class="src">2019</span></summary><div class="ans"><p><strong>ABC</strong>。D 错：调度单位是线程。</p></div></details>
+  <details><summary>正在运行的进程时间片用完后挂到：等待队列 / 运行队列 / 就绪队列 / 任意队列<span class="src">2019</span></summary><div class="ans"><p><strong>C 就绪队列</strong>。</p></div></details>
+  <details><summary>微内核中使用哪种 IPC：消息传递 / 共享内存 / 套接字 / 全部<span class="src">2020</span></summary><div class="ans"><p><strong>A 消息传递</strong>。</p></div></details>
+  <details><summary>哪一部分包含可执行代码：text / data / heap / stack<span class="src">2020</span></summary><div class="ans"><p><strong>A text</strong>。</p></div></details>
+  <details><summary>可能导致进程从 CPU 移出：I/O 请求 / 创建子进程 / 中断或时间片到期 / 全部<span class="src">2020</span></summary><div class="ans"><p><strong>ABCD</strong>。</p></div></details>
+  <details><summary>多线程编程的好处：反应性 / 资源共享 / 经济 / 可扩展性 / 全部<span class="src">2020</span></summary><div class="ans"><p><strong>ABCDE</strong>。</p></div></details>
+  <details><summary>计算向有串行和并行部分的程序增加核数可能获得的性能提升：任务并行 / 数据并行 / 数据分割 / Amdahl 定律<span class="src">2020</span></summary><div class="ans"><p><strong>D Amdahl 定律</strong>。</p></div></details>
+  <details><summary>count 是变量，哪个操作是原子的：count++ / count-- / 两者都是 / 两者都不是<span class="src">2020</span></summary><div class="ans"><p><strong>D 两者都不是</strong>。都是读-改-写三步。</p></div></details>
+  <details><summary>OpenMP 临界区指令比标准互斥锁好用，因为？<span class="src">2020</span></summary><div class="ans"><p><strong>A</strong> 进入和退出代码由 OpenMP 库管理，减少了编程错误的可能。（它并不能消除竞争条件或死锁。）</p></div></details>
+  <details><summary>（OS 的作用）定义使用系统资源解决计算问题的方法的组件？<span class="src">2020</span></summary><div class="ans"><p>原卷答案 <strong>B 操作系统</strong>（见 1.2 的说明）。</p></div></details>
+
+  <h3 id="e-short">简答 / 综合（本范围）</h3>
+  <details><summary>比较核心态和用户态（5 分）<span class="src">2018</span></summary><div class="ans"><p>核心态：OS 内核执行时的受保护状态，可执行特权指令、访问所有资源。用户态：用户进程执行的状态，只能访问本进程地址空间，不能执行特权指令。用户态需通过中断或系统调用才能进入核心态。</p></div></details>
+  <details><summary>描述进程与线程的关系（5 分）<span class="src">2018</span></summary><div class="ans"><p>单线程进程中，进程既是资源管理单位也是调度单位；多线程进程中，线程是调度单位，进程是资源管理单位。线程拥有寄存器和栈，进程拥有栈以外的内存、打开文件列表等资源，同一进程的线程共享这些资源。</p></div></details>
+  <details><summary>比较并发与并行（5 分）<span class="src">2018</span></summary><div class="ans"><p>并发：一个时间间隔内多个任务都在执行（宏观同时）。并行：同一时刻多个任务在执行（微观同时，需要多个处理单元）。</p></div></details>
+  <details><summary>列举 3 种减少上下文切换开销的方法（5 分）<span class="src">2020</span></summary><div class="ans"><p>少用内核线程（事件驱动、有界线程池）；减少模式切换（用户级调度）；用切换较少的调度算法（FIFO 代替 RR、加大时间片）。</p></div></details>
+  <details><summary>线程三态 Ready/Running/Waiting 的所有可能转换及条件（5 分）<span class="src">2020</span></summary><div class="ans"><p>Ready→Running：被调度程序选中；Running→Ready：时间片用完或被抢占；Running→Waiting：等待 I/O 或事件；Waiting→Ready：等待的事件发生（如 I/O 完成）。</p></div></details>
+  <details><summary>三段程序写 file.txt 的可能结果（10 分）<span class="src">2020</span></summary><div class="ans"><p>程序一（fork 后各自 open）：<strong>BC</strong>；程序二（先 open 后 fork）：<strong>EF</strong>；程序三（线程）：<strong>CEF</strong>。详见 <a href="#l3-fork">3.6</a>。</p></div></details>
+
+  <h3 id="e-later">后续章节的题（调度 / 同步 / 死锁）</h3>
+  <div class="box tip"><span class="tag tip">先看个大概</span><p>这些知识点要等后面的课件讲到才系统学。答案先放在这里，学到那一章时回来对照。</p></div>
+  <details><summary>判断：资源分配图中存在环时，系统（中某些）进程处于死锁状态。<span class="src">2018·2020</span></summary><div class="ans"><p><strong>✗</strong> 每类资源只有一个实例时，有环才一定死锁；资源有多个实例时，有环不一定死锁。</p></div></details>
+  <details><summary>判断：A、B 共享 S1 需互斥，B、C 共享 S2 需互斥，所以 A 与 C 也必须互斥。<span class="src">2018</span></summary><div class="ans"><p><strong>✗</strong> 互斥没有传递性。</p></div></details>
+  <details><summary>判断：RR、SJF、FCFS、高响应比优先都没有综合考虑等待时间和执行时间。<span class="src">2019</span></summary><div class="ans"><p><strong>✗</strong> 高响应比优先（响应比 = (等待时间 + 服务时间)/服务时间）综合考虑了两者。</p></div></details>
+  <details><summary>判断：多级反馈队列的就绪队列按时间片大小划分；进程可在不同队列间移动。<span class="src">2018·2019</span></summary><div class="ans"><p><strong>✓</strong>。多级队列按作业性质划分且进程固定在一个队列；多级反馈队列按时间片划分，进程会在队列间移动。</p></div></details>
+  <details><summary>判断：信号量 S 当前值 −6，表示系统中共有 6 个等待的进程。<span class="src">2020</span></summary><div class="ans"><p><strong>✗</strong> 表示有 6 个进程在等待<strong>这个信号量</strong>（对应的临界区），不是全系统。</p></div></details>
+  <details><summary>判断：取值为 0 或 1 的信号量只能实现互斥。<span class="src">2020</span></summary><div class="ans"><p><strong>✗</strong> 二值信号量也能实现同步（如初值 0 用于“先后顺序”）。</p></div></details>
+  <details><summary>判断：RR 不需要预知运行时间，且不会出现长任务饥饿。<span class="src">2020</span></summary><div class="ans"><p><strong>✓</strong></p></div></details>
+  <details><summary>判断：管程中条件变量的 signal() 与信号量的 signal() 效果相同。<span class="src">2020</span></summary><div class="ans"><p><strong>✗</strong> 条件变量的 signal 在没有等待者时什么都不做；信号量的 signal 一定会把值加 1。</p></div></details>
+  <details><summary>选择：P/V 信号量 S 初值 2，当前 −1，表示有几个等待进程？<span class="src">2019</span></summary><div class="ans"><p><strong>1 个</strong>（负值的绝对值）。</p></div></details>
+  <details><summary>选择：可能出现护航效应（convoy effect）的调度算法？可发生抢占式调度的时机？<span class="src">2020</span></summary><div class="ans"><p>护航效应：<strong>FCFS</strong>（短作业排在长作业后面）。抢占式调度时机：<strong>进程从等待切换到就绪时</strong>。</p></div></details>
+  <details><summary>简答：SRTF 在什么指标上最优？FCFS 在什么指标上优于 RR？<span class="src">2020</span></summary><div class="ans"><p>SRTF 平均等待（响应）时间最优；FCFS 在吞吐量上优于 RR，也省去上下文切换开销。</p></div></details>
+  <details><summary>综合：5 个任务 A–E 运行时间 10,6,2,4,8 ms，优先级 3,5,2,1,4（5 最高），求 FCFS、优先级、RR(q=2) 的平均周转时间（15 分）<span class="src">2018</span></summary><div class="ans">
+    <p>FCFS（A,B,C,D,E）：完成时刻 10,16,18,22,30 → 平均 <strong>19.2 ms</strong>。</p>
+    <p>优先级（B,E,A,C,D）：完成时刻 6,14,24,26,30 → 平均 <strong>20 ms</strong>。</p>
+    <p>RR：C 6、D 16、B 22、E 28、A 30 → 平均 102/5 = <strong>20.4 ms</strong>。</p></div></details>
+  <details><summary>综合：售票厅最多容纳 20 人，用 P/V 操作管理（15 分）<span class="src">2018</span></summary><div class="ans">
+    <p>信号量 S 初值 20。S&gt;0：还能进的人数；S=0：厅内已满 20 人；S&lt;0：|S| 是在外等待的人数。</p>
+    <p>每个购票者：<code>P(S); 进入售票厅; 购票; 退出; V(S);</code></p>
+    <p>若最多 n 人购票：S 最大 20，最小 20 − n。</p></div></details>
+  <details><summary>综合：银行家算法，可用 (0,2,1)，求安全序列（10 分）<span class="src">2018</span></summary><div class="ans"><p>P1 需 (0,0,1) 可满足 → 释放后可用 (2,2,1)；P4 需 (2,0,0) 可满足 → 可用 (2,2,2)；P2 需 (1,3,2)、P3 需 (1,3,1)，R2 都不够。<strong>不存在安全序列</strong>，系统处于不安全状态。</p></div></details>
+  <details><summary>综合：一个缓冲区、多个生产者、多个消费者，用 PV 写代码（10 分）<span class="src">2019</span></summary><div class="ans">
+    <div class="code" style="margin:.4rem 0">semaphore mutex = 1, empty = 1, full = 0;
+Producer: while (1) { P(empty); P(mutex); 放产品; V(mutex); V(full); }
+Consumer: while (1) { P(full);  P(mutex); 取产品; V(mutex); V(empty); }</div>
+    <p>要点：先 P 资源信号量（empty/full），再 P mutex，顺序反了可能死锁。</p></div></details>
+  <details><summary>综合：三个线程 a、b、c 分别按 (y,z)、(z,x)、(x,y) 加锁，分析死锁（25 分）<span class="src">2020</span></summary><div class="ans">
+    <p>(1) 死锁顺序：a 获取 y，b 获取 z，c 获取 x，然后 a 申请 z、b 申请 x、c 申请 y，循环等待。</p>
+    <p>(2) 第一个不安全状态：a 持 y、b 持 z、c 持 x，出现在前三步之后。</p>
+    <p>(3) 改变解锁顺序不能解决，死锁发生在任何解锁之前。</p>
+    <p>(4) FCFS 调度下不会死锁：每个线程一直运行到结束，锁不会被竞争。</p>
+    <p>(5) 抢占式调度不能消除死锁：它抢占 CPU，但不抢占线程持有的锁。</p></div></details>
+  <details><summary>辨析：死锁与饥饿；互斥量与信号量<span class="src">2019</span></summary><div class="ans">
+    <p><strong>死锁</strong>：多个进程循环等待对方占有的资源，都无法继续。<strong>饥饿</strong>：某些进程长时间得不到资源而无法执行。发生死锁的进程必然饥饿，饥饿不一定是死锁。</p>
+    <p><strong>互斥量</strong>用于互斥，值只有 0/1，必须由加锁的同一线程解锁；<strong>信号量</strong>可用于同步和互斥，值可以是非负整数（计数多个同类资源），可由一个线程 V、另一个线程 P。</p></div></details>
+</section>
+
+<!-- ============ 自测 ============ -->
+<section class="chap" id="quiz">
+  <div class="chap-head"><span class="chap-no">QUIZ</span><h2>自测：点选项看对错</h2></div>
+  <p class="score" id="quizScore">已答 0 题，答对 0 题</p>
+  <div class="quiz" id="quizBox"></div>
+  <button class="btn ghost" type="button" id="quizReset">清空重做</button>
+</section>
+
+<!-- ============ 清单 ============ -->
+<section class="chap" id="todo">
+  <div class="chap-head"><span class="chap-no">CHECK</span><h2>掌握清单</h2></div>
+  <p class="sub">能不看资料讲出来/写出来就打勾。勾选状态只保存在你这台设备的浏览器里。</p>
+  <div class="progress" aria-hidden="true"><i id="chkBar"></i></div>
+  <p class="score" id="chkText"></p>
+  <ul class="check" id="chkList"></ul>
+</section>
+
+<footer>
+  资料来源：华东师范大学《操作系统》课件 lesson1–4（周炽金），2018–2019、2019–2020、2020–2021 学年期中试卷及答案。教材：Silberschatz《Operating System Concepts》第 10 版。整理于 2026 年 10 月。
+</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs){e.setAttribute(k,attrs[k]);}if(parent){parent.appendChild(e);}return e;}
+function txt(parent,x,y,s,attrs){var t=el("text",Object.assign({x:x,y:y},attrs||{}),parent);t.textContent=s;return t;}
+function clear(svg){while(svg.firstChild){svg.removeChild(svg.firstChild);}}
+function $(id){return document.getElementById(id);}
+function store(){try{return window.localStorage;}catch(e){return null;}}
+
+/* ---------- sticky nav highlight ---------- */
+(function(){
+  var links=[].slice.call(document.querySelectorAll("#navIn a"));
+  var map={};links.forEach(function(a){map[a.getAttribute("href").slice(1)]=a;});
+  if(!("IntersectionObserver" in window)){return;}
+  var io=new IntersectionObserver(function(ents){
+    ents.forEach(function(en){
+      if(en.isIntersecting){
+        links.forEach(function(a){a.classList.remove("on");});
+        var a=map[en.target.id];
+        if(a){a.classList.add("on");var box=$("navIn");box.scrollTo({left:a.offsetLeft-box.clientWidth/2+a.clientWidth/2,behavior:"smooth"});}
+      }
+    });
+  },{rootMargin:"-40% 0px -55% 0px"});
+  Object.keys(map).forEach(function(id){var s=$(id);if(s){io.observe(s);}});
+})();
+
+/* ---------- process state machine ---------- */
+(function(){
+  var svg=$("stSvg"),btnBox=$("stBtns"),log=$("stLog");if(!svg){return;}
+  var N={new:{x:90,y:60,t:"New 新建"},ready:{x:240,y:170,t:"Ready 就绪"},running:{x:450,y:170,t:"Running 运行"},waiting:{x:345,y:268,t:"Waiting 等待"},terminated:{x:580,y:60,t:"Terminated 终止"}};
+  var E=[
+    {f:"new",to:"ready",ev:"admit",p:"M135 78 L200 146",lx:150,ly:122,l:"接纳"},
+    {f:"ready",to:"running",ev:"dispatch",p:"M303 160 L386 160",lx:345,ly:150,l:"调度选中"},
+    {f:"running",to:"ready",ev:"timeout",p:"M386 182 L303 182",lx:345,ly:200,l:"时间片到/抢占"},
+    {f:"running",to:"waiting",ev:"wait",p:"M440 196 L385 246",lx:470,ly:228,l:"等 I/O 或事件"},
+    {f:"waiting",to:"ready",ev:"io",p:"M305 246 L252 196",lx:215,ly:228,l:"I/O 或事件完成"},
+    {f:"running",to:"terminated",ev:"exit",p:"M485 148 L552 84",lx:540,ly:128,l:"退出"}
+  ];
+  var defs=el("defs",{},svg);
+  ["m","mOn"].forEach(function(id,i){var mk=el("marker",{id:"st"+id,viewBox:"0 0 10 10",refX:"9",refY:"5",markerWidth:"7",markerHeight:"7",orient:"auto"},defs);el("path",{d:"M0 0L10 5L0 10z",fill:i?"var(--exam)":"var(--muted)"},mk);});
+  var edgeEls={};
+  E.forEach(function(e){edgeEls[e.ev+e.f]=el("path",{d:e.p,fill:"none",stroke:"var(--muted)","stroke-width":"1.8","marker-end":"url(#stm)"},svg);txt(svg,e.lx,e.ly,e.l,{"text-anchor":"middle","font-size":"11.5",class:"mut"});});
+  var nodeEls={};
+  Object.keys(N).forEach(function(k){var n=N[k];nodeEls[k]=el("ellipse",{cx:n.x,cy:n.y,rx:"64",ry:"25",fill:"var(--surface)",stroke:"var(--line)","stroke-width":"2"},svg);txt(svg,n.x,n.y+5,n.t,{"text-anchor":"middle","font-size":"13","font-weight":"700"});});
+  var EV=[["admit","接纳进系统"],["dispatch","调度程序选中"],["timeout","时间片用完"],["wait","请求 I/O"],["io","I/O 完成"],["exit","执行完毕退出"]];
+  var why={
+    "waiting:dispatch":"✗ 等待态不能直接被调度：它等的事件还没发生，给 CPU 也跑不了。事件完成后要先回就绪队列（这就是“等待→运行不可能”）。",
+    "ready:wait":"✗ 就绪进程并没有在 CPU 上执行，不可能发出 I/O 请求，所以没有“就绪→等待”。",
+    "new:dispatch":"✗ 新建的进程要先被接纳进就绪队列，才能被调度。",
+    "ready:timeout":"✗ 就绪进程根本没在运行，谈不上时间片用完。",
+    "waiting:exit":"✗ 按教材五状态图，进程只能在运行时执行 exit 结束。",
+    "running:io":"✗ 运行中的进程没有在等 I/O。"
+  };
+  var cur="new";
+  function paint(last){
+    Object.keys(nodeEls).forEach(function(k){var on=k===cur;nodeEls[k].setAttribute("fill",on?"var(--accent-soft)":"var(--surface)");nodeEls[k].setAttribute("stroke",on?"var(--accent)":"var(--line)");});
+    Object.keys(edgeEls).forEach(function(k){var on=k===last;edgeEls[k].setAttribute("stroke",on?"var(--exam)":"var(--muted)");edgeEls[k].setAttribute("stroke-width",on?"3":"1.8");edgeEls[k].setAttribute("marker-end",on?"url(#stmOn)":"url(#stm)");});
+  }
+  EV.forEach(function(v){
+    var b=document.createElement("button");b.type="button";b.className="btn ghost";b.textContent=v[1];
+    b.addEventListener("click",function(){
+      var e=E.filter(function(x){return x.f===cur&&x.ev===v[0];})[0];
+      if(e){var from=N[cur].t;cur=e.to;paint(e.ev+e.f);log.textContent="✓ "+from+" → "+N[cur].t+"（"+v[1]+"）";}
+      else{log.textContent=why[cur+":"+v[0]]||("✗ 处于 "+N[cur].t+" 时不会发生“"+v[1]+"”。");}
+    });
+    btnBox.appendChild(b);
+  });
+  var r=document.createElement("button");r.type="button";r.className="btn";r.textContent="重新开始";
+  r.addEventListener("click",function(){cur="new";paint(null);log.textContent="当前：New。点一个事件试试。";});
+  btnBox.appendChild(r);
+  paint(null);
+})();
+
+/* ---------- fork tree ---------- */
+(function(){
+  var svg=$("fkSvg"),rng=$("fkN"),lab=$("fkNv"),out=$("fkOut");if(!svg){return;}
+  function draw(){
+    var n=+rng.value;lab.textContent=n;clear(svg);
+    var id=0;
+    function make(start,iter,depth){var node={id:id++,iter:iter,depth:depth,kids:[]};for(var i=start;i<n;i++){node.kids.push(make(i+1,i,depth+1));}return node;}
+    var root=make(0,-1,0),leaves=0,maxD=0,all=[];
+    function place(nd){all.push(nd);maxD=Math.max(maxD,nd.depth);if(!nd.kids.length){nd.x=leaves++;}else{nd.kids.forEach(place);nd.x=(nd.kids[0].x+nd.kids[nd.kids.length-1].x)/2;}}
+    place(root);
+    var CW=74,RH=74,W=Math.max(320,leaves*CW+40),H=(maxD+1)*RH+20;
+    svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.setAttribute("width",W);svg.setAttribute("height",H);
+    function X(nd){return 20+CW/2+nd.x*CW;}function Y(nd){return 34+nd.depth*RH;}
+    all.forEach(function(nd){nd.kids.forEach(function(k){el("line",{x1:X(nd),y1:Y(nd),x2:X(k),y2:Y(k),stroke:"var(--muted)","stroke-width":"1.5"},svg);txt(svg,(X(nd)+X(k))/2+4,(Y(nd)+Y(k))/2,"i="+k.iter,{"font-size":"10.5",class:"mono","style":"fill:var(--exam)"});});});
+    all.forEach(function(nd){var root0=nd.id===0;el("circle",{cx:X(nd),cy:Y(nd),r:"17",fill:root0?"var(--accent)":"var(--accent-soft)",stroke:"var(--accent)","stroke-width":"1.5"},svg);txt(svg,X(nd),Y(nd)+4,"P"+nd.id,{"text-anchor":"middle","font-size":"11","font-weight":"700",style:"fill:"+(root0?"var(--surface)":"var(--accent)")});});
+    var total=Math.pow(2,n);
+    out.innerHTML="共 <b>"+total+"</b> 个进程（含原进程 P0），新建 <b>"+(total-1)+"</b> 个子进程；fork() 一共被调用 "+(total-1)+" 次。<br>若循环后面有一句 printf(\"hi\\n\")，会打印 <b>"+total+"</b> 次。规律：每轮循环所有进程都 fork 一次，进程数翻倍 → 2ⁿ。";
+  }
+  rng.addEventListener("input",draw);draw();
+})();
+
+/* ---------- bounded buffer ---------- */
+(function(){
+  var slots=$("bbSlots"),st=$("bbState"),log=$("bbLog");if(!slots){return;}
+  var N=4,buf,inp,outp,count,wp,wc,seq;
+  function reset(){buf=[null,null,null,null];inp=0;outp=0;count=0;wp=0;wc=0;seq=1;log.textContent="缓冲区空。点“生产者放一个”。";render();}
+  function put(){buf[inp]=seq++;inp=(inp+1)%N;count++;}
+  function take(){var v=buf[outp];buf[outp]=null;outp=(outp+1)%N;count--;return v;}
+  function render(){
+    slots.innerHTML="";
+    buf.forEach(function(v,i){var s=document.createElement("span");if(v!==null){s.className="full";s.textContent="#"+v;}else{s.textContent="空";}
+      s.title=(i===inp?"in ":"")+(i===outp?"out":"");slots.appendChild(s);});
+    var empty=(N-count)-wp,full=count-wc;
+    st.innerHTML="in = "+inp+"　out = "+outp+"　count = "+count+"<br>信号量 empty = <b>"+empty+"</b>　full = <b>"+full+"</b>"+
+      "<br>阻塞的生产者："+wp+"　阻塞的消费者："+wc;
+  }
+  $("bbP").addEventListener("click",function(){
+    if(count===N){wp++;log.textContent="缓冲区满，生产者阻塞等待（empty 变为负数，绝对值 = 等待的生产者数）。";}
+    else{put();if(wc>0){wc--;var v=take();log.textContent="放入后唤醒一个等待的消费者，它立刻取走了 #"+v+"。";}else{log.textContent="生产者放入一个产品。";}}
+    render();
+  });
+  $("bbC").addEventListener("click",function(){
+    if(count===0){wc++;log.textContent="缓冲区空，消费者阻塞等待（full 变为负数）。";}
+    else{var v=take();if(wp>0){wp--;put();log.textContent="取走 #"+v+"，腾出空位，唤醒一个等待的生产者放入新产品。";}else{log.textContent="消费者取走 #"+v+"。";}}
+    render();
+  });
+  $("bbR").addEventListener("click",reset);
+  reset();
+})();
+
+/* ---------- Amdahl ---------- */
+(function(){
+  var S=$("amS"),Nn=$("amN"),sv=$("amSv"),out=$("amOut"),svg=$("amSvg");if(!svg){return;}
+  function sp(s,n){return 1/(s+(1-s)/n);}
+  var x0=50,x1=600,y0=220,y1=20,YM=16,NS=[1,2,4,8,16,32,64];
+  function X(n){return x0+(Math.log2(n)/6)*(x1-x0);}function Y(v){return y0-Math.min(v,YM)/YM*(y0-y1);}
+  function draw(){
+    var s=+S.value,n=Math.max(1,parseInt(Nn.value,10)||1);sv.textContent=s.toFixed(2);
+    var v=sp(s,n);
+    out.innerHTML="加速比 = 1 / ("+s.toFixed(2)+" + "+(1-s).toFixed(2)+" / "+n+") = <b>"+v.toFixed(3)+"</b>　　核数无穷多时上限 = "+(s>0?"<b>"+(1/s).toFixed(2)+"</b>":"无上限");
+    clear(svg);
+    [0,4,8,12,16].forEach(function(t){el("line",{x1:x0,y1:Y(t),x2:x1,y2:Y(t),stroke:"var(--line)"},svg);txt(svg,x0-8,Y(t)+4,String(t),{"text-anchor":"end","font-size":"11",class:"mono mut"});});
+    NS.forEach(function(k){txt(svg,X(k),y0+16,String(k),{"text-anchor":"middle","font-size":"11",class:"mono mut"});});
+    txt(svg,x1,y0+34,"核数 N（对数刻度）",{"text-anchor":"end","font-size":"11",class:"mut"});
+    txt(svg,x0,12,"加速比",{"font-size":"11",class:"mut"});
+    var ref=[[0.05,"var(--l2)"],[0.1,"var(--l3)"],[0.5,"var(--l1)"]];
+    function curve(sv2,col,w,dash){var d="";for(var i=0;i<=120;i++){var nn=Math.pow(2,6*i/120);d+=(i?"L":"M")+X(nn).toFixed(1)+" "+Y(sp(sv2,nn)).toFixed(1);}el("path",{d:d,fill:"none",stroke:col,"stroke-width":w,"stroke-dasharray":dash||"none"},svg);}
+    ref.forEach(function(r){curve(r[0],r[1],"1.6","5 4");});
+    curve(s,"var(--exam)","3");
+    if(n<=64){el("circle",{cx:X(n),cy:Y(v),r:"5",fill:"var(--exam)"},svg);}
+    var lx=x1-150;
+    [["S = "+s.toFixed(2)+"（当前）","var(--exam)"],["S = 0.05","var(--l2)"],["S = 0.10","var(--l3)"],["S = 0.50","var(--l1)"]].forEach(function(l,i){el("line",{x1:lx,y1:30+i*16,x2:lx+20,y2:30+i*16,stroke:l[1],"stroke-width":"3"},svg);txt(svg,lx+26,34+i*16,l[0],{"font-size":"11"});});
+  }
+  S.addEventListener("input",draw);Nn.addEventListener("input",draw);draw();
+})();
+
+/* ---------- quiz ---------- */
+(function(){
+  var box=$("quizBox");if(!box){return;}
+  var Q=[
+    ["操作系统提供给程序员的接口是？",["进程","系统调用","库函数","Shell"],1,"Shell 是给用户的命令接口；库函数最终也要通过系统调用进内核。"],
+    ["CPU 执行操作系统代码时处于？",["用户态","就绪态","内核态","执行态"],2,""],
+    ["下列哪种进程状态转换不可能发生？",["运行→就绪","运行→等待","等待→运行","等待→就绪"],2,"事件完成后要先回就绪队列。"],
+    ["运行中的进程时间片用完，会被放到？",["等待队列","就绪队列","运行队列","任意队列"],1,""],
+    ["进程请求的文件打开完成后，状态变化是？",["运行→就绪","等待→就绪","等待→运行","就绪→运行"],1,""],
+    ["进程地址空间中存放可执行代码的是？",["text","data","heap","stack"],0,""],
+    ["malloc 分配的内存在？",["栈","堆","data 段","text 段"],1,"指针变量本身若是局部变量在栈上，它指向的内容在堆上。"],
+    ["fork() 在子进程中的返回值是？",["子进程 PID","父进程 PID","0","-1"],2,"父进程得到子进程 PID，失败时父进程得到 -1。"],
+    ["for (i = 0; i < 3; i++) fork(); 结束后共有多少个进程？",["3","4","6","8"],3,"每轮所有进程都 fork 一次：2³ = 8。"],
+    ["exec 系列调用成功后？",["返回 0","返回新程序 PID","不返回，原程序后续代码不执行","创建一个新进程"],2,"exec 不创建进程，而是替换当前进程的程序，PID 不变。"],
+    ["子进程已结束、父进程还没调用 wait，子进程处于？",["孤儿","僵尸","就绪","等待"],1,"父进程先死、子进程还活着才是孤儿。"],
+    ["先 open 再 fork，父子各写 1 个字节到同一 fd，结果？",["互相覆盖只剩 1 字节","两个字节依次写入（共享偏移）","一定先父后子","报错"],1,"继承的 fd 指向同一打开文件描述，共享偏移量。"],
+    ["关于微内核，正确的是？",["虚拟内存管理必须在微内核内","进程间通信可以不在微内核内","微内核主要通过消息传递实现 IPC","Linux 能加载模块所以是微内核"],2,""],
+    ["关于单体内核与微内核，错误的是？",["单体内核内部函数调用开销小","微内核服务崩溃可以单独重启","微内核一定比单体内核快","微内核跨地址空间通信有开销"],2,""],
+    ["系统调用传递参数的方式不包括？",["寄存器","内存块，把地址放寄存器","栈","直接调用内核函数地址"],3,"用户程序不能直接跳到内核函数。"],
+    ["printf(\"A\") 之后一定立刻发生一次 write 系统调用吗？",["一定","不一定，可能先进入 C 库缓冲区","一定不会","只有在内核态才会"],1,""],
+    ["同一进程的线程之间不共享的是？",["代码段","堆","打开的文件","栈和寄存器"],3,""],
+    ["多线程进程中，CPU 调度的基本单位是？",["进程","线程","作业","程序"],1,"进程是资源分配单位。"],
+    ["多对一线程模型的缺点是？",["创建线程太贵","一个线程阻塞会阻塞整个进程，且不能利用多核","线程数受内核限制","不能在用户态切换"],1,""],
+    ["Linux NPTL 和 Windows 线程采用的模型是？",["多对一","一对一","多对多","两级"],1,""],
+    ["串行比例 25%，用 2 个核，理想加速比是？",["2","1.6","1.33","4"],1,"1/(0.25+0.75/2) = 1.6。"],
+    ["串行比例 10%，核数无穷多时加速比上限是？",["10","90","100","无上限"],0,"1/S = 10。"],
+    ["count++ 是原子操作吗？",["是","不是，包含读、改、写三步","只在单核上是","只在多核上是"],1,""],
+    ["Java 中真正启动一个新线程的是？",["run()","start()","join()","new Thread()"],1,"直接调用 run() 只是普通方法调用。"],
+    ["并发与并行的区别，正确的是？",["并发要求多核","并行是同一时刻多个任务执行，需要多个处理单元","两者完全相同","并行一定不是并发"],1,""],
+    ["多处理器系统中，用关中断实现互斥？",["可以","不可以，关中断只影响当前 CPU","只能用于用户态","只能用于线程"],1,""],
+    ["管道 read 返回 0 表示？",["管道暂时没数据","出错","所有写端都已关闭且没有数据（EOF）","读到一个字节 0"],2,""],
+    ["线程取消的默认类型是？",["异步取消","延迟取消，到取消点才响应","立即终止","不允许取消"],1,""]
+  ];
+  var answered=0,right=0;
+  function upd(){$("quizScore").textContent="已答 "+answered+" / "+Q.length+" 题，答对 "+right+" 题";}
+  function render(){
+    box.innerHTML="";answered=0;right=0;upd();
+    Q.forEach(function(q,qi){
+      var d=document.createElement("div");d.className="q";
+      var t=document.createElement("div");t.className="qt";t.textContent=(qi+1)+". "+q[0];d.appendChild(t);
+      var os=document.createElement("div");os.className="opts";
+      var why=document.createElement("div");why.className="why";why.hidden=true;
+      q[1].forEach(function(o,oi){
+        var b=document.createElement("button");b.type="button";b.className="opt";b.textContent=String.fromCharCode(65+oi)+". "+o;
+        b.addEventListener("click",function(){
+          if(d.dataset.done){return;}d.dataset.done="1";answered++;
+          os.querySelectorAll("button")[q[2]].classList.add("right");
+          if(oi===q[2]){right++;why.textContent="答对了。"+q[3];}else{b.classList.add("wrong");why.textContent="正确答案 "+String.fromCharCode(65+q[2])+"。"+q[3];}
+          why.hidden=false;upd();
+        });
+        os.appendChild(b);
+      });
+      d.appendChild(os);d.appendChild(why);box.appendChild(d);
+    });
+  }
+  render();
+  $("quizReset").addEventListener("click",render);
+})();
+
+/* ---------- checklist ---------- */
+(function(){
+  var list=$("chkList");if(!list){return;}
+  var items=[
+    "说出操作系统的定义（三句话），以及“资源管理者 / 扩展机器”两个角度",
+    "说出单道批处理、多道批处理、分时的区别和各自目的；UNIX 是分时系统",
+    "解释用户态与内核态、特权指令，答出 2018 简答“比较核心态和用户态”",
+    "区分硬中断、系统调用、异常；说出为什么中断是多道程序的必要条件",
+    "知道单处理机可用关中断实现原子性，而多处理器不行",
+    "列出 OS 提供的服务（对用户的 6 项 + 系统自身的 4 项）",
+    "区分 API、库函数、系统调用；解释 printf 和 write 的关系",
+    "说出系统调用的执行过程和三种传参方式，以及内核为何要检查参数",
+    "列出系统调用六大类并各举一个 Unix 例子",
+    "区分静态/动态链接、API/ABI；说出编译-链接-装载各做什么",
+    "举例说明机制与策略的区别",
+    "比较单体、分层、微内核、模块化结构的优缺点；微内核里必须有什么",
+    "说出开机到出现 Shell 的阶段",
+    "画出进程地址空间各段，判断 C 程序中变量放在哪",
+    "画出五状态转换图，说出每条边的原因和三条不可能的转换",
+    "列出 PCB 的内容；区分长程/中程/短程调度",
+    "画出上下文切换过程，说出 3 种减少开销的方法",
+    "写出 fork 返回值的三种情况；会算 n 次 fork 的进程数",
+    "分析 fork + exec + wait 程序的打印顺序；会做 2020 写文件三段程序题",
+    "解释僵尸进程和孤儿进程",
+    "比较共享内存与消息传递；说清生产者-消费者为什么既要互斥又要同步",
+    "说出消息传递的直接/间接、阻塞/非阻塞、零/有界/无界缓冲",
+    "说出 pipe 的 fd[0]/fd[1]、什么时候返回 EOF；区分管道、FIFO、Socket；说出 RPC 的 stub 与至多一次/至少一次",
+    "列出线程共享和私有的东西；答出 2018 简答“进程与线程的关系”",
+    "说出多线程的四个好处和进程 vs 线程的五点比较",
+    "区分并发与并行；区分数据并行与任务并行",
+    "用 Amdahl 定律算加速比和上限",
+    "画出多对一、一对一、多对多、两级模型，说出各自的优缺点和例子",
+    "写出 pthread_create / pthread_join 的用法；说出 count++ 为什么不原子、start 与 run 的区别",
+    "解释线程池、Fork-Join、OpenMP reduction 的作用；说出 GIL 的影响",
+    "说出多线程下 fork/exec、信号、线程取消、TLS 的规则",
+    "说出 Linux clone 标志和 Windows ETHREAD/KTHREAD/TEB 的作用"
+  ];
+  var KEY="os-l14-checklist",saved={},st=store();
+  try{saved=JSON.parse((st&&st.getItem(KEY))||"{}")||{};}catch(e){saved={};}
+  function upd(){var n=0;items.forEach(function(_,i){if(saved[i]){n++;}});$("chkBar").style.width=(n/items.length*100)+"%";$("chkText").textContent="已掌握 "+n+" / "+items.length;}
+  items.forEach(function(t,i){
+    var li=document.createElement("li");
+    li.innerHTML='<label for="chk'+i+'"><input type="checkbox" id="chk'+i+'"><span></span></label>';
+    li.querySelector("span").textContent=t;
+    var cb=li.querySelector("input");cb.checked=!!saved[i];
+    cb.addEventListener("change",function(){saved[i]=cb.checked;try{if(st){st.setItem(KEY,JSON.stringify(saved));}}catch(e){}upd();});
+    list.appendChild(li);
+  });
+  upd();
+})();
+})();
+</script>
+
+</body>
+</html>
