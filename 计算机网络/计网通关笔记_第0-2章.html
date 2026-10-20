@@ -1,0 +1,2061 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>计网通关笔记·第1–2章</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column (~46rem) under a sticky chapter bar; every network layer keeps its own color everywhere it appears. */
+:root{
+  --bg:#F2F5F7; --surface:#FFFFFF; --surface-2:#E7EDF1; --ink:#14202B; --muted:#56646F; --line:#D2DBE2;
+  --accent:#0A6A8C; --accent-soft:#DCEEF4;
+  --exam:#B9460E; --exam-soft:#FBE8DB;
+  --trap:#B4232F; --trap-soft:#FBE3E5;
+  --ex:#2C7A4B; --ex-soft:#DFF1E6;
+  --l1:#A86A12; --l2:#2C7A4B; --l3:#2963A8; --l4:#7550C4; --l5:#B8306B;
+  --l1s:#F6E9D3; --l2s:#DCEFE3; --l3s:#DDE8F6; --l4s:#EAE3F8; --l5s:#F7DFEA;
+  --f-display:"Noto Serif SC","Songti SC","STSong",serif;
+  --f-body:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E151B; --surface:#16202A; --surface-2:#1E2A35; --ink:#E2E9EF; --muted:#95A4B1; --line:#2B3946;
+  --accent:#55B9DD; --accent-soft:#123241;
+  --exam:#F2914F; --exam-soft:#3A2415;
+  --trap:#F0737D; --trap-soft:#3B1A1E;
+  --ex:#6CCB93; --ex-soft:#15301F;
+  --l1:#E2A447; --l2:#62C58C; --l3:#6FA6EE; --l4:#AB8BF0; --l5:#EE79A9;
+  --l1s:#33270F; --l2s:#13301F; --l3s:#152639; --l4s:#251C3A; --l5s:#38172A;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E151B; --surface:#16202A; --surface-2:#1E2A35; --ink:#E2E9EF; --muted:#95A4B1; --line:#2B3946;
+  --accent:#55B9DD; --accent-soft:#123241;
+  --exam:#F2914F; --exam-soft:#3A2415;
+  --trap:#F0737D; --trap-soft:#3B1A1E;
+  --ex:#6CCB93; --ex-soft:#15301F;
+  --l1:#E2A447; --l2:#62C58C; --l3:#6FA6EE; --l4:#AB8BF0; --l5:#EE79A9;
+  --l1s:#33270F; --l2s:#13301F; --l3s:#152639; --l4s:#251C3A; --l5s:#38172A;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75}
+.wrap{max-width:48rem;margin:0 auto;padding-inline:16px;padding-block:0 4rem}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;line-height:1.3;margin:0}
+h2{font-size:1.6rem;font-weight:900}
+h3{font-size:1.22rem;font-weight:900;margin-top:2.4rem;margin-bottom:.6rem;scroll-margin-top:4.5rem}
+h4{font-size:1.04rem;font-weight:600;margin-top:1.6rem;margin-bottom:.4rem}
+p{margin:.6rem 0}
+a{color:var(--accent)}
+strong{font-weight:700}
+.muted{color:var(--muted)}
+code,.mono{font-family:var(--f-mono);font-size:.92em}
+code{background:var(--surface-2);padding:.08em .35em;border-radius:4px}
+ul,ol{padding-left:1.3rem;margin:.5rem 0}
+li{margin:.2rem 0}
+li::marker{color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* header */
+.top{padding-block:2.6rem 1.4rem}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;color:var(--muted);font-weight:600}
+.top h1{font-size:clamp(2rem,7vw,3rem);font-weight:900;margin-top:.4rem;letter-spacing:.01em}
+.top h1 span{color:var(--accent)}
+.lede{font-size:1.05rem;color:var(--muted);max-width:40rem}
+.legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.tag{display:inline-flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:700;padding:.12rem .55rem;border-radius:999px;letter-spacing:.04em;white-space:nowrap}
+.tag.exam{background:var(--exam-soft);color:var(--exam)}
+.tag.trap{background:var(--trap-soft);color:var(--trap)}
+.tag.tip{background:var(--accent-soft);color:var(--accent)}
+.tag.ex{background:var(--ex-soft);color:var(--ex)}
+.stars{color:var(--exam);font-size:.85rem;letter-spacing:.1em;font-weight:700;margin-left:.3rem;white-space:nowrap}
+
+/* sticky nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:48rem;margin:0 auto;padding:.55rem 16px;display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.nav a{flex:none;text-decoration:none;color:var(--ink);font-size:.86rem;padding:.3rem .75rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);white-space:nowrap}
+.nav a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* chapter opener */
+.chap{margin-top:3.5rem;padding-top:1.4rem;border-top:2px solid var(--ink);scroll-margin-top:3.6rem}
+.chap-head{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+.chap-no{font-family:var(--f-mono);font-size:.85rem;color:var(--muted);font-weight:600}
+.chap .sub{color:var(--muted);margin-top:.3rem}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.3rem 1.2rem;margin:1rem 0 0;padding:0;list-style:none;font-size:.92rem}
+.toc a{text-decoration:none;color:var(--ink);display:block;padding:.15rem 0;border-bottom:1px dashed var(--line)}
+.toc a span{font-family:var(--f-mono);color:var(--muted);font-size:.8rem;margin-right:.4rem}
+
+/* callouts */
+.box{border-radius:10px;padding:.8rem 1rem;margin:1rem 0;background:var(--surface);border:1px solid var(--line)}
+.box>.tag{margin-bottom:.2rem}
+.box p:first-of-type{margin-top:.3rem}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+.box.exam{background:var(--exam-soft);border-color:transparent}
+.box.trap{background:var(--trap-soft);border-color:transparent}
+.box.tip{background:var(--accent-soft);border-color:transparent}
+.box.ex{background:var(--surface);border-color:var(--line)}
+.box.exam .tag{background:var(--surface);}
+.box.trap .tag{background:var(--surface)}
+.box.tip .tag{background:var(--surface)}
+
+/* formula */
+.formula{font-family:var(--f-mono);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;margin:1rem 0;overflow-x:auto;font-size:1.02rem;line-height:1.9}
+.formula .big{font-size:1.25rem;font-weight:600;color:var(--accent)}
+.formula .cap{display:block;font-family:var(--f-body);font-size:.85rem;color:var(--muted)}
+
+/* tables */
+.tbl{overflow-x:auto;margin:1rem 0;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:.5rem .7rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--surface-2);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.c,th.c{text-align:center}
+.dot{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;background:var(--exam)}
+.dot.lo{background:transparent;border:2px solid var(--exam)}
+
+/* figures */
+figure{margin:1.2rem 0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.8rem}
+figure .svgbox{overflow-x:auto}
+figure svg{display:block;max-width:100%;height:auto;margin:0 auto}
+figure svg.wide{max-width:none}
+figcaption{font-size:.84rem;color:var(--muted);margin-top:.5rem;text-align:center}
+svg text{font-family:var(--f-body);fill:var(--ink)}
+svg .mono{font-family:var(--f-mono)}
+svg .mut{fill:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.8rem}
+.grid2>*{min-width:0}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:.6rem}
+.mini{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.6rem .7rem;font-size:.86rem}
+.mini h5{margin:0 0 .2rem;font-size:.95rem;font-family:var(--f-display)}
+.mini svg{display:block;width:100%;height:auto;max-height:110px}
+
+/* answers / details */
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:.8rem 0}
+details>summary{cursor:pointer;padding:.7rem 1rem;font-weight:600;list-style:none;display:flex;gap:.6rem;align-items:flex-start}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"+";font-family:var(--f-mono);color:var(--accent);font-weight:700;flex:none}
+details[open]>summary::before{content:"−"}
+details>.ans{padding:0 1rem .9rem;border-top:1px dashed var(--line)}
+.src{font-size:.75rem;color:var(--muted);font-weight:400;font-family:var(--f-mono);white-space:nowrap}
+
+/* tools */
+.tool{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1rem;margin:1.2rem 0}
+.tool h5{margin:0 0 .6rem;font-family:var(--f-display);font-size:1rem}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end}
+.row>label{display:flex;flex-direction:column;font-size:.8rem;color:var(--muted);gap:.2rem;min-width:0}
+input[type=text],input[type=number],select{font:inherit;font-size:.95rem;padding:.4rem .55rem;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);max-width:100%}
+input[type=number]{width:8.5rem}
+input.bits{font-family:var(--f-mono);width:14rem;letter-spacing:.08em}
+input[type=range]{width:min(16rem,100%);accent-color:var(--accent)}
+.out{font-family:var(--f-mono);font-size:.92rem;margin-top:.8rem;line-height:1.9;overflow-x:auto}
+.out b{color:var(--accent)}
+.btn{font:inherit;font-size:.88rem;padding:.4rem .8rem;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--surface);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+
+/* quiz */
+.quiz{display:grid;gap:.8rem;margin:1rem 0}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.8rem 1rem}
+.q .qt{font-weight:600}
+.q .opts{display:grid;gap:.35rem;margin-top:.5rem}
+.q button.opt{font:inherit;text-align:left;padding:.45rem .7rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.q button.opt:hover{border-color:var(--accent)}
+.q button.opt.right{background:var(--ex-soft);border-color:var(--ex);color:var(--ink)}
+.q button.opt.wrong{background:var(--trap-soft);border-color:var(--trap);color:var(--ink)}
+.q .why{margin-top:.5rem;font-size:.9rem;color:var(--muted)}
+.score{font-family:var(--f-mono);font-size:.9rem;color:var(--muted)}
+
+/* layer chips */
+.ly{display:inline-block;font-size:.78rem;font-weight:700;padding:.05rem .45rem;border-radius:5px}
+.ly1{background:var(--l1s);color:var(--l1)} .ly2{background:var(--l2s);color:var(--l2)} .ly3{background:var(--l3s);color:var(--l3)} .ly4{background:var(--l4s);color:var(--l4)} .ly5{background:var(--l5s);color:var(--l5)}
+
+/* checklist */
+.check{list-style:none;padding:0;display:grid;gap:.3rem}
+.check label{display:flex;gap:.6rem;align-items:flex-start;cursor:pointer;padding:.35rem .5rem;border-radius:8px}
+.check label:hover{background:var(--surface-2)}
+.check input{margin-top:.4rem;accent-color:var(--ex);flex:none}
+.check input:checked+span{color:var(--muted);text-decoration:line-through}
+.progress{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin:.6rem 0}
+.progress i{display:block;height:100%;background:var(--ex);width:0;transition:width .3s}
+
+.cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.7rem}
+.cheat>div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.7rem .85rem;min-width:0}
+.cheat h5{margin:0 0 .3rem;font-size:.82rem;letter-spacing:.06em;color:var(--muted);font-family:var(--f-body)}
+.cheat .mono{font-size:.95rem;line-height:1.7;overflow-wrap:anywhere}
+footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="章节导航"><div class="nav-in" id="navIn">
+  <a href="#start">开始</a>
+  <a href="#ch0">课程与考情</a>
+  <a href="#pre">零基础预备</a>
+  <a href="#ch1">第1章 引论</a>
+  <a href="#ch2">第2章 物理层</a>
+  <a href="#cheat">公式速查</a>
+  <a href="#exam">真题精讲</a>
+  <a href="#quiz">自测</a>
+  <a href="#todo">掌握清单</a>
+</div></nav>
+
+<div class="wrap">
+
+<header class="top" id="start">
+  <div class="eyebrow">COMPUTER NETWORKS · 华东师大软件工程 · 王廷老师课件</div>
+  <h1>计网通关笔记 <span>第 0–2 章</span></h1>
+  <p class="lede">把课件 <code>0 Intro</code>、<code>1 Introduction</code>、<code>2 Physical Layer</code> 三份 PPT 重新讲一遍，写给完全零基础的同学。每个知识点都配了图或小工具，结合 2020–2023 四年期中真题、老版作业答案和本学期第一章作业/自测题标出考点。</p>
+  <div class="legend" aria-label="图例">
+    <span class="tag exam">考点</span>
+    <span class="tag trap">易错</span>
+    <span class="tag tip">比喻 / 直觉</span>
+    <span class="tag ex">例题</span>
+    <span class="tag" style="background:var(--surface-2)">★ 越多越常考</span>
+  </div>
+  <div class="box tip" style="margin-top:1.2rem">
+    <span class="tag tip">怎么用</span>
+    <ol>
+      <li>第一遍：按顺序读，只看懂比喻和图，不背。</li>
+      <li>第二遍：把每个 <span class="tag exam">考点</span> 框里的结论背下来，把 <span class="tag ex">例题</span> 自己算一遍再展开答案。</li>
+      <li>考前：看「公式速查」和「真题精讲」，做完「自测」，在「掌握清单」里打勾（只存在你自己的浏览器里）。</li>
+    </ol>
+  </div>
+</header>
+
+<!-- ============ 第0章 ============ -->
+<section class="chap" id="ch0">
+  <div class="chap-head"><span class="chap-no">CH 0</span><h2>课程信息与考情地图</h2></div>
+  <p class="sub">先弄清楚“考什么、怎么算分”，再开始学。</p>
+
+  <h3 id="c0-grade">成绩怎么算</h3>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 120" role="img" aria-label="成绩构成：出勤10%，自测10%，作业10%，课题参与10%，期中20%，期末40%">
+      <g font-size="13">
+        <rect x="0" y="20" width="64" height="44" fill="var(--surface-2)"/>
+        <rect x="64" y="20" width="64" height="44" fill="var(--accent-soft)"/>
+        <rect x="128" y="20" width="64" height="44" fill="var(--surface-2)"/>
+        <rect x="192" y="20" width="64" height="44" fill="var(--accent-soft)"/>
+        <rect x="256" y="20" width="128" height="44" fill="var(--exam-soft)"/>
+        <rect x="384" y="20" width="256" height="44" fill="var(--exam)"/>
+        <text x="32" y="47" text-anchor="middle">出勤</text>
+        <text x="96" y="47" text-anchor="middle">自测</text>
+        <text x="160" y="47" text-anchor="middle">作业</text>
+        <text x="224" y="47" text-anchor="middle">论文讨论</text>
+        <text x="320" y="47" text-anchor="middle" font-weight="700">期中 20%</text>
+        <text x="512" y="47" text-anchor="middle" font-weight="700" style="fill:var(--surface)">期末 40%</text>
+        <text x="128" y="90" text-anchor="middle" class="mut">平时 60%（每项 10%）</text>
+        <text x="512" y="90" text-anchor="middle" class="mut">闭卷 120 分钟</text>
+        <text x="320" y="90" text-anchor="middle" class="mut">闭卷 · 约第 10 周</text>
+        <line x1="0" y1="72" x2="384" y2="72" stroke="var(--line)"/>
+      </g>
+    </svg>
+    </div>
+    <figcaption>课件 0 第 10 页。注意“红线”：缺勤超过 1/3、自测一半没交、作业 3 次以上没交，平时分直接为 0。</figcaption>
+  </figure>
+  <p>考试题型（教学大纲）：<strong>选择、填空、名词解释、简答、计算</strong>。往年期中卷子 100 分，大致是 选择 20 + 填空 16~20 + 名词解释 15~20 + 简答 15~30 + 计算/分析 20~30。</p>
+
+  <h3 id="c0-map">考情地图：第 1–2 章哪些点年年考</h3>
+  <p>下表统计的是 4 份期中卷里<strong>属于第 1、2 章</strong>的题目。实心点 = 出现过，空心点 = 以变体出现。</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>知识点</th><th class="c">2020</th><th class="c">2021</th><th class="c">2022</th><th class="c">2023</th><th>本笔记位置</th></tr></thead>
+    <tbody>
+      <tr><td>OSI 七层：层次顺序、每层功能</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c1-osi">1.6</a></td></tr>
+      <tr><td>奈奎斯特 / 香农 求最大速率</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c2-limit">2.3</a></td></tr>
+      <tr><td>CDMA 码片计算</td><td class="c"><i class="dot lo"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c2-cdma">2.8</a></td></tr>
+      <tr><td>波特率 ↔ 比特率（QAM、相位×振幅）</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"></td><td class="c"><i class="dot"></i></td><td><a href="#c2-baud">2.2</a></td></tr>
+      <tr><td>PCM 数据率（采样、量化等级）</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"></td><td><a href="#c2-pcm">2.10</a></td></tr>
+      <tr><td>接口 / 服务 / 协议；N 层与 N+1 层关系</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"></td><td><a href="#c1-layer">1.4</a></td></tr>
+      <tr><td>面向连接 vs 无连接</td><td class="c"><i class="dot"></i></td><td class="c"></td><td class="c"></td><td class="c"><i class="dot lo"></i></td><td><a href="#c1-conn">1.5</a></td></tr>
+      <tr><td>电路交换 vs 分组交换（含 k 跳时延）</td><td class="c"></td><td class="c"><i class="dot"></i></td><td class="c"></td><td class="c"><i class="dot"></i></td><td><a href="#c2-switch">2.11</a></td></tr>
+      <tr><td>ADSL 特点</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot lo"></i></td><td class="c"><i class="dot"></i></td><td class="c"></td><td><a href="#c2-pstn">2.9</a></td></tr>
+      <tr><td>多路复用 FDM/TDM/WDM/CDM</td><td class="c"></td><td class="c"></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c2-mux">2.7</a></td></tr>
+      <tr><td>线路编码 NRZ/RZ/曼彻斯特/4B5B</td><td class="c"></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"></td><td><a href="#c2-code">2.5</a></td></tr>
+      <tr><td>传输介质（光纤单/多模、双绞线）</td><td class="c"></td><td class="c"><i class="dot"></i></td><td class="c"></td><td class="c"><i class="dot"></i></td><td><a href="#c2-media">2.4</a></td></tr>
+      <tr><td>T1 / E1 帧（125 μs）</td><td class="c"></td><td class="c"><i class="dot"></i></td><td class="c"></td><td class="c"></td><td><a href="#c2-pcm">2.10</a></td></tr>
+      <tr><td>载波三要素、ASK/FSK/PSK 识图</td><td class="c"><i class="dot"></i></td><td class="c"></td><td class="c"></td><td class="c"><i class="dot"></i></td><td><a href="#c2-pass">2.6</a></td></tr>
+      <tr><td>单工/半双工/全双工、异步传输效率</td><td class="c"></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"></td><td><a href="#c2-modes">2.1</a></td></tr>
+      <tr><td>文件传输两种确认策略</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><i class="dot"></i></td><td><a href="#c1-perf">1.8</a></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="box exam">
+    <span class="tag exam">提醒</span>
+    <p>往年期中还考了第 3、4 章的内容（成帧/位填充、CRC、海明码、停等与滑动窗口、ALOHA、CSMA/CD），分值约占一半。它们不在这三份 PPT 里，所以本笔记不展开；等老师讲完第 3 章，再用同样的方式补上那部分。</p>
+  </div>
+</section>
+
+<!-- ============ 预备 ============ -->
+<section class="chap" id="pre">
+  <div class="chap-head"><span class="chap-no">PRE</span><h2>零基础预备：单位、对数和三个比喻</h2></div>
+  <p class="sub">算题丢分，八成是单位换算错。先把这页吃透。</p>
+
+  <h3 id="p-unit">b 和 B，k 和 K</h3>
+  <div class="grid2">
+    <div class="mini"><h5>bit（b）与 Byte（B）</h5>小写 <code>b</code> = 比特（一个 0 或 1）；大写 <code>B</code> = 字节。<br><strong>1 B = 8 b</strong>。网速用 bps（bit/s），文件大小用 B。</div>
+    <div class="mini"><h5>速率用 10 的幂</h5><code>1 kbps = 10³ bps</code><br><code>1 Mbps = 10⁶ bps</code><br><code>1 Gbps = 10⁹ bps</code></div>
+    <div class="mini"><h5>存储用 2 的幂</h5><code>1 KB = 2¹⁰ = 1024 B</code><br><code>1 MB = 2²⁰ B</code><br><code>1 GB = 2³⁰ B</code></div>
+    <div class="mini"><h5>时间</h5><code>1 ms = 10⁻³ s</code><br><code>1 μs = 10⁻⁶ s</code><br><code>1 ns = 10⁻⁹ s</code></div>
+  </div>
+  <div class="box trap"><span class="tag trap">易错</span><p>“1 MB 文件用 1 Mbps 传要几秒？” 答案不是 1 秒，而是 <code>2²⁰ × 8 / 10⁶ ≈ 8.39 s</code>。考试若没说明，一般可以近似按 1 MB ≈ 10⁶ B 算（≈ 8 s），写清楚你的假设即可。</p></div>
+
+  <h3 id="p-log">log₂ 速查（计算题天天用）</h3>
+  <p><code>log₂ V</code> 的意思是“V 是 2 的几次方”，也就是 <strong>V 种状态需要几位二进制</strong>来表示。</p>
+  <div class="tbl"><table>
+    <thead><tr><th>V</th><td class="c">2</td><td class="c">4</td><td class="c">8</td><td class="c">16</td><td class="c">32</td><td class="c">64</td><td class="c">128</td><td class="c">256</td></tr></thead>
+    <tbody><tr><th>log₂V</th><td class="c">1</td><td class="c">2</td><td class="c">3</td><td class="c">4</td><td class="c">5</td><td class="c">6</td><td class="c">7</td><td class="c">8</td></tr></tbody>
+  </table></div>
+  <p>香农公式里的“非整数”对数，记住这几个就够：<code>log₂101 ≈ 6.658</code>（20 dB）、<code>log₂1001 ≈ 9.967</code>（30 dB）、<code>log₂3163 ≈ 11.63</code>（35 dB）。手算技巧：<code>log₂x = lg x / lg 2 ≈ lg x / 0.301</code>。</p>
+
+  <h3 id="p-meta">三个贯穿全课的比喻</h3>
+  <div class="grid2">
+    <div class="box tip" style="margin:0"><span class="tag tip">寄快递 = 分层</span><p>你只管写信（应用层），快递员只管包装贴单（传输/网络层），货车只管把箱子运到下一站（链路/物理层）。每一层只和“隔壁层”打交道。</p></div>
+    <div class="box tip" style="margin:0"><span class="tag tip">公路 = 信道</span><p>路宽 = 带宽（Hz），限速下最多能过的车 = 信道容量（bps），路的长度 = 传播时延。</p></div>
+    <div class="box tip" style="margin:0"><span class="tag tip">打电话 vs 寄信 = 两种服务</span><p>打电话先拨通再说话（面向连接）；寄信直接投进邮筒，每封信各走各的（无连接）。</p></div>
+  </div>
+</section>
+
+<!-- ============ 第1章 ============ -->
+<section class="chap" id="ch1">
+  <div class="chap-head"><span class="chap-no">CH 1</span><h2>引论：网络是什么、怎么分层</h2></div>
+  <p class="sub">本章重点（大纲原话）：基本概念、层次化架构、分层实现原理、参考模型。难点：封装/解封装、面向连接与无连接。</p>
+  <ul class="toc">
+    <li><a href="#c1-what"><span>1.1</span>什么是计算机网络</a></li>
+    <li><a href="#c1-topo"><span>1.2</span>连接方式与拓扑</a></li>
+    <li><a href="#c1-type"><span>1.3</span>网络分类 PAN→Internet</a></li>
+    <li><a href="#c1-layer"><span>1.4</span>分层、协议、接口、服务</a></li>
+    <li><a href="#c1-conn"><span>1.5</span>面向连接 vs 无连接</a></li>
+    <li><a href="#c1-osi"><span>1.6</span>OSI 与 TCP/IP 参考模型</a></li>
+    <li><a href="#c1-history"><span>1.7</span>示例网络、标准化组织</a></li>
+    <li><a href="#c1-perf"><span>1.8</span>性能：带宽、时延</a></li>
+    <li><a href="#c1-hw"><span>1.9</span>本章作业逐题讲</a></li>
+  </ul>
+
+  <h3 id="c1-what">1.1 什么是计算机网络<span class="stars">★★</span></h3>
+  <p>课件定义：<strong>计算机网络是一组“自治的”计算机，通过同一种技术互相连接起来。</strong></p>
+  <ul>
+    <li><strong>自治（autonomous）</strong>：每台电脑自己就能独立计算，断网了也能用，不受别人控制。</li>
+    <li><strong>互连（interconnected）</strong>：它们之间能交换信息（文字、图片、音频、视频……）。</li>
+  </ul>
+  <p>不同通信网络（电话网、电视网、计算机网）的区别：表面上看是<strong>终端不同</strong>，本质上是<strong>提供的服务不同</strong>。</p>
+  <div class="box exam"><span class="tag exam">考点 · 2023 选择第 1 题</span>
+    <p>“联网计算机必须使用统一的操作系统”是<strong>错误</strong>的。网络建立的主要目的是<strong>资源共享</strong>；多台机器可以协同完成任务；联网的电脑既能联网工作也能脱网工作（这就是“自治”）。</p>
+  </div>
+  <h4>网络拿来干什么</h4>
+  <div class="grid4">
+    <div class="mini"><h5>商业</h5>资源共享（打印机、云主机）、客户端-服务器模型</div>
+    <div class="mini"><h5>家庭</h5>访问远程信息、人与人通信、交互娱乐、电子商务</div>
+    <div class="mini"><h5>移动</h5>手机/平板 + WiFi 热点 + 4G/5G；GPS 等传感器</div>
+    <div class="mini"><h5>内容分发</h5>同一视频发给很多人时，在网络里放副本（CDN），比每人从源头拉一份更省</div>
+  </div>
+  <div class="box tip"><span class="tag tip">直觉 · 统计复用</span>
+    <p>“复用”就是<strong>共享</strong>。用户大部分时间是空闲的，流量是一阵一阵的（突发）。所以不必给每人留一条专线，而是按大家实际需要动态分享带宽，这叫<strong>统计复用</strong>，是分组交换网（因特网）的基础。就像地铁不给每人留一节车厢。</p>
+  </div>
+  <p><strong>社会问题</strong>（了解即可，可能出选择）：网络中立性；内容版权（美国 DMCA 1998，“通知-删除”）；匿名与审查（TOR 洋葱路由）；隐私（网页追踪，欧盟 GDPR 2018-05-25 实施）；盗窃（僵尸网络 botnet、网络钓鱼 phishing）。</p>
+
+  <h3 id="c1-topo">1.2 网络硬件：连接方式与拓扑<span class="stars">★★</span></h3>
+  <p><strong>两种连接方式</strong>（第一章自测第 4、5 题）：</p>
+  <ul>
+    <li><strong>点到点（point-to-point）</strong>：两台设备之间一条<strong>专用</strong>链路。</li>
+    <li><strong>多点（multipoint）</strong>：两台以上设备<strong>共享</strong>同一条链路。</li>
+  </ul>
+  <p><strong>拓扑</strong>就是“设备怎么连成形状”。四种基本拓扑：</p>
+  <div class="grid4">
+    <div class="mini"><h5>网状 Mesh</h5>
+      <svg viewBox="0 0 120 90" aria-hidden="true"><g stroke="var(--muted)" stroke-width="1.4"><line x1="60" y1="10" x2="105" y2="40"/><line x1="60" y1="10" x2="88" y2="80"/><line x1="60" y1="10" x2="32" y2="80"/><line x1="60" y1="10" x2="15" y2="40"/><line x1="105" y1="40" x2="88" y2="80"/><line x1="105" y1="40" x2="32" y2="80"/><line x1="105" y1="40" x2="15" y2="40"/><line x1="88" y1="80" x2="32" y2="80"/><line x1="88" y1="80" x2="15" y2="40"/><line x1="32" y1="80" x2="15" y2="40"/></g><g fill="var(--accent)"><circle cx="60" cy="10" r="6"/><circle cx="105" cy="40" r="6"/><circle cx="88" cy="80" r="6"/><circle cx="32" cy="80" r="6"/><circle cx="15" cy="40" r="6"/></g></svg>
+      每两台都直连。<br>优：路径多、可靠。<br>缺：连线多（n 台要 <code>n(n−1)/2</code> 条）、端口受限、环路多易广播风暴。</div>
+    <div class="mini"><h5>星型 Star</h5>
+      <svg viewBox="0 0 120 90" aria-hidden="true"><g stroke="var(--muted)" stroke-width="1.4"><line x1="60" y1="45" x2="60" y2="8"/><line x1="60" y1="45" x2="102" y2="30"/><line x1="60" y1="45" x2="92" y2="82"/><line x1="60" y1="45" x2="28" y2="82"/><line x1="60" y1="45" x2="18" y2="30"/></g><rect x="48" y="36" width="24" height="18" rx="3" fill="var(--exam)"/><g fill="var(--accent)"><circle cx="60" cy="8" r="6"/><circle cx="102" cy="30" r="6"/><circle cx="92" cy="82" r="6"/><circle cx="28" cy="82" r="6"/><circle cx="18" cy="30" r="6"/></g></svg>
+      所有设备连到<strong>中心集线器/交换机</strong>。<br>优：组网简单。<br>缺：中心坏了全瘫；中心端口数限制规模。</div>
+    <div class="mini"><h5>总线 Bus</h5>
+      <svg viewBox="0 0 120 90" aria-hidden="true"><line x1="5" y1="50" x2="115" y2="50" stroke="var(--ink)" stroke-width="3"/><g stroke="var(--muted)" stroke-width="1.4"><line x1="22" y1="50" x2="22" y2="22"/><line x1="50" y1="50" x2="50" y2="78"/><line x1="78" y1="50" x2="78" y2="22"/><line x1="102" y1="50" x2="102" y2="78"/></g><g fill="var(--accent)"><circle cx="22" cy="18" r="6"/><circle cx="50" cy="82" r="6"/><circle cx="78" cy="18" r="6"/><circle cx="102" cy="82" r="6"/></g></svg>
+      大家挂在一根共享电缆上。<br>优：便宜、易扩展、单个节点坏不影响全网。<br>缺：距离有限；容易冲突；电缆一坏全断。</div>
+    <div class="mini"><h5>环型 Ring</h5>
+      <svg viewBox="0 0 120 90" aria-hidden="true"><circle cx="60" cy="45" r="33" fill="none" stroke="var(--muted)" stroke-width="1.4"/><g fill="var(--accent)"><circle cx="60" cy="12" r="6"/><circle cx="89" cy="29" r="6"/><circle cx="89" cy="61" r="6"/><circle cx="60" cy="78" r="6"/><circle cx="31" cy="61" r="6"/><circle cx="31" cy="29" r="6"/></g></svg>
+      首尾相连，数据沿一个方向绕圈。<br>优：电缆短、适合光纤、访问公平。<br>缺：一个节点坏可能全网断；加入/退出麻烦。</div>
+  </div>
+  <div class="box exam"><span class="tag exam">考点</span><p>“需要中心控制器或集线器（hub）的拓扑” → <strong>星型</strong>。全连接网状网 n 个节点需要 <strong>n(n−1)/2</strong> 条链路，每个节点需要 n−1 个端口。</p></div>
+  <p class="muted">课件还讲了数据中心网络：传统三层架构（接入-汇聚-核心，用 STP 防环会阻塞一半链路）→ 云数据中心用 <strong>Leaf-Spine（叶脊）全互联</strong>架构 + Overlay（VXLAN）+ SDN 实现大规模、虚拟化、自动化。了解即可。</p>
+
+  <h3 id="c1-type">1.3 网络分类<span class="stars">★★</span></h3>
+  <p>没有统一的分类法，但两个维度最重要：<strong>传输技术</strong>和<strong>覆盖范围（距离尺度）</strong>。</p>
+  <h4>按传输技术</h4>
+  <ul>
+    <li><strong>广播链路</strong>：大家共享一个信道，一个人发、所有人都收到（看地址判断是不是给自己的）。例：WiFi、早期以太网。</li>
+    <li><strong>点到点链路</strong>：一对机器之间连接；一个发送方对一个接收方，叫<strong>单播（unicasting）</strong>。</li>
+  </ul>
+  <h4>按规模</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 140" role="img" aria-label="网络按距离尺度分类：PAN 约 1 米，LAN 10 米到 1 千米，MAN 约 10 千米，WAN 100 到 1000 千米，因特网覆盖地球">
+      <rect x="40" y="40" width="80" height="34" fill="var(--l1s)"/>
+      <rect x="120" y="40" width="160" height="34" fill="var(--l2s)"/>
+      <rect x="280" y="40" width="120" height="34" fill="var(--l3s)"/>
+      <rect x="400" y="40" width="200" height="34" fill="var(--l4s)"/>
+      <g font-weight="700" font-size="14" text-anchor="middle">
+        <text x="80" y="62" style="fill:var(--l1)">PAN</text>
+        <text x="200" y="62" style="fill:var(--l2)">LAN</text>
+        <text x="340" y="62" style="fill:var(--l3)">MAN</text>
+        <text x="500" y="62" style="fill:var(--l4)">WAN</text>
+      </g>
+      <line x1="40" y1="74" x2="600" y2="74" stroke="var(--ink)"/>
+      <g font-size="11" class="mono" text-anchor="middle">
+        <line x1="40" y1="74" x2="40" y2="80" stroke="var(--ink)"/><text x="40" y="94">1m</text>
+        <line x1="120" y1="74" x2="120" y2="80" stroke="var(--ink)"/><text x="120" y="94">10m</text>
+        <line x1="200" y1="74" x2="200" y2="80" stroke="var(--ink)"/><text x="200" y="94">100m</text>
+        <line x1="280" y1="74" x2="280" y2="80" stroke="var(--ink)"/><text x="280" y="94">1km</text>
+        <line x1="360" y1="74" x2="360" y2="80" stroke="var(--ink)"/><text x="360" y="94">10km</text>
+        <line x1="440" y1="74" x2="440" y2="80" stroke="var(--ink)"/><text x="440" y="94">100km</text>
+        <line x1="520" y1="74" x2="520" y2="80" stroke="var(--ink)"/><text x="520" y="94">1000km</text>
+        <line x1="600" y1="74" x2="600" y2="80" stroke="var(--ink)"/><text x="600" y="94">10⁴km</text>
+      </g>
+      <g font-size="11" class="mut" text-anchor="middle">
+        <text x="80" y="116" class="mut">身边·蓝牙</text>
+        <text x="200" y="116" class="mut">房间/大楼/校园</text>
+        <text x="340" y="116" class="mut">城市·有线电视</text>
+        <text x="500" y="116" class="mut">国家/大洲·ISP</text>
+      </g>
+      <path d="M40 30 Q320 -6 600 30" fill="none" stroke="var(--l5)" stroke-dasharray="4 4"/>
+      <text x="320" y="20" text-anchor="middle" font-size="12" style="fill:var(--l5)" font-weight="700">因特网 Internet：网络的网络，覆盖整个地球</text>
+    </svg>
+    </div>
+    <figcaption>横轴是对数刻度，每格 ×10。不同规模决定了传输时间（范围）、速率（技术）和拓扑。</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>类型</th><th>范围</th><th>典型例子</th></tr></thead>
+    <tbody>
+      <tr><td>PAN 个域网</td><td>一个人身边</td><td>蓝牙耳机、手环连手机</td></tr>
+      <tr><td>LAN 局域网</td><td>一栋楼、一个校园</td><td>交换式以太网（有线，802.3）、WiFi（无线，802.11）；公司里叫企业网</td></tr>
+      <tr><td>MAN 城域网</td><td>一座城市</td><td>基于有线电视网的城域网</td></tr>
+      <tr><td>WAN 广域网</td><td>国家/大洲</td><td>连接多个分公司的网络；ISP 网络；VPN（在因特网上用“虚拟链路”搭的广域网）</td></tr>
+      <tr><td>internet 互联网</td><td>全球</td><td>许多独立网络连在一起；最大的那个叫 the Internet</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">自测原题</span><p>“一栋楼/工厂/校园内的通信系统” → <strong>LAN</strong>；“跨州、跨国乃至全球” → <strong>WAN</strong>；“许多独立网络的集合” → <strong>an internet</strong>。</p></div>
+
+  <h3 id="c1-layer">1.4 网络软件：分层、协议、接口、服务<span class="stars">★★★</span></h3>
+  <p>网络要做的事太多了（编码、纠错、找路、可靠传输……），全塞在一个程序里没法写。于是把它<strong>切成一层一层</strong>，每层只干一件事，并且<strong>只用下一层的服务、只给上一层提供服务</strong>。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 300" role="img" aria-label="哲学家-翻译-秘书三层模型">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+      <g font-size="13">
+        <text x="120" y="22" text-anchor="middle" font-weight="700">A 地（肯尼亚）</text>
+        <text x="540" y="22" text-anchor="middle" font-weight="700">B 地（印尼）</text>
+        <rect x="40" y="40" width="160" height="50" rx="8" fill="var(--l5s)" stroke="var(--l5)"/>
+        <text x="120" y="62" text-anchor="middle" font-weight="700" style="fill:var(--l5)">第 3 层 · 哲学家</text>
+        <text x="120" y="80" text-anchor="middle" font-size="11" class="mut">“我喜欢兔子”（斯瓦希里语）</text>
+        <rect x="40" y="130" width="160" height="50" rx="8" fill="var(--l3s)" stroke="var(--l3)"/>
+        <text x="120" y="152" text-anchor="middle" font-weight="700" style="fill:var(--l3)">第 2 层 · 翻译</text>
+        <text x="120" y="170" text-anchor="middle" font-size="11" class="mut">译成双方约定的荷兰语</text>
+        <rect x="40" y="220" width="160" height="50" rx="8" fill="var(--l1s)" stroke="var(--l1)"/>
+        <text x="120" y="242" text-anchor="middle" font-weight="700" style="fill:var(--l1)">第 1 层 · 秘书</text>
+        <text x="120" y="260" text-anchor="middle" font-size="11" class="mut">选择传真发出去</text>
+        <rect x="460" y="40" width="160" height="50" rx="8" fill="var(--l5s)" stroke="var(--l5)"/>
+        <text x="540" y="62" text-anchor="middle" font-weight="700" style="fill:var(--l5)">哲学家</text>
+        <text x="540" y="80" text-anchor="middle" font-size="11" class="mut">读到（印尼语）</text>
+        <rect x="460" y="130" width="160" height="50" rx="8" fill="var(--l3s)" stroke="var(--l3)"/>
+        <text x="540" y="152" text-anchor="middle" font-weight="700" style="fill:var(--l3)">翻译</text>
+        <text x="540" y="170" text-anchor="middle" font-size="11" class="mut">荷兰语 → 印尼语</text>
+        <rect x="460" y="220" width="160" height="50" rx="8" fill="var(--l1s)" stroke="var(--l1)"/>
+        <text x="540" y="242" text-anchor="middle" font-weight="700" style="fill:var(--l1)">秘书</text>
+        <text x="540" y="260" text-anchor="middle" font-size="11" class="mut">收传真</text>
+        <g stroke="var(--muted)" stroke-dasharray="5 4"><line x1="205" y1="65" x2="455" y2="65"/><line x1="205" y1="155" x2="455" y2="155"/></g>
+        <text x="330" y="58" text-anchor="middle" font-size="12">L3 协议：讨论哲学</text>
+        <text x="330" y="148" text-anchor="middle" font-size="12">L2 协议：用荷兰语</text>
+        <line x1="200" y1="258" x2="460" y2="258" stroke="var(--ink)" stroke-width="2.5"/>
+        <text x="330" y="250" text-anchor="middle" font-size="12" font-weight="700">物理介质（电话线）</text>
+        <g stroke="var(--muted)" stroke-width="1.6" marker-end="url(#ar)"><line x1="120" y1="92" x2="120" y2="126"/><line x1="120" y1="182" x2="120" y2="216"/><line x1="540" y1="216" x2="540" y2="184"/><line x1="540" y1="126" x2="540" y2="94"/></g>
+        <text x="132" y="113" font-size="11" class="mut">接口</text>
+        <text x="552" y="113" font-size="11" class="mut">接口</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>虚线 = 对等层之间的“虚拟通信”（遵守协议）；实线箭头 = 相邻层之间的“实际通信”（通过接口）。翻译换成英语、秘书改用邮件，都不影响哲学家。</figcaption>
+  </figure>
+
+  <h4>必须分清的 6 个名词</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>名词</th><th>一句话解释</th><th>在比喻里</th></tr></thead>
+    <tbody>
+      <tr><td><strong>实体 / 对等实体</strong> (peer)</td><td>每层里干活的东西；不同机器上<strong>同一层</strong>的实体互称对等实体</td><td>两个翻译互为对等实体</td></tr>
+      <tr><td><strong>协议</strong> Protocol</td><td>对等实体之间通信的<strong>规则</strong>（水平方向）</td><td>“两个翻译都用荷兰语”</td></tr>
+      <tr><td><strong>服务</strong> Service</td><td>下层<strong>为上层提供</strong>的功能（垂直方向）；只说“能做什么”，不说“怎么做”</td><td>翻译为哲学家提供“翻译”服务</td></tr>
+      <tr><td><strong>接口</strong> Interface</td><td>相邻两层之间交换信息的连接点，规定下层向上层提供哪些原语操作</td><td>哲学家把纸条递给翻译的那个窗口</td></tr>
+      <tr><td><strong>网络体系结构</strong></td><td><strong>层和协议的集合</strong></td><td>整个三层安排</td></tr>
+      <tr><td><strong>协议栈</strong></td><td>某个系统所用的协议列表，每层一个</td><td>斯瓦希里语/荷兰语/传真</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点 · 年年考</span>
+    <ul>
+      <li>OSI 参考模型的三个主要概念：<strong>服务、接口、协议</strong>（2020、2022 填空）。</li>
+      <li>第 N 层与第 N+1 层的关系：<strong>第 N 层为第 N+1 层提供服务</strong>（2021、2022 选择）。</li>
+      <li>服务是<strong>垂直</strong>的（上下层之间），协议是<strong>水平</strong>的（对等层之间）。可以随便换协议，但不能随便改服务，因为服务对上层用户可见。</li>
+    </ul>
+  </div>
+  <h4>协议三要素（自测第 8–10 题）</h4>
+  <div class="grid4">
+    <div class="mini"><h5>语法 Syntax</h5>数据的<strong>结构和格式</strong>，即各部分出现的顺序。（“说什么格式”）</div>
+    <div class="mini"><h5>语义 Semantics</h5>每个比特模式<strong>是什么意思</strong>，收到后要做什么动作。（“是什么意思”）</div>
+    <div class="mini"><h5>时序 Timing</h5><strong>什么时候发</strong>、<strong>发多快</strong>。（“何时、多快”）</div>
+  </div>
+
+  <h4 id="c1-encap">封装与解封装（本章难点）</h4>
+  <p>发送时数据<strong>从上往下</strong>走，每经过一层就在前面<strong>加一个头部</strong>（链路层还会在尾部加尾部）。接收时<strong>从下往上</strong>走，每层<strong>剥掉</strong>自己那层的头。每层只看自己的头，不关心里面装的是什么。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 700 290" role="img" aria-label="数据封装过程：应用数据依次加上传输层头、网络层头、链路层头和尾，最后变成比特流">
+      <g font-size="13">
+        <text x="10" y="42" font-weight="700" style="fill:var(--l5)">应用层</text>
+        <text x="10" y="92" font-weight="700" style="fill:var(--l4)">传输层</text>
+        <text x="10" y="142" font-weight="700" style="fill:var(--l3)">网络层</text>
+        <text x="10" y="192" font-weight="700" style="fill:var(--l2)">数据链路层</text>
+        <text x="10" y="242" font-weight="700" style="fill:var(--l1)">物理层</text>
+        <text x="10" y="58" font-size="11" class="mut">报文 message</text>
+        <text x="10" y="108" font-size="11" class="mut">段 segment</text>
+        <text x="10" y="158" font-size="11" class="mut">分组 packet</text>
+        <text x="10" y="208" font-size="11" class="mut">帧 frame</text>
+        <text x="10" y="258" font-size="11" class="mut">比特 bit</text>
+        <!-- data -->
+        <g>
+          <rect x="430" y="26" width="150" height="34" fill="var(--l5s)" stroke="var(--l5)"/><text x="505" y="48" text-anchor="middle">数据 M</text>
+          <rect x="430" y="76" width="150" height="34" fill="var(--l5s)" stroke="var(--l5)"/><text x="505" y="98" text-anchor="middle">M</text>
+          <rect x="380" y="76" width="50" height="34" fill="var(--l4s)" stroke="var(--l4)"/><text x="405" y="98" text-anchor="middle" style="fill:var(--l4)">H4</text>
+          <rect x="430" y="126" width="150" height="34" fill="var(--l5s)" stroke="var(--l5)"/><text x="505" y="148" text-anchor="middle">M</text>
+          <rect x="380" y="126" width="50" height="34" fill="var(--l4s)" stroke="var(--l4)"/><text x="405" y="148" text-anchor="middle" style="fill:var(--l4)">H4</text>
+          <rect x="330" y="126" width="50" height="34" fill="var(--l3s)" stroke="var(--l3)"/><text x="355" y="148" text-anchor="middle" style="fill:var(--l3)">H3</text>
+          <rect x="430" y="176" width="150" height="34" fill="var(--l5s)" stroke="var(--l5)"/><text x="505" y="198" text-anchor="middle">M</text>
+          <rect x="380" y="176" width="50" height="34" fill="var(--l4s)" stroke="var(--l4)"/><text x="405" y="198" text-anchor="middle" style="fill:var(--l4)">H4</text>
+          <rect x="330" y="176" width="50" height="34" fill="var(--l3s)" stroke="var(--l3)"/><text x="355" y="198" text-anchor="middle" style="fill:var(--l3)">H3</text>
+          <rect x="280" y="176" width="50" height="34" fill="var(--l2s)" stroke="var(--l2)"/><text x="305" y="198" text-anchor="middle" style="fill:var(--l2)">H2</text>
+          <rect x="580" y="176" width="40" height="34" fill="var(--l2s)" stroke="var(--l2)"/><text x="600" y="198" text-anchor="middle" style="fill:var(--l2)">T2</text>
+          <text x="450" y="248" text-anchor="middle" class="mono" font-size="14" style="fill:var(--l1)">0110100101110010 1101…</text>
+        </g>
+        <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+        <line x1="655" y1="30" x2="655" y2="250" stroke="var(--accent)" stroke-width="2" marker-end="url(#ar2)"/>
+        <text transform="translate(668 80) rotate(90)" font-size="12" style="fill:var(--accent)">发送：逐层加头 ↓</text>
+        <text x="350" y="282" text-anchor="middle" font-size="12" class="mut">接收方顺序相反：从物理层往上，每层剥掉自己的头（H2→H3→H4）</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>H = Header 头部，T = Trailer 尾部。头里装的是控制信息（地址、序号、校验等）。</figcaption>
+  </figure>
+  <div class="box exam"><span class="tag exam">考点 · 自测第 20 题</span><p>OSI 中数据包<strong>从低层往高层</strong>走时，头部被<strong>移除（removed）</strong>；从高层往低层走时，头部被<strong>添加（added）</strong>。</p></div>
+  <h4>PDU、SDU、PCI 的关系（名词解释备用）</h4>
+  <div class="formula">N 层 PDU = N 层 PCI（头部控制信息） + N 层 SDU（上层交下来的数据）
+<br>N 层 SDU = (N+1) 层 PDU
+<br>IDU（接口数据单元）= ICI（接口控制信息） + SDU
+<span class="cap">PDU：对等实体之间交换的数据单元；SDU：上层交给本层“要帮我送”的数据；SAP（服务访问点）：层间接口上的“插座”，每个 SAP 有唯一地址。一个 SDU 太大时可能被切成多个 PDU。</span></div>
+
+  <h4>分层的优点与缺点 <span class="stars">★★★</span></h4>
+  <div class="grid2">
+    <div class="box ex" style="margin:0"><span class="tag ex">优点（作业第 2 题）</span>
+      <ul>
+        <li>各层<strong>相对独立</strong>：只需知道下层提供什么服务，不必知道怎么实现。</li>
+        <li><strong>灵活</strong>：某层协议改变，只要接口不变，就不影响其他层。</li>
+        <li>结构上分开，每层可用<strong>最合适的技术</strong>。</li>
+        <li><strong>易于实现和维护</strong>（把大问题拆小）。</li>
+        <li><strong>促进标准化</strong>。</li>
+      </ul></div>
+    <div class="box trap" style="margin:0"><span class="tag trap">缺点</span>
+      <ul>
+        <li>有些功能会在多层<strong>重复实现</strong>（如差错检测），浪费资源、降低效率。</li>
+        <li><strong>层数不好定</strong>：太少每层太复杂，太多又难以描述和实现。</li>
+        <li>每层都加头部，带来额外开销（见作业第 5 题）。</li>
+      </ul></div>
+  </div>
+  <p>每一层都要考虑的<strong>设计问题</strong>：可靠性（检错纠错、绕开故障路由）、网络演进（编址、命名、分层）、资源分配（多路访问、拥塞控制）、安全（保密、认证）。</p>
+
+  <h4>服务原语：客户端-服务器怎么“对话”</h4>
+  <p>服务在形式上是一组<strong>原语（primitive）</strong>，就是上层可以调用的操作。课件给了一个面向连接服务的 6 个原语：</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 330" role="img" aria-label="服务原语时序：LISTEN、CONNECT、ACCEPT、RECEIVE、SEND、DISCONNECT">
+      <defs><marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker></defs>
+      <g font-size="12">
+        <text x="200" y="22" text-anchor="middle" font-weight="700" font-size="14">客户端 Client</text>
+        <text x="440" y="22" text-anchor="middle" font-weight="700" font-size="14">服务器 Server</text>
+        <line x1="200" y1="32" x2="200" y2="320" stroke="var(--line)" stroke-width="3"/>
+        <line x1="440" y1="32" x2="440" y2="320" stroke="var(--line)" stroke-width="3"/>
+        <g stroke="var(--accent)" stroke-width="1.6" marker-end="url(#ar3)">
+          <line x1="200" y1="70" x2="436" y2="90"/>
+          <line x1="440" y1="105" x2="204" y2="125"/>
+          <line x1="200" y1="150" x2="436" y2="170"/>
+          <line x1="440" y1="190" x2="204" y2="210"/>
+          <line x1="200" y1="240" x2="436" y2="260"/>
+          <line x1="440" y1="275" x2="204" y2="295"/>
+        </g>
+        <g text-anchor="middle" class="mut"><text x="320" y="72">① 连接请求</text><text x="320" y="107">② 接受响应</text><text x="320" y="152">③ 请求数据</text><text x="320" y="192">④ 回复数据</text><text x="320" y="242">⑤ 断开</text><text x="320" y="277">⑥ 断开</text></g>
+        <g class="mono" text-anchor="end"><text x="190" y="74">CONNECT</text><text x="190" y="154">SEND</text><text x="190" y="214">RECEIVE</text><text x="190" y="244">DISCONNECT</text></g>
+        <g class="mono"><text x="450" y="50">LISTEN</text><text x="450" y="108">ACCEPT</text><text x="450" y="135">RECEIVE</text><text x="450" y="194">SEND</text><text x="450" y="279">DISCONNECT</text></g>
+      </g>
+    </svg>
+    </div>
+    <figcaption>LISTEN：阻塞等待别人来连；CONNECT：发起连接；ACCEPT：接受连接；RECEIVE：阻塞等待消息；SEND：发消息；DISCONNECT：断开。这就是后面 Socket 编程的雏形。</figcaption>
+  </figure>
+
+  <h3 id="c1-conn">1.5 面向连接 vs 无连接<span class="stars">★★★</span></h3>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>面向连接 Connection-oriented</th><th>无连接 Connectionless</th></tr></thead>
+    <tbody>
+      <tr><td>比喻</td><td>打电话：先拨通，再说话，最后挂断</td><td>寄信：写好地址直接扔进邮筒</td></tr>
+      <tr><td>阶段</td><td><strong>三个阶段</strong>：建立连接 → 传数据 → 释放连接</td><td>没有这些阶段，直接发</td></tr>
+      <tr><td>顺序</td><td><strong>保序</strong>：先发的先到</td><td>每个包独立选路，可能走不同路径，<strong>到达顺序可能乱</strong></td></tr>
+      <tr><td>代价</td><td>建连要协商，确认（ACK）带来额外开销和时延</td><td>开销小、快</td></tr>
+      <tr><td>例子</td><td><strong>TCP</strong>（可靠字节流）</td><td><strong>UDP</strong>；网络层的 <strong>IP</strong>（不可靠数据报）</td></tr>
+    </tbody>
+  </table></div>
+  <p>“可靠”和“连接”是两个独立的维度。<strong>可靠</strong> = 有确认、丢了会重传；<strong>不可靠</strong> = 发完就不管了。组合起来有 6 种服务：</p>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>服务</th><th>例子</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3">面向连接</td><td>可靠报文流</td><td>按页发送的书稿（保留每页边界）</td></tr>
+      <tr><td>可靠字节流</td><td>下载电影（TCP）</td></tr>
+      <tr><td>不可靠连接</td><td>VoIP 网络电话（RTP）</td></tr>
+      <tr><td rowspan="3">无连接</td><td>不可靠数据报</td><td>垃圾邮件、IP</td></tr>
+      <tr><td>有确认的数据报</td><td>挂号信</td></tr>
+      <tr><td>请求-应答</td><td>数据库查询</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box tip"><span class="tag tip">报文流 vs 字节流（老作业 1-7）</span><p>进程先写 1024 字节，过一会儿又写 1024 字节，接收方一次读 2048 字节。<strong>报文流</strong>：收到两个 1024 字节的报文（保留边界）；<strong>字节流</strong>：收到一整块 2048 字节，原来“分两次发”的信息丢了。</p></div>
+  <div class="box exam"><span class="tag exam">考点</span><ul><li>TCP 与 UDP 的主要区别（本学期作业第 6 题）：TCP 面向连接、可靠、保序、有流量控制，提供字节流；UDP 无连接、不可靠、不保序、开销小，适合实时音视频、DNS 查询。两者都跑在 IP 之上。</li><li>IP 是<strong>既不可靠也不面向连接</strong>的协议（自测第 24 题选 none of the above）。</li></ul></div>
+
+  <h3 id="c1-osi">1.6 参考模型：OSI 七层与 TCP/IP<span class="stars">★★★</span></h3>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 380" role="img" aria-label="OSI 七层、TCP/IP 四层和本书五层混合模型的对应关系">
+      <g font-size="13" text-anchor="middle">
+        <text x="110" y="24" font-weight="700">OSI 七层</text>
+        <text x="330" y="24" font-weight="700">TCP/IP 四层</text>
+        <text x="550" y="24" font-weight="700">课本五层（混合）</text>
+        <!-- OSI -->
+        <g>
+          <rect x="20" y="36" width="180" height="42" fill="var(--l5s)" stroke="var(--l5)"/><text x="110" y="62">7 应用层 Application</text>
+          <rect x="20" y="80" width="180" height="42" fill="var(--l5s)" stroke="var(--l5)"/><text x="110" y="106">6 表示层 Presentation</text>
+          <rect x="20" y="124" width="180" height="42" fill="var(--l5s)" stroke="var(--l5)"/><text x="110" y="150">5 会话层 Session</text>
+          <rect x="20" y="168" width="180" height="42" fill="var(--l4s)" stroke="var(--l4)"/><text x="110" y="194">4 传输层 Transport</text>
+          <rect x="20" y="212" width="180" height="42" fill="var(--l3s)" stroke="var(--l3)"/><text x="110" y="238">3 网络层 Network</text>
+          <rect x="20" y="256" width="180" height="42" fill="var(--l2s)" stroke="var(--l2)"/><text x="110" y="282">2 数据链路层 Data Link</text>
+          <rect x="20" y="300" width="180" height="42" fill="var(--l1s)" stroke="var(--l1)"/><text x="110" y="326">1 物理层 Physical</text>
+        </g>
+        <!-- TCP/IP -->
+        <g>
+          <rect x="240" y="36" width="180" height="130" fill="var(--l5s)" stroke="var(--l5)"/><text x="330" y="98">应用层 Application</text><text x="330" y="118" font-size="11" class="mut">HTTP SMTP DNS RTP</text>
+          <rect x="240" y="168" width="180" height="42" fill="var(--l4s)" stroke="var(--l4)"/><text x="330" y="188">传输层</text><text x="330" y="203" font-size="11" class="mut">TCP UDP</text>
+          <rect x="240" y="212" width="180" height="42" fill="var(--l3s)" stroke="var(--l3)"/><text x="330" y="232">互联网层 Internet</text><text x="330" y="247" font-size="11" class="mut">IP ICMP</text>
+          <rect x="240" y="256" width="180" height="86" fill="var(--l2s)" stroke="var(--l2)"/><text x="330" y="294">链路层 Link</text><text x="330" y="312" font-size="11" class="mut">以太网 802.11 DSL</text>
+        </g>
+        <!-- hybrid -->
+        <g>
+          <rect x="460" y="36" width="180" height="130" fill="var(--l5s)" stroke="var(--l5)"/><text x="550" y="106">5 应用层</text>
+          <rect x="460" y="168" width="180" height="42" fill="var(--l4s)" stroke="var(--l4)"/><text x="550" y="194">4 传输层</text>
+          <rect x="460" y="212" width="180" height="42" fill="var(--l3s)" stroke="var(--l3)"/><text x="550" y="238">3 网络层</text>
+          <rect x="460" y="256" width="180" height="42" fill="var(--l2s)" stroke="var(--l2)"/><text x="550" y="282">2 链路层</text>
+          <rect x="460" y="300" width="180" height="42" fill="var(--l1s)" stroke="var(--l1)"/><text x="550" y="326">1 物理层</text>
+        </g>
+        <text x="330" y="368" font-size="12" class="mut">TCP/IP 里没有表示层和会话层；IP 是因特网的“细腰”（narrow waist）</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>同一颜色 = 同一功能层。本课程（和课本）按右边的五层模型组织：第 2 章物理层，第 3–4 章链路层，第 5 章网络层，第 6 章传输层，第 7 章应用层。</figcaption>
+  </figure>
+  <div class="box tip"><span class="tag tip">记忆口诀</span><p>从下往上：<strong>物 · 链 · 网 · 传 · 会 · 表 · 应</strong>（“物联网传会表演”）。英文口诀：<em>Please Do Not Throw Sausage Pizza Away</em>。</p></div>
+  <h4>每层干什么（选择题主战场）</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>层</th><th>核心功能</th><th>数据单位</th><th>设备 / 协议举例</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ly ly5">7 应用</span></td><td>直接为用户的应用程序服务：远程登录、文件传输、邮件、网页</td><td>报文</td><td>HTTP、FTP、SMTP、DNS、Telnet</td></tr>
+      <tr><td><span class="ly ly5">6 表示</span></td><td>数据格式转换、<strong>加密解密</strong>、压缩；保证双方“看得懂”</td><td></td><td></td></tr>
+      <tr><td><span class="ly ly5">5 会话</span></td><td>建立、维护、<strong>同步</strong>双方的会话（设检查点，断了从检查点续传）</td><td></td><td></td></tr>
+      <tr><td><span class="ly ly4">4 传输</span></td><td><strong>端到端</strong>（进程到进程）的可靠传输；分段、排序、流量控制、差错控制</td><td>段 segment</td><td>TCP、UDP</td></tr>
+      <tr><td><span class="ly ly3">3 网络</span></td><td><strong>路由选择</strong>，把分组从源主机经过多条链路送到目的主机；拥塞控制；网络互连</td><td><strong>分组 packet</strong></td><td>路由器；IP</td></tr>
+      <tr><td><span class="ly ly2">2 数据链路</span></td><td><strong>相邻节点</strong>之间（一跳）无差错传输；成帧、检错、流量控制；分 MAC 和 LLC 两个子层</td><td>帧 frame</td><td>交换机、网桥；以太网、PPP</td></tr>
+      <tr><td><span class="ly ly1">1 物理</span></td><td>在介质上传输<strong>比特流</strong>：把比特变成电磁信号；规定接口的机械、电气、功能、过程特性</td><td>比特 bit</td><td>集线器、中继器；网线、光纤</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点 · 真题原句速配</span>
+    <ul>
+      <li>第二、三、四、六层 = <strong>数据链路、网络、传输、表示</strong>（2020、2022）。</li>
+      <li>加密解密 → <strong>表示层</strong>（2021、自测）；建立/维护/同步会话 → <strong>会话层</strong>；数据转成双方约定格式 → <strong>表示层</strong>。</li>
+      <li>端到端应答、分组排序、流量控制 → <strong>传输层</strong>（2023）；process-to-process 交付 → 传输层；node-to-node / 一站到下一站无差错 → <strong>数据链路层</strong>；source-to-destination 跨多条链路 → <strong>网络层</strong>。</li>
+      <li>路由选择协议位于 <strong>网络层</strong>；网络层数据单位是 <strong>分组</strong>（2023）。</li>
+      <li>“数据链路层保证端到端数据正确传输”是<strong>错</strong>的，链路层只管相邻节点（2023）。</li>
+      <li><strong>通信子网</strong> = 下三层（物理、链路、网络）；会话层<strong>不属于</strong>通信子网（2021）。</li>
+      <li>把比特变成电磁信号 → 物理层；TCP/IP 的应用层 = OSI 的会话+表示+应用层（自测 30）。</li>
+      <li>OSI 由 <strong>ISO</strong> 提出，目的是让任何两个系统都能通信（自测 18、25）。</li>
+      <li>常用端口（2021 选择）：HTTP 80、FTP 21、Telnet 23、SMTP 25、DNS 53、HTTPS 443。<strong>FTP 不是 31</strong>。</li>
+    </ul>
+  </div>
+  <h4>数据在路上：路由器只用到网络层</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 250" role="img" aria-label="主机 A 经过路由器发送到主机 B，路由器只处理物理层、链路层、网络层">
+      <g font-size="12" text-anchor="middle">
+        <text x="90" y="20" font-weight="700">主机 A</text><text x="320" y="20" font-weight="700">路由器</text><text x="550" y="20" font-weight="700">主机 B</text>
+        <rect x="40" y="30" width="100" height="36" fill="var(--l5s)" stroke="var(--l5)"/><text x="90" y="53">应用</text>
+        <rect x="40" y="68" width="100" height="36" fill="var(--l4s)" stroke="var(--l4)"/><text x="90" y="91">传输</text>
+        <rect x="40" y="106" width="100" height="36" fill="var(--l3s)" stroke="var(--l3)"/><text x="90" y="129">网络</text>
+        <rect x="40" y="144" width="100" height="36" fill="var(--l2s)" stroke="var(--l2)"/><text x="90" y="167">链路</text>
+        <rect x="40" y="182" width="100" height="36" fill="var(--l1s)" stroke="var(--l1)"/><text x="90" y="205">物理</text>
+        <rect x="270" y="106" width="100" height="36" fill="var(--l3s)" stroke="var(--l3)"/><text x="320" y="129">网络</text>
+        <rect x="270" y="144" width="100" height="36" fill="var(--l2s)" stroke="var(--l2)"/><text x="320" y="167">链路</text>
+        <rect x="270" y="182" width="100" height="36" fill="var(--l1s)" stroke="var(--l1)"/><text x="320" y="205">物理</text>
+        <rect x="500" y="30" width="100" height="36" fill="var(--l5s)" stroke="var(--l5)"/><text x="550" y="53">应用</text>
+        <rect x="500" y="68" width="100" height="36" fill="var(--l4s)" stroke="var(--l4)"/><text x="550" y="91">传输</text>
+        <rect x="500" y="106" width="100" height="36" fill="var(--l3s)" stroke="var(--l3)"/><text x="550" y="129">网络</text>
+        <rect x="500" y="144" width="100" height="36" fill="var(--l2s)" stroke="var(--l2)"/><text x="550" y="167">链路</text>
+        <rect x="500" y="182" width="100" height="36" fill="var(--l1s)" stroke="var(--l1)"/><text x="550" y="205">物理</text>
+        <path d="M150 48 V228 H260 V112 H380 V228 H490 V48" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="7 4"/>
+        <text x="205" y="244" class="mut">介质</text><text x="435" y="244" class="mut">介质</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>虚线是数据真正走过的路径：在 A 处向下封装，到路由器只拆到网络层（看 IP 地址选路），再向下封装发出，最后在 B 处一路拆到应用层。</figcaption>
+  </figure>
+  <h4>OSI 和 TCP/IP 的评价（简答可能考）</h4>
+  <div class="grid2">
+    <div class="mini"><h5>OSI：概念清晰，但没流行</h5><ul><li><strong>时机不好</strong>：出来时 TCP/IP 已经广泛使用。</li><li><strong>技术不好</strong>：会话层、表示层几乎没内容，七层不均匀，太复杂。</li><li><strong>实现不好</strong>：早期实现又慢又贵。</li><li><strong>政治不好</strong>：政府强推引起技术人员反感。</li></ul></div>
+    <div class="mini"><h5>TCP/IP：协议成功，模型弱</h5><ul><li>先有协议后有模型，模型是“事后总结”的。</li><li><strong>不通用</strong>：不适合描述非 TCP/IP 协议栈（如蓝牙）。</li><li>没区分服务、接口、协议；没区分物理层和链路层。</li></ul></div>
+  </div>
+
+  <h3 id="c1-history">1.7 示例网络与标准化<span class="stars">★</span></h3>
+  <div class="tbl"><table>
+    <thead><tr><th>年份</th><th>事件</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">1969</td><td><strong>ARPANET</strong> 启用（美国国防部 ARPA），只连 4 台计算机，分组交换，因特网的前身——<strong>第一个网络</strong>（自测第 6 题）</td></tr>
+      <tr><td class="mono">1974</td><td>Vint Cerf 和 Bob Kahn（互联网之父）提出连接不同分组网的协议，后来演变为 <strong>TCP/IP</strong></td></tr>
+      <tr><td class="mono">1982</td><td>ARPA 采用 TCP/IP，选定 Internet 为主要通信系统（当前因特网的协议族 = TCP/IP）</td></tr>
+      <tr><td class="mono">1986/88</td><td>NSF 建 <strong>NSFNET</strong>（连 5 个超算中心），1988 年替代 ARPANET 成为主干网</td></tr>
+      <tr><td class="mono">1989</td><td>ARPANET 解散，因特网由军用转向民用</td></tr>
+      <tr><td class="mono">1995</td><td>NSFNET 停止运作，商业 ISP 接管主干；已覆盖 91 个国家、400 万台主机</td></tr>
+    </tbody>
+  </table></div>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 200" role="img" aria-label="现代因特网结构：用户通过 DSL、有线电视、光纤、移动网络接入 ISP，ISP 在 IXP 互联，数据中心提供内容">
+      <defs><marker id="ar4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+      <g font-size="12" text-anchor="middle">
+        <rect x="10" y="20" width="120" height="160" rx="10" fill="var(--surface-2)"/>
+        <text x="70" y="40" font-weight="700">边缘接入</text>
+        <text x="70" y="66">DSL 电话线</text><text x="70" y="90">Cable 有线电视</text><text x="70" y="114">FTTH 光纤到户</text><text x="70" y="138">3G/4G/5G</text><text x="70" y="162">WiFi</text>
+        <rect x="170" y="60" width="130" height="80" rx="10" fill="var(--l3s)" stroke="var(--l3)"/>
+        <text x="235" y="94" font-weight="700" style="fill:var(--l3)">ISP A 网络</text><text x="235" y="114" class="mut">POP 接入点 + 路由器</text>
+        <circle cx="365" cy="100" r="30" fill="var(--exam-soft)" stroke="var(--exam)"/><text x="365" y="104" font-weight="700" style="fill:var(--exam)">IXP</text>
+        <rect x="430" y="60" width="110" height="80" rx="10" fill="var(--l3s)" stroke="var(--l3)"/>
+        <text x="485" y="94" font-weight="700" style="fill:var(--l3)">ISP B 网络</text><text x="485" y="114" class="mut">骨干</text>
+        <rect x="570" y="50" width="80" height="100" rx="10" fill="var(--l5s)" stroke="var(--l5)"/>
+        <text x="610" y="92" font-weight="700" style="fill:var(--l5)">数据中心</text><text x="610" y="112" class="mut">云 / CDN</text>
+        <g stroke="var(--muted)" stroke-width="1.6" marker-end="url(#ar4)" marker-start="url(#ar4)"><line x1="134" y1="100" x2="166" y2="100"/><line x1="304" y1="100" x2="333" y2="100"/><line x1="397" y1="100" x2="426" y2="100"/><line x1="544" y1="100" x2="566" y2="100"/></g>
+        <text x="365" y="160" class="mut">ISP 之间在 IXP 交换流量（按商业协议）</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>现代因特网：ISP 网络组成骨干；用户在边缘用各种方式接入；大部分流量是数据中心发出的内容（尤其是视频）。</figcaption>
+  </figure>
+  <p><strong>其他示例网络</strong>：</p>
+  <ul>
+    <li><strong>3G 移动网</strong>：地区划成小区（cell），每个小区一个基站；基站连核心网；手机移动时基站之间<strong>切换（handover）</strong>。</li>
+    <li><strong>无线局域网 802.11（WiFi）</strong>：客户端通过<strong>接入点 AP</strong> 通信，AP 用线连到有线网；2.4 GHz ISM 频段；信号会因反射产生<strong>多径衰落</strong>，所以用 OFDM 等复杂传输方案；无线电会互相干扰，所以用 <strong>CSMA</strong>（载波监听多路访问）。</li>
+    <li><strong>RFID 与传感器网络</strong>：无源 RFID 标签（连电池都没有）反射读写器的信号来通信；传感器把数据多跳无线传到汇聚节点。</li>
+  </ul>
+  <h4>标准化组织</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>组织</th><th>领域</th><th>代表标准</th></tr></thead>
+    <tbody>
+      <tr><td><strong>ITU</strong> 国际电信联盟（联合国机构）</td><td>电信</td><td>ADSL（G.992）、H.264；分配卫星轨道和频率</td></tr>
+      <tr><td><strong>IEEE</strong> 电气电子工程师协会</td><td>通信</td><td><strong>802.3 以太网</strong>、<strong>802.11 WiFi</strong></td></tr>
+      <tr><td><strong>IETF</strong> 互联网工程任务组</td><td>因特网</td><td>RFC 文档：HTTP（RFC 2616）、DNS（RFC 1034/1035）</td></tr>
+      <tr><td><strong>W3C</strong> 万维网联盟</td><td>Web</td><td>HTML5、CSS</td></tr>
+      <tr><td><strong>ISO</strong> 国际标准化组织</td><td>综合</td><td>OSI 参考模型</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">自测第 15 题：“在成为因特网标准之前的想法或概念” → <strong>RFC</strong>（Request For Comments）。</p>
+
+  <h3 id="c1-perf">1.8 性能：带宽、时延、抖动<span class="stars">★★★</span></h3>
+  <p>客户端-服务器系统的性能主要看两个指标：<strong>带宽</strong>（每秒能运多少比特）和<strong>时延</strong>（第一个比特从一端到另一端要多久）。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 240" role="img" aria-label="时空图：一个分组从发送方到接收方，包含传输时延和传播时延">
+      <g font-size="12">
+        <text x="110" y="22" text-anchor="middle" font-weight="700">发送方</text>
+        <text x="530" y="22" text-anchor="middle" font-weight="700">接收方</text>
+        <line x1="110" y1="30" x2="110" y2="230" stroke="var(--ink)" stroke-width="2"/>
+        <line x1="530" y1="30" x2="530" y2="230" stroke="var(--ink)" stroke-width="2"/>
+        <polygon points="110,40 110,90 530,180 530,130" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="320" y="125" text-anchor="middle" style="fill:var(--accent)" font-weight="700">一个分组（L 比特）</text>
+        <g stroke="var(--exam)" stroke-width="1.5"><line x1="96" y1="40" x2="96" y2="90"/><line x1="92" y1="40" x2="100" y2="40"/><line x1="92" y1="90" x2="100" y2="90"/></g>
+        <text x="88" y="62" text-anchor="end" style="fill:var(--exam)" font-weight="700">传输时延</text>
+        <text x="88" y="78" text-anchor="end" class="mono" style="fill:var(--exam)">= L / R</text>
+        <g stroke="var(--l3)" stroke-width="1.5"><line x1="546" y1="40" x2="546" y2="130"/><line x1="542" y1="40" x2="550" y2="40"/><line x1="542" y1="130" x2="550" y2="130"/></g>
+        <text x="556" y="80" style="fill:var(--l3)" font-weight="700">传播时延</text>
+        <text x="556" y="96" class="mono" style="fill:var(--l3)">= d / v</text>
+        <line x1="110" y1="40" x2="530" y2="40" stroke="var(--line)" stroke-dasharray="3 3"/>
+        <text x="20" y="228" class="mut">时间 ↓</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>斜带的“厚度”是传输时延（把整个分组推上线路要多久，取决于速率 R）；斜带的“倾斜”是传播时延（信号跑过距离 d 要多久，取决于介质速度 v）。</figcaption>
+  </figure>
+  <div class="formula">
+    <span class="big">传输时延 = L / R</span>　<span class="muted">L 比特，R bps</span><br>
+    <span class="big">传播时延 = d / v</span>　<span class="muted">真空/空气 v = 3×10⁸ m/s；铜线/光纤约 2×10⁸ m/s</span><br>
+    <span class="big">时延带宽积 = R × 传播时延</span>　<span class="muted">线路上“装着”多少比特</span>
+    <span class="cap">课件例：100 Mbps、5000 km 光纤，时延 50 ms → 线路里同时有 10⁸×0.05 = 5×10⁶ 比特，1 km 装 1000 比特，即每个比特“长” 1 米。</span>
+  </div>
+  <div class="box tip"><span class="tag tip">高带宽≠低时延（老作业 1-1）</span>
+    <p>横跨大陆的光纤：带宽很高（Gbps），但光要跑几千公里，<strong>时延也高</strong>；卫星链路同理。同一栋楼里的 56 kbps 调制解调器：带宽低、时延也低。</p>
+    <p>“开一辆装满磁带的货车跑高速”带宽惊人（课件算出约 2 Tbps），但时延要好几天。</p>
+  </div>
+  <div class="box exam"><span class="tag exam">服务质量 QoS 还看什么（老作业 1-2）</span>
+    <p>语音、视频：需要<strong>均匀的交付时间</strong>，看<strong>抖动（jitter）</strong>，即时延的波动；短时延但波动大，比时延稍长但稳定更糟。金融交易：看<strong>可靠性和安全性</strong>。自测：故障频率、故障后恢复时间衡量的是<strong>可靠性</strong>；未授权用户是<strong>安全</strong>问题。</p>
+  </div>
+  <div class="box exam"><span class="tag exam">简答 · 2023 第 5 题 / 本学期作业第 7 题</span>
+    <p><strong>两种确认策略</strong>：A. 每个分组单独确认，整个文件不确认；B. 分组不确认，整个文件到达后确认一次。</p>
+    <ul><li><strong>网络质量差（容易丢包）</strong> → 用 A：丢了哪个只重传哪个，比重传整个文件代价小。</li>
+    <li><strong>网络质量好</strong> → 用 B：正常情况下只发一次确认，省带宽、处理简单；万一丢一个包就要重传整个文件，但这很少发生。</li></ul>
+  </div>
+
+  <h3 id="c1-hw">1.9 本学期第一章作业逐题讲</h3>
+  <p class="muted">题目来自 <code>计网作业第一章.pdf</code>，答案参考老版作业答案，并补全了推导。先自己做，再展开。</p>
+
+  <details><summary>1. 5 台路由器点到点相连，每两台之间可以放高速、中速、低速线路或不放线。生成并检查一种拓扑要 100 ms，检查全部要多久？<span class="src">作业1</span></summary><div class="ans">
+    <p>5 台路由器两两之间的“位置”有 <code>C(5,2) = 5×4/2 = 10</code> 个（AB、AC、AD、AE、BC、BD、BE、CD、CE、DE）。</p>
+    <p>每个位置 4 种选择（高/中/低/无）→ 拓扑总数 <code>4¹⁰ = 1,048,576</code>。</p>
+    <p>总时间 <code>1,048,576 × 0.1 s = 104,857.6 s ≈ 29.1 小时</code>。</p>
+    <p class="muted">（老版题目是 50 ms，答案是约 14.6 小时；看清题目给的数字。）</p>
+  </div></details>
+
+  <details><summary>2. 使用分层协议的两个理由？一个可能的缺点？<span class="src">作业2</span></summary><div class="ans">
+    <p><strong>理由</strong>：① 把设计问题拆成更小、更好处理的部分（易于实现和维护）；② 某层协议变化不影响其他层，只要接口不变（灵活、独立）。</p>
+    <p><strong>缺点</strong>：性能可能变差（每层加头部开销、功能可能重复实现）；层数不好确定。</p>
+  </div></details>
+
+  <details><summary>3. 无连接与面向连接通信的主要区别？各举一个协议<span class="src">作业3</span></summary><div class="ans">
+    <p>面向连接有三个阶段：建立连接 → 传数据 → 释放连接，且保证顺序；无连接没有这些阶段，直接发数据，不保证顺序。</p>
+    <p>（1）无连接：<strong>UDP</strong>（或 IP）；（2）面向连接：<strong>TCP</strong>。</p>
+  </div></details>
+
+  <details><summary>4. 链路层出错就要求重传。一帧受损概率为 p（确认不会丢），发送一帧平均需要传几次？<span class="src">作业4</span></summary><div class="ans">
+    <p>每次传输成功的概率是 <code>1−p</code>。恰好传 k 次才成功的概率是 <code>p^(k−1)·(1−p)</code>（前 k−1 次都坏了）。</p>
+    <p>期望 <code>E = Σ k·p^(k−1)·(1−p) = 1/(1−p)</code>。</p>
+    <p><strong>答：平均 1/(1−p) 次。</strong>直觉：成功率 1/2 时平均要 2 次。</p>
+  </div></details>
+
+  <details><summary>5. n 层协议，应用报文长 M 字节，每层加 h 字节头部。头部占网络带宽的比例？<span class="src">作业5 · 课件 P6</span></summary><div class="ans">
+    <p>头部总共 <code>n·h</code> 字节，整个报文 <code>M + n·h</code> 字节。</p>
+    <p><strong>比例 = nh / (M + nh)</strong>。</p>
+    <p class="muted">没考虑分片（会增加开销）和聚合（会降低开销）。</p>
+  </div></details>
+
+  <details><summary>6. TCP 和 UDP 的主要区别？<span class="src">作业6 · 课件 P4</span></summary><div class="ans">
+    <p>TCP 面向连接，提供可靠的字节流（有确认、重传、保序、流量控制）；UDP 无连接，只是把数据报发出去，不保证到达和顺序，但开销小、时延低。</p>
+  </div></details>
+
+  <details><summary>7. 文件传输的两种确认策略讨论<span class="src">作业7 · 2023 简答</span></summary><div class="ans">
+    <p>见上面 1.8 的考点框：网络容易丢包时逐个确认；网络很可靠时整个文件确认一次（省带宽，但一旦丢包要重传整个文件）。</p>
+  </div></details>
+
+  <details><summary>8. 1024×768 像素、每像素 3 字节的未压缩图像，分别用 56 kbps、1 Mbps、10 Mbps、100 Mbps、1 Gbps 传要多久？<span class="src">作业8</span></summary><div class="ans">
+    <p>图像大小：<code>1024 × 768 × 3 = 2,359,296 字节 = 18,874,368 比特</code>。</p>
+    <div class="tbl"><table><thead><tr><th>链路</th><th>计算</th><th>时间</th></tr></thead><tbody>
+      <tr><td>56 kbps 调制解调器</td><td class="mono">18,874,368 / 56,000</td><td><strong>≈ 337 s</strong></td></tr>
+      <tr><td>1 Mbps 电缆调制解调器</td><td class="mono">/ 10⁶</td><td><strong>≈ 18.9 s</strong></td></tr>
+      <tr><td>10 Mbps 以太网</td><td class="mono">/ 10⁷</td><td><strong>≈ 1.9 s</strong></td></tr>
+      <tr><td>100 Mbps 以太网</td><td class="mono">/ 10⁸</td><td><strong>≈ 0.19 s</strong></td></tr>
+      <tr><td>千兆以太网</td><td class="mono">/ 10⁹</td><td><strong>≈ 0.019 s</strong></td></tr>
+    </tbody></table></div>
+    <p class="muted">要点：像素数×每像素字节×8 得到比特数；速率用 10 的幂。</p>
+  </div></details>
+
+  <details><summary>9. 第 k 层实现操作的<strong>算法</strong>变了，对第 k−1 层和 k+1 层有什么影响？<span class="src">作业9</span></summary><div class="ans">
+    <p><strong>没有影响。</strong>算法只是第 k 层内部的实现方式，它向上提供的服务、对下使用的服务都没变，接口不变，其他层感觉不到。这正是分层的好处。</p>
+  </div></details>
+
+  <details><summary>10. 第 k 层提供的<strong>服务</strong>（操作集合）变了，对第 k−1 层和 k+1 层的服务有什么影响？<span class="src">作业10</span></summary><div class="ans">
+    <p><strong>第 k+1 层受影响</strong>：它是第 k 层服务的使用者，操作变了，k+1 层可能要修改（甚至它向上提供的服务也要变）。</p>
+    <p><strong>第 k−1 层不受影响</strong>：它只为第 k 层提供服务，不关心第 k 层对上提供什么。</p>
+  </div></details>
+
+  <details><summary>课件 P1：圣伯纳犬背 3 盘 7 GB 磁带，以 18 km/h 跑。距离多远以内，狗比 150 Mbps 的线路快？</summary><div class="ans">
+    <p>狗运的数据：<code>3 × 7 GB = 21 GB = 21 × 8 × 10⁹ = 1.68 × 10¹¹ 比特</code>（按 1 GB = 10⁹ B）。</p>
+    <p>跑 x km 要 <code>x / 18 小时 = 200x 秒</code>，狗的速率 = <code>1.68×10¹¹ / (200x)</code> bps。</p>
+    <p>令其 > 1.5×10⁸：<code>x < 1.68×10¹¹ / (200 × 1.5×10⁸) = 5.6 km</code>。</p>
+    <p><strong>答：约 5.6 km 以内</strong>（若按 1 GB = 2³⁰ B 算约 6 km）。</p>
+  </div></details>
+
+  <details><summary>课件 P2：卫星高 40,000 km，客户端-服务器请求的最好情况响应时延？</summary><div class="ans">
+    <p>请求要上去再下来（2 × 40,000），响应也要上去再下来（2 × 40,000），共 <code>160,000 km</code>。</p>
+    <p>光速 300,000 km/s → <code>160,000 / 300,000 ≈ 0.533 s = 533 ms</code>。</p>
+  </div></details>
+</section>
+
+<!-- ============ 第2章 ============ -->
+<section class="chap" id="ch2">
+  <div class="chap-head"><span class="chap-no">CH 2</span><h2>物理层：怎么把 0 和 1 送过去</h2></div>
+  <p class="sub">本章重点：数据通信理论基础、数字调制与复用、电话网。难点：奈奎斯特与香农、编码与调制、多路复用（尤其 CDMA）。<strong>期中计算题大头在这里。</strong></p>
+  <ul class="toc">
+    <li><a href="#c2-modes"><span>2.1</span>数据、信号与传输方式</a></li>
+    <li><a href="#c2-baud"><span>2.2</span>带宽、波特率、比特率</a></li>
+    <li><a href="#c2-limit"><span>2.3</span>奈奎斯特与香农</a></li>
+    <li><a href="#c2-media"><span>2.4</span>传输介质与卫星</a></li>
+    <li><a href="#c2-code"><span>2.5</span>基带：线路编码</a></li>
+    <li><a href="#c2-pass"><span>2.6</span>通带：调制与星座图</a></li>
+    <li><a href="#c2-mux"><span>2.7</span>多路复用 FDM/TDM/WDM</a></li>
+    <li><a href="#c2-cdma"><span>2.8</span>码分多址 CDMA</a></li>
+    <li><a href="#c2-pstn"><span>2.9</span>电话网、Modem、ADSL</a></li>
+    <li><a href="#c2-pcm"><span>2.10</span>PCM、T1/E1、SONET</a></li>
+    <li><a href="#c2-switch"><span>2.11</span>电路交换 vs 分组交换</a></li>
+    <li><a href="#c2-mobile"><span>2.12</span>移动通信 1G–5G</a></li>
+    <li><a href="#c2-cable"><span>2.13</span>有线电视上网</a></li>
+    <li><a href="#c2-hw"><span>2.14</span>老版作业精讲</a></li>
+  </ul>
+
+  <div class="box tip"><span class="tag tip">一句话</span><p>物理层是所有层的地基：电线、光纤、无线电的物理性质，决定了网络最快能多快。它的核心问题是<strong>只能用模拟的物理信号（电压、光强、电磁波）去表示数字比特</strong>，这个转换叫<strong>调制（modulation）</strong>。家里的“猫” = Modem = <strong>Mo</strong>dulator（调制器）+ <strong>Dem</strong>odulator（解调器）。</p></div>
+  <p>描述一条链路只要三个数：<strong>比特率</strong>（每秒多少比特，受带宽限制）、<strong>时延</strong>（一个比特到对面要多久）、<strong>误码率</strong>（比特被翻转的概率）。</p>
+
+  <h3 id="c2-modes">2.1 数据、信号与传输方式<span class="stars">★★</span></h3>
+  <p><strong>数据</strong>是要运送的信息；<strong>信号</strong>是数据的电气或电磁表现形式。两者都可以是<strong>模拟的</strong>（连续变化，如指针表）或<strong>数字的</strong>（取值离散，如数字表从 8:05 直接跳到 8:06）。</p>
+  <h4>正弦波的三要素（载波三要素）</h4>
+  <figure>
+    <div class="svgbox"><svg id="sineFig" viewBox="0 0 660 230" role="img" aria-label="正弦波的振幅、频率、相位变化示意"></svg></div>
+    <figcaption>灰线是原始波形，彩色是改变一个要素后的波形。<strong>振幅</strong> = 波的高度；<strong>频率</strong> f = 每秒重复多少次（Hz），周期 T = 1/f；<strong>相位</strong> = 波形相对时间 0 的位置（度）。</figcaption>
+  </figure>
+  <div class="box exam"><span class="tag exam">考点 · 2020 填空</span><p>模拟信号传输的基础是<strong>载波</strong>，载波三要素：<strong>频率、振幅、相位</strong>。数字数据可以针对其中一个或组合进行调制（见 2.6）。</p></div>
+  <ul>
+    <li><strong>周期信号</strong>：在一个周期内完成一个模式并不断重复（如正弦波）。<strong>非周期信号</strong>：没有重复模式（如说话的声音）。大多数数字信号是非周期的。</li>
+    <li><strong>时域</strong>图：横轴是时间，看信号怎么随时间变。<strong>频域</strong>图：横轴是频率，看信号由哪些频率组成。一个纯正弦波在频域里只是一根竖线。</li>
+    <li>单一频率的正弦波没法携带信息（电力公司送 60 Hz 交流电、防盗报警可以用）。通信要用<strong>复合信号</strong>，即许多正弦波的叠加。</li>
+  </ul>
+  <h4 id="c2-duplex">单工、半双工、全双工</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 170" role="img" aria-label="单工、半双工、全双工示意">
+      <defs><marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker><marker id="a6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--exam)"/></marker></defs>
+      <g font-size="13">
+        <text x="10" y="35" font-weight="700">单工</text><text x="10" y="52" font-size="11" class="mut">只能单向</text>
+        <rect x="130" y="18" width="50" height="30" rx="6" fill="var(--surface-2)"/><text x="155" y="38" text-anchor="middle">A</text>
+        <rect x="430" y="18" width="50" height="30" rx="6" fill="var(--surface-2)"/><text x="455" y="38" text-anchor="middle">B</text>
+        <line x1="185" y1="33" x2="425" y2="33" stroke="var(--accent)" stroke-width="2" marker-end="url(#a5)"/>
+        <text x="500" y="38" font-size="12" class="mut">广播、键盘→主机</text>
+        <text x="10" y="90" font-weight="700">半双工</text><text x="10" y="107" font-size="11" class="mut">双向，但轮流</text>
+        <rect x="130" y="73" width="50" height="30" rx="6" fill="var(--surface-2)"/><text x="155" y="93" text-anchor="middle">A</text>
+        <rect x="430" y="73" width="50" height="30" rx="6" fill="var(--surface-2)"/><text x="455" y="93" text-anchor="middle">B</text>
+        <line x1="185" y1="83" x2="425" y2="83" stroke="var(--accent)" stroke-width="2" marker-end="url(#a5)"/>
+        <line x1="425" y1="95" x2="185" y2="95" stroke="var(--exam)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a6)"/>
+        <text x="305" y="78" text-anchor="middle" font-size="11" class="mut">时刻 1</text><text x="305" y="110" text-anchor="middle" font-size="11" class="mut">时刻 2</text>
+        <text x="500" y="93" font-size="12" class="mut">对讲机</text>
+        <text x="10" y="145" font-weight="700">全双工</text><text x="10" y="162" font-size="11" class="mut">同时双向</text>
+        <rect x="130" y="128" width="50" height="30" rx="6" fill="var(--surface-2)"/><text x="155" y="148" text-anchor="middle">A</text>
+        <rect x="430" y="128" width="50" height="30" rx="6" fill="var(--surface-2)"/><text x="455" y="148" text-anchor="middle">B</text>
+        <line x1="185" y1="138" x2="425" y2="138" stroke="var(--accent)" stroke-width="2" marker-end="url(#a5)"/>
+        <line x1="425" y1="150" x2="185" y2="150" stroke="var(--exam)" stroke-width="2" marker-end="url(#a6)"/>
+        <text x="500" y="148" font-size="12" class="mut">电话</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>2022 名词解释考过“半双工通信”：通信双方都可以发送信息，但不能同时发送/接收。</figcaption>
+  </figure>
+  <h4>并行 vs 串行；异步 vs 同步</h4>
+  <ul>
+    <li><strong>并行</strong>：多根线同时传多个比特（快，但线多、只适合短距离）。<strong>串行</strong>：一根线一个接一个传（网络里基本都是串行）。</li>
+    <li><strong>异步传输</strong>：以<strong>字符</strong>为单位，每个字符前加<strong>起始位（0）</strong>、后加<strong>停止位（1）</strong>，字符之间可以有空闲。对时钟要求低。</li>
+    <li><strong>同步传输</strong>：以<strong>帧</strong>为单位，比特一个接一个，没有起止位和空隙，由接收方负责分组，<strong>时钟同步很重要</strong>。</li>
+  </ul>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 110" role="img" aria-label="异步传输一个字符：起始位、数据位、校验位、停止位">
+      <g font-size="12" text-anchor="middle">
+        <rect x="20" y="30" width="50" height="34" fill="var(--surface-2)"/><text x="45" y="52" class="mut">空闲1</text>
+        <rect x="70" y="30" width="50" height="34" fill="var(--exam-soft)" stroke="var(--exam)"/><text x="95" y="52" style="fill:var(--exam)" font-weight="700">起始0</text>
+        <rect x="120" y="30" width="350" height="34" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="295" y="52" style="fill:var(--accent)" font-weight="700">7 位数据</text>
+        <rect x="470" y="30" width="50" height="34" fill="var(--surface-2)" stroke="var(--line)"/><text x="495" y="52">校验</text>
+        <rect x="520" y="30" width="100" height="34" fill="var(--ex-soft)" stroke="var(--ex)"/><text x="570" y="52" style="fill:var(--ex)" font-weight="700">停止 1 1</text>
+        <text x="320" y="92" class="mut">一个字符共 1+7+1+2 = 11 位，有效的只有 7 位</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <div class="box ex"><span class="tag ex">例题 · 2021 填空</span><p>异步通信，每个字符 1 位起始位、7 位数据位、1 位奇偶位、2 位终止位，每秒传 100 个字符，有效数据速率？</p>
+  <p><strong>答：</strong>有效的只算数据位：<code>100 × 7 = 700 bps</code>。（线路总速率是 100 × 11 = 1100 bps，效率 7/11。）</p></div>
+
+  <h3 id="c2-baud">2.2 带宽、波特率、比特率<span class="stars">★★★</span></h3>
+  <h4>傅里叶：任何信号都是很多正弦波叠加</h4>
+  <p>傅里叶分析说：任何周期信号都能拆成一个“基波”加上无数个“谐波”（频率是基波的整数倍）。数字方波边沿很陡，要无穷多个谐波才能拼出来，所以<strong>数字信号的带宽是无穷大</strong>。</p>
+  <p>可真实信道的<strong>带宽有限</strong>，高频谐波过不去，收到的波形就“变圆变形”。下面拖动滑块，看看信道只放过前 N 个谐波时，字符 “b”（01100010）变成什么样：</p>
+  <div class="tool">
+    <h5>傅里叶演示：带宽越窄，波形越糊</h5>
+    <div class="row">
+      <label for="fBits">比特（8 位）<input type="text" id="fBits" class="bits" value="01100010" maxlength="16" inputmode="numeric"></label>
+      <label for="fN">通过的谐波数 N = <span id="fNv" class="mono">8</span><input type="range" id="fN" min="1" max="40" value="8"></label>
+    </div>
+    <div class="svgbox" style="margin-top:.6rem"><svg id="fourierSvg" viewBox="0 0 640 170" role="img" aria-label="傅里叶级数近似方波"></svg></div>
+    <p class="muted" style="font-size:.85rem;margin-bottom:0">灰色台阶 = 发出去的理想信号；彩色曲线 = 只保留前 N 个谐波后接收方看到的。N=1、2 时几乎认不出，N≥8 基本能判断出每一位。</p>
+  </div>
+  <div class="formula">信号带宽（Hz） = 最高频率 − 最低频率
+<span class="cap">例：一个复合信号的频率范围 1000–5000 Hz，带宽 = 4000 Hz。周期信号的频率是离散的（傅里叶级数），非周期信号的频率是连续的（傅里叶变换）。</span></div>
+  <div class="box trap"><span class="tag trap">易错 · “带宽”有两个意思</span>
+    <p>电子工程师说的<strong>带宽</strong>：信道能通过的频率范围，单位 <strong>Hz</strong>。</p>
+    <p>计算机人说的“带宽”：其实是<strong>信道容量 / 最大数据率</strong>，单位 <strong>bps</strong>。平时说“10 Mbps 带宽”就是这个意思。</p>
+    <p>公式里的 B 永远是 <strong>Hz</strong>。数据率是“用掉模拟带宽之后得到的结果”。比喻：带宽是路宽，信道容量是这条路的限速通行量。</p>
+  </div>
+  <h4 id="c2-baudrate">波特率 vs 比特率（必考换算）</h4>
+  <ul>
+    <li><strong>码元（symbol）</strong>：一个信号脉冲/一个信号状态。</li>
+    <li><strong>波特率 R<sub>B</sub></strong>（码元速率、符号率）：每秒传多少个码元，单位 Baud。</li>
+    <li><strong>比特率 R<sub>b</sub></strong>：每秒传多少比特，单位 bps。</li>
+    <li>一个码元有 V 种状态，就能表示 <code>log₂V</code> 位。</li>
+  </ul>
+  <div class="formula"><span class="big">R<sub>b</sub> = R<sub>B</sub> × log₂V</span>
+<span class="cap">V=2（0/1 两个电平）：比特率 = 波特率；V=4（00/01/10/11）：比特率 = 2 × 波特率。</span></div>
+  <div class="box ex"><span class="tag ex">例题 · 真题三连</span>
+    <ul>
+      <li><strong>2021</strong>：64-QAM 信号波特率 2000，比特率？ → 64 种状态，log₂64 = 6，<code>2000 × 6 = 12000 bps</code>。</li>
+      <li><strong>2023</strong>：波特率 600 Baud，4 种幅度 × 4 种相位 = 16 种码元，数据率？ → <code>600 × log₂16 = 600 × 4 = 2400 b/s</code>。</li>
+      <li><strong>2020</strong>：8 种相位，每种相位 2 种幅度，一个码元表示几位？ → 8 × 2 = 16 种状态，<code>log₂16 = 4 位</code>。</li>
+    </ul>
+  </div>
+
+  <h3 id="c2-limit">2.3 信道的极限：奈奎斯特与香农<span class="stars">★★★★</span></h3>
+  <p>这是第 2 章<strong>每年必考</strong>的计算。记两个公式，再记一个规则。</p>
+  <div class="grid2">
+    <div class="formula" style="margin:0"><span class="cap">奈奎斯特定理（1924）· <strong>无噪声</strong>理想信道</span><span class="big">C = 2B log₂V</span><span class="cap">B：带宽（Hz）；V：信号电平/状态数。<br>想更快：加带宽，或用更多电平。</span></div>
+    <div class="formula" style="margin:0"><span class="cap">香农定理（1948）· <strong>有噪声</strong>信道</span><span class="big">C = B log₂(1 + S/N)</span><span class="cap">S/N：信噪比（功率比，不是 dB！）。<br>香农上限与电平数无关，加多少电平也突破不了。</span></div>
+  </div>
+  <div class="formula"><span class="big">信噪比 dB = 10 × log₁₀(S/N)</span>　⇔　<span class="big">S/N = 10^(dB/10)</span>
+<span class="cap">10 dB → 10；20 dB → 100；30 dB → 1000；36 dB → 约 3981；40 dB → 10000。</span></div>
+  <div class="box trap"><span class="tag trap">易错 · 最常见的丢分点</span>
+    <p>题目同时给了<strong>“二进制信号/几种电平”</strong>和<strong>“信噪比”</strong>时，要<strong>两个公式都算，取较小的那个</strong>。因为信道必须同时满足两个限制。</p>
+    <p>香农公式里一定先把 dB 换成比值，再代入。<code>20 dB ≠ S/N = 20</code>，而是 S/N = 100。</p>
+  </div>
+  <div class="tool">
+    <h5>计算器：奈奎斯特 / 香农 / 取最小</h5>
+    <div class="row">
+      <label for="cB">带宽 B（Hz）<input type="number" id="cB" value="3000" min="0"></label>
+      <label for="cV">电平数 V（留空不算）<input type="number" id="cV" value="2" min="2"></label>
+      <label for="cDb">信噪比 dB（留空不算）<input type="number" id="cDb" value="20"></label>
+    </div>
+    <div class="out" id="cOut" aria-live="polite"></div>
+  </div>
+  <h4>例题（全部来自课件与真题）</h4>
+  <details open><summary>例 1 · 2022 填空 / 老作业 2-2：3 kHz 信道，信噪比 20 dB，传<strong>二进制</strong>信号，最大速率？<span class="src">★必会</span></summary><div class="ans">
+    <p>① 20 dB → S/N = 100。香农：<code>3000 × log₂101 ≈ 3000 × 6.658 ≈ 19.97 kbps</code>。</p>
+    <p>② 二进制 V=2。奈奎斯特：<code>2 × 3000 × log₂2 = 6000 bps</code>。</p>
+    <p>③ 取小：<strong>6 kbps</strong>。瓶颈是奈奎斯特。</p>
+  </div></details>
+  <details><summary>例 2 · 2021 简答：4 kHz 带宽，信噪比 20 dB，传二进制信号，最大速率？</summary><div class="ans">
+    <p>香农：<code>4000 × log₂101 ≈ 26.63 kbps</code>；奈奎斯特：<code>2 × 4000 × 1 = 8 kbps</code>。取小 → <strong>8 kbps</strong>。</p>
+  </div></details>
+  <details><summary>例 3 · 2023 填空 / 课件：PSTN 带宽 3000 Hz，4 种状态，无噪声最多多少位/秒？若信噪比 20 dB，理论最大速率？</summary><div class="ans">
+    <p>无噪声用奈奎斯特：<code>2 × 3000 × log₂4 = 12000 bps</code>。</p>
+    <p>有噪声用香农：<code>3000 × log₂(1+100) = 3000 × log₂101 ≈ 19,975 bps</code>（课件写作 19 936 bps，近似误差，答 3000×log₂101 即可）。</p>
+  </div></details>
+  <details><summary>例 4 · 课件：电话线带宽 3000 Hz，信噪比 3162，最大比特率？</summary><div class="ans">
+    <p><code>C = 3000 × log₂(1 + 3162) = 3000 × log₂3163 ≈ 3000 × 11.63 ≈ 34.86 kbps</code>。想更快只能加带宽或提高信噪比。</p>
+  </div></details>
+  <details><summary>例 5 · 课件：SNR<sub>dB</sub> = 36，带宽 2 MHz，理论容量？</summary><div class="ans">
+    <p>S/N = 10^3.6 ≈ 3981。<code>C = 2×10⁶ × log₂3982 ≈ 2×10⁶ × 11.96 ≈ 24 Mbps</code>。</p>
+  </div></details>
+  <details><summary>例 6 · 课件：无噪声信道带宽 20 kHz，要传 265 kbps，需要多少电平？</summary><div class="ans">
+    <p><code>265000 = 2 × 20000 × log₂V</code> → <code>log₂V = 6.625</code> → V ≈ 98.7。</p>
+    <p>不是 2 的整数次幂，所以要么增加到 <strong>128 级</strong>（速率 280 kbps），要么降低速率用 64 级（240 kbps）。</p>
+  </div></details>
+  <details><summary>例 7 · 课件：信噪比几乎为 0 的极端噪声信道，容量是多少？</summary><div class="ans">
+    <p><code>C = B log₂(1 + 0) = B × 0 = 0</code>。无论带宽多大都收不到数据。</p>
+  </div></details>
+  <div class="box tip"><span class="tag tip">奈奎斯特的两个推论（课件）</span><ol><li>带宽和编码方式定了，极限速率就定了，除非改善带宽。</li><li>提高比特率只有两条路：<strong>加带宽</strong>，或者用<strong>更多电平的编码</strong>（但香农给了天花板）。</li></ol></div>
+
+  <h3 id="c2-media">2.4 传输介质<span class="stars">★★</span></h3>
+  <p>分两大类：<strong>有导向</strong>（信号沿着实物走：双绞线、同轴电缆、电力线、光纤）和<strong>无导向</strong>（无线：无线电、微波、红外、光、卫星）。</p>
+  <h4>双绞线 Twisted Pair</h4>
+  <ul>
+    <li>两根绝缘铜线<strong>绞在一起</strong>：绞合能抵消电磁辐射、减少相邻线对间的干扰。</li>
+    <li>最常见，用于局域网和电话线。<strong>5 类（超五类）UTP 有 4 对线</strong>（2023 填空）。类别越高（3→5→6→7）绞得越密、带宽越高。</li>
+    <li><strong>UTP</strong>（非屏蔽）便宜、好装；<strong>STP</strong>（屏蔽）多一层屏蔽，衰减和噪音小、能传更远，但贵、重、难装。</li>
+    <li>接口：<strong>RJ-45</strong>（8 针，网线）、<strong>RJ-11</strong>（电话线）。</li>
+  </ul>
+  <h4>同轴电缆 Coaxial Cable</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 120" role="img" aria-label="同轴电缆结构：铜芯、绝缘层、编织外导体、塑料外套">
+      <g font-size="12">
+        <rect x="40" y="20" width="420" height="80" rx="40" fill="var(--surface-2)" stroke="var(--muted)"/>
+        <rect x="120" y="30" width="340" height="60" rx="30" fill="var(--l1s)" stroke="var(--l1)" stroke-dasharray="3 2"/>
+        <rect x="200" y="40" width="260" height="40" rx="20" fill="var(--surface)" stroke="var(--line)"/>
+        <rect x="280" y="54" width="230" height="12" rx="6" fill="var(--l1)"/>
+        <text x="80" y="64" text-anchor="middle" class="mut">塑料外套</text>
+        <text x="160" y="64" text-anchor="middle" style="fill:var(--l1)">编织外导体</text>
+        <text x="240" y="64" text-anchor="middle" class="mut">绝缘层</text>
+        <text x="560" y="64" font-weight="700" style="fill:var(--l1)">铜芯</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>比双绞线屏蔽更好、带宽更高、距离更远。基带同轴 <strong>50 Ω</strong>，传数字信号；宽带同轴 <strong>75 Ω</strong>，传模拟信号（有线电视）。缺点：粗、怕弯折、贵；局域网里已被双绞线取代，长途已被光纤取代。</figcaption>
+  </figure>
+  <p><strong>电力线</strong>：家里本来就有，用着方便，但对传数据来说“很糟糕”（噪声大）。</p>
+  <h4>光纤 Fiber</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 210" role="img" aria-label="光纤全反射，多模光纤和单模光纤对比">
+      <g font-size="12">
+        <text x="20" y="20" font-weight="700">多模光纤（纤芯粗）</text>
+        <rect x="20" y="30" width="600" height="60" fill="var(--surface-2)"/>
+        <rect x="20" y="40" width="600" height="40" fill="var(--accent-soft)"/>
+        <polyline points="20,60 80,40 160,80 240,40 320,80 400,40 480,80 560,40 620,58" fill="none" stroke="var(--exam)" stroke-width="1.8"/>
+        <polyline points="20,60 120,40 220,80 320,40 420,80 520,40 620,80" fill="none" stroke="var(--l4)" stroke-width="1.8"/>
+        <line x1="20" y1="60" x2="620" y2="60" stroke="var(--ex)" stroke-width="1.8"/>
+                <text x="20" y="125" font-weight="700">单模光纤（纤芯极细，只走一条路）</text>
+        <rect x="20" y="135" width="600" height="40" fill="var(--surface-2)"/>
+        <rect x="20" y="151" width="600" height="8" fill="var(--accent-soft)"/>
+        <line x1="20" y1="155" x2="620" y2="155" stroke="var(--exam)" stroke-width="2"/>
+        <text x="320" y="200" text-anchor="middle" class="mut">光在纤芯和包层的分界面发生全反射，被“关”在纤芯里前进</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <p>光纤系统三部分：<strong>光源</strong>（LED 或激光器）、<strong>传输介质</strong>（极细的石英玻璃）、<strong>检测器</strong>（光电二极管，把光变成电）。有光 = 1，无光 = 0。</p>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>单模光纤</th><th>多模光纤</th></tr></thead>
+    <tbody>
+      <tr><td>纤芯</td><td><strong>细</strong>，色散小</td><td><strong>粗</strong>，色散大</td></tr>
+      <tr><td>光源</td><td>激光器</td><td>LED 发光二极管</td></tr>
+      <tr><td>传输模式</td><td>只允许一种模式</td><td>上百种模式（不同角度的光线）</td></tr>
+      <tr><td>距离</td><td><strong>长</strong>，百公里以上</td><td>短，通常 &lt; 2 km</td></tr>
+      <tr><td>带宽</td><td>更高</td><td>较低</td></tr>
+      <tr><td>成本</td><td>贵</td><td>便宜</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点</span><ul>
+    <li>2021：单模与多模的区别 → <strong>多模光纤比单模光纤的纤芯直径粗</strong>（单模速率更高、距离更远、更贵）。</li>
+    <li>2023：抗电磁干扰最好的介质 → <strong>光缆</strong>（传的是光，不受电磁干扰）。</li>
+    <li>光纤优点：带宽极大（THz 级）、损耗极小、不怕电磁干扰、难以窃听、轻。缺点：安装难、贵、只能单向（双向要两根）。</li>
+    <li>衰减（dB）= 10 log₁₀(发送功率/接收功率)；能量损失一半 ≈ 3 dB。</li>
+  </ul></div>
+  <div class="tbl"><table>
+    <thead><tr><th>属性</th><th>电线（铜）</th><th>光纤</th></tr></thead>
+    <tbody>
+      <tr><td>距离</td><td>短（几百米）</td><td>长（几十公里）</td></tr>
+      <tr><td>带宽</td><td>中等</td><td>非常高</td></tr>
+      <tr><td>成本</td><td>便宜</td><td>稍贵</td></tr>
+      <tr><td>方便</td><td>好用</td><td>没那么好用</td></tr>
+      <tr><td>安全</td><td>容易搭线窃听</td><td>难以窃听</td></tr>
+    </tbody>
+  </table></div>
+  <div class="formula"><span class="big">λ × f = c</span>　<span class="cap" style="display:inline">c = 3×10⁸ m/s</span><br>
+  <span class="big">Δf = c·Δλ / λ²</span>
+  <span class="cap">波长范围 Δλ 对应的频带宽度。老作业 2-1：λ = 1 μm 处 0.1 μm 的光谱有多少带宽？Δf = 3×10⁸ × 0.1×10⁻⁶ / (10⁻⁶)² = 3×10¹³ Hz = <strong>30 THz</strong>（30000 GHz）。</span></div>
+
+  <h4 id="c2-wireless">无线传输</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 130" role="img" aria-label="电磁频谱：无线电、微波、红外、可见光，频率从低到高">
+      <defs><linearGradient id="spec" x1="0" x2="1"><stop offset="0" stop-color="var(--l1)"/><stop offset=".45" stop-color="var(--l3)"/><stop offset=".75" stop-color="var(--l4)"/><stop offset="1" stop-color="var(--l5)"/></linearGradient></defs>
+      <rect x="20" y="40" width="600" height="22" rx="4" fill="url(#spec)" opacity=".85"/>
+      <g font-size="12" text-anchor="middle">
+        <text x="110" y="30" font-weight="700">无线电 Radio</text>
+        <text x="300" y="30" font-weight="700">微波 Microwave</text>
+        <text x="460" y="30" font-weight="700">红外</text>
+        <text x="570" y="30" font-weight="700">可见光</text>
+        <text x="110" y="82" class="mut">穿墙好·全向·远</text>
+        <text x="300" y="82" class="mut">直线传播·WiFi/4G/5G/卫星</text>
+        <text x="460" y="82" class="mut">短距·遥控器·不穿墙</text>
+        <text x="570" y="82" class="mut">激光·视距</text>
+        <text x="20" y="112" text-anchor="start" class="mut">频率低 / 波长长</text>
+        <text x="620" y="112" text-anchor="end" class="mut">频率高 / 波长短 →</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>频率越高，可用带宽越大，但越像光一样走直线、越容易被墙和雨挡住。</figcaption>
+  </figure>
+  <ul>
+    <li><strong>无线电</strong>：低频（VLF/LF/MF）沿地球表面传播；高频 HF 被<strong>电离层反射</strong>，能传很远。容易穿过建筑物。</li>
+    <li><strong>微波</strong>：带宽大，室内 WiFi、室外 3G/4G/5G 和卫星都用。会被物体衰减和反射（多径），信号强度随移动变化很大，所以无线链路的速率不像有线那样固定。</li>
+    <li><strong>光传输</strong>：激光点对点，方向性极强、带宽大，但空气对流、雨雾会干扰。</li>
+    <li><strong>频谱要管理</strong>：大部分频段需要许可证（拍卖）。但 <strong>ISM 频段</strong>（工业、科学、医疗；如 900 MHz、<strong>2.4 GHz</strong>、5 GHz）免许可，低功率可随便用，<strong>WiFi、蓝牙、Zigbee</strong> 都在这里。</li>
+  </ul>
+  <div class="grid2">
+    <div class="mini"><h5>无线</h5>部署简单便宜；天然支持移动和广播；但会互相干扰，信号强度和速率变化大。</div>
+    <div class="mini"><h5>有线 / 光纤</h5>点对点容易做到固定速率；但长距离铺设贵；不方便移动和广播。</div>
+  </div>
+
+  <h4 id="c2-sat">通信卫星</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 190" role="img" aria-label="三种卫星轨道高度：低轨 LEO 约 500 到 2000 公里，中轨 MEO 约 5000 到 20000 公里，地球同步 GEO 35786 公里">
+      <g font-size="12">
+        <line x1="60" y1="150" x2="620" y2="150" stroke="var(--ink)"/>
+        <g class="mono" font-size="11" text-anchor="middle">
+          <text x="60" y="168">0</text><text x="215" y="168">10000</text><text x="371" y="168">20000</text><text x="526" y="168">30000</text>
+        </g>
+        <text x="620" y="182" text-anchor="end" class="mut">离地高度（km）</text>
+        <rect x="68" y="30" width="23" height="26" fill="var(--l2)"/>
+        <text x="100" y="48" font-weight="700" style="fill:var(--l2)">LEO 低轨 500–2000 km　铱星 750 km、星链</text>
+        <rect x="138" y="70" width="234" height="26" fill="var(--l3)" opacity=".85"/>
+        <text x="146" y="88" font-weight="700" style="fill:var(--surface)">MEO 中轨（GPS ≈ 20000 km）</text>
+        <rect x="614" y="110" width="6" height="26" fill="var(--exam)"/>
+        <text x="604" y="128" text-anchor="end" font-weight="700" style="fill:var(--exam)">GEO 地球同步 35 786 km</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>线性刻度，LEO 离地面近得几乎贴着轴。</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>类型</th><th>高度</th><th>时延（往返）</th><th>覆盖全球需要</th><th>特点</th></tr></thead>
+    <tbody>
+      <tr><td><strong>GEO</strong> 地球同步</td><td>35 786 km，赤道上空</td><td>约 270 ms</td><td><strong>3 颗</strong></td><td>相对地面静止，24 小时转一圈；间隔 ≥2° → 最多约 180 颗；轨道槽和频率由 ITU 分配</td></tr>
+      <tr><td><strong>MEO</strong> 中轨</td><td>两条范艾伦辐射带之间</td><td>35–85 ms</td><td>约 10 颗</td><td>主要用于导航（GPS）</td></tr>
+      <tr><td><strong>LEO</strong> 低轨</td><td>几百到 2000 km</td><td>1–7 ms</td><td>约 50 颗以上</td><td>时延小，移动快需要很多颗：铱星（66 颗，<strong>在太空中星间转发</strong>）、全球星（48 颗，<strong>弯管式，在地面转发</strong>）、星链</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>GEO 端到端时延 250–300 ms，典型 270 ms；<strong>VSAT</strong>（甚小口径终端，天线 ≤1 m，功率 1 W）之间要经过地面 hub 中继，时延翻倍到约 <strong>540 ms</strong>。</li>
+    <li>卫星特点：覆盖面广、天然广播、能“随时随地”通信；但成本高、寿命 8–10 年、时延大、带宽有限。Ku、Ka 频段容易受<strong>雨衰</strong>影响。</li>
+    <li>卫星 vs 光纤：卫星能快速在任何地方建立通信、适合广播；光纤长距离带宽巨大，但铺设难、贵。</li>
+  </ul>
+
+
+  <h3 id="c2-code">2.5 基带传输：线路编码<span class="stars">★★★</span></h3>
+  <p><strong>基带信号</strong>：从 0 Hz 到某个最高频率的信号，常用于有线（直接把电压加在线上）。<strong>通带信号</strong>：被“搬”到某个高频范围的信号，所有无线和光传输都是通带（见 2.6）。</p>
+  <p>线路编码就是“用什么电压波形代表 0 和 1”。好的编码要考虑三件事：</p>
+  <div class="grid4">
+    <div class="mini"><h5>带宽效率</h5>一个码元能带几位？电平越多，同样带宽传得越多。</div>
+    <div class="mini"><h5>时钟恢复（自同步）</h5>接收方要知道每一位从哪开始、到哪结束。长串 0 或 1 没有跳变，接收方会数错位数。</div>
+    <div class="mini"><h5>直流分量 / 基线漂移</h5>电压长时间不变，产生接近 0 Hz 的分量，有些系统过不去，接收端判决门限会漂。</div>
+  </div>
+  <div class="tool">
+    <h5>动手画波形：输入比特，自动画出 6 种编码</h5>
+    <div class="row">
+      <label for="lcBits">比特串（最多 24 位）<input type="text" id="lcBits" class="bits" value="10110010" maxlength="24" inputmode="numeric"></label>
+      <button class="btn ghost" type="button" id="lcEx">换一个例子</button>
+    </div>
+    <div class="svgbox" style="margin-top:.7rem"><svg id="lcSvg" class="wide" role="img" aria-label="线路编码波形"></svg></div>
+    <p class="muted" style="font-size:.84rem;margin-bottom:0">约定按课件：NRZ 高=1；NRZI 遇 1 翻转；曼彻斯特 1=中间高→低，0=中间低→高；差分曼彻斯特每位中间必跳，<strong>位开始处有跳变表示 0、无跳变表示 1</strong>（初始电平设为高）；AMI 的 1 交替正负。考试若给了别的约定，以题目为准。</p>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>编码</th><th>规则</th><th>优点</th><th>缺点</th></tr></thead>
+    <tbody>
+      <tr><td><strong>NRZ</strong> 不归零</td><td>高电平=1，低电平=0；表示完一位电压不回零</td><td>最简单，编码效率高</td><td>没有自同步能力：长串 0/1 没跳变，收发双方会失步；有直流分量</td></tr>
+      <tr><td><strong>RZ</strong> 归零</td><td>正电平=1，负电平=0，每位<strong>后半段回到 0</strong>（三种电平）</td><td>每位都有跳变，<strong>自同步</strong>（时钟藏在数据里）</td><td>很大一部分带宽浪费在“归零”上</td></tr>
+      <tr><td><strong>NRZI</strong></td><td><strong>遇 1 翻转，遇 0 不变</strong></td><td>连续的 1 有跳变；USB 用它</td><td>连续的 0 还是没跳变 → 配合 4B/5B 解决</td></tr>
+      <tr><td><strong>曼彻斯特</strong></td><td>每位<strong>中间必有跳变</strong>：时钟与数据异或；课件规定 1 = 高→低，0 = 低→高</td><td>自同步；经典以太网用它</td><td>每位两个码元，需要 NRZ 的 <strong>2 倍带宽</strong>（效率 50%）</td></tr>
+      <tr><td><strong>差分曼彻斯特</strong></td><td>中间必跳（只做时钟）；看<strong>位开始处</strong>：有跳变 = 0，无跳变 = 1</td><td>自同步；只看“有没有跳变”，抗干扰更好</td><td>同样带宽减半</td></tr>
+      <tr><td><strong>AMI</strong>（双极）</td><td>0 = 零电平；1 交替用正、负电平</td><td>无直流分量；T1 线路用它</td><td>长串 0 无跳变</td></tr>
+      <tr><td>伪三元</td><td>和 AMI 相反：1 = 零电平，0 交替正负</td><td colspan="2">了解即可</td></tr>
+      <tr><td><strong>4B/5B</strong></td><td>每 4 位查表换成 5 位，保证不出现超过 3 个连续 0，再用 NRZI 发送</td><td>解决 NRZI 长串 0 问题，开销只有 25%</td><td>编码效率 <strong>4/5 = 80%</strong></td></tr>
+      <tr><td>2B1Q（多电平）</td><td>2 位用 1 个四电平码元表示</td><td colspan="2">xByQ：x 位数据用 y 个码元；单个码元表达位数越多越高效</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点</span><ul>
+    <li>2021 填空：4B/5B 编码效率 = <strong>0.8（80%）</strong>。</li>
+    <li>2022 简答：描述 NRZ 和 RZ 的原理和优缺点 → 直接背上表前两行。</li>
+    <li>极性分类：<strong>单极（unipolar）</strong>信号只在轴的一侧；<strong>极性（polar）</strong>在两侧（NRZ-L、NRZ-I、RZ、曼彻斯特）；<strong>双极（bipolar）</strong>有正、负、零三种电平（AMI、伪三元）。</li>
+  </ul></div>
+  <details><summary>4B/5B 对照表（看懂即可，不用背）</summary><div class="ans">
+    <div class="tbl"><table class="mono"><tbody>
+      <tr><td>0000→11110</td><td>0001→01001</td><td>0010→10100</td><td>0011→10101</td></tr>
+      <tr><td>0100→01010</td><td>0101→01011</td><td>0110→01110</td><td>0111→01111</td></tr>
+      <tr><td>1000→10010</td><td>1001→10011</td><td>1010→10110</td><td>1011→10111</td></tr>
+      <tr><td>1100→11010</td><td>1101→11011</td><td>1110→11100</td><td>1111→11101</td></tr>
+    </tbody></table></div>
+  </div></details>
+
+  <h3 id="c2-pass">2.6 通带传输：调制与星座图<span class="stars">★★</span></h3>
+  <p>无线和光纤不能直接加 0/1 电压，要找一个高频<strong>载波</strong>（正弦波），改变它的三要素之一来表示比特：</p>
+  <figure>
+    <div class="svgbox"><svg id="modFig" class="wide" viewBox="0 0 660 300" role="img" aria-label="ASK 振幅键控、FSK 频移键控、PSK 相移键控波形"></svg></div>
+    <figcaption><strong>ASK</strong> 振幅键控：1 用大振幅、0 用小振幅；<strong>FSK</strong> 频移键控：1 和 0 用不同频率；<strong>PSK</strong> 相移键控：0 的波形反相（相位差 180°）。2023 填空给图让你认：(a) 振幅调制、(b) 频率调制。</figcaption>
+  </figure>
+  <h4>星座图：一个码元带更多位</h4>
+  <p>同时改变<strong>振幅和相位</strong>，就能得到更多种码元状态（QAM，正交调幅）。星座图上每个点 = 一种码元：点到原点的距离 = 振幅，角度 = 相位。</p>
+  <div class="grid4">
+    <div class="mini"><h5>BPSK</h5><svg id="cs1" viewBox="0 0 140 140" role="img" aria-label="BPSK 星座图"></svg>2 个点，<strong>1 位/码元</strong>，只变相位</div>
+    <div class="mini"><h5>QPSK</h5><svg id="cs2" viewBox="0 0 140 140" role="img" aria-label="QPSK 星座图"></svg>4 个点，<strong>2 位/码元</strong>，只变相位</div>
+    <div class="mini"><h5>QAM-16</h5><svg id="cs3" viewBox="0 0 140 140" role="img" aria-label="QAM-16 星座图"></svg>16 个点，<strong>4 位/码元</strong>，振幅+相位</div>
+    <div class="mini"><h5>QAM-64</h5><svg id="cs4" viewBox="0 0 140 140" role="img" aria-label="QAM-64 星座图"></svg>64 个点，<strong>6 位/码元</strong></div>
+  </div>
+  <div class="box tip"><span class="tag tip">格雷码 Gray code</span><p>给星座点分配比特时，让<strong>相邻的点只差 1 位</strong>（如 QAM-16 一行是 00、01、11、10）。噪声让接收方误判成相邻的点时，只错 1 位而不是好几位。格雷码首尾也只差一位，又叫循环码，是一种<strong>可靠性编码</strong>。</p></div>
+  <p>接收方解调时，看收到的点离星座图上哪个点最近（欧氏距离），就判成哪个。点越多越容易判错，所以噪声大时只能用少的点数，这正是香农定理的直观体现。</p>
+
+  <h3 id="c2-mux">2.7 多路复用：FDM、TDM、WDM<span class="stars">★★★</span></h3>
+  <p><strong>复用</strong> = 多路信号共享一条信道（发送端复用器 MUX 合并，接收端分用器 DEMUX 拆开）。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 200" role="img" aria-label="FDM 按频率划分，TDM 按时间划分，CDMA 按码字划分">
+      <g font-size="12">
+        <!-- FDM -->
+        <g transform="translate(20 10)">
+          <text x="85" y="14" text-anchor="middle" font-weight="700">FDM 频分</text>
+          <line x1="20" y1="160" x2="190" y2="160" stroke="var(--ink)"/><line x1="20" y1="160" x2="20" y2="25" stroke="var(--ink)"/>
+          <text x="190" y="176" text-anchor="end" class="mut">时间 t</text><text x="24" y="34" class="mut">频率 f</text>
+          <rect x="22" y="44" width="166" height="30" fill="var(--l3s)" stroke="var(--l3)"/><text x="105" y="64" text-anchor="middle">用户 3</text>
+          <rect x="22" y="84" width="166" height="30" fill="var(--l2s)" stroke="var(--l2)"/><text x="105" y="104" text-anchor="middle">用户 2</text>
+          <rect x="22" y="124" width="166" height="30" fill="var(--l5s)" stroke="var(--l5)"/><text x="105" y="144" text-anchor="middle">用户 1</text>
+          <text x="196" y="82" font-size="10" class="mut">保护带</text>
+        </g>
+        <!-- TDM -->
+        <g transform="translate(240 10)">
+          <text x="85" y="14" text-anchor="middle" font-weight="700">TDM 时分</text>
+          <line x1="20" y1="160" x2="190" y2="160" stroke="var(--ink)"/><line x1="20" y1="160" x2="20" y2="25" stroke="var(--ink)"/>
+          <text x="190" y="176" text-anchor="end" class="mut">时间 t</text><text x="24" y="34" class="mut">频率 f</text>
+          <rect x="22" y="44" width="26" height="110" fill="var(--l5s)" stroke="var(--l5)"/><rect x="50" y="44" width="26" height="110" fill="var(--l2s)" stroke="var(--l2)"/><rect x="78" y="44" width="26" height="110" fill="var(--l3s)" stroke="var(--l3)"/>
+          <rect x="106" y="44" width="26" height="110" fill="var(--l5s)" stroke="var(--l5)"/><rect x="134" y="44" width="26" height="110" fill="var(--l2s)" stroke="var(--l2)"/><rect x="162" y="44" width="26" height="110" fill="var(--l3s)" stroke="var(--l3)"/>
+          <g text-anchor="middle"><text x="35" y="104">1</text><text x="63" y="104">2</text><text x="91" y="104">3</text><text x="119" y="104">1</text><text x="147" y="104">2</text><text x="175" y="104">3</text></g>
+        </g>
+        <!-- CDMA -->
+        <g transform="translate(460 10)">
+          <text x="85" y="14" text-anchor="middle" font-weight="700">CDMA 码分</text>
+          <line x1="20" y1="160" x2="190" y2="160" stroke="var(--ink)"/><line x1="20" y1="160" x2="20" y2="25" stroke="var(--ink)"/>
+          <text x="190" y="176" text-anchor="end" class="mut">时间 t</text><text x="24" y="34" class="mut">频率 f</text>
+          <rect x="22" y="44" width="166" height="110" fill="var(--l5s)" stroke="var(--l5)" opacity=".9"/>
+          <rect x="30" y="52" width="166" height="110" fill="var(--l2s)" stroke="var(--l2)" opacity=".7"/>
+          <rect x="38" y="60" width="150" height="94" fill="var(--l3s)" stroke="var(--l3)" opacity=".7"/>
+          <text x="113" y="112" text-anchor="middle">同频同时，用码字区分</text>
+        </g>
+      </g>
+    </svg>
+    </div>
+    <figcaption>课件比喻：TDM 像一屋子人<strong>轮流</strong>说话；FDM 像几对人用<strong>不同音高</strong>同时说；CDMA 像几对人同时说<strong>不同语言</strong>，你只听得懂法语就只挑出法语。</figcaption>
+  </figure>
+  <h4>FDM 频分多路复用</h4>
+  <p>把信道带宽切成多个互不重叠的子频带，每路信号调制到不同载波频率上；相邻子信道之间留<strong>保护带（guard band）</strong>防止干扰。广播电台、有线电视就是 FDM。</p>
+  <div class="box ex"><span class="tag ex">例题 · 老作业 2-3</span><p>10 路信号各需 4000 Hz，用 FDM 复用，保护带 400 Hz，最小带宽？</p><p>10 路之间只需要 <strong>9</strong> 条保护带：<code>4000 × 10 + 400 × 9 = 43,600 Hz</code>。</p></div>
+  <p><strong>OFDM 正交频分复用</strong>：子载波彼此“正交”，频谱可以部分重叠而不互相干扰（每个子载波的峰值正好落在别人的零点），比普通 FDM 更省频带。<strong>802.11 WiFi、4G、ADSL2</strong> 都用它。</p>
+  <p><strong>WDM 波分复用</strong>：就是光纤上的 FDM，不同波长（颜色）的光在一根光纤里同时传。<strong>光纤通信用波分复用</strong>（2023 选择）。</p>
+  <h4>TDM 时分多路复用</h4>
+  <p>大家用同一个频率，按固定顺序<strong>轮流</strong>占用时间片。电话网、蜂窝网大量使用。</p>
+  <div class="tbl"><table>
+    <thead><tr><th>同步 TDM</th><th>统计 TDM（异步 TDM）</th></tr></thead>
+    <tbody><tr><td>时隙预先分好、固定不变；某用户没数据，他的时隙也空着 → 浪费</td><td>按需动态分配时隙，谁有数据给谁；还能多给某用户几个时隙提高速率。（就是 1.1 的“统计复用”）</td></tr></tbody>
+  </table></div>
+  <p class="muted"><strong>TDM vs TDMA</strong>：都把时间切成时隙。TDM 用于“复用”，时隙由发送方预先排好；TDMA（时分多址）用于“多址接入”，多个节点争用有限的时隙。课件比喻：商家自己排好供货顺序是 TDM；谁抢到谁供货是 TDMA。</p>
+  <div class="box exam"><span class="tag exam">简答 · 2022</span><p>列举四种多路复用并说明原理：<strong>时分</strong>（按时间片轮流）、<strong>频分</strong>（按不重叠的频带，加保护带）、<strong>波分</strong>（一根光纤里传多个波长）、<strong>码分</strong>（每个用户一个相互正交的码片序列，同时同频发送）。</p></div>
+
+  <h3 id="c2-cdma">2.8 码分多址 CDMA<span class="stars">★★★★</span></h3>
+  <p>CDMA 每年都考计算，且题型固定。步骤只有四步：</p>
+  <ol>
+    <li><strong>转双极</strong>：码片里的 <code>0 → −1</code>，<code>1 → +1</code>。例：<code>00101110 → (−1 −1 +1 −1 +1 +1 +1 −1)</code>。</li>
+    <li><strong>发送</strong>：发比特 1 → 发自己的码片序列；发比特 0 → 发码片的<strong>反码</strong>（每位取负）；不发 → 全 0。</li>
+    <li><strong>信道叠加</strong>：所有站同时发的序列<strong>按位相加</strong>，得到接收序列 S。</li>
+    <li><strong>解码</strong>：想知道站 X 发了什么，算内积 <code>S·X / m</code>（对应位相乘再求和，除以码片长度 m）：结果 <strong>+1 → 发了 1</strong>，<strong>−1 → 发了 0</strong>，<strong>0 → 没发</strong>。</li>
+  </ol>
+  <div class="formula">正交性：S·T = (1/m) Σ SᵢTᵢ = 0（不同站）　S·S = 1　S·S̄ = −1
+<span class="cap">因为不同站的码片两两正交，别人的信号在内积里全部抵消成 0，只剩下自己的。</span></div>
+  <div class="tool">
+    <h5>CDMA 计算器（默认值 = 2021/2022 期中真题）</h5>
+    <div id="cdmaRows" style="display:grid;gap:.5rem"></div>
+    <div class="row" style="margin-top:.6rem"><button class="btn" type="button" id="cdmaGo">计算</button><button class="btn ghost" type="button" id="cdma4">载入 2023 四码片题（T0）</button><button class="btn ghost" type="button" id="cdmaReset">恢复真题默认</button></div>
+    <div class="out" id="cdmaOut" aria-live="polite"></div>
+  </div>
+  <div class="box ex"><span class="tag ex">例题 · 2021/2022 期中原题</span>
+    <p>站点码片 A：00101110　B：01011100　C：00011011　D：01000010。A 发 0，C、D 发 1，接收方收到什么？</p>
+    <p>A 发 0（取反）：<code>(+1 +1 −1 +1 −1 −1 −1 +1)</code><br>C 发 1：<code>(−1 −1 −1 +1 +1 −1 +1 +1)</code><br>D 发 1：<code>(−1 +1 −1 −1 −1 −1 +1 −1)</code><br>按位相加：<strong><code>(−1 +1 −3 +1 −1 −3 +1 +1)</code></strong></p>
+    <p>反过来验证（老作业 2-5 就是这个反向问题）：用 B 的码片 <code>(−1 +1 −1 +1 +1 +1 −1 −1)</code> 做内积 = (1+1+3+1−1−3−1−1)/8 = 0 → B 没发。</p>
+  </div>
+  <div class="box ex"><span class="tag ex">例题 · 2023 分析题（10 分）</span>
+    <p>四站 4 位码片：A 1001、B 1010、C 1100、D 1111；在 T0~T3 依次发送 A:1010、B:1001、C:0100、D:0110。求每个时间片收到的信号。</p>
+    <div class="tbl"><table class="mono">
+      <thead><tr><th>站</th><th>T0</th><th>T1</th><th>T2</th><th>T3</th></tr></thead>
+      <tbody>
+        <tr><td>A</td><td>(+1 −1 −1 +1)</td><td>(−1 +1 +1 −1)</td><td>(+1 −1 −1 +1)</td><td>(−1 +1 +1 −1)</td></tr>
+        <tr><td>B</td><td>(+1 −1 +1 −1)</td><td>(−1 +1 −1 +1)</td><td>(−1 +1 −1 +1)</td><td>(+1 −1 +1 −1)</td></tr>
+        <tr><td>C</td><td>(−1 −1 +1 +1)</td><td>(+1 +1 −1 −1)</td><td>(−1 −1 +1 +1)</td><td>(−1 −1 +1 +1)</td></tr>
+        <tr><td>D</td><td>(−1 −1 −1 −1)</td><td>(+1 +1 +1 +1)</td><td>(+1 +1 +1 +1)</td><td>(−1 −1 −1 −1)</td></tr>
+        <tr><th>收到</th><th>(0 −4 0 0)</th><th>(0 +4 0 0)</th><th>(0 0 0 +4)</th><th>(−2 −2 +2 −2)</th></tr>
+      </tbody>
+    </table></div>
+    <p>方法：先把每站码片转成双极；每个时间片看该站这一位是 1 还是 0，是 1 原样、是 0 取反；最后四行按位相加。</p>
+  </div>
+  <p>名词解释（2020）：<strong>CDMA</strong> 码分多址，给每个用户分配一个特定的码片序列，各码片序列相互正交，允许多路信号<strong>在同一时间、使用相同带宽</strong>同时传输，接收方用码片做相关运算分离出自己的信号。3G 网络广泛使用。</p>
+
+  <h3 id="c2-pstn">2.9 公共交换电话网 PSTN<span class="stars">★★</span></h3>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 690 170" role="img" aria-label="电话系统结构：电话经本地回路连到端局，端局经长途连接干线到长途局，长途局之间用高速干线">
+      <g font-size="12" text-anchor="middle">
+        <circle cx="30" cy="60" r="16" fill="var(--surface-2)" stroke="var(--muted)"/><text x="30" y="64">话机</text>
+        <rect x="90" y="40" width="90" height="40" rx="6" fill="var(--l2s)" stroke="var(--l2)"/><text x="135" y="65">端局</text>
+        <rect x="230" y="40" width="90" height="40" rx="6" fill="var(--l3s)" stroke="var(--l3)"/><text x="275" y="65">长途局</text>
+        <rect x="370" y="40" width="90" height="40" rx="6" fill="var(--l3s)" stroke="var(--l3)"/><text x="415" y="65">长途局</text>
+        <rect x="510" y="40" width="90" height="40" rx="6" fill="var(--l2s)" stroke="var(--l2)"/><text x="555" y="65">端局</text>
+        <circle cx="660" cy="60" r="16" fill="var(--surface-2)" stroke="var(--muted)"/><text x="660" y="64">话机</text>
+        <line x1="46" y1="60" x2="90" y2="60" stroke="var(--l1)" stroke-width="2" stroke-dasharray="4 3"/>
+        <line x1="600" y1="60" x2="644" y2="60" stroke="var(--l1)" stroke-width="2" stroke-dasharray="4 3"/>
+        <line x1="180" y1="60" x2="230" y2="60" stroke="var(--muted)" stroke-width="2"/>
+        <line x1="460" y1="60" x2="510" y2="60" stroke="var(--muted)" stroke-width="2"/>
+        <line x1="320" y1="60" x2="370" y2="60" stroke="var(--accent)" stroke-width="5"/>
+        <text x="68" y="110" style="fill:var(--l1)" font-weight="700">本地回路</text><text x="68" y="126" class="mut">双绞线·模拟</text>
+        <text x="205" y="110">长途连接干线</text>
+        <text x="345" y="110" style="fill:var(--accent)" font-weight="700">干线 trunk</text><text x="345" y="126" class="mut">光纤·数字·TDM</text>
+        <text x="555" y="110" class="mut">交换局在干线间转接呼叫</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>电话系统三大部件：<strong>本地回路</strong>（进入家庭的双绞线，模拟信号）、<strong>干线</strong>（连接交换局的光纤，数字信号）、<strong>交换局</strong>（把呼叫从一条干线转到另一条）。两台电脑经电话网通信，信号要经历 数字→模拟→数字→模拟→数字 多次转换。</figcaption>
+  </figure>
+  <p class="muted"><strong>电话的政治</strong>（了解）：1984 年 AT&T 被拆分。美国分成很多 <strong>LATA</strong>（本地接入和传输区），区内由 <strong>LEC</strong>（本地交换运营商）服务，区间由 <strong>IXC</strong>（长途运营商）承接，IXC 在每个 LATA 设 <strong>POP</strong>（入网点），用户可以自由选择 IXC，目的是促进竞争。</p>
+  <h4>本地回路上网的三种方式</h4>
+  <div class="grid4">
+    <div class="mini"><h5>① 电话 Modem</h5>把数字数据调制成 300–3400 Hz 的模拟信号，在 3.1 kHz 的话音通道上传，<strong>&lt; 56 kbps</strong>。最早的上网方式。</div>
+    <div class="mini"><h5>② DSL / ADSL</h5>在同一根电话线上，用<strong>话音以外的高频段</strong>传数据，所以<strong>打电话和上网可以同时进行</strong>。</div>
+    <div class="mini"><h5>③ FTTH 光纤到户</h5>光纤铺到家；一个波长被多户共享；光纤网是<strong>无源</strong>的（无放大器），叫 PON。</div>
+  </div>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 120" role="img" aria-label="ADSL 频谱：0 到 4 千赫话音，25 到 138 千赫上行，138 千赫到 1.1 兆赫下行">
+      <g font-size="12" text-anchor="middle">
+        <line x1="20" y1="80" x2="620" y2="80" stroke="var(--ink)"/>
+        <rect x="22" y="40" width="40" height="40" fill="var(--surface-2)" stroke="var(--muted)"/><text x="42" y="64">话音</text>
+        <rect x="90" y="40" width="100" height="40" fill="var(--l4s)" stroke="var(--l4)"/><text x="140" y="64" style="fill:var(--l4)" font-weight="700">上行</text>
+        <rect x="200" y="20" width="415" height="60" fill="var(--l3s)" stroke="var(--l3)"/><text x="407" y="56" style="fill:var(--l3)" font-weight="700">下行（占大部分带宽）</text>
+        <g class="mono" font-size="11"><text x="22" y="98">0</text><text x="62" y="98">4k</text><text x="90" y="98">25k</text><text x="200" y="98">138k</text><text x="612" y="98">1.1M Hz</text></g>
+        <text x="320" y="116" class="mut">示意图，不按比例；ADSL2 在 1.1 MHz 以内使用 OFDM</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <div class="box exam"><span class="tag exam">考点 · 2020/2022 同一题</span>
+    <p>下列对 ADSL 描述<strong>错误</strong>的是：<strong>B. 当语音通话时，不能使用网络通信</strong>（错！ADSL 话音和数据用不同频段，可以同时用）。</p>
+    <p>正确的描述：用普通电话线；<strong>上下行带宽不同</strong>（A = Asymmetric 非对称，下行远大于上行）；D 选项“ADSL 是一种异步传输模式”在原卷中被当作正确描述（应理解为“非对称”）。</p>
+    <p>速率：ADSL 下行 1.5~9 Mbps，ADSL2 约 12 Mbps，ADSL2+ 约 25 Mbps。</p>
+  </div>
+
+  <h3 id="c2-pcm">2.10 PCM、T1/E1 与 SONET<span class="stars">★★★</span></h3>
+  <p>干线是数字的，但人说话是模拟的。把模拟声音变成数字比特的最常用方法是 <strong>PCM 脉冲编码调制</strong>，它是<strong>模拟→数字</strong>转换（2020、2022 选择）。三步：</p>
+  <figure>
+    <div class="svgbox"><svg id="pcmFig" class="wide" viewBox="0 0 660 230" role="img" aria-label="PCM：采样、量化、编码"></svg></div>
+    <figcaption>① <strong>采样</strong>：每隔固定时间测一次电压（圆点）；② <strong>量化</strong>：把测到的值四舍五入到最近的等级（这里 8 级）；③ <strong>编码</strong>：每个等级写成二进制（8 级 → 3 位）。电话用 256 级 → 8 位。</figcaption>
+  </figure>
+  <div class="formula"><span class="big">采样频率 ≥ 2 × 信号最高频率</span>（奈奎斯特采样定理）
+<span class="cap"><strong>注意是“最高频率”，不是带宽！</strong>话音最高按 4000 Hz 算 → 每秒采样 8000 次 → 采样周期 1/8000 s = <strong>125 μs</strong>。采样太慢会“混叠”（像视频里车轮看起来倒转）。</span></div>
+  <div class="formula"><span class="big">PCM 数据率 = 采样频率 × 每样本位数</span>
+<span class="cap">每样本 8 位（256 级）：8000 × 8 = <strong>64 kbps</strong>（一路电话）。每样本 7 位（128 级）：8000 × 7 = <strong>56 kbps</strong>。</span></div>
+  <div class="box ex"><span class="tag ex">例题 · 2020/2021/2022 都考过</span>
+    <p>信道带宽 4000 Hz（2021 卷是 3400 Hz），采用 PCM，采样周期 125 μs，每样本量化为 128 个等级，数据率？</p>
+    <p>采样周期 125 μs → 每秒 8000 次；128 级 → log₂128 = 7 位；<code>8000 × 7 = 56 kbps</code>。<strong>答 56 kbps。</strong>带宽 3400 还是 4000 都不影响，因为采样周期已经给了。</p>
+  </div>
+  <h4>T1 与 E1：把多路电话时分复用到一条干线</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 120" role="img" aria-label="T1 帧：1 个帧位加 24 个信道，每个信道 8 位，共 193 位，每 125 微秒一帧">
+      <g font-size="11" text-anchor="middle">
+        <rect x="20" y="34" width="16" height="34" fill="var(--exam)"/>
+        <g fill="var(--accent-soft)" stroke="var(--accent)">
+          <rect x="36" y="34" width="24" height="34"/><rect x="60" y="34" width="24" height="34"/><rect x="84" y="34" width="24" height="34"/><rect x="108" y="34" width="24" height="34"/><rect x="132" y="34" width="24" height="34"/><rect x="156" y="34" width="24" height="34"/><rect x="180" y="34" width="24" height="34"/><rect x="204" y="34" width="24" height="34"/><rect x="228" y="34" width="24" height="34"/><rect x="252" y="34" width="24" height="34"/><rect x="276" y="34" width="24" height="34"/><rect x="300" y="34" width="24" height="34"/><rect x="324" y="34" width="24" height="34"/><rect x="348" y="34" width="24" height="34"/><rect x="372" y="34" width="24" height="34"/><rect x="396" y="34" width="24" height="34"/><rect x="420" y="34" width="24" height="34"/><rect x="444" y="34" width="24" height="34"/><rect x="468" y="34" width="24" height="34"/><rect x="492" y="34" width="24" height="34"/><rect x="516" y="34" width="24" height="34"/><rect x="540" y="34" width="24" height="34"/><rect x="564" y="34" width="24" height="34"/><rect x="588" y="34" width="24" height="34"/>
+        </g>
+        <text x="48" y="55">1</text><text x="72" y="55">2</text><text x="96" y="55">3</text><text x="324" y="55">…</text><text x="576" y="55">23</text><text x="600" y="55">24</text>
+        <text x="28" y="26" style="fill:var(--exam)" font-weight="700">F</text>
+        <text x="324" y="22">24 个信道 × 8 位</text>
+        <text x="320" y="92" font-size="12">一帧 = 1 + 24×8 = <tspan font-weight="700">193 位</tspan>，每 125 μs 一帧 → 193 × 8000 = <tspan font-weight="700">1.544 Mbps</tspan></text>
+        <text x="320" y="110" class="mut" font-size="11">F = 帧同步位；T1 线路用 AMI 编码</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>载波</th><th>地区</th><th>一帧构成</th><th>速率</th></tr></thead>
+    <tbody>
+      <tr><td><strong>T1</strong></td><td>北美、日本</td><td>24 路 × 8 位 + 1 帧位 = 193 位</td><td><strong>1.544 Mbps</strong></td></tr>
+      <tr><td><strong>E1</strong></td><td>欧洲、中国</td><td>32 个信道 × 8 位 = 256 位（30 路话音 + 2 路信令/控制）</td><td><strong>2.048 Mbps</strong></td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点 · 2021 选择</span><p>E1 基本帧（32 个子信道）的传送时间是 <strong>125 μs</strong>。无论 T1、E1 还是 SONET，帧时间都是 125 μs，因为都源于每秒 8000 次采样。</p></div>
+  <p><strong>SONET/SDH</strong>（同步光纤网）：光纤干线上的数字传输标准，保持 125 μs 帧。基本帧 STS-1 = 9 行 × 90 列 = 810 字节 → <code>810 × 8 × 8000 = 51.84 Mbps</code>（其中 SPE 50.112 Mbps，用户 49.536 Mbps）。SDH 是 ITU 的版本，STM-1 = <strong>155.52 Mbps</strong>（= 3 × STS-1），可一直复用到约 40 Gbps（STS-768）。干线上再用 <strong>WDM</strong> 在一根光纤里跑多个波长。</p>
+
+  <h3 id="c2-switch">2.11 交换：电路交换 vs 分组交换<span class="stars">★★★</span></h3>
+  <ul>
+    <li><strong>电路交换</strong>（电话网 PSTN）：先<strong>建立连接</strong>，在两端之间预留一条专用通路，数据再顺畅地流过，最后拆除。</li>
+    <li><strong>分组交换</strong>（因特网）：把数据切成分组，每个分组独立地<strong>存储-转发</strong>，不需要建立连接，但在路由器处可能排队，时延不固定。</li>
+    <li><strong>报文交换</strong>：整条报文存储-转发，不分组，没有长度限制（早期电报）。分组交换给分组限制了大小，所以可以<strong>流水线</strong>：第一个分组到下一跳时，第二个分组已经在发了。</li>
+  </ul>
+  <div class="tbl"><table>
+    <thead><tr><th>项目</th><th>电路交换</th><th>分组交换</th></tr></thead>
+    <tbody>
+      <tr><td>呼叫建立</td><td>需要</td><td>不需要</td></tr>
+      <tr><td>专用物理通路</td><td>有</td><td>没有</td></tr>
+      <tr><td>每个分组走相同路由</td><td>是</td><td>不一定</td></tr>
+      <tr><td>按顺序到达</td><td>是</td><td>不一定</td></tr>
+      <tr><td>交换机崩溃是否致命</td><td>是</td><td>否（可以绕路）</td></tr>
+      <tr><td>可用带宽</td><td>固定</td><td>动态</td></tr>
+      <tr><td>可能拥塞的时间</td><td>建立连接时</td><td>每个分组都可能</td></tr>
+      <tr><td>可能浪费带宽</td><td>是（空闲也占着）</td><td>否</td></tr>
+      <tr><td>存储-转发</td><td>否</td><td>是</td></tr>
+      <tr><td>计费</td><td>按时间</td><td>按流量</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点 · 2021</span><ul>
+    <li>本地电话网采用<strong>电路</strong>交换。</li>
+    <li>简答：应用以稳定速率长时间发送数据（每 k 个时间单位发 N 位），适合哪种网络？→ <strong>电路交换</strong>。因为速率已知且稳定，可以预留带宽而不太浪费；会话很长，建立和拆除电路的开销可以摊薄。</li>
+  </ul></div>
+  <h4>k 跳路径的时延公式（2023 分析题 10 分 / 老作业 2-6）</h4>
+  <p>设：电路建立时间 s 秒，每跳传播时延 d 秒，分组大小 p 位，数据率 b bps，要发 x 位，经过 k 跳。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 270" role="img" aria-label="电路交换与分组交换时延对比：分组交换流水线，最后一个分组还要多走 k 减 1 跳">
+      <g font-size="12">
+        <text x="10" y="44" font-weight="700">电路交换</text>
+        <rect x="120" y="28" width="90" height="26" fill="var(--exam-soft)" stroke="var(--exam)"/><text x="165" y="46" text-anchor="middle" style="fill:var(--exam)">建立 s</text>
+        <rect x="210" y="28" width="200" height="26" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="310" y="46" text-anchor="middle" style="fill:var(--accent)">连续发送 x/b</text>
+        <text x="418" y="46" class="mut">＋ 传播 k·d</text>
+        <text x="10" y="102" font-weight="700">分组交换</text>
+        <text x="10" y="120" class="mut" font-size="11">（k = 3 跳，4 个分组）</text>
+        <text x="100" y="132" text-anchor="end" class="mut">链路 1</text>
+        <text x="100" y="172" text-anchor="end" class="mut">链路 2</text>
+        <text x="100" y="212" text-anchor="end" class="mut">链路 3</text>
+        <g stroke="var(--surface)" stroke-width="1.5">
+          <rect x="120" y="115" width="50" height="26" fill="var(--l5)"/><rect x="170" y="115" width="50" height="26" fill="var(--l4)"/><rect x="220" y="115" width="50" height="26" fill="var(--l3)"/><rect x="270" y="115" width="50" height="26" fill="var(--l2)"/>
+          <rect x="170" y="155" width="50" height="26" fill="var(--l5)"/><rect x="220" y="155" width="50" height="26" fill="var(--l4)"/><rect x="270" y="155" width="50" height="26" fill="var(--l3)"/><rect x="320" y="155" width="50" height="26" fill="var(--l2)"/>
+          <rect x="220" y="195" width="50" height="26" fill="var(--l5)"/><rect x="270" y="195" width="50" height="26" fill="var(--l4)"/><rect x="320" y="195" width="50" height="26" fill="var(--l3)"/><rect x="370" y="195" width="50" height="26" fill="var(--l2)"/>
+        </g>
+        <g text-anchor="middle" font-weight="700" style="fill:var(--surface)" font-size="12">
+          <text x="145" y="133" style="fill:var(--surface)">P1</text><text x="195" y="133" style="fill:var(--surface)">P2</text><text x="245" y="133" style="fill:var(--surface)">P3</text><text x="295" y="133" style="fill:var(--surface)">P4</text>
+          <text x="195" y="173" style="fill:var(--surface)">P1</text><text x="245" y="173" style="fill:var(--surface)">P2</text><text x="295" y="173" style="fill:var(--surface)">P3</text><text x="345" y="173" style="fill:var(--surface)">P4</text>
+          <text x="245" y="213" style="fill:var(--surface)">P1</text><text x="295" y="213" style="fill:var(--surface)">P2</text><text x="345" y="213" style="fill:var(--surface)">P3</text><text x="395" y="213" style="fill:var(--surface)">P4</text>
+        </g>
+        <g stroke="var(--ink)"><line x1="120" y1="235" x2="320" y2="235"/><line x1="120" y1="230" x2="120" y2="240"/><line x1="320" y1="230" x2="320" y2="240"/><line x1="320" y1="235" x2="420" y2="235" stroke="var(--exam)" stroke-width="2"/><line x1="420" y1="230" x2="420" y2="240" stroke="var(--exam)"/></g>
+        <text x="220" y="255" text-anchor="middle">x/b：源端发完全部分组</text>
+        <text x="430" y="255" style="fill:var(--exam)" font-weight="700">(k−1)·p/b</text>
+        <text x="430" y="238" class="mut" font-size="11">P4 还要再走 k−1 跳</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>每个小方块 = 发送一个分组的时间 p/b。分组交换像流水线：源端用 x/b 发完所有分组，最后一个分组在后面每一跳都要被“存储-转发”一次。（图中省略了传播时延，两种方式都要加 k·d。）</figcaption>
+  </figure>
+  <div class="formula">电路交换：<span class="big">T = s + x/b + k·d</span><br>分组交换：<span class="big">T = x/b + (k−1)·p/b + k·d</span>（负载很轻，忽略排队、处理时延和头部）<br>分组交换更快的条件：<span class="big">s &gt; (k−1)·p/b</span>
+<span class="cap">直觉：电路交换多付了“建立时间 s”，分组交换多付了“最后一个分组的 k−1 次转发”。哪个小谁就快。此外，需要容错（交换机坏了能绕路）时分组交换更好。</span></div>
+  <div class="box tip"><span class="tag tip">四种时延（分组交换）</span><p><strong>传输时延</strong> p/b（推上链路）＋ <strong>传播时延</strong> d（在线上跑）＋ <strong>排队时延</strong>（取决于拥塞）＋ <strong>处理时延</strong>（通常几微秒，可忽略）。</p></div>
+
+  <h3 id="c2-mobile">2.12 移动电话系统<span class="stars">★</span></h3>
+  <div class="tbl"><table>
+    <thead><tr><th>代</th><th>特点</th><th>代表系统</th><th>关键技术</th></tr></thead>
+    <tbody>
+      <tr><td>1G（1980s）</td><td>模拟语音</td><td>AMPS</td><td>FM 调制，FDM</td></tr>
+      <tr><td>2G（1990s）</td><td>数字语音（+ 少量数据）</td><td><strong>GSM</strong></td><td>QPSK；FDM 200 kHz 信道 × 8 时隙 TDM</td></tr>
+      <tr><td>3G（2000s）</td><td>数字语音和数据</td><td><strong>UMTS</strong></td><td><strong>CDMA</strong>，5 MHz 信道，软切换</td></tr>
+      <tr><td>4G（2010s）</td><td>全 IP 数据（语音也走数据）</td><td><strong>LTE</strong></td><td><strong>OFDM/OFDMA</strong>，100 Mbps~1 Gbps，网络扁平化</td></tr>
+      <tr><td>5G（2019 中国商用）</td><td>Gbps 用户体验速率</td><td>NR</td><td>大规模天线 Massive MIMO、超密集组网、新型多址、全频谱接入、边缘计算</td></tr>
+    </tbody>
+  </table></div>
+  <figure>
+    <div class="svgbox"><svg id="hexFig" viewBox="0 0 400 260" role="img" aria-label="蜂窝频率复用：相邻小区频率不同，A 频率在不相邻的小区重复使用"></svg></div>
+    <figcaption><strong>蜂窝</strong>：把地区分成小区，每个小区用一组频率；<strong>相邻小区不用相同频率</strong>，不相邻的小区可以复用（图中所有 A 用同一组频率）。用户多的地方把小区做小（微蜂窝）。</figcaption>
+  </figure>
+  <ul>
+    <li><strong>切换（handoff）</strong>：手机移动到新小区时换基站。<strong>软切换</strong>：新基站先接上、旧基站再断开（CDMA/3G 支持）；<strong>硬切换</strong>：旧基站先断、新基站再接。</li>
+    <li><strong>GSM</strong>：手机 = 机身 + <strong>SIM 卡</strong>（存身份凭证）；手机向自己的 <strong>HLR</strong>（归属位置寄存器）报告当前位置，小区用 <strong>VLR</strong>（访问位置寄存器）记录来访手机。</li>
+    <li><strong>UMTS</strong>：在 GSM 架构上演进；CDMA 允许<strong>所有小区都复用同一频率</strong>，并支持软切换；分组经 SGSN/GGSN 进出因特网。</li>
+    <li><strong>5G 三大场景</strong>：<strong>eMBB</strong> 增强移动宽带（大流量）、<strong>URLLC</strong> 超高可靠超低时延（如自动驾驶，时延要求从 4G 的 50 ms 降到课件写的 0.5 ms 级）、<strong>mMTC</strong> 海量物联网连接。</li>
+  </ul>
+
+  <h3 id="c2-cable">2.13 有线电视网上网<span class="stars">★</span></h3>
+  <p>复用有线电视的电缆：数据从头端（head-end）经光纤到光纤节点，再经<strong>共享的同轴电缆树</strong>送到各家（光纤+同轴，HFC）。用户端用 <strong>Cable Modem</strong>，标准是 <strong>DOCSIS</strong>；上行用 QPSK，下行用 QAM-64。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 640 110" role="img" aria-label="有线电视频谱分配：上行 5 到 42 兆赫，电视 54 到 550 兆赫，下行数据 550 到 750 兆赫">
+      <g font-size="12" text-anchor="middle">
+        <line x1="20" y1="70" x2="620" y2="70" stroke="var(--ink)"/>
+        <rect x="24" y="36" width="28" height="34" fill="var(--l4s)" stroke="var(--l4)"/>
+        <rect x="60" y="36" width="372" height="34" fill="var(--surface-2)" stroke="var(--muted)"/>
+        <rect x="432" y="36" width="150" height="34" fill="var(--l3s)" stroke="var(--l3)"/>
+        <text x="38" y="28" style="fill:var(--l4)" font-weight="700">上行</text>
+        <text x="246" y="58">电视频道（每台 6–8 MHz）</text>
+        <text x="507" y="58" style="fill:var(--l3)" font-weight="700">下行数据</text>
+        <g class="mono" font-size="11"><text x="24" y="88">5</text><text x="52" y="100">42</text><text x="62" y="88">54</text><text x="432" y="88">550</text><text x="582" y="88">750</text><text x="612" y="100">MHz</text></g>
+      </g>
+    </svg>
+    </div>
+    <figcaption>上行 5–42 MHz；电视 54–550 MHz；下行数据 550–750 MHz（按比例）。</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Cable 有线电视</th><th>ADSL</th></tr></thead>
+    <tbody>
+      <tr><td>到用户的介质</td><td>同轴电缆（带宽好）</td><td>双绞线（带宽较低）</td></tr>
+      <tr><td>带宽</td><td><strong>所有用户共享</strong>，人多时会变慢</td><td>每个用户<strong>独享</strong></td></tr>
+      <tr><td>安全</td><td>数据广播给所有用户，安全性较差</td><td>点到点链路，不广播</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="c2-hw">2.14 老版第二章作业精讲</h3>
+  <details><summary>2-1 波长 1 μm 处 0.1 μm 的光谱有多少带宽？</summary><div class="ans"><p>Δf = cΔλ/λ² = 3×10⁸ × 10⁻⁷ / 10⁻¹² = 3×10¹³ Hz = <strong>30 THz</strong>。（也可以分别算 0.95 μm 和 1.05 μm 对应的频率再相减，得到约 30,000 GHz。）</p></div></details>
+  <details><summary>2-2 3 kHz 信道、信噪比 20 dB、二进制信号，最大速率？</summary><div class="ans"><p>香农 ≈ 19.975 kbps；奈奎斯特 = 6 kbps；取小 → <strong>6 kbps</strong>。</p></div></details>
+  <details><summary>2-3 10 路各 4000 Hz 的信号 FDM，保护带 400 Hz，最小带宽？</summary><div class="ans"><p>4000 × 10 + 400 × 9 = <strong>43,600 Hz</strong>。</p></div></details>
+  <details><summary>2-4 A、B、C 同时发 0（课本图 2-22(a) 码片），结果码片序列？</summary><div class="ans"><p>课本码片：A (−1 −1 −1 +1 +1 −1 +1 +1)，B (−1 −1 +1 −1 +1 +1 +1 −1)，C (−1 +1 −1 +1 +1 +1 −1 −1)。发 0 就取反后相加（或先加再取反）：<strong>(+3 +1 +1 −1 −3 −1 −1 +1)</strong>。</p></div></details>
+  <details><summary>2-5 收到 (−1 +1 −3 +1 −1 −3 +1 +1)，用课本码片，哪些站发了什么？</summary><div class="ans">
+    <p>课本码片另有 D (−1 +1 −1 −1 −1 −1 +1 −1)。逐个做内积除以 8：</p>
+    <p>S·A = (1−1+3+1−1+3+1+1)/8 = 8/8 = <strong>+1 → A 发 1</strong><br>S·B = (1−1−3−1−1−3+1−1)/8 = −8/8 = <strong>−1 → B 发 0</strong><br>S·C = (1+1+3+1−1−3−1−1)/8 = <strong>0 → C 没发</strong><br>S·D = (1+1+3−1+1+3+1−1)/8 = <strong>+1 → D 发 1</strong></p>
+    <p class="muted">课本 A、B、C 的字母和期中卷不同（卷子里的 A 是课本的 B），但方法一样。可以用上面的 CDMA 计算器验证。</p>
+  </div></details>
+  <details><summary>2-6 k 跳路径上电路交换与分组交换的时延比较</summary><div class="ans"><p>电路：s + x/b + kd；分组：x/b + (k−1)p/b + kd。分组更快当且仅当 <strong>s &gt; (k−1)p/b</strong>。另外需要在交换机故障时容错，分组交换更好。</p></div></details>
+  <details><summary>2-7 每个分组 p 位数据 + h 位头部，传播时延忽略，p 取多少总时延最小？</summary><div class="ans">
+    <p>分组数 x/p，总流量 (p+h)·x/p 位，源端发送用时 (p+h)x/(pb)；最后一个分组在中间路由器再转发 k−1 次，用时 (k−1)(p+h)/b。</p>
+    <p>总时间 T = (p+h)x/(pb) + (k−1)(p+h)/b。对 p 求导令其为 0：−hx/(p²b) + (k−1)/b = 0。</p>
+    <p><strong>p = √( hx / (k−1) )</strong>。</p>
+  </div></details>
+  <details><summary>2-8 5000 户，每根同轴 100 Mbps 下行，保证每户至少 2 Mbps，怎么办？</summary><div class="ans"><p>每根电缆最多 100/2 = 50 户，所以要把电缆拆成 5000/50 = <strong>100 根</strong>同轴电缆，每根直接连到一个光纤节点。</p></div></details>
+  <details><summary>2-9 两个 VSAT 经 hub 传 1 GB 文件，上行 1 Mbps、下行 7 Mbps，电路交换建立 1.2 s，要多久？</summary><div class="ans"><p>瓶颈是 1 Mbps 的上行。传输：1 GB = 1024 × 8 Mb → 8192 s。单向时延：经 hub 要上下两次共 4 段，4 × 35800/300000 ≈ 0.48 s。总计 1.2 + 8192 + 0.48 = <strong>8193.68 s</strong>。</p></div></details>
+  <details><summary>2-10 同上改用分组交换：分组 64 KB，卫星和 hub 交换时延 10 μs，头部 32 字节</summary><div class="ans"><p>1 GB / 64 KB = 16384 个分组（老答案写的“16”应理解为 16K）；头部 16384 × 32 B = 512 KB，总共 1024.5 MB → 发送 1024.5 × 8 = 8196 s；加传播 0.48 s 与 3 次交换 30 μs，约 <strong>8196.48 s</strong>。</p></div></details>
+</section>
+
+<!-- ============ 公式速查 ============ -->
+<section class="chap" id="cheat">
+  <div class="chap-head"><span class="chap-no">SHEET</span><h2>考前一页纸：公式与数字</h2></div>
+  <p class="sub">考前 10 分钟只看这里。</p>
+  <div class="cheat">
+    <div><h5>奈奎斯特（无噪声）</h5><div class="mono">C = 2B·log₂V</div></div>
+    <div><h5>香农（有噪声）</h5><div class="mono">C = B·log₂(1+S/N)<br>dB = 10·lg(S/N)</div></div>
+    <div><h5>两者都给时</h5><div class="mono">取 min(奈奎斯特, 香农)</div></div>
+    <div><h5>波特率→比特率</h5><div class="mono">Rb = RB·log₂V</div></div>
+    <div><h5>PCM</h5><div class="mono">采样率 ≥ 2·f_max<br>速率 = 采样率 × 位数<br>8000×8 = 64k；×7 = 56k</div></div>
+    <div><h5>T1 / E1</h5><div class="mono">T1 = 193 位/125μs = 1.544M<br>E1 = 256 位/125μs = 2.048M</div></div>
+    <div><h5>时延</h5><div class="mono">传输 = L/R<br>传播 = d/v（光 3×10⁸ m/s）<br>时延带宽积 = R × 传播时延</div></div>
+    <div><h5>电路 vs 分组（k 跳）</h5><div class="mono">电路 = s + x/b + kd<br>分组 = x/b + (k−1)p/b + kd<br>分组快 ⇔ s &gt; (k−1)p/b</div></div>
+    <div><h5>CDMA</h5><div class="mono">0→−1，1→+1；发0取反<br>S·X/m = +1 发1，−1 发0，0 没发</div></div>
+    <div><h5>FDM 带宽</h5><div class="mono">n·每路 + (n−1)·保护带</div></div>
+    <div><h5>分层开销</h5><div class="mono">头部占比 = nh/(M+nh)</div></div>
+    <div><h5>波长与频率</h5><div class="mono">λf = c；Δf = cΔλ/λ²</div></div>
+    <div><h5>编码效率</h5><div class="mono">曼彻斯特 50%；4B/5B 80%</div></div>
+    <div><h5>码元位数</h5><div class="mono">QPSK 2；QAM-16 4；QAM-64 6</div></div>
+    <div><h5>卫星</h5><div class="mono">GEO 35786 km，单程 ~270 ms<br>全球覆盖 3 颗；间隔 ≥2°</div></div>
+    <div><h5>OSI 自下而上</h5><div class="mono">物 链 网 传 会 表 应<br>bit 帧 分组 段</div></div>
+  </div>
+</section>
+
+<!-- ============ 真题 ============ -->
+<section class="chap" id="exam">
+  <div class="chap-head"><span class="chap-no">EXAM</span><h2>真题精讲：第 1–2 章相关题汇总</h2></div>
+  <p class="sub">四年期中卷里和这两章有关的题全部列在这里。先遮住答案自己做。</p>
+
+  <h3 id="e-choice">选择题</h3>
+  <details><summary>OSI 模型中第二、三、四、六层分别是？<span class="src">2020·2022</span></summary><div class="ans"><p><strong>D</strong> 数据链路层、网络层、传输层、表示层。</p></div></details>
+  <details><summary>PCM 是（ ）转换的一个实例：数字→数字 / 模拟→数字 / 模拟→模拟 / 数字→模拟<span class="src">2020·2022</span></summary><div class="ans"><p><strong>B 模拟到数字</strong>。PCM 把模拟话音采样、量化、编码成比特。</p></div></details>
+  <details><summary>8 种相位，每种相位 2 种幅度，一个码元表示几位？<span class="src">2020</span></summary><div class="ans"><p>16 种状态 → <strong>4 位</strong>（A）。</p></div></details>
+  <details><summary>带宽 4000 Hz，PCM，采样周期 125 μs，128 个量化等级，数据率？<span class="src">2020·2022</span></summary><div class="ans"><p>8000 次/秒 × 7 位 = <strong>56 kb/s</strong>（C）。</p></div></details>
+  <details><summary>下列对 ADSL 描述错误的是？<span class="src">2020·2022</span></summary><div class="ans"><p><strong>B</strong>“语音通话时不能上网”是错的。</p></div></details>
+  <details><summary>OSI 中不属于通信子网的是：物理层 / 数据链路层 / 网络层 / 会话层<span class="src">2021</span></summary><div class="ans"><p><strong>D 会话层</strong>。通信子网 = 下三层。</p></div></details>
+  <details><summary>加密和解密是哪一层的功能？<span class="src">2021</span></summary><div class="ans"><p><strong>C 表示层</strong>。</p></div></details>
+  <details><summary>本地电话网采用什么交换技术？<span class="src">2021</span></summary><div class="ans"><p><strong>A 电路交换</strong>。</p></div></details>
+  <details><summary>端口描述错误的：Telnet 23 / SMTP 25 / HTTP 80 / FTP 31<span class="src">2021</span></summary><div class="ans"><p><strong>D</strong>。FTP 是 21（数据连接 20）。</p></div></details>
+  <details><summary>第 N 层与第 N+1 层的关系？<span class="src">2021·2022</span></summary><div class="ans"><p><strong>A 第 N 层为第 N+1 层提供服务</strong>。B 错在“N+1 层给 N 层的信息加头”方向反了；C 方向反了。</p></div></details>
+  <details><summary>E1 基本帧（32 个子信道）的传送时间？<span class="src">2021</span></summary><div class="ans"><p><strong>C 125 μs</strong>。</p></div></details>
+  <details><summary>单模与多模光纤的区别：单模速率低 / 多模传得更远 / 单模更便宜 / 多模纤芯更粗<span class="src">2021</span></summary><div class="ans"><p><strong>D 多模光纤比单模光纤的纤芯直径粗</strong>。</p></div></details>
+  <details><summary>关于计算机网络特征，错误的是？<span class="src">2023</span></summary><div class="ans"><p><strong>D 联网计算机必须使用统一的操作系统</strong>（错）。</p></div></details>
+  <details><summary>关于网络体系结构，错误的是：物理层传比特流 / 数据链路层保证端到端正确传输 / 网络层选路径 / 应用层在最高层<span class="src">2023</span></summary><div class="ans"><p><strong>B</strong>。端到端是传输层的事，链路层只负责相邻节点之间。</p></div></details>
+  <details><summary>路由选择协议位于？网络层数据传输的基本单位？<span class="src">2023</span></summary><div class="ans"><p>路由选择 → <strong>网络层</strong>；网络层单位 → <strong>分组</strong>。</p></div></details>
+  <details><summary>光纤通信中使用的复用方式？<span class="src">2023</span></summary><div class="ans"><p><strong>B 波分多路复用</strong>。</p></div></details>
+  <details><summary>实现端到端应答、分组排序和流量控制的层？<span class="src">2023</span></summary><div class="ans"><p><strong>C 传输层</strong>。</p></div></details>
+  <details><summary>抗电磁干扰性最好的传输介质？<span class="src">2023</span></summary><div class="ans"><p><strong>C 光缆</strong>。</p></div></details>
+  <details><summary>波特率 600 Baud，4 种幅度 × 4 种相位组成 16 种码元，数据率？<span class="src">2023</span></summary><div class="ans"><p>600 × 4 = <strong>2400 b/s</strong>（B）。</p></div></details>
+
+  <h3 id="e-fill">填空题</h3>
+  <details><summary>载波三要素：频率、（ ）、（ ）<span class="src">2020</span></summary><div class="ans"><p><strong>振幅、相位</strong>。</p></div></details>
+  <details><summary>OSI 参考模型的三个主要概念：接口、（ ）、（ ）<span class="src">2020·2022</span></summary><div class="ans"><p><strong>服务、协议</strong>。</p></div></details>
+  <details><summary>（ ）定理定义无噪声信道最大速率，（ ）定理定义加性白噪声信道最大速率<span class="src">2020·2021</span></summary><div class="ans"><p><strong>奈奎斯特（Nyquist）；香农（Shannon）</strong>。</p></div></details>
+  <details><summary>64-QAM 信号波特率 2000，比特率？<span class="src">2021</span></summary><div class="ans"><p><strong>12000 bps</strong>。</p></div></details>
+  <details><summary>带宽 3400 Hz，PCM，采样周期 125 μs，128 级量化，数据率？<span class="src">2021</span></summary><div class="ans"><p><strong>56 kbps</strong>。</p></div></details>
+  <details><summary>4B/5B 编码效率？<span class="src">2021</span></summary><div class="ans"><p><strong>0.8</strong>。</p></div></details>
+  <details><summary>异步：1 起始 + 7 数据 + 1 奇偶 + 2 终止，每秒 100 字符，有效数据速率？<span class="src">2021</span></summary><div class="ans"><p><strong>700 bps</strong>。</p></div></details>
+  <details><summary>3000 Hz 信道传二进制信号，信噪比 20 dB，最大速率？<span class="src">2022</span></summary><div class="ans"><p><strong>6 kbps</strong>（奈奎斯特限制）。</p></div></details>
+  <details><summary>PSTN 3000 Hz，4 种状态，无噪声最多每秒多少位？信噪比 20 dB 时理论最大速率？<span class="src">2023</span></summary><div class="ans"><p><strong>12000</strong>；<strong>3000 × log₂101</strong>（≈ 19.97 kbps）。</p></div></details>
+  <details><summary>超五类非屏蔽双绞线由（ ）对导线组成<span class="src">2023</span></summary><div class="ans"><p><strong>4</strong>。</p></div></details>
+  <details><summary>识图：（a）是（ ）调制，（b）是（ ）调制<span class="src">2023</span></summary><div class="ans"><p>（a）振幅大小变化 → <strong>振幅</strong>调制；（b）疏密变化 → <strong>频率</strong>调制。看 2.6 的图：振幅变 = ASK，疏密变 = FSK，突然反相 = PSK。</p></div></details>
+
+  <h3 id="e-term">名词解释（背诵版）</h3>
+  <p class="muted">往年考过：CDMA、ADSL、半双工、DNS，以及第 3 章的 CRC、海明距离、捎带确认、ARQ、滑动窗口。下面是第 1–2 章可能考的，每条 2–3 句写满就能拿分。</p>
+  <div class="tbl"><table>
+    <thead><tr><th>名词</th><th>参考答案</th></tr></thead>
+    <tbody>
+      <tr><td><strong>CDMA</strong></td><td>码分多址。为每个用户分配一个特定的码片序列，码片序列之间相互正交，允许多个用户在同一时间、使用相同频带同时发送；接收方用对应码片做内积运算分离出该用户的信号。</td></tr>
+      <tr><td><strong>ADSL</strong></td><td>非对称数字用户线。利用普通电话线（双绞线）中话音频段以外的高频段传输数据，上行和下行带宽不对称（下行远大于上行），可以同时打电话和上网。</td></tr>
+      <tr><td><strong>半双工</strong></td><td>通信双方都可以发送和接收信息，但不能同时进行，同一时刻只能单向传输，如对讲机。</td></tr>
+      <tr><td><strong>协议</strong></td><td>对等实体之间通信必须遵守的规则集合，规定了交换的报文/帧的格式和含义。三要素：语法、语义、时序。</td></tr>
+      <tr><td><strong>服务</strong></td><td>下层通过层间接口为上层提供的一组原语操作，规定能做什么但不规定如何实现；服务是垂直的，协议是水平的。</td></tr>
+      <tr><td><strong>网络体系结构</strong></td><td>计算机网络各层及其协议的集合。</td></tr>
+      <tr><td><strong>面向连接服务</strong></td><td>通信前先建立连接，再传数据，最后释放连接，数据按序到达，如 TCP、电话。</td></tr>
+      <tr><td><strong>带宽 / 信道容量</strong></td><td>带宽是信道能通过的频率范围（Hz）；信道容量是信道的最大数据传输速率（bps），由奈奎斯特和香农定理限定。</td></tr>
+      <tr><td><strong>波特率</strong></td><td>每秒传送的码元数，单位 Baud；比特率 = 波特率 × log₂V。</td></tr>
+      <tr><td><strong>多路复用</strong></td><td>多路信号共享同一传输介质的技术，提高线路利用率；有频分、时分、波分、码分。</td></tr>
+      <tr><td><strong>统计时分复用</strong></td><td>按需动态分配时隙，只有用户有数据时才分配，避免同步 TDM 中的空闲时隙浪费。</td></tr>
+      <tr><td><strong>PCM</strong></td><td>脉冲编码调制，把模拟信号数字化的方法：按不低于最高频率两倍的速率采样，再量化、编码为二进制。</td></tr>
+      <tr><td><strong>曼彻斯特编码</strong></td><td>每个比特中间都有一次电平跳变，跳变方向表示 0 或 1，具有自同步能力，但所需带宽是 NRZ 的两倍；经典以太网使用。</td></tr>
+      <tr><td><strong>电路交换</strong></td><td>通信前在两端之间建立一条专用物理通路，通信期间独占，结束后拆除；时延稳定但可能浪费带宽，如电话网。</td></tr>
+      <tr><td><strong>分组交换</strong></td><td>把数据分成有限长度的分组，各分组独立地存储-转发，无需建立连接，线路利用率高但时延不固定，如因特网。</td></tr>
+      <tr><td><strong>时延带宽积</strong></td><td>传播时延 × 数据率，表示链路上同时能容纳的比特数。</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="e-big">简答 / 计算题</h3>
+  <details><summary>面向连接和无连接通信的差异？各举一例（6 分）<span class="src">2020</span></summary><div class="ans"><p>见 <a href="#c1-conn">1.5</a>。答题要点：① 面向连接分建立、传输、释放三阶段，无连接直接传；② 面向连接保序，无连接不保证顺序；③ 例：UDP 无连接，TCP 面向连接。</p></div></details>
+  <details><summary>稳定速率、长时间运行的应用适合分组交换还是电路交换？为什么？（5 分）<span class="src">2021</span></summary><div class="ans"><p><strong>电路交换</strong>（2 分）。速率已知且波动小，可以为会话预留带宽而不会浪费太多；会话持续时间长，建立和拆除电路的开销可以忽略（3 分）。</p></div></details>
+  <details><summary>CDMA：A 00101110、B 01011100、C 00011011、D 01000010，A 发 0，C、D 发 1，收到什么？<span class="src">2021·2022</span></summary><div class="ans"><p><strong>(−1 +1 −3 +1 −1 −3 +1 +1)</strong>。过程见 <a href="#c2-cdma">2.8</a>。</p></div></details>
+  <details><summary>4 kHz 带宽、信噪比 20 dB、二进制信号，最大速率？（5 分）<span class="src">2021</span></summary><div class="ans"><p>S/N = 100；香农 4 × log₂101 ≈ 26.64 kbps；奈奎斯特 2 × 4 × 1 = 8 kbps；取 <strong>8 kbps</strong>。</p></div></details>
+  <details><summary>列举四种多路复用并简述原理（6 分）<span class="src">2022</span></summary><div class="ans"><p>见 <a href="#c2-mux">2.7</a> 的考点框。</p></div></details>
+  <details><summary>NRZ 与 RZ 的原理和优缺点（6 分）<span class="src">2022</span></summary><div class="ans"><p>NRZ：用高/低电平表示 1/0，一位结束电压不回零；优点编码效率高，缺点没有自同步能力，长串相同比特难以区分，存在直流分量。RZ：正电平表示 1、负电平表示 0，每位后半段回到零电平，有三种电平；优点自同步（接收方在归零后采样即可，不需要单独时钟），缺点大量带宽浪费在归零上。</p></div></details>
+  <details><summary>两种文件确认机制分别适合什么网络（6 分）<span class="src">2023</span></summary><div class="ans"><p>见 <a href="#c1-perf">1.8</a>。质量差 → 逐分组确认；质量好 → 整个文件确认一次。各 3 分：结论 + 原因。</p></div></details>
+  <details><summary>CDMA 四站四码片 T0~T3 计算（10 分）<span class="src">2023</span></summary><div class="ans"><p>答案：T0 (0 −4 0 0)，T1 (0 +4 0 0)，T2 (0 0 0 +4)，T3 (−2 −2 +2 −2)。过程表格见 <a href="#c2-cdma">2.8</a>。</p></div></details>
+  <details><summary>k 跳路径：电路交换和分组交换的时延，分组交换何时更低？（10 分）<span class="src">2023</span></summary><div class="ans"><p>（1）电路交换：s + x/b + kd（3 分：建立、传输、传播各一项）。（2）分组交换：x/b + (k−1)p/b + kd（5 分，说明分组数 ⌈x/p⌉、第一个分组 k 跳、其余流水线；排队和处理时延忽略）。（3）条件 s &gt; (k−1)p/b（2 分）。</p></div></details>
+</section>
+
+<!-- ============ 自测 ============ -->
+<section class="chap" id="quiz">
+  <div class="chap-head"><span class="chap-no">QUIZ</span><h2>自测：点选项看对错</h2></div>
+  <p class="sub">题目改编自本学期第一章自测、往年期中卷。点一下立刻显示正误和解析。</p>
+  <p class="score" id="quizScore">已答 0 题，答对 0 题</p>
+  <div class="quiz" id="quizBox"></div>
+  <button class="btn ghost" type="button" id="quizReset">清空重做</button>
+</section>
+
+<!-- ============ 清单 ============ -->
+<section class="chap" id="todo">
+  <div class="chap-head"><span class="chap-no">CHECK</span><h2>掌握清单</h2></div>
+  <p class="sub">每一条都能不看资料讲出来/算出来，就打勾。勾选状态只保存在你这台设备的浏览器里。</p>
+  <div class="progress" aria-hidden="true"><i id="chkBar"></i></div>
+  <p class="score" id="chkText"></p>
+  <ul class="check" id="chkList"></ul>
+</section>
+
+<footer>
+  资料来源：华东师范大学《计算机网络》课件 0、1、2（王廷），2020–2023 学年期中试卷及答案，老版第一、二章作业答案，本学期第一章作业与自测题，教学大纲（2025）。教材：Tanenbaum《Computer Networks》第 6 版。整理于 2026 年 10 月。
+</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs){e.setAttribute(k,attrs[k]);}if(parent){parent.appendChild(e);}return e;}
+function txt(parent,x,y,s,attrs){var t=el("text",Object.assign({x:x,y:y},attrs||{}),parent);t.textContent=s;return t;}
+function clear(svg){while(svg.firstChild){svg.removeChild(svg.firstChild);}}
+function $(id){return document.getElementById(id);}
+function sgn(v){if(Math.abs(v)<1e-9){return "0";}return (v>0?"+":"−")+Math.abs(Math.round(v*1000)/1000);}
+function store(){try{return window.localStorage;}catch(e){return null;}}
+
+/* ---------- sticky nav highlight ---------- */
+(function(){
+  var links=[].slice.call(document.querySelectorAll("#navIn a"));
+  var map={};links.forEach(function(a){map[a.getAttribute("href").slice(1)]=a;});
+  if(!("IntersectionObserver" in window)){return;}
+  var io=new IntersectionObserver(function(ents){
+    ents.forEach(function(en){
+      if(en.isIntersecting){
+        links.forEach(function(a){a.classList.remove("on");});
+        var a=map[en.target.id];
+        if(a){a.classList.add("on");var box=$("navIn");var l=a.offsetLeft-box.clientWidth/2+a.clientWidth/2;box.scrollTo({left:l,behavior:"smooth"});}
+      }
+    });
+  },{rootMargin:"-40% 0px -55% 0px"});
+  Object.keys(map).forEach(function(id){var s=$(id);if(s){io.observe(s);}});
+})();
+
+/* ---------- sine wave elements ---------- */
+function sinePath(x0,w,yc,A,cyc,ph){var d="";for(var i=0;i<=w;i+=2){var t=i/w;var y=yc-A*Math.sin(2*Math.PI*cyc*t+ph);d+=(i?"L":"M")+(x0+i).toFixed(1)+" "+y.toFixed(1);}return d;}
+(function(){
+  var svg=$("sineFig");if(!svg){return;}
+  var panels=[{x:15,t:"振幅变大",A:70,c:2,p:0,col:"var(--exam)"},{x:235,t:"频率加倍（周期减半）",A:40,c:4,p:0,col:"var(--l3)"},{x:455,t:"相位移动 90°",A:40,c:2,p:Math.PI/2,col:"var(--l4)"}];
+  panels.forEach(function(P){
+    txt(svg,P.x+95,22,P.t,{"text-anchor":"middle","font-size":"13","font-weight":"700"});
+    el("line",{x1:P.x,y1:120,x2:P.x+190,y2:120,stroke:"var(--line)"},svg);
+    el("line",{x1:P.x,y1:40,x2:P.x,y2:200,stroke:"var(--line)"},svg);
+    el("path",{d:sinePath(P.x,190,120,40,2,0),fill:"none",stroke:"var(--muted)","stroke-width":"1.5","stroke-dasharray":"4 3"},svg);
+    el("path",{d:sinePath(P.x,190,120,P.A,P.c,P.p),fill:"none",stroke:P.col,"stroke-width":"2.4"},svg);
+  });
+  txt(svg,330,222,"灰色虚线：原始波形（2 个周期）",{"text-anchor":"middle","font-size":"11",class:"mut"});
+})();
+
+/* ---------- Fourier demo ---------- */
+(function(){
+  var svg=$("fourierSvg"),inp=$("fBits"),rng=$("fN"),lab=$("fNv");if(!svg){return;}
+  function draw(){
+    var bits=(inp.value||"").replace(/[^01]/g,"");if(bits.length<1){bits="01100010";}
+    var n=bits.length,N=+rng.value;lab.textContent=N;
+    clear(svg);
+    var x0=20,w=600,M=2000,i,k;
+    function g(t){return +bits[Math.min(n-1,Math.floor(t*n))];}
+    var mean=0,a=[],b=[];
+    for(i=0;i<M;i++){mean+=g((i+.5)/M);}mean/=M;
+    for(k=1;k<=N;k++){var sa=0,sb=0;for(i=0;i<M;i++){var t=(i+.5)/M,v=g(t);sa+=v*Math.sin(2*Math.PI*k*t);sb+=v*Math.cos(2*Math.PI*k*t);}a.push(2*sa/M);b.push(2*sb/M);}
+    function Y(v){return 140-v*95;}
+    for(i=1;i<n;i++){el("line",{x1:x0+w*i/n,y1:30,x2:x0+w*i/n,y2:160,stroke:"var(--line)","stroke-dasharray":"3 3"},svg);}
+    for(i=0;i<n;i++){txt(svg,x0+w*(i+.5)/n,20,bits[i],{"text-anchor":"middle","font-size":"13",class:"mono","font-weight":"700"});}
+    var d="";for(i=0;i<n;i++){var lv=Y(+bits[i]);d+=(i?"L":"M")+(x0+w*i/n)+" "+lv+"L"+(x0+w*(i+1)/n)+" "+lv;}
+    el("path",{d:d,fill:"none",stroke:"var(--muted)","stroke-width":"1.5"},svg);
+    var p="";for(i=0;i<=300;i++){var tt=i/300,s=mean;for(k=1;k<=N;k++){s+=a[k-1]*Math.sin(2*Math.PI*k*tt)+b[k-1]*Math.cos(2*Math.PI*k*tt);}p+=(i?"L":"M")+(x0+w*tt).toFixed(1)+" "+Math.max(4,Math.min(166,Y(s))).toFixed(1);}
+    el("path",{d:p,fill:"none",stroke:"var(--accent)","stroke-width":"2.4"},svg);
+  }
+  inp.addEventListener("input",draw);rng.addEventListener("input",draw);draw();
+})();
+
+/* ---------- Nyquist / Shannon calculator ---------- */
+(function(){
+  var B=$("cB"),V=$("cV"),D=$("cDb"),out=$("cOut");if(!out){return;}
+  function f(x){if(x>=1e9){return (x/1e9).toPrecision(4)+" Gbps";}if(x>=1e6){return (x/1e6).toPrecision(4)+" Mbps";}if(x>=1e3){return (x/1e3).toPrecision(4)+" kbps";}return x.toPrecision(4)+" bps";}
+  function calc(){
+    var b=parseFloat(B.value),v=parseFloat(V.value),db=parseFloat(D.value),lines=[],res=[];
+    if(!(b>0)){out.innerHTML="请输入大于 0 的带宽 B。";return;}
+    if(v>=2){var ny=2*b*Math.log2(v);res.push(ny);lines.push("奈奎斯特：2 × "+b+" × log₂"+v+" = 2 × "+b+" × "+(+Math.log2(v).toFixed(3))+" = <b>"+f(ny)+"</b>");}
+    if(!isNaN(db)){var sn=Math.pow(10,db/10),sh=b*Math.log2(1+sn);res.push(sh);lines.push("信噪比："+db+" dB → S/N = 10^("+db+"/10) = "+(+sn.toPrecision(5)));lines.push("香农："+b+" × log₂(1+"+(+sn.toPrecision(5))+") = "+b+" × "+Math.log2(1+sn).toFixed(3)+" = <b>"+f(sh)+"</b>");}
+    if(res.length===2){lines.push("两个限制同时成立 → 取较小值：<b>"+f(Math.min(res[0],res[1]))+"</b>"+(res[0]<res[1]?"（瓶颈是奈奎斯特）":"（瓶颈是香农）"));}
+    if(!res.length){lines.push("至少填电平数 V 或信噪比 dB 之一。");}
+    out.innerHTML=lines.join("<br>");
+  }
+  [B,V,D].forEach(function(x){x.addEventListener("input",calc);});calc();
+})();
+
+/* ---------- line codes ---------- */
+(function(){
+  var svg=$("lcSvg"),inp=$("lcBits");if(!svg){return;}
+  var exs=["10110010","00000000","11111111","0100111010","110001"],exi=0;
+  function codes(bits){
+    var arr=bits.split("").map(Number),out=[];
+    out.push({n:"NRZ",c:"var(--l3)",h:arr.map(function(b){return b?[1,1]:[-1,-1];})});
+    var lv=-1;out.push({n:"NRZI",c:"var(--l2)",h:arr.map(function(b){if(b){lv=-lv;}return [lv,lv];})});
+    out.push({n:"曼彻斯特",c:"var(--l5)",h:arr.map(function(b){return b?[1,-1]:[-1,1];})});
+    var cur=1;out.push({n:"差分曼彻斯特",c:"var(--l4)",h:arr.map(function(b){if(!b){cur=-cur;}var f=cur;cur=-cur;return [f,cur];})});
+    out.push({n:"RZ 归零",c:"var(--l1)",h:arr.map(function(b){return b?[1,0]:[-1,0];})});
+    var last=-1;out.push({n:"AMI",c:"var(--exam)",h:arr.map(function(b){if(!b){return [0,0];}last=-last;return [last,last];})});
+    return out;
+  }
+  function draw(){
+    var bits=(inp.value||"").replace(/[^01]/g,"").slice(0,24);if(!bits){bits="1";}
+    var n=bits.length,L=118,W=44,RH=66,top=30,width=L+n*W+16,height=top+6*RH+6;
+    clear(svg);svg.setAttribute("viewBox","0 0 "+width+" "+height);svg.setAttribute("width",width);svg.setAttribute("height",height);
+    var i;
+    for(i=0;i<=n;i++){el("line",{x1:L+i*W,y1:top-6,x2:L+i*W,y2:height-4,stroke:"var(--line)","stroke-dasharray":"3 3"},svg);}
+    for(i=0;i<n;i++){txt(svg,L+i*W+W/2,20,bits[i],{"text-anchor":"middle","font-size":"14",class:"mono","font-weight":"700"});}
+    codes(bits).forEach(function(c,r){
+      var y0=top+r*RH;function Y(v){return y0+33-v*21;}
+      txt(svg,8,y0+38,c.n,{"font-size":"12.5","font-weight":"700",style:"fill:"+c.c});
+      el("line",{x1:L,y1:Y(0),x2:L+n*W,y2:Y(0),stroke:"var(--line)"},svg);
+      var d="",prev=null;
+      c.h.forEach(function(hv,bi){hv.forEach(function(v,hi){var xs=L+bi*W+hi*W/2,xe=xs+W/2;if(prev===null){d+="M"+xs+" "+Y(v);}else if(v!==prev){d+="L"+xs+" "+Y(v);}d+="L"+xe+" "+Y(v);prev=v;});});
+      el("path",{d:d,fill:"none",stroke:c.c,"stroke-width":"2.4","stroke-linejoin":"round"},svg);
+    });
+  }
+  inp.addEventListener("input",draw);
+  $("lcEx").addEventListener("click",function(){exi=(exi+1)%exs.length;inp.value=exs[exi];draw();});
+  draw();
+})();
+
+/* ---------- ASK / FSK / PSK ---------- */
+(function(){
+  var svg=$("modFig");if(!svg){return;}
+  var bits=[1,0,1,1,0,0,1],L=92,W=78,n=bits.length,i;
+  for(i=0;i<=n;i++){el("line",{x1:L+i*W,y1:22,x2:L+i*W,y2:292,stroke:"var(--line)","stroke-dasharray":"3 3"},svg);}
+  for(i=0;i<n;i++){txt(svg,L+i*W+W/2,16,String(bits[i]),{"text-anchor":"middle","font-size":"14",class:"mono","font-weight":"700"});}
+  var rows=[{n:"数字信号",y:50,c:"var(--ink)"},{n:"ASK 振幅",y:120,c:"var(--exam)"},{n:"FSK 频率",y:190,c:"var(--l3)"},{n:"PSK 相位",y:260,c:"var(--l4)"}];
+  rows.forEach(function(r,ri){
+    txt(svg,6,r.y+5,r.n,{"font-size":"12.5","font-weight":"700",style:"fill:"+r.c});
+    var d="";
+    if(ri===0){bits.forEach(function(b,bi){var y=b?r.y-20:r.y+20;d+=(bi?"L":"M")+(L+bi*W)+" "+y+"L"+(L+(bi+1)*W)+" "+y;});}
+    else{
+      for(var bi=0;bi<n;bi++){var b=bits[bi];for(var s=0;s<=W;s+=1.5){var t=s/W,y;
+        if(ri===1){y=r.y-(b?24:6)*Math.sin(2*Math.PI*2*t);}
+        else if(ri===2){y=r.y-22*Math.sin(2*Math.PI*(b?4:2)*t);}
+        else{y=r.y-22*Math.sin(2*Math.PI*2*t+(b?0:Math.PI));}
+        d+=((bi===0&&s===0)?"M":"L")+(L+bi*W+s).toFixed(1)+" "+y.toFixed(1);}}
+    }
+    el("path",{d:d,fill:"none",stroke:r.c,"stroke-width":"2"},svg);
+  });
+})();
+
+/* ---------- constellations ---------- */
+(function(){
+  function cons(id,pts,lim,labels){
+    var svg=$(id);if(!svg){return;}
+    el("line",{x1:8,y1:70,x2:132,y2:70,stroke:"var(--line)"},svg);el("line",{x1:70,y1:8,x2:70,y2:132,stroke:"var(--line)"},svg);
+    var s=54/lim;
+    pts.forEach(function(p){var x=70+p[0]*s,y=70-p[1]*s;el("circle",{cx:x,cy:y,r:labels?4:2.6,fill:"var(--accent)"},svg);if(labels&&p[2]){txt(svg,x,y-7,p[2],{"text-anchor":"middle","font-size":labels==="s"?"8":"11",class:"mono"});}});
+  }
+  cons("cs1",[[1,0,"1"],[-1,0,"0"]],1.2,"b");
+  cons("cs2",[[1,1,"00"],[-1,1,"01"],[-1,-1,"11"],[1,-1,"10"]],1.4,"b");
+  var g=["00","01","11","10"],lv=[-3,-1,1,3],p16=[];
+  for(var i=0;i<4;i++){for(var j=0;j<4;j++){p16.push([lv[i],lv[j],g[i]+g[j]]);}}
+  cons("cs3",p16,3.6,"s");
+  var p64=[],l8=[-7,-5,-3,-1,1,3,5,7];
+  l8.forEach(function(a){l8.forEach(function(b){p64.push([a,b]);});});
+  cons("cs4",p64,7.8,null);
+})();
+
+/* ---------- PCM ---------- */
+(function(){
+  var svg=$("pcmFig");if(!svg){return;}
+  var x0=70,w=560,yc=100,S=80,i;
+  function sig(t){return .62*Math.sin(2*Math.PI*t)+.3*Math.sin(4*Math.PI*t+.6);}
+  for(i=0;i<8;i++){var y=yc-(i/7*2-1)*S;el("line",{x1:x0,y1:y,x2:x0+w,y2:y,stroke:"var(--line)","stroke-dasharray":"2 4"},svg);txt(svg,x0-8,y+4,("00"+i.toString(2)).slice(-3),{"text-anchor":"end","font-size":"10",class:"mono mut"});}
+  var d="";for(i=0;i<=w;i+=2){d+=(i?"L":"M")+(x0+i)+" "+(yc-sig(i/w)*S).toFixed(1);}
+  el("path",{d:d,fill:"none",stroke:"var(--muted)","stroke-width":"1.8"},svg);
+  var K=12;
+  for(i=0;i<K;i++){var t=(i+.5)/K,v=sig(t),q=Math.round((v+1)/2*7),qv=q/7*2-1,x=x0+t*w;
+    el("line",{x1:x,y1:yc,x2:x,y2:yc-v*S,stroke:"var(--accent)","stroke-width":"1.2"},svg);
+    el("circle",{cx:x,cy:yc-v*S,r:3.5,fill:"var(--accent)"},svg);
+    el("rect",{x:x-5,y:yc-qv*S-5,width:10,height:10,fill:"none",stroke:"var(--exam)","stroke-width":"2"},svg);
+    txt(svg,x,214,("00"+q.toString(2)).slice(-3),{"text-anchor":"middle","font-size":"11",class:"mono","font-weight":"700",style:"fill:var(--exam)"});
+  }
+  txt(svg,6,214,"编码",{"font-size":"11",class:"mut"});
+  txt(svg,6,16,"量化等级",{"font-size":"11",class:"mut"});
+  el("circle",{cx:480,cy:12,r:3.5,fill:"var(--accent)"},svg);txt(svg,488,16,"采样值",{"font-size":"11"});
+  el("rect",{x:545,y:7,width:10,height:10,fill:"none",stroke:"var(--exam)","stroke-width":"2"},svg);txt(svg,560,16,"量化后",{"font-size":"11"});
+})();
+
+/* ---------- hex cells ---------- */
+(function(){
+  var svg=$("hexFig");if(!svg){return;}
+  var s=26,L="ABCDEFG";
+  for(var r=-3;r<=3;r++){for(var q=-6;q<=6;q++){
+    var cx=200+s*Math.sqrt(3)*(q+r/2),cy=130+s*1.5*r;
+    if(cx<28||cx>372||cy<26||cy>236){continue;}
+    var pts=[];for(var k=0;k<6;k++){var a=Math.PI/180*(60*k-30);pts.push((cx+(s-1.5)*Math.cos(a)).toFixed(1)+","+(cy+(s-1.5)*Math.sin(a)).toFixed(1));}
+    var lab=L[(((q+3*r)%7)+7)%7],isA=lab==="A";
+    el("polygon",{points:pts.join(" "),fill:isA?"var(--accent-soft)":"var(--surface-2)",stroke:isA?"var(--accent)":"var(--line)","stroke-width":isA?"2":"1"},svg);
+    txt(svg,cx,cy+5,lab,{"text-anchor":"middle","font-size":"14","font-weight":"700",style:"fill:"+(isA?"var(--accent)":"var(--muted)")});
+  }}
+})();
+
+/* ---------- CDMA tool ---------- */
+(function(){
+  var box=$("cdmaRows"),out=$("cdmaOut");if(!box){return;}
+  var def=[["A","00101110","0"],["B","01011100","x"],["C","00011011","1"],["D","01000010","1"]];
+  def.forEach(function(r){
+    var row=document.createElement("div");row.className="row";
+    row.innerHTML='<label for="cc'+r[0]+'">站 '+r[0]+' 码片<input type="text" class="bits" id="cc'+r[0]+'" inputmode="numeric" maxlength="16"></label>'+
+      '<label for="ca'+r[0]+'">发送<select id="ca'+r[0]+'"><option value="1">发 1</option><option value="0">发 0</option><option value="x">不发</option></select></label>';
+    box.appendChild(row);
+  });
+  function set(v){v.forEach(function(r){$("cc"+r[0]).value=r[1];$("ca"+r[0]).value=r[2];});}
+  function fmt(a){return "("+a.map(sgn).join(" ")+")";}
+  function go(){
+    var m=null,sum=null,lines=[],chips={};
+    for(var i=0;i<def.length;i++){
+      var n=def[i][0],c=$("cc"+n).value.replace(/[^01]/g,""),act=$("ca"+n).value;
+      if(!c){out.innerHTML="站 "+n+" 的码片为空。";return;}
+      if(m===null){m=c.length;sum=new Array(m).fill(0);}
+      if(c.length!==m){out.innerHTML="所有码片长度必须相同（站 "+n+" 是 "+c.length+" 位，别的站是 "+m+" 位）。";return;}
+      var bp=c.split("").map(function(ch){return ch==="1"?1:-1;});chips[n]=bp;
+      lines.push("站 "+n+"："+c+" → 双极 "+fmt(bp));
+      if(act!=="x"){var tx=bp.map(function(v){return act==="1"?v:-v;});tx.forEach(function(v,k){sum[k]+=v;});lines.push("　发 "+act+(act==="0"?"（取反）":"")+" → "+fmt(tx));}
+      else{lines.push("　不发");}
+    }
+    lines.push("<b>信道叠加 S = "+fmt(sum)+"</b>");
+    def.forEach(function(r){var n=r[0],dot=0;chips[n].forEach(function(v,k){dot+=v*sum[k];});var val=dot/m;
+      var res=Math.abs(val-1)<1e-9?"发了 1":Math.abs(val+1)<1e-9?"发了 0":Math.abs(val)<1e-9?"没发":"码片不正交，无法判定";
+      lines.push("解码 S·"+n+"/"+m+" = "+dot+"/"+m+" = "+sgn(val)+" → <b>"+res+"</b>");});
+    out.innerHTML=lines.join("<br>");
+  }
+  set(def);go();
+  $("cdmaGo").addEventListener("click",go);
+  $("cdmaReset").addEventListener("click",function(){set(def);go();});
+  $("cdma4").addEventListener("click",function(){set([["A","1001","1"],["B","1010","1"],["C","1100","0"],["D","1111","0"]]);go();});
+})();
+
+/* ---------- quiz ---------- */
+(function(){
+  var box=$("quizBox");if(!box){return;}
+  var Q=[
+    ["故障发生的频率和故障后的恢复时间，衡量的是网络的？",["性能 Performance","可靠性 Reliability","安全 Security","可行性"],1,"可靠性看故障频率、恢复时间、灾难中的健壮性。"],
+    ["哪种拓扑需要一个中心控制器或集线器？",["网状","星型","总线","环型"],1,"星型拓扑所有设备都连到中心 hub。"],
+    ["“______ 连接在两台设备之间提供专用链路。”",["点到点 point-to-point","多点 multipoint","主 primary","次 secondary"],0,"多点连接是两台以上设备共享一条链路。"],
+    ["第一个计算机网络是？",["CSNET","NSFNET","ANSNET","ARPANET"],3,"1969 年 ARPANET 启用，因特网的前身。"],
+    ["“规定数据的结构或格式，即各部分出现的顺序”指协议的？",["语义","语法","时序","以上都是"],1,"语法 = 格式；语义 = 含义与动作；时序 = 何时发、多快。"],
+    ["“何时发送数据、以多快速度发送”指协议的？",["语义","语法","时序","以上都不是"],2,"Timing。"],
+    ["在 OSI 模型中，数据从低层向高层移动时，头部被？",["添加","移除","重排","修改"],1,"接收方逐层解封装，剥掉头部。"],
+    ["OSI 中加密和解密是哪一层的功能？",["传输层","会话层","表示层","应用层"],2,"表示层负责格式转换、加密、压缩。"],
+    ["OSI 传输层的主要功能是？",["节点到节点交付","进程到进程的报文交付","同步","维护路由表"],1,"节点到节点是链路层；维护路由表是网络层。"],
+    ["IP 协议是一个 ______ 协议。",["可靠的","面向连接的","既可靠又面向连接","以上都不是"],3,"IP 提供不可靠、无连接的数据报服务。"],
+    ["负责把数据单元从一个站无差错地交付到下一个站的是？",["传输层","网络层","数据链路层","物理层"],2,"相邻节点之间 = 数据链路层。"],
+    ["负责分组跨越多条链路从源到目的地交付的是？",["传输层","网络层","数据链路层","物理层"],1,"源到目的、跨多条链路、选路 = 网络层。"],
+    ["TCP/IP 的哪一层相当于 OSI 的会话层+表示层+应用层？",["应用层","网络层","数据链路层","物理层"],0,""],
+    ["在 OSI 模型中，层 N 与层 N+1 的关系是？",["N 层为 N+1 层提供服务","N+1 层给 N 层的数据加头","N 层使用 N+1 层的服务","没有关系"],0,"2021、2022 期中原题。"],
+    ["OSI 中不属于通信子网的是？",["物理层","数据链路层","网络层","会话层"],3,"通信子网 = 下三层。"],
+    ["3000 Hz 信道传二进制信号，信噪比 20 dB，最大数据率？",["6 kbps","19.97 kbps","12 kbps","60 kbps"],0,"香农约 19.97k，奈奎斯特 6k，取小的。"],
+    ["64-QAM 信号波特率 2000，比特率是？",["2000 bps","6000 bps","12000 bps","128000 bps"],2,"2000 × log₂64 = 2000 × 6。"],
+    ["PCM：采样周期 125 μs，量化 128 级，数据率？",["64 kbps","56 kbps","16 kbps","10 kbps"],1,"8000 × 7 = 56 kbps。"],
+    ["E1 基本帧的传送时间是？",["100 ms","200 μs","125 μs","150 μs"],2,"所有 T/E 载波都是每 125 μs 一帧。"],
+    ["关于单模和多模光纤，正确的是？",["单模速率更低","多模传输更远","单模更便宜","多模纤芯更粗"],3,""],
+    ["关于 ADSL，错误的是？",["用普通电话线","语音通话时不能上网","上下行带宽不同","非对称"],1,"话音和数据占不同频段，可以同时进行。"],
+    ["光纤通信中使用的复用方式是？",["时分","波分","频分","码分"],1,"WDM：一根光纤传多个波长。"],
+    ["4B/5B 编码的效率是？",["50%","80%","100%","125%"],1,"4 位数据用 5 位传。曼彻斯特才是 50%。"],
+    ["码片 A=00101110 的站发送比特 0 时，发出的序列是？",["(−1 −1 +1 −1 +1 +1 +1 −1)","(+1 +1 −1 +1 −1 −1 −1 +1)","(0 0 1 0 1 1 1 0)","全 0"],1,"先转双极 (−1 −1 +1 −1 +1 +1 +1 −1)，发 0 再取反。"],
+    ["本地电话网采用什么交换技术？",["电路交换","分组交换","报文交换","以上都不是"],0,""],
+    ["10 路各 4000 Hz 的信号 FDM 复用，保护带 400 Hz，至少需要多少带宽？",["40000 Hz","43600 Hz","44000 Hz","40400 Hz"],1,"10 路之间只需 9 条保护带。"]
+  ];
+  var answered=0,right=0;
+  function upd(){$("quizScore").textContent="已答 "+answered+" / "+Q.length+" 题，答对 "+right+" 题";}
+  function render(){
+    box.innerHTML="";answered=0;right=0;upd();
+    Q.forEach(function(q,qi){
+      var d=document.createElement("div");d.className="q";
+      var t=document.createElement("div");t.className="qt";t.textContent=(qi+1)+". "+q[0];d.appendChild(t);
+      var os=document.createElement("div");os.className="opts";
+      var why=document.createElement("div");why.className="why";why.hidden=true;
+      q[1].forEach(function(o,oi){
+        var b=document.createElement("button");b.type="button";b.className="opt";b.textContent=String.fromCharCode(65+oi)+". "+o;
+        b.addEventListener("click",function(){
+          if(d.dataset.done){return;}d.dataset.done="1";answered++;
+          var btns=os.querySelectorAll("button");btns[q[2]].classList.add("right");
+          if(oi===q[2]){right++;why.textContent="答对了。"+q[3];}else{b.classList.add("wrong");why.textContent="正确答案 "+String.fromCharCode(65+q[2])+"。"+q[3];}
+          why.hidden=false;upd();
+        });
+        os.appendChild(b);
+      });
+      d.appendChild(os);d.appendChild(why);box.appendChild(d);
+    });
+  }
+  render();
+  $("quizReset").addEventListener("click",render);
+})();
+
+/* ---------- checklist ---------- */
+(function(){
+  var list=$("chkList");if(!list){return;}
+  var items=[
+    "说出计算机网络的定义（自治 + 互连）和网络的主要用途",
+    "画出四种拓扑并各说一个优缺点；知道星型需要中心 hub",
+    "按规模区分 PAN/LAN/MAN/WAN/internet，按传输技术区分广播与点到点",
+    "解释协议、服务、接口、对等实体、网络体系结构，并说清“服务垂直、协议水平”",
+    "说出协议三要素：语法、语义、时序",
+    "画出封装过程（H4/H3/H2/T2），说出每层数据单位",
+    "背出分层的优点（至少 3 条）和缺点（2 条）",
+    "对比面向连接与无连接，举出 TCP/UDP 例子；区分报文流和字节流",
+    "从下到上默写 OSI 七层，并说出每层功能；画出 OSI 与 TCP/IP 的对应",
+    "知道路由器只用到网络层、通信子网是下三层、加密在表示层、端到端在传输层",
+    "会算传输时延、传播时延、时延带宽积；做对卫星 533 ms 题",
+    "会做本学期第一章作业全部 10 题",
+    "分清带宽（Hz）与信道容量（bps）、波特率与比特率，会用 Rb = RB·log₂V",
+    "默写奈奎斯特和香农公式，会 dB 换算，知道两者都给时取小",
+    "说出双绞线、同轴、光纤（单模/多模）的特点；知道光纤抗干扰最好、超五类 4 对线",
+    "说出 GEO/MEO/LEO 的高度与时延量级，GEO 全球覆盖要 3 颗",
+    "根据比特串画出 NRZ、NRZI、曼彻斯特、差分曼彻斯特、RZ、AMI 波形",
+    "认出 ASK/FSK/PSK 波形，说出 QPSK/QAM-16/QAM-64 每码元位数",
+    "说出 FDM、TDM（同步/统计）、WDM、CDMA 的原理；会算带保护带的 FDM 带宽",
+    "独立完成 CDMA 编码与解码计算（8 位码片和 4 位码片两种）",
+    "说出 ADSL 的特点和为什么能边打电话边上网",
+    "会算 PCM 数据率（64k/56k），记住 T1 1.544M、E1 2.048M、帧时 125 μs",
+    "列出电路交换与分组交换的区别，推出 k 跳时延公式和分组交换更快的条件",
+    "说出 1G–5G 各代的关键技术，解释频率复用和软/硬切换",
+    "比较 Cable 与 ADSL 上网"
+  ];
+  var KEY="cn-ch12-checklist",saved={};
+  var st=store();
+  try{saved=JSON.parse((st&&st.getItem(KEY))||"{}")||{};}catch(e){saved={};}
+  function upd(){
+    var n=0;items.forEach(function(_,i){if(saved[i]){n++;}});
+    $("chkBar").style.width=(n/items.length*100)+"%";
+    $("chkText").textContent="已掌握 "+n+" / "+items.length;
+  }
+  items.forEach(function(t,i){
+    var li=document.createElement("li");
+    li.innerHTML='<label for="chk'+i+'"><input type="checkbox" id="chk'+i+'"><span></span></label>';
+    li.querySelector("span").textContent=t;
+    var cb=li.querySelector("input");cb.checked=!!saved[i];
+    cb.addEventListener("change",function(){saved[i]=cb.checked;try{if(st){st.setItem(KEY,JSON.stringify(saved));}}catch(e){}upd();});
+    list.appendChild(li);
+  });
+  upd();
+})();
+})();
+</script>
+
+</body>
+</html>
