@@ -10,6 +10,7 @@
 | `作业3.1实验报告.md` | 报告的 Markdown 原稿，内容和 docx 一样 |
 | `作业3.2-priority讲解.pptx` | 作业 3.2 上台讲解用的 PPT（11 页，约 5 分钟，讲 priority-*），每页讲稿在备注里 |
 | `作业3.2讲稿.md` | 逐页讲稿 + 可能被问到的问题 |
+| `priority从零讲解.md` | 从 Pintos 线程基础讲起的 priority 完整讲解：12 个测试逐个分析、代码逐段解释、三个难测试的逐步推演、问答准备 |
 | `修改后的源文件/src/...` | 只包含改动过的 7 个文件，目录结构和 `pintos/src` 一致 |
 | `lab3.patch` | 相对于课程原始 `pintos (1).tar.gz` 的补丁 |
 | `pintos-lab3.tar.gz` | 打好补丁的完整 pintos 源码（不含编译产物） |
