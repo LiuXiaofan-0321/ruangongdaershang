@@ -1,0 +1,725 @@
+diff -ruN a/src/devices/timer.c b/src/devices/timer.c
+--- a/src/devices/timer.c	2026-10-20 07:39:26.030360512 +0000
++++ b/src/devices/timer.c	2026-10-20 07:39:26.040175940 +0000
+@@ -89,11 +89,11 @@
+ void
+ timer_sleep (int64_t ticks) 
+ {
+-  int64_t start = timer_ticks ();
+-
+   ASSERT (intr_get_level () == INTR_ON);
+-  while (timer_elapsed (start) < ticks) 
+-    thread_yield ();
++  /* 原来是忙等 + thread_yield，现在记下目标时刻后直接阻塞。
++     ticks <= 0 时直接返回（alarm-zero / alarm-negative）。 */
++  if (ticks > 0)
++    thread_sleep (timer_ticks () + ticks);
+ }
+ 
+ /* Sleeps for approximately MS milliseconds.  Interrupts must be
+@@ -172,6 +172,7 @@
+ {
+   ticks++;
+   thread_tick ();
++  thread_wake (ticks);   /* 唤醒所有到期的睡眠线程 */
+ }
+ 
+ /* Returns true if LOOPS iterations waits for more than one timer
+diff -ruN a/src/threads/Make.vars b/src/threads/Make.vars
+--- a/src/threads/Make.vars	2026-10-20 07:39:26.028761363 +0000
++++ b/src/threads/Make.vars	2026-10-20 07:39:26.059580506 +0000
+@@ -4,4 +4,4 @@
+ KERNEL_SUBDIRS = threads devices lib lib/kernel $(TEST_SUBDIRS)
+ TEST_SUBDIRS = tests/threads
+ GRADING_FILE = $(SRCDIR)/tests/threads/Grading
+-SIMULATOR = --bochs
++SIMULATOR = --qemu
+diff -ruN a/src/threads/fixed-point.h b/src/threads/fixed-point.h
+--- a/src/threads/fixed-point.h	1970-01-01 00:00:00.000000000 +0000
++++ b/src/threads/fixed-point.h	2026-10-20 07:39:26.060429138 +0000
+@@ -0,0 +1,35 @@
++#ifndef THREADS_FIXED_POINT_H
++#define THREADS_FIXED_POINT_H
++
++#include <stdint.h>
++
++/* 17.14 定点数：低 14 位是小数部分，高 17 位是整数部分（含符号位）。
++   内核里不能用浮点（CFLAGS 带 -msoft-float，且中断里也不保存 FPU 状态），
++   所以 MLFQS 中的 load_avg、recent_cpu 都用这种整数模拟的小数来算。 */
++typedef int fixed_t;
++
++#define FP_SHIFT 14
++#define FP_F (1 << FP_SHIFT)
++
++/* 整数 n 转成定点数。 */
++#define INT_TO_FP(n) ((fixed_t) ((n) * FP_F))
++/* 定点数 x 转整数，向 0 取整。 */
++#define FP_TO_INT_ZERO(x) ((x) / FP_F)
++/* 定点数 x 转整数，四舍五入。 */
++#define FP_TO_INT_NEAREST(x) ((x) >= 0 ? ((x) + FP_F / 2) / FP_F \
++                                       : ((x) - FP_F / 2) / FP_F)
++
++/* 定点数与定点数之间的加减。 */
++#define FP_ADD(x, y) ((x) + (y))
++#define FP_SUB(x, y) ((x) - (y))
++/* 定点数与整数之间的加减。 */
++#define FP_ADD_INT(x, n) ((x) + (n) * FP_F)
++#define FP_SUB_INT(x, n) ((x) - (n) * FP_F)
++/* 定点数乘除：中间结果先扩成 64 位，否则 x * y 很容易溢出。 */
++#define FP_MUL(x, y) ((fixed_t) (((int64_t) (x)) * (y) / FP_F))
++#define FP_DIV(x, y) ((fixed_t) (((int64_t) (x)) * FP_F / (y)))
++/* 定点数与整数之间的乘除，不会溢出，直接算。 */
++#define FP_MUL_INT(x, n) ((x) * (n))
++#define FP_DIV_INT(x, n) ((x) / (n))
++
++#endif /* threads/fixed-point.h */
+diff -ruN a/src/threads/synch.c b/src/threads/synch.c
+--- a/src/threads/synch.c	2026-10-20 07:39:26.028351251 +0000
++++ b/src/threads/synch.c	2026-10-20 07:39:26.060250126 +0000
+@@ -32,6 +32,9 @@
+ #include "threads/interrupt.h"
+ #include "threads/thread.h"
+ 
++/* 嵌套捐赠的最大深度，防止锁链太长（或出现环）时一直循环下去。 */
++#define DONATE_DEPTH_MAX 8
++
+ /* Initializes semaphore SEMA to VALUE.  A semaphore is a
+    nonnegative integer along with two atomic operators for
+    manipulating it:
+@@ -68,7 +71,8 @@
+   old_level = intr_disable ();
+   while (sema->value == 0) 
+     {
+-      list_push_back (&sema->waiters, &thread_current ()->elem);
++      list_insert_ordered (&sema->waiters, &thread_current ()->elem,
++                           thread_priority_more, NULL);
+       thread_block ();
+     }
+   sema->value--;
+@@ -114,9 +118,19 @@
+ 
+   old_level = intr_disable ();
+   if (!list_empty (&sema->waiters)) 
+-    thread_unblock (list_entry (list_pop_front (&sema->waiters),
+-                                struct thread, elem));
++    {
++      /* 线程在等待期间优先级可能因为捐赠而变化，插入时排好的顺序
++         不一定还对，所以这里重新找一次优先级最高的。
++         list_min + “大于”比较函数 = 第一个优先级最高的线程，
++         同优先级时取最早来的那个。 */
++      struct list_elem *e = list_min (&sema->waiters,
++                                      thread_priority_more, NULL);
++      list_remove (e);
++      thread_unblock (list_entry (e, struct thread, elem));
++    }
+   sema->value++;
++  /* 被唤醒的线程优先级可能比自己高，需要抢占。 */
++  thread_preempt ();
+   intr_set_level (old_level);
+ }
+ 
+@@ -178,6 +192,7 @@
+   ASSERT (lock != NULL);
+ 
+   lock->holder = NULL;
++  lock->max_priority = PRI_MIN;
+   sema_init (&lock->semaphore, 1);
+ }
+ 
+@@ -192,12 +207,51 @@
+ void
+ lock_acquire (struct lock *lock)
+ {
++  struct thread *cur = thread_current ();
++  enum intr_level old_level;
++
+   ASSERT (lock != NULL);
+   ASSERT (!intr_context ());
+   ASSERT (!lock_held_by_current_thread (lock));
+ 
++  old_level = intr_disable ();
++
++  if (!thread_mlfqs && lock->holder != NULL)
++    {
++      /* 锁被占用：记下自己在等哪把锁，然后沿着“锁 -> 持有者 ->
++         持有者在等的锁 -> ...”这条链把优先级一路捐上去（嵌套捐赠）。 */
++      struct lock *l = lock;
++      int depth = 0;
++
++      cur->waiting_lock = lock;
++      while (l != NULL && l->holder != NULL && depth < DONATE_DEPTH_MAX
++             && l->max_priority < cur->priority)
++        {
++          l->max_priority = cur->priority;
++          thread_update_priority (l->holder);
++          l = l->holder->waiting_lock;
++          depth++;
++        }
++    }
++
+   sema_down (&lock->semaphore);
+-  lock->holder = thread_current ();
++
++  /* 拿到锁了。 */
++  cur->waiting_lock = NULL;
++  lock->holder = cur;
++  if (!thread_mlfqs)
++    {
++      /* 还在等这把锁的线程现在要转而向新持有者（自己）捐赠。 */
++      lock->max_priority = PRI_MIN;
++      if (!list_empty (&lock->semaphore.waiters))
++        lock->max_priority = list_entry (list_min (&lock->semaphore.waiters,
++                                                   thread_priority_more,
++                                                   NULL),
++                                         struct thread, elem)->priority;
++      list_push_back (&cur->locks, &lock->elem);
++      thread_update_priority (cur);
++    }
++  intr_set_level (old_level);
+ }
+ 
+ /* Tries to acquires LOCK and returns true if successful or false
+@@ -216,7 +270,17 @@
+ 
+   success = sema_try_down (&lock->semaphore);
+   if (success)
+-    lock->holder = thread_current ();
++    {
++      enum intr_level old_level = intr_disable ();
++      lock->holder = thread_current ();
++      if (!thread_mlfqs)
++        {
++          /* try_acquire 成功说明没有人在等，不会有捐赠。 */
++          lock->max_priority = PRI_MIN;
++          list_push_back (&thread_current ()->locks, &lock->elem);
++        }
++      intr_set_level (old_level);
++    }
+   return success;
+ }
+ 
+@@ -228,11 +292,23 @@
+ void
+ lock_release (struct lock *lock) 
+ {
++  enum intr_level old_level;
++
+   ASSERT (lock != NULL);
+   ASSERT (lock_held_by_current_thread (lock));
+ 
++  old_level = intr_disable ();
++  if (!thread_mlfqs)
++    {
++      /* 放掉这把锁后，因为这把锁得到的捐赠也要收回：
++         从 locks 链表里删掉它，再按剩下的锁重新算优先级
++         （priority-donate-multiple 要求只收回这一部分）。 */
++      list_remove (&lock->elem);
++      thread_update_priority (thread_current ());
++    }
+   lock->holder = NULL;
+   sema_up (&lock->semaphore);
++  intr_set_level (old_level);
+ }
+ 
+ /* Returns true if the current thread holds LOCK, false
+@@ -251,8 +327,18 @@
+   {
+     struct list_elem elem;              /* List element. */
+     struct semaphore semaphore;         /* This semaphore. */
++    struct thread *thread;              /* 在这个信号量上等待的线程. */
+   };
+ 
++/* cond->waiters 的比较函数：等待线程优先级高的为“大”。 */
++static bool
++sema_elem_priority_less (const struct list_elem *a,
++                         const struct list_elem *b, void *aux UNUSED)
++{
++  return list_entry (a, struct semaphore_elem, elem)->thread->priority
++         < list_entry (b, struct semaphore_elem, elem)->thread->priority;
++}
++
+ /* Initializes condition variable COND.  A condition variable
+    allows one piece of code to signal a condition and cooperating
+    code to receive the signal and act upon it. */
+@@ -295,6 +381,7 @@
+   ASSERT (lock_held_by_current_thread (lock));
+   
+   sema_init (&waiter.semaphore, 0);
++  waiter.thread = thread_current ();
+   list_push_back (&cond->waiters, &waiter.elem);
+   lock_release (lock);
+   sema_down (&waiter.semaphore);
+@@ -317,8 +404,13 @@
+   ASSERT (lock_held_by_current_thread (lock));
+ 
+   if (!list_empty (&cond->waiters)) 
+-    sema_up (&list_entry (list_pop_front (&cond->waiters),
+-                          struct semaphore_elem, elem)->semaphore);
++    {
++      /* 唤醒等待线程中优先级最高的那个（priority-condvar）。 */
++      struct list_elem *e = list_max (&cond->waiters,
++                                      sema_elem_priority_less, NULL);
++      list_remove (e);
++      sema_up (&list_entry (e, struct semaphore_elem, elem)->semaphore);
++    }
+ }
+ 
+ /* Wakes up all threads, if any, waiting on COND (protected by
+diff -ruN a/src/threads/synch.h b/src/threads/synch.h
+--- a/src/threads/synch.h	2026-10-20 07:39:26.027920457 +0000
++++ b/src/threads/synch.h	2026-10-20 07:39:26.060290523 +0000
+@@ -22,6 +22,8 @@
+   {
+     struct thread *holder;      /* Thread holding lock (for debugging). */
+     struct semaphore semaphore; /* Binary semaphore controlling access. */
++    struct list_elem elem;      /* 持有者 locks 链表中的元素. */
++    int max_priority;           /* 等待这把锁的线程中的最高优先级. */
+   };
+ 
+ void lock_init (struct lock *);
+diff -ruN a/src/threads/thread.c b/src/threads/thread.c
+--- a/src/threads/thread.c	2026-10-20 07:39:26.028541700 +0000
++++ b/src/threads/thread.c	2026-10-20 07:39:26.060321972 +0000
+@@ -11,6 +11,7 @@
+ #include "threads/switch.h"
+ #include "threads/synch.h"
+ #include "threads/vaddr.h"
++#include "devices/timer.h"
+ #ifdef USERPROG
+ #include "userprog/process.h"
+ #endif
+@@ -24,6 +25,12 @@
+    that are ready to run but not actually running. */
+ static struct list ready_list;
+ 
++/* 处于睡眠状态的线程，按 wake_ticks 升序排列（lab2 alarm 时加的）。 */
++static struct list sleep_list;
++
++/* MLFQS: 系统平均负载 (定点数)。 */
++static fixed_t load_avg;
++
+ /* List of all processes.  Processes are added to this list
+    when they are first scheduled and removed when they exit. */
+ static struct list all_list;
+@@ -71,6 +78,11 @@
+ static void schedule (void);
+ void thread_schedule_tail (struct thread *prev);
+ static tid_t allocate_tid (void);
++static bool sleep_less (const struct list_elem *, const struct list_elem *,
++                        void *aux);
++static void mlfqs_update_priority (struct thread *, void *aux);
++static void mlfqs_update_recent_cpu (struct thread *, void *aux);
++static void mlfqs_update_load_avg (void);
+ 
+ /* Initializes the threading system by transforming the code
+    that's currently running into a thread.  This can't work in
+@@ -93,6 +105,8 @@
+   lock_init (&tid_lock);
+   list_init (&ready_list);
+   list_init (&all_list);
++  list_init (&sleep_list);
++  load_avg = 0;
+ 
+   /* Set up a thread structure for the running thread. */
+   initial_thread = running_thread ();
+@@ -135,6 +149,34 @@
+   else
+     kernel_ticks++;
+ 
++  if (thread_mlfqs)
++    {
++      int64_t now = timer_ticks ();
++
++      /* 正在运行的线程 recent_cpu 每个 tick 加 1（idle 不算）。 */
++      if (t != idle_thread)
++        t->recent_cpu = FP_ADD_INT (t->recent_cpu, 1);
++
++      /* 每秒更新一次 load_avg 和所有线程的 recent_cpu。
++         注意顺序：recent_cpu 的公式要用到新的 load_avg。 */
++      if (now % TIMER_FREQ == 0)
++        {
++          mlfqs_update_load_avg ();
++          thread_foreach (mlfqs_update_recent_cpu, NULL);
++        }
++
++      /* 每 4 个 tick 重新计算所有线程的优先级，并重排就绪队列。 */
++      if (now % TIME_SLICE == 0)
++        {
++          thread_foreach (mlfqs_update_priority, NULL);
++          list_sort (&ready_list, thread_priority_more, NULL);
++          if (!list_empty (&ready_list)
++              && list_entry (list_front (&ready_list), struct thread, elem)
++                   ->priority > t->priority)
++            intr_yield_on_return ();
++        }
++    }
++
+   /* Enforce preemption. */
+   if (++thread_ticks >= TIME_SLICE)
+     intr_yield_on_return ();
+@@ -202,6 +244,9 @@
+   /* Add to run queue. */
+   thread_unblock (t);
+ 
++  /* 新线程优先级比当前线程高的话，当前线程马上让出 CPU。 */
++  thread_preempt ();
++
+   return tid;
+ }
+ 
+@@ -238,7 +283,8 @@
+ 
+   old_level = intr_disable ();
+   ASSERT (t->status == THREAD_BLOCKED);
+-  list_push_back (&ready_list, &t->elem);
++  /* 按优先级降序插入，队首永远是优先级最高的线程。 */
++  list_insert_ordered (&ready_list, &t->elem, thread_priority_more, NULL);
+   t->status = THREAD_READY;
+   intr_set_level (old_level);
+ }
+@@ -309,7 +355,7 @@
+ 
+   old_level = intr_disable ();
+   if (cur != idle_thread) 
+-    list_push_back (&ready_list, &cur->elem);
++    list_insert_ordered (&ready_list, &cur->elem, thread_priority_more, NULL);
+   cur->status = THREAD_READY;
+   schedule ();
+   intr_set_level (old_level);
+@@ -336,7 +382,22 @@
+ void
+ thread_set_priority (int new_priority) 
+ {
+-  thread_current ()->priority = new_priority;
++  struct thread *cur = thread_current ();
++  enum intr_level old_level;
++
++  /* MLFQS 下优先级由调度器自己算，忽略手动设置。 */
++  if (thread_mlfqs)
++    return;
++
++  old_level = intr_disable ();
++  /* 只改 base_priority，实际优先级还要和捐赠来的优先级取最大值，
++     否则 priority-donate-lower 里持锁线程会把捐赠“降”掉。 */
++  cur->base_priority = new_priority;
++  thread_update_priority (cur);
++  intr_set_level (old_level);
++
++  /* 降低了优先级之后，就绪队列里可能有比自己高的线程了。 */
++  thread_preempt ();
+ }
+ 
+ /* Returns the current thread's priority. */
+@@ -348,33 +409,212 @@
+ 
+ /* Sets the current thread's nice value to NICE. */
+ void
+-thread_set_nice (int nice UNUSED) 
++thread_set_nice (int nice) 
+ {
+-  /* Not yet implemented. */
++  struct thread *cur = thread_current ();
++  enum intr_level old_level;
++
++  if (nice < NICE_MIN)
++    nice = NICE_MIN;
++  if (nice > NICE_MAX)
++    nice = NICE_MAX;
++
++  old_level = intr_disable ();
++  cur->nice = nice;
++  /* nice 变了优先级立刻重新算，可能需要让出 CPU。 */
++  mlfqs_update_priority (cur, NULL);
++  intr_set_level (old_level);
++
++  thread_preempt ();
+ }
+ 
+ /* Returns the current thread's nice value. */
+ int
+ thread_get_nice (void) 
+ {
+-  /* Not yet implemented. */
+-  return 0;
++  return thread_current ()->nice;
+ }
+ 
+ /* Returns 100 times the system load average. */
+ int
+ thread_get_load_avg (void) 
+ {
+-  /* Not yet implemented. */
+-  return 0;
++  enum intr_level old_level = intr_disable ();
++  int result = FP_TO_INT_NEAREST (FP_MUL_INT (load_avg, 100));
++  intr_set_level (old_level);
++  return result;
+ }
+ 
+ /* Returns 100 times the current thread's recent_cpu value. */
+ int
+ thread_get_recent_cpu (void) 
+ {
+-  /* Not yet implemented. */
+-  return 0;
++  enum intr_level old_level = intr_disable ();
++  int result = FP_TO_INT_NEAREST (FP_MUL_INT (thread_current ()->recent_cpu,
++                                              100));
++  intr_set_level (old_level);
++  return result;
++}
++
++/* MLFQS: priority = PRI_MAX - (recent_cpu / 4) - (nice * 2)，
++   结果截断到 [PRI_MIN, PRI_MAX]。 */
++static void
++mlfqs_update_priority (struct thread *t, void *aux UNUSED)
++{
++  int priority;
++
++  if (t == idle_thread)
++    return;
++
++  priority = PRI_MAX - FP_TO_INT_ZERO (FP_DIV_INT (t->recent_cpu, 4))
++             - t->nice * 2;
++  if (priority < PRI_MIN)
++    priority = PRI_MIN;
++  if (priority > PRI_MAX)
++    priority = PRI_MAX;
++  t->priority = priority;
++}
++
++/* MLFQS: recent_cpu = (2*load_avg)/(2*load_avg + 1) * recent_cpu + nice。
++   先把系数算出来再乘，避免 (2*load_avg)*recent_cpu 溢出。 */
++static void
++mlfqs_update_recent_cpu (struct thread *t, void *aux UNUSED)
++{
++  fixed_t coef;
++
++  if (t == idle_thread)
++    return;
++
++  coef = FP_DIV (FP_MUL_INT (load_avg, 2),
++                 FP_ADD_INT (FP_MUL_INT (load_avg, 2), 1));
++  t->recent_cpu = FP_ADD_INT (FP_MUL (coef, t->recent_cpu), t->nice);
++}
++
++/* MLFQS: load_avg = (59/60)*load_avg + (1/60)*ready_threads，
++   ready_threads 是就绪队列中的线程数加上正在运行的线程（不含 idle）。 */
++static void
++mlfqs_update_load_avg (void)
++{
++  int ready_threads = list_size (&ready_list);
++
++  if (thread_current () != idle_thread)
++    ready_threads++;
++
++  load_avg = FP_ADD (FP_MUL (FP_DIV_INT (INT_TO_FP (59), 60), load_avg),
++                     FP_MUL_INT (FP_DIV_INT (INT_TO_FP (1), 60),
++                                 ready_threads));
++}
++
++/* ready_list / 信号量等待队列用的比较函数：优先级高的排前面。
++   相同优先级时返回 false，所以 list_insert_ordered 会把新元素插到
++   同优先级线程的后面，保证同优先级之间仍然是 FIFO（priority-fifo）。 */
++bool
++thread_priority_more (const struct list_elem *a, const struct list_elem *b,
++                      void *aux UNUSED)
++{
++  return list_entry (a, struct thread, elem)->priority
++         > list_entry (b, struct thread, elem)->priority;
++}
++
++/* sleep_list 用的比较函数：唤醒时刻早的排前面。 */
++static bool
++sleep_less (const struct list_elem *a, const struct list_elem *b,
++            void *aux UNUSED)
++{
++  return list_entry (a, struct thread, elem)->wake_ticks
++         < list_entry (b, struct thread, elem)->wake_ticks;
++}
++
++/* 当前线程睡到 WAKE_TICKS 时刻再醒（由 timer_sleep 调用）。 */
++void
++thread_sleep (int64_t wake_ticks)
++{
++  struct thread *cur = thread_current ();
++  enum intr_level old_level;
++
++  ASSERT (cur != idle_thread);
++
++  old_level = intr_disable ();
++  cur->wake_ticks = wake_ticks;
++  list_insert_ordered (&sleep_list, &cur->elem, sleep_less, NULL);
++  thread_block ();
++  intr_set_level (old_level);
++}
++
++/* 时钟中断里调用：把所有 wake_ticks <= NOW 的线程放回就绪队列。 */
++void
++thread_wake (int64_t now)
++{
++  bool need_yield = false;
++
++  ASSERT (intr_get_level () == INTR_OFF);
++
++  while (!list_empty (&sleep_list))
++    {
++      struct thread *t = list_entry (list_front (&sleep_list),
++                                     struct thread, elem);
++      /* sleep_list 是有序的，第一个没到期后面的也都没到期。 */
++      if (t->wake_ticks > now)
++        break;
++      list_pop_front (&sleep_list);
++      thread_unblock (t);
++      if (t->priority > thread_current ()->priority)
++        need_yield = true;
++    }
++
++  /* 在中断上下文里不能直接 thread_yield，只能等中断返回时再切换。 */
++  if (need_yield)
++    intr_yield_on_return ();
++}
++
++/* 重新计算线程 T 的实际优先级：
++   priority = max (base_priority, 它持有的每把锁上等待者的最高优先级)。
++   如果 T 正在就绪队列里，还要把它挪到新优先级对应的位置。
++   必须在关中断的情况下调用。 */
++void
++thread_update_priority (struct thread *t)
++{
++  int priority = t->base_priority;
++  struct list_elem *e;
++
++  ASSERT (intr_get_level () == INTR_OFF);
++
++  if (thread_mlfqs)
++    return;
++
++  for (e = list_begin (&t->locks); e != list_end (&t->locks);
++       e = list_next (e))
++    {
++      struct lock *l = list_entry (e, struct lock, elem);
++      if (l->max_priority > priority)
++        priority = l->max_priority;
++    }
++  t->priority = priority;
++
++  if (t->status == THREAD_READY)
++    {
++      list_remove (&t->elem);
++      list_insert_ordered (&ready_list, &t->elem, thread_priority_more, NULL);
++    }
++}
++
++/* 如果就绪队列里有比当前线程优先级更高的线程，就让出 CPU。
++   在中断处理程序里调用时改为中断返回后再让出。 */
++void
++thread_preempt (void)
++{
++  enum intr_level old_level = intr_disable ();
++
++  if (!list_empty (&ready_list)
++      && list_entry (list_front (&ready_list), struct thread, elem)->priority
++         > thread_current ()->priority)
++    {
++      if (intr_context ())
++        intr_yield_on_return ();
++      else
++        thread_yield ();
++    }
++  intr_set_level (old_level);
+ }
+ 
+ /* Idle thread.  Executes when no other thread is ready to run.
+@@ -463,8 +703,28 @@
+   strlcpy (t->name, name, sizeof t->name);
+   t->stack = (uint8_t *) t + PGSIZE;
+   t->priority = priority;
++  t->base_priority = priority;
++  list_init (&t->locks);
++  t->waiting_lock = NULL;
+   t->magic = THREAD_MAGIC;
+ 
++  if (thread_mlfqs)
++    {
++      /* 新线程继承父线程的 nice 和 recent_cpu；第一个线程 (main)
++         还没有父线程，用默认值 0。优先级参数被忽略，按公式重新算。 */
++      if (t == initial_thread)
++        {
++          t->nice = NICE_DEFAULT;
++          t->recent_cpu = 0;
++        }
++      else
++        {
++          t->nice = thread_current ()->nice;
++          t->recent_cpu = thread_current ()->recent_cpu;
++        }
++      mlfqs_update_priority (t, NULL);
++    }
++
+   old_level = intr_disable ();
+   list_push_back (&all_list, &t->allelem);
+   intr_set_level (old_level);
+diff -ruN a/src/threads/thread.h b/src/threads/thread.h
+--- a/src/threads/thread.h	2026-10-20 07:39:26.028477446 +0000
++++ b/src/threads/thread.h	2026-10-20 07:39:26.060367812 +0000
+@@ -4,6 +4,7 @@
+ #include <debug.h>
+ #include <list.h>
+ #include <stdint.h>
++#include "threads/fixed-point.h"
+ 
+ /* States in a thread's life cycle. */
+ enum thread_status
+@@ -24,6 +25,11 @@
+ #define PRI_DEFAULT 31                  /* Default priority. */
+ #define PRI_MAX 63                      /* Highest priority. */
+ 
++/* MLFQS 中 nice 值的范围。 */
++#define NICE_MIN -20
++#define NICE_DEFAULT 0
++#define NICE_MAX 20
++
+ /* A kernel thread or user process.
+ 
+    Each thread structure is stored in its own 4 kB page.  The
+@@ -87,9 +93,21 @@
+     enum thread_status status;          /* Thread state. */
+     char name[16];                      /* Name (for debugging purposes). */
+     uint8_t *stack;                     /* Saved stack pointer. */
+-    int priority;                       /* Priority. */
++    int priority;                       /* Priority. (捐赠后的实际优先级) */
+     struct list_elem allelem;           /* List element for all threads list. */
+ 
++    /* Alarm Clock. */
++    int64_t wake_ticks;                 /* 睡眠线程应被唤醒的时刻. */
++
++    /* Priority Donation. */
++    int base_priority;                  /* 线程自己设置的原始优先级. */
++    struct list locks;                  /* 当前持有的锁 (struct lock.elem). */
++    struct lock *waiting_lock;          /* 正在等待的锁, 没有则为 NULL. */
++
++    /* MLFQS. */
++    int nice;                           /* nice 值, -20 ~ 20. */
++    fixed_t recent_cpu;                 /* 最近占用 CPU 的时间 (定点数). */
++
+     /* Shared between thread.c and synch.c. */
+     struct list_elem elem;              /* List element. */
+ 
+@@ -134,6 +152,16 @@
+ int thread_get_priority (void);
+ void thread_set_priority (int);
+ 
++/* Alarm Clock. */
++void thread_sleep (int64_t wake_ticks);
++void thread_wake (int64_t now);
++
++/* Priority Scheduling. */
++bool thread_priority_more (const struct list_elem *,
++                           const struct list_elem *, void *aux);
++void thread_update_priority (struct thread *);
++void thread_preempt (void);
++
+ int thread_get_nice (void);
+ void thread_set_nice (int);
+ int thread_get_recent_cpu (void);
