@@ -1,0 +1,15 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/y90nupkv","index":0,"layout":{"id":"ly/ux4ruhcv","name":"Blank"},"backgroundColor":"rgba(7,109,252,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/547294r6","kind":"shape","name":"deco-tri-big","position":{"left":933.33,"top":-80,"width":426.67,"height":293.33},"geometry":"triangle","fillColor":"#A8EB3F","lineWidth":0},
+{"id":"sh/k3yl0zql","kind":"shape","name":"deco-tri-small","position":{"left":53.33,"top":586.67,"width":160,"height":120},"geometry":"triangle","fillColor":"#A8EB3F","lineWidth":0},
+{"id":"sh/7qp4be9c","kind":"shape","name":"deco-circle","position":{"left":826.67,"top":440,"width":200,"height":200},"geometry":"ellipse","lineColor":"rgba(255,255,255,0.6)","lineWidth":3.33},
+{"id":"sh/65g3298r","kind":"shape","name":"deco-dot","position":{"left":901.33,"top":536,"width":16,"height":16},"geometry":"ellipse","fillColor":"#A8EB3F","lineWidth":0},
+{"id":"sh/ts7md4r2","kind":"textbox","name":"cover-org","position":{"left":85.33,"top":58.67,"width":746.67,"height":24},"text":"华东师范大学 · 本科生创新训练培育项目（创业训练类）","style":{"fontSize":14.67,"typeface":"MiSans","color":"#D6E6FF","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/sryl4zqx","kind":"textbox","name":"cover-title","position":{"left":80,"top":170.67,"width":640,"height":112},"text":"一笔成章","style":{"fontSize":82.67,"typeface":"MiSans","color":"#FFFFFF","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/fu94fe98","kind":"textbox","name":"cover-sub","position":{"left":85.33,"top":296,"width":626.67,"height":34.67},"text":"基于视觉模型的全场景汉字书法智能反馈系统","style":{"fontSize":24,"typeface":"MiSans","color":"#EAF2FF","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/utg3698n","kind":"shape","name":"cover-tag-bg","position":{"left":85.33,"top":362.67,"width":157.33,"height":40},"geometry":"roundRect","fillColor":"#A8EB3F","lineWidth":0},
+{"id":"sh/wn6dc7eh","kind":"textbox","name":"cover-tag","position":{"left":85.33,"top":362.67,"width":157.33,"height":40},"text":"中期汇报","style":{"fontSize":18.67,"typeface":"MiSans","color":"#0A2A6B","bold":true,"alignment":"center"},"geometry":"rect","lineWidth":0},
+{"id":"sh/hofulsf2","kind":"textbox","name":"cover-info","position":{"left":85.33,"top":453.33,"width":613.33,"height":80},"text":"汇报人：刘小凡（软件工程学院）　　指导教师：万成城\n2026 年 10 月","style":{"fontSize":16,"typeface":"MiSans","color":"#D6E6FF","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"im/5cze9svq","kind":"image","name":"cover-img","position":{"left":733.33,"top":130.4,"width":470.53,"height":331.47},"crop":{"left":0,"top":0,"right":0,"bottom":0}},
+{"id":"sh/vmdcj2xw","kind":"textbox","name":"cover-img-cap","position":{"left":760,"top":493.33,"width":480,"height":21.33},"text":"iPad 端 AI 分析结果实拍：参考结构匹配度 + 四图对照 + 点评建议","style":{"fontSize":12.67,"typeface":"MiSans","color":"#C9DCFF","bold":true,"alignment":"center"},"geometry":"rect","lineWidth":0}
+]}

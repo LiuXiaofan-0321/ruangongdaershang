@@ -1,0 +1,13 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/hgzapcr6","index":12,"layout":{"id":"ly/ux4ruhcv","name":"Blank"},"backgroundColor":"rgba(7,109,252,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/q50nydsj","kind":"shape","name":"deco-tri-big","position":{"left":-80,"top":506.67,"width":346.67,"height":266.67},"geometry":"triangle","fillColor":"#A8EB3F","lineWidth":0},
+{"id":"sh/bq9orito","kind":"shape","name":"deco-tri-small","position":{"left":1106.67,"top":80,"width":200,"height":146.67},"geometry":"triangle","fillColor":"#A8EB3F","lineWidth":0},
+{"id":"sh/o3i5w3ad","kind":"shape","name":"deco-circle","position":{"left":933.33,"top":426.67,"width":226.67,"height":226.67},"geometry":"ellipse","lineColor":"rgba(255,255,255,0.6)","lineWidth":3.33},
+{"id":"sh/p4r6p8by","kind":"shape","name":"deco-dot","position":{"left":1034.67,"top":530.67,"width":16,"height":16},"geometry":"ellipse","fillColor":"#A8EB3F","lineWidth":0},
+{"id":"im/rat4bap8","kind":"image","name":"end-char","position":{"left":880,"top":133.33,"width":200,"height":200},"geometry":"roundRect","crop":{"left":0,"top":0,"right":0,"bottom":0}},
+{"id":"sh/32ponyts","kind":"textbox","name":"end-thanks","position":{"left":120,"top":200,"width":746.67,"height":101.33},"text":"感谢聆听","style":{"fontSize":72,"typeface":"MiSans","color":"#FFFFFF","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/gzy5s3a1","kind":"textbox","name":"end-sub","position":{"left":125.33,"top":320,"width":693.33,"height":37.33},"text":"恳请各位老师批评指正","style":{"fontSize":21.33,"typeface":"MiSans","color":"#EAF2FF","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/1076lobm","kind":"shape","name":"end-tag-bg","position":{"left":125.33,"top":394.67,"width":333.33,"height":40},"geometry":"roundRect","fillColor":"#A8EB3F","lineWidth":0},
+{"id":"sh/hcfy9k3u","kind":"textbox","name":"end-tag","position":{"left":125.33,"top":394.67,"width":333.33,"height":40},"text":"一笔成章 · 中期汇报 · 2026.10","style":{"fontSize":16.67,"typeface":"MiSans","color":"#0A2A6B","bold":true,"alignment":"center"},"geometry":"rect","lineWidth":0},
+{"id":"sh/gb6x0zm9","kind":"textbox","name":"end-info","position":{"left":234.47,"top":474.67,"width":613.33,"height":66.67},"text":"汇报人：刘小凡　　指导教师：万成城\n华东师范大学 软件工程学院","style":{"fontSize":15.33,"typeface":"MiSans","color":"#D6E6FF","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0}
+]}

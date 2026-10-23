@@ -1,0 +1,675 @@
+{
+  "version": 1,
+  "guide": "crypto-lectures-2-3-v1",
+  "mastered": [],
+  "revealed": [],
+  "answers": {
+    "b01-q1": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    },
+    "b01-q2": {
+      "selected": [
+        1,
+        3
+      ],
+      "correct": true
+    },
+    "b01-q3": {
+      "selected": [
+        3
+      ],
+      "correct": true
+    },
+    "b02-q1": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    },
+    "b02-q2": {
+      "selected": [
+        2,
+        3
+      ],
+      "correct": true
+    },
+    "b02-q3": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "b03-q1": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    },
+    "b03-q2": {
+      "selected": [
+        1,
+        2,
+        3
+      ],
+      "correct": true
+    },
+    "b03-q3": {
+      "selected": [
+        3
+      ],
+      "correct": true
+    },
+    "b04-q1": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    },
+    "b04-q2": {
+      "selected": [
+        1,
+        2
+      ],
+      "correct": true
+    },
+    "b04-q3": {
+      "selected": [
+        3
+      ],
+      "correct": true
+    },
+    "b05-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "b05-q2": {
+      "selected": [
+        3
+      ],
+      "correct": true
+    },
+    "b05-q3": {
+      "selected": [
+        0,
+        1,
+        3
+      ],
+      "correct": true
+    },
+    "b06-q1": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    },
+    "b06-q2": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    },
+    "b06-q3": {
+      "selected": [
+        1,
+        3,
+        4
+      ],
+      "correct": true
+    },
+    "b07-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "b07-q2": {
+      "selected": [
+        0,
+        1,
+        2,
+        4
+      ],
+      "correct": true
+    },
+    "b07-q3": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "b08-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "b08-q2": {
+      "selected": [
+        0,
+        2,
+        4
+      ],
+      "correct": true
+    },
+    "b08-q3": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "b09-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "b09-q2": {
+      "selected": [
+        0,
+        1,
+        2,
+        4
+      ],
+      "correct": true
+    },
+    "b09-q3": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "r01-q1": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "r01-q2": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "r01-q3": {
+      "selected": [
+        1,
+        2
+      ],
+      "correct": true
+    },
+    "r02-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "r02-q2": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "r02-q3": {
+      "selected": [
+        0,
+        3
+      ],
+      "correct": true
+    },
+    "r03-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "r03-q2": {
+      "selected": [
+        0,
+        2,
+        3
+      ],
+      "correct": true
+    },
+    "r03-q3": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "h01-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "h01-q2": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "h01-q3": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "h02-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "h02-q2": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "h02-q3": {
+      "selected": [
+        0,
+        1,
+        4
+      ],
+      "correct": true
+    },
+    "s01-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "s01-q2": {
+      "selected": [
+        0,
+        2,
+        4
+      ],
+      "correct": true
+    },
+    "s01-q3": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "s02-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "s02-q2": {
+      "selected": [
+        0,
+        1,
+        4
+      ],
+      "correct": true
+    },
+    "s02-q3": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "s03-q1": {
+      "selected": [
+        0,
+        1,
+        4
+      ],
+      "correct": true
+    },
+    "s03-q2": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "s03-q3": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "h03-q1": {
+      "selected": [
+        1,
+        2
+      ],
+      "correct": true
+    },
+    "h03-q2": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "h03-q3": {
+      "selected": [
+        0,
+        2,
+        4
+      ],
+      "correct": true
+    },
+    "t01-q1": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "t01-q2": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "t01-q3": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    },
+    "t02-q1": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    },
+    "t02-q2": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "t02-q3": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "t03-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "t03-q2": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "t03-q3": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "t04-q1": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "t04-q2": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "t04-q3": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "t05-q1": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "t05-q2": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "t05-q3": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "t06-q1": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "t06-q2": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "t06-q3": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "t07-q1": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "t07-q2": {
+      "selected": [
+        0,
+        1
+      ],
+      "correct": true
+    },
+    "t07-q3": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "t08-q1": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "t08-q2": {
+      "selected": [
+        0,
+        1
+      ],
+      "correct": true
+    },
+    "t08-q3": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    },
+    "m01-q1": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "m01-q2": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "m01-q3": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "m02-q1": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    },
+    "m02-q2": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "m02-q3": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "m03-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "m03-q2": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "m03-q3": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    },
+    "f01-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "f01-q2": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "f01-q3": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "z01-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "z01-q2": {
+      "selected": [
+        0,
+        1
+      ],
+      "correct": true
+    },
+    "z01-q3": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "z02-q1": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "z02-q2": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "z02-q3": {
+      "selected": [
+        0,
+        1
+      ],
+      "correct": true
+    },
+    "a01-q1": {
+      "selected": [
+        1
+      ],
+      "correct": true
+    },
+    "a01-q2": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "a01-q3": {
+      "selected": [
+        0,
+        2
+      ],
+      "correct": true
+    },
+    "a02-q1": {
+      "selected": [
+        0
+      ],
+      "correct": true
+    },
+    "a02-q2": {
+      "selected": [
+        0,
+        1
+      ],
+      "correct": true
+    },
+    "a02-q3": {
+      "selected": [
+        2
+      ],
+      "correct": true
+    }
+  },
+  "theme": "light",
+  "exportedAt": "2026-10-17T17:55:24.121Z"
+}
