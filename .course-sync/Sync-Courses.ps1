@@ -39,7 +39,7 @@ try {
     foreach ($marker in @('MERGE_HEAD', 'rebase-merge', 'rebase-apply', 'CHERRY_PICK_HEAD')) {
         if (Test-Path -LiteralPath (Join-Path $gitDirectory $marker)) { throw 'An existing Git operation needs attention; automatic sync stopped.' }
     }
-    $courseNames = @('操作系统', '操作系统lab', '概率论与数理统计', '高端软件开发方法', '计算机网络', '计算机网络lab', '密码与网络安全导论', '软件质量分析')
+    $courseNames = @('操作系统', '操作系统lab', '概率论与数理统计', '高端软件开发方法', '计算机网络', '计算机网络lab', '密码与网络安全导论', '密码与网络安全引论', '软件质量分析')
     foreach ($courseName in $courseNames) {
         $coursePath = Join-Path $RepositoryRoot $courseName
         if (-not (Test-Path -LiteralPath $coursePath)) { continue }
