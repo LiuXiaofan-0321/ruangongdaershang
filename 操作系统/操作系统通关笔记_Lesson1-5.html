@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>操作系统通关笔记·Lesson 1–4</title>
+<title>操作系统通关笔记·Lesson 1–5</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -200,6 +200,18 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 .log{font-family:var(--f-mono);font-size:.85rem;color:var(--muted);min-height:1.5em}
 .buf{display:flex;gap:.4rem;flex-wrap:wrap}
 .buf span{width:3.2rem;height:3.2rem;border-radius:8px;border:2px dashed var(--line);display:grid;place-items:center;font-family:var(--f-mono);font-weight:700}
+.gfig{margin:1rem 0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.6rem .7rem}
+.gcap{font-size:.84rem;color:var(--muted);margin-bottom:.35rem;line-height:1.65}
+.gcap b{color:var(--ink)}
+.gbox,.tool .svgbox{overflow-x:auto}
+.gbox svg,#smGantt{display:block;max-width:none}
+.ptab{margin:.6rem 0}
+.ptab td{padding:.3rem .4rem;vertical-align:middle}
+.ptab input{width:3.5rem;padding:.25rem .4rem;font-size:.9rem}
+.btn.xs{padding:.15rem .5rem;font-size:.8rem}
+#smTable table,#smCmp table{font-size:.86rem}
+#smCmp tr.cur td{background:var(--accent-soft)}
+.tbl table.wide,#smTable table{min-width:40rem}
 .buf span.full{border-style:solid;border-color:var(--ex);background:var(--ex-soft);color:var(--ex)}
 </style>
 </head>
@@ -212,6 +224,7 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
   <a href="#l2">L2 服务与结构</a>
   <a href="#l3">L3 进程</a>
   <a href="#l4">L4 线程</a>
+  <a href="#l5">L5 调度</a>
   <a href="#cheat">一页纸</a>
   <a href="#exam">真题精讲</a>
   <a href="#quiz">自测</a>
@@ -222,8 +235,8 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 
 <header class="top" id="start">
   <div class="eyebrow">OPERATING SYSTEMS · 华东师大软件工程 · 周炽金老师课件</div>
-  <h1>操作系统通关笔记 <span>Lesson 1–4</span></h1>
-  <p class="lede">把 <code>lesson1-intro</code>、<code>lesson2-service</code>、<code>lesson3-processes</code>、<code>lesson4-threads</code> 四份课件重新讲一遍，写给零基础的同学。每个概念配图或小工具，并对照 2018、2019、2020 三年期中真题标出考点。</p>
+  <h1>操作系统通关笔记 <span>Lesson 1–5</span></h1>
+  <p class="lede">把 <code>lesson1-intro</code>、<code>lesson2-service</code>、<code>lesson3-processes</code>、<code>lesson4-threads</code>、<code>lesson5-scheduling</code> 五份课件重新讲一遍，写给零基础的同学。每个概念配图或小工具，并对照 2018、2019、2020 三年期中真题标出考点。</p>
   <div class="legend" aria-label="图例">
     <span class="tag exam">考点</span>
     <span class="tag trap">易错</span>
@@ -234,7 +247,7 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
   <div class="box tip" style="margin-top:1.2rem">
     <span class="tag tip">怎么用</span>
     <ol>
-      <li>第一遍：按顺序读，看懂比喻和图，玩一玩页面里的小工具（进程状态机、fork 进程树、生产者-消费者缓冲区、Amdahl 计算器）。</li>
+      <li>第一遍：按顺序读，看懂比喻和图，玩一玩页面里的小工具（进程状态机、fork 进程树、生产者-消费者缓冲区、Amdahl 计算器、CPU 调度模拟器）。</li>
       <li>第二遍：背 <span class="tag exam">考点</span> 框；判断题一定要会<strong>说出理由</strong>（往年判断题错了要写原因，否则不给分）。</li>
       <li>考前：看「一页纸」和「真题精讲」，做「自测」，在「掌握清单」里打勾。</li>
     </ol>
@@ -263,10 +276,14 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
   </figure>
   <p>往年期中卷结构（100 分）：<strong>判断题 20 分</strong>（错的要写理由）＋ <strong>不定项选择 20–30 分</strong>（多选、少选都不给分）＋ <strong>辨析/简答 15–20 分</strong> ＋ <strong>综合题 35–40 分</strong>。</p>
 
-  <h3 id="c0-map">考情地图：Lesson 1–4 的知识点哪年考过</h3>
+  <h3 id="c0-map">考情地图：Lesson 1–5 的知识点哪年考过</h3>
   <div class="tbl"><table>
     <thead><tr><th>知识点</th><th class="c">2018</th><th class="c">2019</th><th class="c">2020</th><th>位置</th></tr></thead>
     <tbody>
+      <tr><td><strong>CPU 调度算法：画甘特图、算等待/周转时间（综合题 10–15 分）</strong></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot lo"></i></td><td><a href="#l5-sim">5.10</a></td></tr>
+      <tr><td>调度时机与抢占、护航效应、时间片大小的影响</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#l5-when">5.2</a></td></tr>
+      <tr><td>多级反馈队列（vs 多级队列、vs FCFS，举例说明优点）</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"></td><td><a href="#l5-mlfq">5.9</a></td></tr>
+      <tr><td>高响应比优先；SRTF 最优指标；RR 不饥饿</td><td class="c"></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#l5-sjf">5.5</a></td></tr>
       <tr><td>进程状态与转换（哪些不可能、时间片到/打开文件后去哪）</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#l3-state">3.3</a></td></tr>
       <tr><td>进程 vs 线程：各自保存什么、谁是调度单位</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#l4-share">4.1</a></td></tr>
       <tr><td>内核态/用户态、系统调用是程序员接口</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"></td><td><a href="#l1-mode">1.5</a></td></tr>
@@ -285,13 +302,12 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     </tbody>
   </table></div>
   <div class="box exam"><span class="tag exam">重要提醒</span>
-    <p>往年期中还有<strong>一半以上的分数</strong>来自 Lesson 4 之后的章节，四年都考：</p>
+    <p><strong>CPU 调度已在 <a href="#l5">Lesson 5</a> 补齐</strong>（每年综合题 10–15 分，一定要会画甘特图）。往年期中另外约三成分数来自后面的章节，三年都考：</p>
     <ul>
-      <li><strong>CPU 调度算法</strong>：FCFS / SJF / 优先级 / RR / 多级反馈队列，画甘特图、算周转时间和等待时间（每年 10–15 分）。</li>
       <li><strong>进程同步</strong>：信号量 P/V 操作（售票厅、生产者-消费者）、互斥量 vs 信号量、管程（每年 10–15 分）。</li>
       <li><strong>死锁</strong>：四个必要条件、预防 vs 避免、银行家算法求安全序列、资源分配图。</li>
     </ul>
-    <p>这些内容不在 lesson1–4 里，本笔记只在相关处埋了伏笔（比如生产者-消费者、<code>count++</code>）。等后面的课件发了，再按同样方式补上。</p>
+    <p>这些不在 lesson1–5 里，本笔记只在相关处埋了伏笔（比如生产者-消费者、<code>count++</code>）。等后面的课件发了，再按同样方式补上。</p>
   </div>
 </section>
 
@@ -470,7 +486,7 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     <thead><tr><th>主题</th><th>核心问题</th><th>关键概念</th><th>章节</th></tr></thead>
     <tbody>
       <tr><td>服务与结构</td><td>程序怎样获得系统服务？</td><td>系统调用、内核结构</td><td>L2</td></tr>
-      <tr><td>进程与线程</td><td>多个任务怎样运行？</td><td><strong>进程</strong> = 程序运行时的实例；<strong>线程</strong> = 进程内的一条执行流；<strong>调度</strong> = 决定谁用 CPU</td><td>L3、L4、调度</td></tr>
+      <tr><td>进程与线程</td><td>多个任务怎样运行？</td><td><strong>进程</strong> = 程序运行时的实例；<strong>线程</strong> = 进程内的一条执行流；<strong>调度</strong> = 决定谁用 CPU</td><td>L3、L4、L5</td></tr>
       <tr><td>同步与死锁</td><td>共享资源怎样协调？</td><td><strong>同步</strong>：互斥、等待、通知；<strong>死锁</strong>：互相等待对方占着的资源</td><td>后续</td></tr>
       <tr><td>内存管理</td><td>程序怎样用内存？</td><td>地址映射与隔离（两个进程都用地址 0x1000，指向不同物理位置）、虚拟内存</td><td>后续</td></tr>
       <tr><td>存储与 I/O</td><td>数据怎样保存和传输？</td><td>文件系统、I/O 子系统、驱动</td><td>后续</td></tr>
@@ -846,7 +862,7 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     <li><strong>2020 判断</strong>：“进程请求打开的文件打开后，进程从运行态变为就绪态” → ✗。请求打开文件时它进了<strong>等待态</strong>，文件打开（I/O 完成）后是 <strong>等待态 → 就绪态</strong>。</li>
     <li><strong>2020 不定项</strong>：哪些情况可能让进程离开 CPU？I/O 请求、创建子进程（父进程可能被放回就绪或等待子进程）、中断或时间片到期 → <strong>ABCD 全选</strong>。</li>
     <li><strong>2020 简答</strong>：线程有 Ready、Running、Waiting 三态，列出所有可能转换和条件 → 就是上表中间 4 行。</li>
-    <li>调度时机（第 5 章伏笔）：Running→Waiting、Running→Terminated 时调度是<strong>非抢占</strong>的；Running→Ready、Waiting→Ready 时调度是<strong>抢占式</strong>的（2020 选择：抢占式调度可发生在 <strong>等待→就绪</strong> 时）。</li>
+    <li>调度时机（详见 <a href="#l5-when">5.2</a>）：Running→Waiting、Running→Terminated 时调度是<strong>非抢占</strong>的；Running→Ready、Waiting→Ready 时调度是<strong>抢占式</strong>的（2020 选择：抢占式调度可发生在 <strong>等待→就绪</strong> 时）。</li>
     <li>2018 判断：“进程执行的相对速度不能由进程自己控制” ✓（取决于调度和资源）。2019 判断：“进程执行的相对速度与资源无关” ✗（资源不够就得等）。</li>
   </ul></div>
 
@@ -1462,6 +1478,548 @@ sem_init(&amp;shared-&gt;ready, 1, 0);   <span class="c">// 第 2 个参数 1 = 
   </div></details>
 </section>
 
+<!-- ============ Lesson 5 ============ -->
+<section class="chap" id="l5">
+  <div class="chap-head"><span class="chap-no">LESSON 5</span><h2>CPU 调度</h2></div>
+  <p class="sub">对应教材第 5 章。<strong>期中综合题的固定得分点</strong>：给一组进程，画甘特图，算等待时间、周转时间（每年 10–15 分）。另外判断、选择也年年考调度时机、护航效应、RR 时间片、多级反馈队列。</p>
+  <ul class="toc">
+    <li><a href="#l5-basic"><span>5.1</span>调度是什么；CPU 区间与 I/O 区间</a></li>
+    <li><a href="#l5-when"><span>5.2</span>调度时机；抢占与非抢占；分派程序</a></li>
+    <li><a href="#l5-metric"><span>5.3</span>五个评价指标（必会公式）</a></li>
+    <li><a href="#l5-fcfs"><span>5.4</span>FCFS 与护航效应</a></li>
+    <li><a href="#l5-sjf"><span>5.5</span>SJF、SRTF 与执行时间预测</a></li>
+    <li><a href="#l5-hrrn"><span>5.6</span>高响应比优先（往年考过）</a></li>
+    <li><a href="#l5-rr"><span>5.7</span>时间片轮转 RR</a></li>
+    <li><a href="#l5-prio"><span>5.8</span>优先级调度；饥饿与老化</a></li>
+    <li><a href="#l5-mlfq"><span>5.9</span>多级队列与多级反馈队列</a></li>
+    <li><a href="#l5-sim"><span>5.10</span>算法对比 + 调度模拟器</a></li>
+    <li><a href="#l5-mp"><span>5.11</span>多核调度</a></li>
+    <li><a href="#l5-rt"><span>5.12</span>实时调度：RM 与 EDF</a></li>
+    <li><a href="#l5-os"><span>5.13</span>Linux 与 Windows 怎么调度</a></li>
+    <li><a href="#l5-eval"><span>5.14</span>算法评估；Little 定律</a></li>
+    <li><a href="#l5-ex"><span>5.15</span>课堂练习参考答案</a></li>
+  </ul>
+
+  <h3 id="l5-basic">5.1 调度是什么：CPU 区间与 I/O 区间<span class="stars">★★</span></h3>
+  <p>上一讲说线程可以独立执行。可是就绪的线程常常比 CPU 多，总得有人决定<strong>下一个让谁上 CPU</strong>，这就是 <strong>CPU 调度</strong>。</p>
+  <ul>
+    <li><strong>就绪队列（ready queue）</strong>：已经具备运行条件、只差 CPU 的任务排在这里。正在等 I/O 的任务<strong>不在</strong>就绪队列里，I/O 完成后才回来排队。</li>
+    <li>本讲说的“任务”可以是进程，也可以是线程（支持内核线程的系统里，CPU 调度的单位是线程，见 <a href="#l4-share">4.1</a>）。</li>
+  </ul>
+  <div class="box tip"><span class="tag tip">比喻</span><p>CPU 是医院里唯一的医生，就绪队列是候诊区，去拍片（I/O）的病人不在候诊区。调度算法就是“叫号规则”：先来先看？病情轻的先看？每人先看 5 分钟轮流来？</p></div>
+  <p>程序运行时总是<strong>算一会儿、等一会儿</strong>交替进行：连续用 CPU 计算的一段叫 <strong>CPU 执行区间（CPU burst）</strong>，等输入输出的一段叫 <strong>I/O 区间（I/O burst）</strong>。调度关心的是<strong>下一段 CPU 区间</strong>有多长，而不是整个程序要跑多久。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 160" role="img" aria-label="I/O 密集型任务 CPU 区间短而频繁，CPU 密集型任务 CPU 区间长">
+      <g font-size="12.5">
+        <text x="8" y="44" font-weight="700">I/O 密集型</text><text x="8" y="60" font-size="11" class="mut">编辑器、网页服务</text>
+        <text x="8" y="104" font-weight="700">CPU 密集型</text><text x="8" y="120" font-size="11" class="mut">视频编码、科学计算</text>
+        <g>
+          <rect x="120" y="32" width="40" height="28" fill="var(--accent)"/><rect x="160" y="32" width="80" height="28" fill="var(--surface-2)" stroke="var(--line)"/>
+          <rect x="240" y="32" width="20" height="28" fill="var(--accent)"/><rect x="260" y="32" width="100" height="28" fill="var(--surface-2)" stroke="var(--line)"/>
+          <rect x="360" y="32" width="40" height="28" fill="var(--accent)"/><rect x="400" y="32" width="80" height="28" fill="var(--surface-2)" stroke="var(--line)"/>
+          <rect x="480" y="32" width="20" height="28" fill="var(--accent)"/><rect x="500" y="32" width="100" height="28" fill="var(--surface-2)" stroke="var(--line)"/>
+          <rect x="600" y="32" width="40" height="28" fill="var(--accent)"/>
+          <rect x="120" y="92" width="200" height="28" fill="var(--exam)"/><rect x="320" y="92" width="40" height="28" fill="var(--surface-2)" stroke="var(--line)"/>
+          <rect x="360" y="92" width="240" height="28" fill="var(--exam)"/><rect x="600" y="92" width="40" height="28" fill="var(--surface-2)" stroke="var(--line)"/>
+        </g>
+        <rect x="120" y="138" width="14" height="12" fill="var(--accent)"/><text x="140" y="149" font-size="11">CPU 区间</text>
+        <rect x="210" y="138" width="14" height="12" fill="var(--surface-2)" stroke="var(--line)"/><text x="230" y="149" font-size="11">I/O 区间（不占 CPU，不在就绪队列）</text>
+        <text x="640" y="22" text-anchor="end" font-size="11" class="mut">时间 →</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>课件 P5 的统计：<strong>大多数 CPU 区间都很短</strong>，只有少数很长。所以“让短的先跑”往往能让大家都更快回去做 I/O。</figcaption>
+  </figure>
+  <p>调度器的三个层次在 <a href="#l3-queue">3.4</a> 讲过：长程（作业调度，高级）、中程（换入换出）、<strong>短程（CPU 调度，低级）</strong>。本讲讲的都是<strong>短程调度</strong>，它非常频繁（几十毫秒一次），所以必须快。</p>
+
+  <h3 id="l5-when">5.2 调度时机；抢占与非抢占；分派程序<span class="stars">★★★★</span></h3>
+  <p>什么时候需要选下一个任务？看当前任务的状态怎么变（对照 <a href="#l3-state">3.3 五状态图</a>）：</p>
+  <div class="tbl"><table>
+    <thead><tr><th>状态变化</th><th>当前任务还能继续跑吗</th><th>调度的含义</th><th>类型</th></tr></thead>
+    <tbody>
+      <tr><td>① 运行 → 等待（发起 I/O、wait 子进程）</td><td>不能</td><td>必须选别人</td><td rowspan="2"><strong>非抢占</strong>也会发生</td></tr>
+      <tr><td>④ 运行 → 终止</td><td>不能</td><td>选别人，或者 CPU 空闲</td></tr>
+      <tr><td>② 运行 → 就绪（时间片用完、被抢）</td><td>能，但被换下</td><td>重新排队</td><td rowspan="2">只有<strong>抢占式</strong>才有</td></tr>
+      <tr><td>③ 等待 → 就绪（I/O 完成）</td><td>原任务照样能跑</td><td>新就绪的任务可能更重要 → 可能抢占</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2">
+    <div class="mini"><h5>非抢占式（Nonpreemptive）</h5>任务一旦拿到 CPU，就一直用到<strong>自己阻塞或结束</strong>才交出来。<br>例：FCFS、非抢占 SJF、非抢占优先级。</div>
+    <div class="mini"><h5>抢占式（Preemptive）</h5>任务还能跑，OS 也可以把 CPU 收回：<strong>时间片用完</strong>，或<strong>来了更合适的任务</strong>。<br>例：RR、SRTF、抢占式优先级。Linux、Windows 都支持抢占。</div>
+  </div>
+  <div class="box exam"><span class="tag exam">考点 · 2020 选择</span><p>“可以在以下哪种情况下进行<strong>抢占式</strong>调度？” → <strong>B 进程从等待状态切换到就绪状态时</strong>。A（运行→等待）和 C（终止）时当前进程自己就跑不了了，那是非抢占调度也会做的选择，不叫“抢占”。</p></div>
+  <div class="box trap"><span class="tag trap">易错</span><p>抢占的代价：①切换次数增加，开销变大；②任务可能在<strong>改共享数据改到一半</strong>时被抢走，别的任务看到不一致的数据，所以需要同步（下一讲 Lesson 6 的内容，前面 <code>count++</code> 不是原子操作就是这个问题）。</p></div>
+  <h4>调度器 vs 分派程序</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 130" role="img" aria-label="调度器负责选择，分派程序负责切换：保存现场、恢复现场、切换地址空间和模式、跳转">
+      <defs><marker id="l5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+      <g font-size="12.5" text-anchor="middle">
+        <rect x="10" y="30" width="140" height="56" rx="10" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="80" y="54" font-weight="700" style="fill:var(--accent)">调度器 Scheduler</text><text x="80" y="74" font-size="11">决定“选谁”</text>
+        <line x1="152" y1="58" x2="196" y2="58" stroke="var(--muted)" stroke-width="1.8" marker-end="url(#l5a)"/>
+        <rect x="200" y="20" width="450" height="76" rx="10" fill="var(--exam-soft)" stroke="var(--exam)"/>
+        <text x="425" y="40" font-weight="700" style="fill:var(--exam)">分派程序 Dispatcher：负责“怎么换”</text>
+        <text x="290" y="66" font-size="11.5">① 保存旧任务现场</text><text x="425" y="66" font-size="11.5">② 恢复新任务现场</text><text x="565" y="66" font-size="11.5">③ 必要时切地址空间</text>
+        <text x="330" y="86" font-size="11.5">④ 切回用户态</text><text x="520" y="86" font-size="11.5">⑤ 跳到新任务该继续的位置</text>
+        <text x="425" y="120" font-size="11.5" class="mut">分派延迟（dispatch latency）= 停下旧任务 到 新任务开始运行 所花的时间，越短越好</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+
+  <h3 id="l5-metric">5.3 五个评价指标<span class="stars">★★★★</span></h3>
+  <div class="tbl"><table>
+    <thead><tr><th>指标</th><th>含义</th><th>目标</th></tr></thead>
+    <tbody>
+      <tr><td><strong>CPU 利用率</strong></td><td>CPU 忙的时间占总时间的比例</td><td>越高越好</td></tr>
+      <tr><td><strong>吞吐量</strong> Throughput</td><td>单位时间完成的任务数</td><td>越高越好</td></tr>
+      <tr><td><strong>周转时间</strong> Turnaround</td><td>从<strong>到达</strong>到<strong>完成</strong>的总时间</td><td>越短越好</td></tr>
+      <tr><td><strong>等待时间</strong> Waiting</td><td>在<strong>就绪队列</strong>里排队的时间<strong>总和</strong>（每次排队都算）</td><td>越短越好</td></tr>
+      <tr><td><strong>响应时间</strong> Response</td><td>从<strong>到达</strong>到<strong>第一次</strong>上 CPU 的时间</td><td>越短越好</td></tr>
+    </tbody>
+  </table></div>
+  <div class="formula">设到达时刻 A，第一次运行时刻 S，完成时刻 C，CPU 执行时间（服务时间）B：
+<br><span class="big">周转 = C − A</span>　　<span class="big">响应 = S − A</span>
+<br><span class="big">等待 = 周转 − B = C − A − B</span>　（中间没有 I/O 时成立）
+<br>带权周转时间 = 周转 / B　　平均值 = 各任务之和 ÷ 任务数
+<span class="cap">“等待 = 周转 − 执行时间”是算题最快的办法：先在甘特图上找每个任务的完成时刻，减去到达时刻，再减去它自己的执行时间。带权周转课件没讲，但国内教材和考研常考，顺手记住（它 ≥ 1，越接近 1 越好）。</span></div>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 210" role="img" aria-label="任务在时刻 1 到达，3 到 5 和 8 到 10 运行；响应时间 2，等待时间 5，周转时间 9">
+      <defs><marker id="l5b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--ink)"/></marker></defs>
+      <g font-size="12">
+        <rect x="60" y="40" width="150" height="34" fill="var(--surface-2)" stroke="var(--line)"/><text x="135" y="62" text-anchor="middle" class="mut">其他任务</text>
+        <rect x="210" y="40" width="100" height="34" fill="var(--accent)"/><text x="260" y="62" text-anchor="middle" font-weight="700" style="fill:var(--surface)">目标任务</text>
+        <rect x="310" y="40" width="150" height="34" fill="var(--surface-2)" stroke="var(--line)"/><text x="385" y="62" text-anchor="middle" class="mut">其他任务</text>
+        <rect x="460" y="40" width="100" height="34" fill="var(--accent)"/><text x="510" y="62" text-anchor="middle" font-weight="700" style="fill:var(--surface)">目标任务</text>
+        <g class="mono" font-size="11.5" text-anchor="middle"><text x="60" y="90">0</text><text x="110" y="90">1</text><text x="210" y="90">3</text><text x="310" y="90">5</text><text x="460" y="90">8</text><text x="560" y="90">10</text></g>
+        <path d="M110 14 L110 36" stroke="var(--exam)" stroke-width="2" marker-end="url(#l5b)"/><text x="116" y="22" style="fill:var(--exam)" font-weight="700">到达 A=1</text>
+        <line x1="110" y1="112" x2="208" y2="112" stroke="var(--ink)" marker-end="url(#l5b)" marker-start="url(#l5b)"/><text x="160" y="106" text-anchor="middle">响应 = 3−1 = <tspan font-weight="700">2</tspan></text>
+        <line x1="110" y1="142" x2="208" y2="142" stroke="var(--exam)" stroke-width="2" marker-end="url(#l5b)" marker-start="url(#l5b)"/>
+        <line x1="310" y1="142" x2="458" y2="142" stroke="var(--exam)" stroke-width="2" marker-end="url(#l5b)" marker-start="url(#l5b)"/>
+        <text x="384" y="132" text-anchor="middle" style="fill:var(--exam)">等待 = (3−1) + (8−5) = <tspan font-weight="700">5</tspan></text>
+        <line x1="110" y1="174" x2="558" y2="174" stroke="var(--l3)" stroke-width="2" marker-end="url(#l5b)" marker-start="url(#l5b)"/>
+        <text x="334" y="168" text-anchor="middle" style="fill:var(--l3)">周转 = 10−1 = <tspan font-weight="700">9</tspan> = 执行 4 + 等待 5</text>
+        <text x="330" y="200" text-anchor="middle" class="mut" font-size="11.5">课件 P12：第一次上 CPU 早（响应短），不代表总等待短</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <div class="box tip"><span class="tag tip">不同系统看重不同指标</span><ul>
+    <li><strong>批处理</strong>：吞吐量、平均周转时间、利用率。</li>
+    <li><strong>交互式</strong>：响应时间，以及会不会偶尔等很久。</li>
+    <li><strong>实时</strong>：能不能在<strong>截止时间</strong>前完成（平均再快也没用）。</li>
+    <li>只看平均值会掩盖少数任务等很久的情况。这些指标<strong>不能同时最优</strong>，选算法就是选取舍。</li>
+  </ul></div>
+
+  <h3 id="l5-fcfs">5.4 先来先服务 FCFS 与护航效应<span class="stars">★★★</span></h3>
+  <p><strong>FCFS（First-Come, First-Served）</strong>：按进入就绪队列的顺序执行，新来的排队尾，CPU 空了取队首；<strong>非抢占</strong>，一直跑到这段 CPU 区间结束或阻塞。</p>
+  <p>课件例子：P1=24、P2=3、P3=3，都在时刻 0 到达。只是换了排队顺序，结果天差地别：</p>
+  <div class="gfig" data-p="slide16" data-alg="FCFS"></div>
+  <div class="gfig" data-p="slide17" data-alg="FCFS"></div>
+  <div class="box ex"><span class="tag ex">算一遍</span><p>顺序 P1、P2、P3：等待 0、24、27，平均 <strong>(0+24+27)/3 = 17</strong>。<br>顺序 P2、P3、P1：等待 0、3、6，平均 <strong>(0+3+6)/3 = 3</strong>。<br>总工作量都是 30，只是短任务不再被长任务挡住。</p></div>
+  <h4>护航效应（Convoy effect）</h4>
+  <p>一个长的 CPU 密集型任务占着 CPU，一群 I/O 密集型的短任务只能在后面干等，就像一辆慢车后面排起的车队。短任务拿不到 CPU 就发不出下一次 I/O，于是<strong>I/O 设备闲着</strong>；等长任务去做 I/O 了，短任务一拥而上、很快又都去等 I/O，<strong>CPU 又闲着</strong>。CPU 和 I/O 交替空闲，利用率下降。</p>
+  <div class="box exam"><span class="tag exam">考点 · 2020 选择</span><p>可能出现护航效应的调度算法 → <strong>FCFS</strong>。FCFS 的优点：简单、公平（按顺序）、切换少；缺点：平均等待时间往往很长、对短任务和交互任务不友好。</p></div>
+
+  <h3 id="l5-sjf">5.5 短作业优先 SJF 与最短剩余时间优先 SRTF<span class="stars">★★★★</span></h3>
+  <p><strong>SJF（Shortest-Job-First）</strong>：每次从就绪队列中选<strong>下一段 CPU 区间最短</strong>的任务。课件里的 SJF 默认是<strong>非抢占</strong>的：一旦开始就跑完，后来的再短也不抢。</p>
+  <div class="gfig" data-p="slide20" data-alg="SJF"></div>
+  <p>P1=6、P2=8、P3=7、P4=3 同时到达：顺序 P4→P1→P3→P2，等待 3、16、9、0，平均 <strong>7</strong>。</p>
+  <div class="box tip"><span class="tag tip">为什么短的先跑，平均等待最小？（课件 P21 的证明）</span>
+    <p>两个任务从时刻 t 开始跑，长度 a &gt; b。<br>长的先：两者等待之和 = t + (t + a) = 2t + a；<br>短的先：两者等待之和 = t + (t + b) = 2t + b，<strong>少了 a − b</strong>。<br>后面任务的开始时间不变。所以只要发现“长的排在短的前面”就交换，一直换到按长度从小到大排列，平均等待最小。</p>
+    <p>结论：<strong>一组任务同时到达、执行时间已知、忽略切换开销时，SJF 的平均等待时间最小（最优）。</strong></p>
+  </div>
+  <h4>SRTF：SJF 的抢占版</h4>
+  <p><strong>SRTF（Shortest-Remaining-Time-First，也叫抢占式 SJF、STCF）</strong>：每当有新任务到达，就拿<strong>新任务的执行时间</strong>和<strong>当前任务的剩余时间</strong>比，新的更短就抢占。</p>
+  <div class="gfig" data-p="slide23" data-alg="SRTF"></div>
+  <div class="box ex"><span class="tag ex">课件 P23 · 一步步来</span>
+    <p>到达 0、1、2、3；执行 8、4、9、5。</p>
+    <ul>
+      <li>t=0：只有 P1，开跑。</li>
+      <li>t=1：P2 到（需 4），P1 还剩 7 → <strong>P2 抢占</strong>。</li>
+      <li>t=2、3：P3（9）、P4（5）到，都比 P2 剩下的长，P2 继续，到 t=5 完成。</li>
+      <li>t=5：剩 P1(7)、P3(9)、P4(5) → P4；t=10 → P1；t=17 → P3，t=26 结束。</li>
+      <li>等待：P1 = 17−0−8 = 9，P2 = 0，P3 = 26−2−9 = 15，P4 = 10−3−5 = 2 → 平均 <strong>26/4 = 6.5</strong>。（同一组数用非抢占 SJF 是 7.75。）</li>
+    </ul>
+  </div>
+  <div class="box exam"><span class="tag exam">考点</span><ul>
+    <li><strong>2020 简答</strong>：SRTF 在哪个指标上最优？→ <strong>平均等待时间（平均响应时间）最优</strong>。FCFS 在什么指标上优于 RR？→ <strong>吞吐量</strong>（没有频繁的上下文切换开销）。</li>
+    <li>课堂练习：新任务到达时，<strong>非抢占 SJF</strong> 不管它，等当前任务跑完再按长度选；<strong>SRTF</strong> 立刻比较“新任务长度”和“当前任务剩余”，更短就抢。</li>
+    <li>SJF/SRTF 的两个问题：① 下一段 CPU 区间有多长<strong>事先不知道</strong>，只能预测；② 短任务源源不断来时，长任务可能<strong>饥饿</strong>。</li>
+  </ul></div>
+  <h4>怎么预测下一段 CPU 区间：指数平均</h4>
+  <div class="formula"><span class="big">τ<sub>n+1</sub> = α·t<sub>n</sub> + (1 − α)·τ<sub>n</sub></span>　　0 ≤ α ≤ 1
+<span class="cap">t<sub>n</sub>：第 n 次实际长度；τ<sub>n</sub>：对第 n 次的预测；τ<sub>n+1</sub>：对下一次的预测。<br>课件例：α = 0.5，τ<sub>n</sub> = 10，t<sub>n</sub> = 6 → τ<sub>n+1</sub> = 0.5×6 + 0.5×10 = <strong>8</strong>。<br>α = 0：只用旧预测，新数据不起作用；α = 1：只看最近一次；0 &lt; α &lt; 1：越早的数据权重按 (1−α) 的幂衰减。</span></div>
+  <div class="tool">
+    <h5>拖一拖：α 越大，预测越“跟得紧”</h5>
+    <div class="row"><label for="eaA">α = <span id="eaAv" class="mono">0.50</span><input type="range" id="eaA" min="0" max="1" step="0.05" value="0.5"></label><label for="eaT0">初始预测 τ₀<input type="number" id="eaT0" value="10" min="0" step="1"></label></div>
+    <div class="svgbox" style="margin-top:.5rem"><svg id="eaSvg" viewBox="0 0 640 230" role="img" aria-label="实际 CPU 区间与指数平均预测值"></svg></div>
+    <div class="out" id="eaOut"></div>
+  </div>
+
+  <h3 id="l5-hrrn">5.6 高响应比优先 HRRN<span class="stars">★★</span></h3>
+  <p class="muted">课件没有单独讲，但 2019 判断题考过，国内教材常见。</p>
+  <div class="formula"><span class="big">响应比 R = (等待时间 + 服务时间) / 服务时间 = 1 + 等待时间 / 服务时间</span>
+<span class="cap">非抢占。每次 CPU 空出来时，给就绪队列里每个任务算一次 R，选最大的。</span></div>
+  <ul>
+    <li>服务时间短 → R 大 → 优先（像 SJF）；</li>
+    <li>等得越久 → R 越大 → 长任务也终会轮到（像 FCFS，<strong>不会饥饿</strong>）。</li>
+  </ul>
+  <div class="box exam"><span class="tag exam">考点 · 2019 判断</span><p>“RR、短进程优先、FCFS 及高响应比优先调度算法都没有综合考虑进程等待时间和执行时间” → <strong>✗</strong>。高响应比优先综合考虑了等待时间和执行时间。</p></div>
+  <details><summary>例题：A(到达 0, 服务 3)、B(2, 6)、C(4, 4)、D(6, 5)、E(8, 2)，用 HRRN 求执行顺序</summary><div class="ans">
+    <p>t=0 只有 A，A 跑到 3。t=3 只有 B，B 跑到 9。</p>
+    <p>t=9：C 等了 5 → R = (5+4)/4 = <strong>2.25</strong>；D 等了 3 → (3+5)/5 = 1.6；E 等了 1 → (1+2)/2 = 1.5 → 选 <strong>C</strong>，跑到 13。</p>
+    <p>t=13：D 等了 7 → (7+5)/5 = 2.4；E 等了 5 → (5+2)/2 = <strong>3.5</strong> → 选 <strong>E</strong>，跑到 15；最后 D 跑到 20。</p>
+    <p>顺序 A B C E D，等待 0、1、5、9、5，平均 <strong>4.0</strong>（FCFS 是 4.6，SJF 是 3.6）。在下面的模拟器里选“高响应比 HRRN 例”可以看到甘特图。</p>
+  </div></details>
+
+  <h3 id="l5-rr">5.7 时间片轮转 RR<span class="stars">★★★★</span></h3>
+  <p><strong>RR（Round Robin）</strong>：就绪队列当成一个<strong>循环队列</strong>，每个任务最多连续跑一个<strong>时间片 q</strong>：</p>
+  <ul>
+    <li>q 内跑完或阻塞 → 提前让出 CPU；</li>
+    <li>q 用完还没跑完 → 被抢占，<strong>回到队尾</strong>；</li>
+    <li>它是<strong>抢占式</strong>的，专为分时、交互系统设计。</li>
+  </ul>
+  <div class="gfig" data-p="slide28" data-alg="RR" data-q="4"></div>
+  <div class="tbl"><table>
+    <thead><tr><th>课件 P29（q=4）</th><th class="c">P1</th><th class="c">P2</th><th class="c">P3</th><th>平均</th></tr></thead>
+    <tbody>
+      <tr><td>首次运行时刻</td><td class="c">0</td><td class="c">4</td><td class="c">7</td><td></td></tr>
+      <tr><td>完成时刻</td><td class="c">30</td><td class="c">7</td><td class="c">10</td><td></td></tr>
+      <tr><td>响应时间</td><td class="c">0</td><td class="c">4</td><td class="c">7</td><td>11/3 ≈ 3.67</td></tr>
+      <tr><td>等待时间</td><td class="c">30−24 = 6</td><td class="c">4</td><td class="c">7</td><td>17/3 ≈ 5.67</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box trap"><span class="tag trap">易错 · 画 RR 甘特图的三条规矩</span><ol>
+    <li>时间片用完的任务排到<strong>队尾</strong>；如果<strong>同一时刻有新任务到达</strong>，惯例是<strong>新任务先入队</strong>，被换下的再排在它后面（题目另有说明时按题目）。</li>
+    <li>任务剩余时间不足 q，跑完就走，<strong>不必用满 q</strong>，下一个立刻接上。</li>
+    <li>队列里只剩它自己时，时间片到了也<strong>不会换人</strong>，它接着跑（课堂练习：RR 时间片到期不一定切换）。</li>
+  </ol></div>
+  <h4>时间片 q 选多大</h4>
+  <div class="grid2">
+    <div class="mini"><h5>q 太大</h5>每个任务都能在一个时间片里跑完 → <strong>退化成 FCFS</strong>，响应变慢。</div>
+    <div class="mini"><h5>q 太小</h5>切换太频繁，上下文切换的<strong>开销占比</strong>变大，CPU 大量时间花在“换人”上 → 效率下降。</div>
+  </div>
+  <p>经验：q 要比一次上下文切换的时间大得多（q 常取 10–100 ms，切换不到 10 μs）；让<strong>大约 80% 的 CPU 区间短于 q</strong>。固定 n 个任务都一直就绪时，每个任务最多等 <strong>(n−1)·q</strong> 就能再轮到。</p>
+  <figure>
+    <div class="svgbox"><svg id="rrqSvg" viewBox="0 0 640 230" role="img" aria-label="时间片 q 从 1 到 7 时的平均周转时间，不单调"></svg></div>
+    <figcaption>课件 P31：四个任务 P1=6、P2=3、P3=1、P4=7，q 从 1 变到 7 的平均周转时间（本页模拟器实时算出）。<strong>平均周转时间不随 q 单调变化</strong>；q 大于等于最长任务（7）后就和 FCFS 一样。</figcaption>
+  </figure>
+  <div class="box exam"><span class="tag exam">考点</span><ul>
+    <li><strong>2018 判断</strong>：“时间片越小，系统的响应时间就越小，系统的效率就越高” → <strong>✗</strong>。时间片小能缩短响应时间，但切换开销占比增大，效率<strong>降低</strong>。</li>
+    <li><strong>2019 选择</strong>：运行进程时间片用完 → 挂到<strong>就绪队列</strong>。</li>
+    <li><strong>2020 判断</strong>：RR 不需要预知任务运行时间，且不会出现长任务饥饿 → <strong>✓</strong>。</li>
+    <li>RR 的平均等待时间往往比 SJF 长，但<strong>响应时间短</strong>；首次响应快 ≠ 总等待少。</li>
+  </ul></div>
+
+  <h3 id="l5-prio">5.8 优先级调度；饥饿与老化<span class="stars">★★★</span></h3>
+  <p>给每个任务一个优先级，每次选<strong>优先级最高</strong>的。可以是抢占式（更高优先级的到了就抢），也可以是非抢占式。同级之间再用 FCFS 或 RR 决定先后。</p>
+  <div class="box trap"><span class="tag trap">易错 · 先看清“数字大还是数字小优先”</span><p>课件例题<strong>数字越小优先级越高</strong>；2018 期中题和课堂练习是<strong>数字越大越高</strong>（“这里 5 为最高优先级”）。题目没说时按教材默认“数字小 = 优先级高”，并在答案里写明你的假设。</p></div>
+  <div class="gfig" data-p="slide33" data-alg="PRIO" data-hi="small"></div>
+  <p>课件 P33（数字小优先）：顺序 P2→P5→P1→P3→P4，等待 6、0、16、18、1，平均 <strong>8.2</strong>。</p>
+  <p>SJF 其实是优先级调度的特例：把“预测执行时间越短”定为“优先级越高”。</p>
+  <h4>饥饿（Starvation）与老化（Aging）</h4>
+  <div class="grid2">
+    <div class="mini"><h5>饥饿</h5>高优先级任务源源不断，低优先级任务<strong>一直就绪却总轮不到</strong>。（传闻 1973 年拆 MIT 的 IBM 7094 时，发现一个 1967 年提交的低优先级任务还没跑。）</div>
+    <div class="mini"><h5>老化</h5>等得越久，<strong>逐步提高</strong>它的优先级（数字小优先时就是把数字减小），总有一天它会变成最高。也可以周期性把所有任务提到高队列，或给低优先级预留份额。</div>
+  </div>
+  <h4>优先级 + 轮转</h4>
+  <p>先选最高优先级，<strong>同一优先级内用 RR 轮流</strong>。课件 P35（数字小优先，q=2）：</p>
+  <div class="gfig" data-p="slide35" data-alg="PRR" data-q="2" data-hi="small"></div>
+  <p>P4（优先级 1）先跑完；再轮转 P2、P3（优先级 2）；最后轮转 P1、P5（优先级 3）。</p>
+
+  <h3 id="l5-mlfq">5.9 多级队列与多级反馈队列<span class="stars">★★★★</span></h3>
+  <h4>多级队列 MLQ（Multilevel Queue）</h4>
+  <p>系统里既有交互任务又有后台计算，一条队列一个规则不合适。于是按<strong>任务类型或优先级</strong>分成几条队列（如实时 &gt; 系统 &gt; 交互 &gt; 批处理），每条队列用<strong>自己的算法</strong>（交互用 RR，批处理用 FCFS），队列之间用<strong>严格优先级</strong>（高队列空了才轮到低队列）或<strong>按比例分时间</strong>（如前台 80%、后台 20%）。</p>
+  <p><strong>关键：任务进了哪条队列就固定在那里，不会根据运行情况换队。</strong></p>
+  <h4>多级反馈队列 MLFQ（Multilevel Feedback Queue）</h4>
+  <p>允许任务<strong>根据运行行为在队列间移动</strong>：用满时间片还没完（像 CPU 密集型）就<strong>降级</strong>；等太久就<strong>升级</strong>（老化）。越高的队列优先级越高、时间片越短。</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 250" role="img" aria-label="三层多级反馈队列：Q0 时间片 8，Q1 时间片 16，Q2 FCFS；用完时间片降级，等太久升级">
+      <defs><marker id="l5c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ink)"/></marker><marker id="l5d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--exam)"/></marker><marker id="l5e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ex)"/></marker></defs>
+      <g font-size="12.5">
+        <text x="10" y="40" font-weight="700">新任务</text>
+        <line x1="62" y1="36" x2="118" y2="44" stroke="var(--ink)" stroke-width="1.8" marker-end="url(#l5c)"/>
+        <g>
+          <rect x="120" y="26" width="300" height="36" rx="6" fill="var(--l3s)" stroke="var(--l3)"/>
+          <text x="134" y="49" font-weight="700" style="fill:var(--l3)">Q0　RR，q = 8 ms</text><text x="410" y="49" text-anchor="end" font-size="11" class="mut">最高优先级</text>
+          <rect x="120" y="106" width="300" height="36" rx="6" fill="var(--l4s)" stroke="var(--l4)"/>
+          <text x="134" y="129" font-weight="700" style="fill:var(--l4)">Q1　RR，q = 16 ms</text>
+          <rect x="120" y="186" width="300" height="36" rx="6" fill="var(--l1s)" stroke="var(--l1)"/>
+          <text x="134" y="209" font-weight="700" style="fill:var(--l1)">Q2　FCFS</text><text x="410" y="209" text-anchor="end" font-size="11" class="mut">最低优先级</text>
+        </g>
+        <rect x="540" y="96" width="100" height="56" rx="10" fill="var(--surface-2)" stroke="var(--ink)"/><text x="590" y="129" text-anchor="middle" font-weight="700">CPU</text>
+        <g stroke="var(--muted)" stroke-width="1.5" marker-end="url(#l5c)"><line x1="422" y1="44" x2="538" y2="108"/><line x1="422" y1="124" x2="538" y2="124"/><line x1="422" y1="204" x2="538" y2="140"/></g>
+        <line x1="300" y1="64" x2="300" y2="102" stroke="var(--exam)" stroke-width="2" marker-end="url(#l5d)"/>
+        <line x1="300" y1="144" x2="300" y2="182" stroke="var(--exam)" stroke-width="2" marker-end="url(#l5d)"/>
+        <text x="310" y="88" font-size="11" style="fill:var(--exam)">用满 8 ms 没跑完 → 降一级</text>
+        <text x="310" y="168" font-size="11" style="fill:var(--exam)">用满 16 ms 没跑完 → 降一级</text>
+        <path d="M100 196 C 70 170, 70 80, 116 50" fill="none" stroke="var(--ex)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#l5e)"/>
+        <text x="8" y="130" font-size="11" style="fill:var(--ex)">等太久 →</text><text x="8" y="146" font-size="11" style="fill:var(--ex)">提升（老化）</text>
+        <text x="330" y="244" text-anchor="middle" font-size="11.5" class="mut">高队列有任务时，低队列不运行；高队列来了新任务，可以抢占低队列正在跑的任务</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>课件 P43 的三层例子。</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>一个要 30 ms、从不阻塞的任务（没有别人）</th><th>本阶段执行</th><th>还剩</th><th>接下来</th></tr></thead>
+    <tbody>
+      <tr><td>Q0</td><td>8 ms</td><td>22 ms</td><td>降到 Q1</td></tr>
+      <tr><td>Q1</td><td>16 ms</td><td>6 ms</td><td>降到 Q2</td></tr>
+      <tr><td>Q2（FCFS）</td><td>6 ms</td><td>0</td><td>结束</td></tr>
+    </tbody>
+  </table></div>
+  <p>效果：<strong>短任务、交互任务</strong>在 Q0 的一个短时间片里就做完了，响应快；<strong>长任务</strong>逐步沉到下面，不挡短任务，但也一定能轮到。它<strong>不需要事先知道执行时间</strong>，靠“观察行为”自动区分长短，所以是通用系统最常用的思路。设计 MLFQ 要规定：队列数、每队算法和时间片、初始进哪队、何时降级、何时升级、提前阻塞的任务怎么处理。</p>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>多级队列 MLQ</th><th>多级反馈队列 MLFQ</th></tr></thead>
+    <tbody>
+      <tr><td>怎么分队</td><td>按任务<strong>性质/类型</strong>固定分类</td><td>按<strong>优先级与时间片大小</strong>分层</td></tr>
+      <tr><td>任务能否换队</td><td><strong>不能</strong>，固定在一个队列</td><td><strong>能</strong>，降级/升级</td></tr>
+      <tr><td>要不要预知执行时间</td><td>要知道任务类型</td><td>不需要</td></tr>
+      <tr><td>饥饿</td><td>严格优先级时低队列可能饥饿</td><td>可用老化/周期提升避免</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点</span><ul>
+    <li><strong>2018/2019 判断</strong>：多级反馈队列中就绪队列按时间片大小划分 → ✓；进程可以在不同队列间移动 → ✓。</li>
+    <li><strong>2018 不定项选择</strong>（原卷答案 A）：A“MLFQ 不像多级队列那样按作业性质划分，而是按时间片大小划分”✓；B“MLFQ 没用到优先权”✗（队列之间就是按优先级）；C“多级队列的进程固定在某一队列，MLFQ 的进程不固定”——按课件这句也是对的（见 <a href="#e-sched">真题精讲</a> 的说明）；D 不是 MLFQ 的特征。</li>
+    <li><strong>2019 综合（10 分）</strong>：举例说明 MLFQ 及其优点 → 答案要点：交互型短作业在第一队列的时间片内就能完成，用户满意；短批处理作业在第一、二队列各执行一个时间片就能完成，周转时间短；长批处理作业依次下沉，在各队列都能获得时间片，<strong>不会得不到处理</strong>。配上上图的 30 ms 例子。</li>
+    <li><strong>2019 辨析</strong>：多级反馈队列调度 vs FCFS（答案见 <a href="#e-sched">真题精讲</a>）。</li>
+  </ul></div>
+
+  <h3 id="l5-sim">5.10 算法对比 + 调度模拟器<span class="stars">★★★★</span></h3>
+  <div class="tbl"><table class="wide">
+    <thead><tr><th>算法</th><th>依据</th><th>抢占？</th><th>要知道执行时间？</th><th>会饥饿？</th><th>优点</th><th>主要问题</th></tr></thead>
+    <tbody>
+      <tr><td><strong>FCFS</strong></td><td>到达顺序</td><td>否</td><td>否</td><td>否</td><td>简单，切换少，吞吐量好</td><td>护航效应，平均等待长</td></tr>
+      <tr><td><strong>SJF</strong></td><td>下一段执行长度</td><td>否</td><td>要（只能预测）</td><td>长任务会</td><td>平均等待最小（同时到达）</td><td>长度难预测</td></tr>
+      <tr><td><strong>SRTF</strong></td><td>剩余执行长度</td><td>是</td><td>要</td><td>长任务会</td><td>平均等待最小（可抢占时）</td><td>切换多，长度难预测</td></tr>
+      <tr><td><strong>HRRN</strong></td><td>响应比</td><td>否</td><td>要</td><td>否</td><td>兼顾等待与长度</td><td>每次都要算响应比</td></tr>
+      <tr><td><strong>RR</strong></td><td>时间片 + 队列顺序</td><td>是</td><td>否</td><td>否</td><td>响应快，公平</td><td>q 难选；平均等待常比 SJF 长</td></tr>
+      <tr><td><strong>优先级</strong></td><td>优先级</td><td>都可</td><td>否</td><td>低优先级会</td><td>重要任务先跑</td><td>饥饿 → 老化</td></tr>
+      <tr><td><strong>MLFQ</strong></td><td>行为 + 优先级</td><td>是</td><td>否</td><td>可避免</td><td>兼顾交互与批处理，最通用</td><td>参数多，设计复杂</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box ex"><span class="tag ex">综合题答题模板（每年 10–15 分）</span><ol>
+    <li>写清假设：时间单位、优先级方向、同等条件按什么顺序、忽略切换开销。</li>
+    <li>每种算法<strong>画一条甘特图</strong>，标出每个切换时刻。</li>
+    <li>列表：完成时刻 C → 周转 = C − 到达 → 等待 = 周转 − 执行时间。</li>
+    <li>算平均值，最后回答“哪个最小”（同时到达时一般是 SJF）。</li>
+  </ol></div>
+  <div class="tool" id="simTool">
+    <h5>调度模拟器：输入进程，自动画甘特图、算三种时间</h5>
+    <div class="row">
+      <label for="smPreset">载入例题<select id="smPreset"></select></label>
+      <label for="smAlg">算法<select id="smAlg">
+        <option value="FCFS">FCFS 先来先服务</option>
+        <option value="SJF">SJF 短作业优先（非抢占）</option>
+        <option value="SRTF">SRTF 最短剩余时间（抢占）</option>
+        <option value="HRRN">HRRN 高响应比优先</option>
+        <option value="RR">RR 时间片轮转</option>
+        <option value="PRIO">优先级（非抢占）</option>
+        <option value="PPRIO">优先级（抢占）</option>
+        <option value="PRR">优先级 + 同级 RR</option>
+      </select></label>
+      <label for="smQ">时间片 q<input type="number" id="smQ" value="2" min="1" step="1"></label>
+      <label for="smHi">优先级方向<select id="smHi"><option value="small">数字小 = 优先级高</option><option value="big">数字大 = 优先级高</option></select></label>
+    </div>
+    <div class="tbl ptab" style="margin-top:.8rem"><table>
+      <thead><tr><th>进程</th><th>到达</th><th>执行时间</th><th>优先级</th><th></th></tr></thead>
+      <tbody id="smRows"></tbody>
+    </table></div>
+    <div class="row"><button class="btn ghost" type="button" id="smAdd">＋ 加一行</button><span class="muted" style="font-size:.82rem">同时满足条件时按表中顺序；RR 中新到达的任务排在刚被换下的任务前面。</span></div>
+    <div class="svgbox" style="margin-top:.8rem"><svg id="smGantt" class="wide" role="img" aria-label="模拟器甘特图"></svg></div>
+    <div class="tbl" id="smTable"></div>
+    <div class="out" id="smNote"></div>
+    <h5 style="margin-top:1rem">同一组进程，各算法的平均等待时间</h5>
+    <div class="tbl" id="smCmp"></div>
+  </div>
+
+  <h3 id="l5-mp">5.11 多核调度<span class="stars">★★</span></h3>
+  <p>有多个 CPU 时，调度器不仅要选“谁跑”，还要选“在哪个 CPU 上跑”。</p>
+  <h4>线程竞争范围</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>范围</th><th>和谁抢 CPU</th><th>谁来调度</th></tr></thead>
+    <tbody>
+      <tr><td><strong>PCS</strong> 进程竞争范围</td><td>同一进程内的用户线程之间</td><td>线程库（多对一、多对多模型中把用户线程排到 LWP 上）</td></tr>
+      <tr><td><strong>SCS</strong> 系统竞争范围</td><td>系统里所有内核线程之间</td><td>内核</td></tr>
+    </tbody>
+  </table></div>
+  <p>POSIX 用 <code>PTHREAD_SCOPE_PROCESS</code> / <code>PTHREAD_SCOPE_SYSTEM</code> 设置。Linux NPTL 是一对一模型，<strong>只支持 SYSTEM</strong>（对照 <a href="#l4-model">4.5</a>）。</p>
+  <h4>就绪队列怎么组织</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 200" role="img" aria-label="对称多处理中，左边所有 CPU 共享一个就绪队列，右边每个 CPU 有自己的运行队列，并通过负载均衡迁移任务">
+      <defs><marker id="l5f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+      <g font-size="12">
+        <text x="140" y="20" text-anchor="middle" font-weight="700">(a) 共享一个就绪队列</text>
+        <rect x="10" y="80" width="130" height="34" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <g fill="var(--accent)"><rect x="20" y="88" width="18" height="18" rx="3"/><rect x="44" y="88" width="18" height="18" rx="3"/><rect x="68" y="88" width="18" height="18" rx="3"/><rect x="92" y="88" width="18" height="18" rx="3"/></g>
+        <g stroke="var(--muted)" stroke-width="1.4" marker-end="url(#l5f)"><line x1="142" y1="97" x2="206" y2="46"/><line x1="142" y1="97" x2="206" y2="82"/><line x1="142" y1="97" x2="206" y2="118"/><line x1="142" y1="97" x2="206" y2="154"/></g>
+        <g><rect x="210" y="32" width="64" height="28" rx="5" fill="var(--surface-2)" stroke="var(--ink)"/><rect x="210" y="68" width="64" height="28" rx="5" fill="var(--surface-2)" stroke="var(--ink)"/><rect x="210" y="104" width="64" height="28" rx="5" fill="var(--surface-2)" stroke="var(--ink)"/><rect x="210" y="140" width="64" height="28" rx="5" fill="var(--surface-2)" stroke="var(--ink)"/></g>
+        <g text-anchor="middle"><text x="242" y="51">CPU0</text><text x="242" y="87">CPU1</text><text x="242" y="123">CPU2</text><text x="242" y="159">CPU3</text></g>
+        <text x="140" y="192" text-anchor="middle" font-size="11" class="mut">简单、自动均衡；但大家抢一把队列锁</text>
+        <text x="500" y="20" text-anchor="middle" font-weight="700">(b) 每个 CPU 一个运行队列</text>
+        <g>
+          <rect x="380" y="32" width="120" height="28" rx="5" fill="var(--l2s)" stroke="var(--l2)"/><rect x="380" y="68" width="120" height="28" rx="5" fill="var(--l2s)" stroke="var(--l2)"/><rect x="380" y="104" width="120" height="28" rx="5" fill="var(--l2s)" stroke="var(--l2)"/><rect x="380" y="140" width="120" height="28" rx="5" fill="var(--l2s)" stroke="var(--l2)"/>
+          <g fill="var(--l2)"><rect x="388" y="37" width="16" height="18" rx="3"/><rect x="408" y="37" width="16" height="18" rx="3"/><rect x="428" y="37" width="16" height="18" rx="3"/><rect x="388" y="73" width="16" height="18" rx="3"/><rect x="388" y="109" width="16" height="18" rx="3"/><rect x="408" y="109" width="16" height="18" rx="3"/></g>
+          <text x="490" y="158" text-anchor="end" font-size="11" class="mut">空闲</text>
+        </g>
+        <g stroke="var(--muted)" stroke-width="1.4" marker-end="url(#l5f)"><line x1="502" y1="46" x2="546" y2="46"/><line x1="502" y1="82" x2="546" y2="82"/><line x1="502" y1="118" x2="546" y2="118"/><line x1="502" y1="154" x2="546" y2="154"/></g>
+        <g><rect x="550" y="32" width="64" height="28" rx="5" fill="var(--surface-2)" stroke="var(--ink)"/><rect x="550" y="68" width="64" height="28" rx="5" fill="var(--surface-2)" stroke="var(--ink)"/><rect x="550" y="104" width="64" height="28" rx="5" fill="var(--surface-2)" stroke="var(--ink)"/><rect x="550" y="140" width="64" height="28" rx="5" fill="var(--surface-2)" stroke="var(--ink)"/></g>
+        <g text-anchor="middle"><text x="582" y="51">CPU0</text><text x="582" y="87">CPU1</text><text x="582" y="123">CPU2</text><text x="582" y="159">CPU3</text></g>
+        <path d="M372 46 C 345 80, 345 120, 372 150" fill="none" stroke="var(--exam)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#l5f)"/>
+        <text x="344" y="104" text-anchor="end" font-size="11" style="fill:var(--exam)">负载均衡</text><text x="344" y="118" text-anchor="end" font-size="11" style="fill:var(--exam)">迁移</text>
+        <text x="500" y="192" text-anchor="middle" font-size="11" class="mut">缓存友好、无共享锁；需要负载均衡（Linux、Windows 用这种）</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption><strong>SMP 对称多处理</strong>：每个 CPU 都自己做调度。</figcaption>
+  </figure>
+  <ul>
+    <li><strong>负载均衡</strong>：把任务从忙的 CPU 迁到闲的 CPU。<strong>推迁移（push）</strong>：定期检查，从忙的往外推；<strong>拉迁移（pull）</strong>：闲的 CPU 主动去别人队列里拿。负载不只看任务个数，还看优先级、可运行时间、CPU 能力。</li>
+    <li><strong>处理器亲和性（affinity）</strong>：任务在某个 CPU 上跑过，那个 CPU 的<strong>缓存</strong>里有它的数据，迁走就要重新加载。<strong>软亲和</strong>：调度器尽量留在原 CPU；<strong>硬亲和</strong>：限定只能在某些 CPU 上跑（但不保证独占）。亲和性和负载均衡是<strong>互相拉扯</strong>的。</li>
+    <li><strong>NUMA（非一致内存访问）</strong>：每个 CPU 访问“自己那块”内存快，访问别的节点慢，所以迁移还要考虑内存在哪。</li>
+  </ul>
+  <h4>硬件多线程（超线程）</h4>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 150" role="img" aria-label="单线程时 CPU 在访存停顿时空闲；两个硬件线程交替，填满停顿">
+      <g font-size="12">
+        <text x="8" y="44" font-weight="700">单线程</text>
+        <rect x="120" y="28" width="60" height="26" fill="var(--accent)"/><rect x="180" y="28" width="70" height="26" fill="var(--surface-2)" stroke="var(--line)" stroke-dasharray="3 3"/>
+        <rect x="250" y="28" width="60" height="26" fill="var(--accent)"/><rect x="310" y="28" width="70" height="26" fill="var(--surface-2)" stroke="var(--line)" stroke-dasharray="3 3"/>
+        <rect x="380" y="28" width="60" height="26" fill="var(--accent)"/><rect x="440" y="28" width="70" height="26" fill="var(--surface-2)" stroke="var(--line)" stroke-dasharray="3 3"/>
+        <rect x="510" y="28" width="60" height="26" fill="var(--accent)"/>
+        <text x="215" y="46" text-anchor="middle" font-size="10.5" class="mut">等内存</text><text x="345" y="46" text-anchor="middle" font-size="10.5" class="mut">等内存</text><text x="475" y="46" text-anchor="middle" font-size="10.5" class="mut">等内存</text>
+        <text x="8" y="94" font-weight="700">两个硬件线程</text>
+        <rect x="120" y="78" width="60" height="26" fill="var(--accent)"/><rect x="180" y="78" width="60" height="26" fill="var(--exam)"/>
+        <rect x="250" y="78" width="60" height="26" fill="var(--accent)"/><rect x="310" y="78" width="60" height="26" fill="var(--exam)"/>
+        <rect x="380" y="78" width="60" height="26" fill="var(--accent)"/><rect x="440" y="78" width="60" height="26" fill="var(--exam)"/>
+        <rect x="510" y="78" width="60" height="26" fill="var(--accent)"/>
+        <rect x="120" y="122" width="14" height="12" fill="var(--accent)"/><text x="140" y="133" font-size="11">线程 0 计算</text>
+        <rect x="230" y="122" width="14" height="12" fill="var(--exam)"/><text x="250" y="133" font-size="11">线程 1 趁线程 0 等内存时计算</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>访存停顿（memory stall）时 CPU 在干等。一个物理核放两个<strong>硬件线程</strong>，一个等内存时执行另一个的指令（Intel 叫超线程 Hyper-Threading）。</figcaption>
+  </figure>
+  <div class="box exam"><span class="tag exam">课堂练习</span><p>“四核八线程”是否等于八个独立物理核？→ <strong>不等于</strong>。OS 看到 8 个<strong>逻辑 CPU</strong>，但同一核上的两个硬件线程<strong>共享执行单元和缓存</strong>，两个都满负荷时性能远不到两个核。</p></div>
+
+  <h3 id="l5-rt">5.12 实时调度：RM 与 EDF<span class="stars">★★</span></h3>
+  <p>实时系统关心<strong>能不能在截止时间（deadline）前完成</strong>，而不是平均多快。</p>
+  <div class="grid2">
+    <div class="mini"><h5>硬实时</h5>错过截止时间 = 系统失败（如刹车、心脏起搏器）。</div>
+    <div class="mini"><h5>软实时</h5>允许偶尔延迟，但要控制影响（如视频播放掉帧）。</div>
+  </div>
+  <p>课件只讨论“单 CPU、可抢占、任务相互独立的<strong>周期任务</strong>”：每个任务每隔周期 T<sub>i</sub> 来一次，每次最多算 C<sub>i</sub>（最坏执行时间 WCET），要在下一次到来前（D<sub>i</sub> = T<sub>i</sub>）做完。</p>
+  <div class="formula"><span class="big">CPU 利用率需求 U = Σ C<sub>i</sub> / T<sub>i</sub></span>
+<br><strong>EDF</strong> 可调度 ⇔ <span class="big">U ≤ 1</span>
+<br><strong>RM</strong>：<span class="big">U ≤ n(2<sup>1/n</sup> − 1)</span> 是<strong>充分条件</strong>（n=1：1；n=2：0.828；n=3：0.780；n→∞：ln2 ≈ 0.693）
+<span class="cap">超过 RM 界限<strong>不等于</strong>一定不能调度，只是不能用这个公式保证。</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th>算法</th><th>谁优先</th><th>优先级会变吗</th></tr></thead>
+    <tbody>
+      <tr><td><strong>RM</strong> 速率单调（Rate-Monotonic）</td><td><strong>周期越短越优先</strong></td><td>固定（静态）</td></tr>
+      <tr><td><strong>EDF</strong> 最早截止时间优先</td><td>当前作业的<strong>绝对截止时间越早越优先</strong></td><td>随时变（动态）</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box ex"><span class="tag ex">课件例</span><p>A：C=1、T=4；B：C=2、T=5。U = 1/4 + 2/5 = <strong>0.65</strong> &lt; 0.828（两个任务的 RM 界限）→ RM 能保证；也 ≤ 1 → EDF 能保证。时刻 0 时 A 截止 4、B 截止 5，两种规则都先选 A。</p></div>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 190" role="img" aria-label="P1 周期 50 执行 25，P2 周期 80 执行 35：RM 下 P2 在 80 时错过截止时间，EDF 下全部按时完成">
+      <g font-size="12">
+        <text x="8" y="50" font-weight="700">RM</text><text x="8" y="66" font-size="11" class="mut">周期短者优先</text>
+        <rect x="110" y="34" width="81" height="30" fill="var(--l3)"/><rect x="191" y="34" width="81" height="30" fill="var(--l5)"/><rect x="272" y="34" width="81" height="30" fill="var(--l3)"/><rect x="353" y="34" width="17" height="30" fill="var(--l5)"/>
+        <g text-anchor="middle" font-weight="700" style="fill:var(--surface)"><text x="150" y="54" style="fill:var(--surface)">P1</text><text x="231" y="54" style="fill:var(--surface)">P2</text><text x="312" y="54" style="fill:var(--surface)">P1</text></g>
+        <line x1="370" y1="26" x2="370" y2="72" stroke="var(--trap)" stroke-width="2.5"/><text x="378" y="46" style="fill:var(--trap)" font-weight="700">t=80：P2 还差 10，错过截止时间</text>
+        <text x="8" y="120" font-weight="700">EDF</text><text x="8" y="136" font-size="11" class="mut">截止早者优先</text>
+        <rect x="110" y="104" width="81" height="30" fill="var(--l3)"/><rect x="191" y="104" width="114" height="30" fill="var(--l5)"/><rect x="305" y="104" width="81" height="30" fill="var(--l3)"/><rect x="386" y="104" width="49" height="30" fill="var(--l5)"/><rect x="435" y="104" width="81" height="30" fill="var(--l3)"/><rect x="516" y="104" width="65" height="30" fill="var(--l5)"/><rect x="597" y="104" width="33" height="30" fill="var(--l3)"/>
+        <g text-anchor="middle" font-weight="700"><text x="150" y="124" style="fill:var(--surface)">P1</text><text x="248" y="124" style="fill:var(--surface)">P2</text><text x="345" y="124" style="fill:var(--surface)">P1</text><text x="410" y="124" style="fill:var(--surface)">P2</text><text x="475" y="124" style="fill:var(--surface)">P1</text><text x="548" y="124" style="fill:var(--surface)">P2</text></g>
+        <line x1="110" y1="148" x2="630" y2="148" stroke="var(--ink)"/>
+        <g class="mono" font-size="11" text-anchor="middle"><text x="110" y="164">0</text><text x="191" y="164">25</text><text x="272" y="164">50</text><text x="305" y="178">60</text><text x="370" y="164">80</text><text x="435" y="164">100</text><text x="516" y="164">125</text><text x="597" y="164">150</text></g>
+        <text x="330" y="186" text-anchor="middle" font-size="11" class="mut">P1：C=25，T=50；P2：C=35，T=80。U = 0.5 + 0.4375 = 0.9375 &gt; 0.828，但 ≤ 1</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>教材经典例子（课件未给，帮助理解）：t=50 时 P1 的新作业截止 100，P2 截止 80，EDF 让 P2 继续，所以 P2 在 60 完成；RM 只看周期，让 P1 抢占，P2 就超时了。</figcaption>
+  </figure>
+  <p>还要记住：<strong>优先级高或平均响应快，都不能单独保证截止时间</strong>；能否按时完成取决于最坏执行时间、到达规律、阻塞和系统开销。</p>
+
+  <h3 id="l5-os">5.13 Linux 与 Windows 怎么调度<span class="stars">★</span></h3>
+  <h4>Linux</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>时期</th><th>普通任务的调度器</th></tr></thead>
+    <tbody>
+      <tr><td>2.5 之前</td><td>传统 UNIX 风格：优先级 + 时间片</td></tr>
+      <tr><td>2.5 / 2.6 早期</td><td><strong>O(1) 调度器</strong>：按优先级组织运行队列，选任务的时间与任务数无关</td></tr>
+      <tr><td>2.6.23 起</td><td><strong>CFS（完全公平调度器）</strong>：按权重累计<strong>虚拟运行时间 vruntime</strong>，总选 vruntime 最小的（用红黑树）</td></tr>
+      <tr><td>6.6 起</td><td><strong>EEVDF</strong>：先找还没用超自己应得份额的任务，再在其中选<strong>虚拟截止时间</strong>最早的，兼顾公平和延迟</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><strong>调度类</strong>：截止时间类 <code>SCHED_DEADLINE</code> ＞ 实时类 <code>SCHED_FIFO</code> / <code>SCHED_RR</code> ＞ 普通类 <code>SCHED_OTHER</code>（还有 <code>SCHED_BATCH</code>、<code>SCHED_IDLE</code>）。高类别有任务时先选高类别；类内各有规则。</li>
+    <li><strong>nice 值</strong>：−20 到 19，<strong>越小权重越高、分到的 CPU 越多</strong>（“nice”= 对别人客气）。同组持续就绪的任务按权重分 CPU，nice 相同则份额接近。</li>
+  </ul>
+  <div class="tbl"><table>
+    <thead><tr><th>数字</th><th>范围</th><th>方向</th></tr></thead>
+    <tbody>
+      <tr><td>用户接口实时优先级（FIFO/RR）</td><td>1–99</td><td><strong>越大越高</strong></td></tr>
+      <tr><td>普通任务 nice</td><td>−20–19</td><td><strong>越小越高</strong></td></tr>
+      <tr><td>内核内部静态优先级（普通）</td><td>100–139（nice −20 → 100，nice 19 → 139）</td><td>越小越高</td></tr>
+      <tr><td>内核内部实时区间</td><td>小于 100</td><td>越小越高（和用户实时数字方向相反）</td></tr>
+    </tbody>
+  </table></div>
+  <p>课堂练习：nice 表示普通任务的<strong>权重</strong>（相对份额）；实时优先级决定实时任务<strong>谁先跑</strong>（严格抢占）；EEVDF 的虚拟截止时间是<strong>公平调度内部</strong>用来排先后的，和实时任务的真实截止时间不是一回事。</p>
+  <p>查看命令（只读）：<code>ps -L -p &lt;PID&gt; -o pid,tid,cls,rtprio,ni,psr,comm</code>（NI = nice，RTPRIO = 实时优先级，PSR = 最近在哪个 CPU 跑）；<code>chrt -p &lt;TID&gt;</code> 看调度策略；<code>taskset -pc &lt;TID&gt;</code> 看<strong>允许</strong>在哪些 CPU 跑（和最近在哪跑是两回事）。</p>
+  <h4>Windows</h4>
+  <ul>
+    <li>基于优先级的<strong>抢占式</strong>调度，优先级 <strong>0–31</strong>：0 留给特殊系统用途；<strong>1–15 可变（动态）</strong>；<strong>16–31 实时</strong>。数字<strong>越大越高</strong>。</li>
+    <li>线程的基础优先级 = 进程的<strong>优先级类别</strong> + 线程的<strong>相对优先级</strong>。</li>
+    <li>更高优先级的线程就绪就抢占；同优先级用 RR。</li>
+    <li><strong>动态提升</strong>：某些 I/O 完成或等待结束（如键盘输入）后临时提高优先级，让交互线程更快响应，之后逐步回落到基础优先级。实时范围的线程不提升。</li>
+  </ul>
+
+  <h3 id="l5-eval">5.14 算法评估；Little 定律<span class="stars">★★</span></h3>
+  <div class="tbl"><table>
+    <thead><tr><th>方法</th><th>怎么做</th><th>优缺点</th></tr></thead>
+    <tbody>
+      <tr><td><strong>确定性建模</strong></td><td>给定一组具体任务，直接算各算法的指标（就是我们做的甘特图题）</td><td>简单精确；但结论只对这组输入成立</td></tr>
+      <tr><td><strong>排队模型</strong></td><td>用到达率 λ、服务率 μ 等分布描述长期负载，估计利用率、队长、等待时间</td><td>能分析长期行为；分布要假设，难贴近真实</td></tr>
+      <tr><td><strong>仿真</strong></td><td>写程序模拟时钟和事件（到达、区间结束、时间片到期），统计输出</td><td>较准确；费时，需要真实的负载数据（trace）</td></tr>
+      <tr><td><strong>实际实现</strong></td><td>在真实系统里跑同样负载，测吞吐量、响应分布、切换次数</td><td>最准确；代价高，环境不同结果会变</td></tr>
+    </tbody>
+  </table></div>
+  <div class="gfig" data-p="slide67" data-alg="FCFS"></div>
+  <div class="gfig" data-p="slide67" data-alg="SJF"></div>
+  <div class="gfig" data-p="slide67" data-alg="RR" data-q="10"></div>
+  <p>课件 P67–68：P1–P5 = 10、29、3、7、12 ms，同时到达 → 平均等待 <strong>FCFS 28 ms、SJF 13 ms、RR(q=10) 23 ms</strong>。课堂练习：一个算法在一个例题里最好，<strong>不能</strong>证明它适合所有负载（确定性建模的局限）。</p>
+  <div class="formula"><span class="big">Little 定律：L<sub>q</sub> = λ × W<sub>q</sub></span>
+<span class="cap">L<sub>q</sub>：队列里平均有几个任务；λ：平均到达率；W<sub>q</sub>：平均排队时间。课件例：每秒到 7 个，队列平均 14 个 → W<sub>q</sub> = 14 / 7 = <strong>2 秒</strong>。它不依赖具体调度算法和分布，只要求长期“进出平衡”。单服务台利用率 ρ = λ / μ。</span></div>
+
+  <h3 id="l5-ex">5.15 课堂练习参考答案</h3>
+  <details><summary>课件 P36：P1–P5 执行时间 2、1、8、4、5，优先级 2、1、4、2、3（数字越大越高），同时到达。求 FCFS、非抢占 SJF、非抢占优先级、RR(q=2) 的平均等待时间</summary><div class="ans">
+    <div class="gfig" data-p="class36" data-alg="FCFS"></div>
+    <p>FCFS：等待 0、2、3、11、15 → (0+2+3+11+15)/5 = <strong>6.2</strong></p>
+    <div class="gfig" data-p="class36" data-alg="SJF"></div>
+    <p>SJF：P2、P1、P4、P5、P3 → 等待 P1=1、P2=0、P3=12、P4=3、P5=7 → 23/5 = <strong>4.6</strong>（最小）</p>
+    <div class="gfig" data-p="class36" data-alg="PRIO" data-hi="big"></div>
+    <p>优先级：P3(4)、P5(3)、P1(2)、P4(2)、P2(1) → 等待 P1=13、P2=19、P3=0、P4=15、P5=8 → 55/5 = <strong>11</strong></p>
+    <div class="gfig" data-p="class36" data-alg="RR" data-q="2"></div>
+    <p>RR：完成时刻 P1=2、P2=3、P3=20、P4=13、P5=18 → 等待 0、2、12、9、13 → 36/5 = <strong>7.2</strong></p>
+  </div></details>
+  <details><summary>某任务首次运行很早，总等待时间一定很短吗？</summary><div class="ans"><p>不一定。响应时间只看第一次，等待时间要把<strong>每次回到就绪队列后的排队</strong>都加起来。RR 中的长任务第一次很快就上 CPU，但会反复排队，总等待可能很长（如 P12 的例子，响应 2、等待 5）。</p></div></details>
+  <details><summary>新任务到达时，非抢占 SJF 与 SRTF 的选择有什么区别？</summary><div class="ans"><p>非抢占 SJF：当前任务继续跑完，新任务进就绪队列，下次 CPU 空出来时再按长度选。SRTF：立刻比较新任务的执行时间和当前任务的<strong>剩余</strong>时间，新任务更短就抢占。</p></div></details>
+  <details><summary>RR 时间片到期，一定会切换到另一个进程吗？</summary><div class="ans"><p>不一定。如果就绪队列里没有别的任务，时间片到了它被放回队尾，又是队首，于是继续运行（不发生真正的进程切换）。</p></div></details>
+  <details><summary>四核八线程是否等于八个独立物理 CPU 核？</summary><div class="ans"><p>不等于。8 个是逻辑 CPU，同一物理核上的两个硬件线程共享执行资源和缓存，只是利用访存停顿的空隙交替执行。</p></div></details>
+  <details><summary>Linux 的 nice、实时优先级与 EEVDF 虚拟截止时间各表示什么？</summary><div class="ans"><p>nice：普通任务的调度权重，越小分到的 CPU 份额越大。实时优先级：SCHED_FIFO/RR 任务的优先级（1–99，越大越先），高的严格先跑。EEVDF 虚拟截止时间：公平调度类内部为兼顾公平和延迟而算出的排序依据，不是应用要求的真实截止时间。</p></div></details>
+  <details><summary>同一算法在一个固定例题中表现最好，是否足以证明它适合所有工作负载？</summary><div class="ans"><p>不能。确定性建模的结论只对那组输入成立；要用排队模型、仿真、真实测量在多种负载下比较，并且看清目标指标（吞吐量、响应、截止时间）。</p></div></details>
+</section>
+
 <!-- ============ 一页纸 ============ -->
 <section class="chap" id="cheat">
   <div class="chap-head"><span class="chap-no">SHEET</span><h2>考前一页纸</h2></div>
@@ -1482,17 +2040,29 @@ sem_init(&amp;shared-&gt;ready, 1, 0);   <span class="c">// 第 2 个参数 1 = 
     <div><h5>调度单位 / 资源单位</h5><div class="mono">线程 = 调度单位<br>进程 = 资源分配单位</div></div>
     <div><h5>Amdahl</h5><div class="mono">1 / (S + (1−S)/N)<br>N→∞：1/S</div></div>
     <div><h5>线程模型</h5><div class="mono">多对一：一阻塞全阻塞、不能多核<br>一对一：Linux、Windows<br>多对多：Go、Java 虚拟线程</div></div>
+    <div><h5>调度时机（L5）</h5><div class="mono">运行→等待、终止：非抢占也调度<br>运行→就绪、等待→就绪：抢占</div></div>
+    <div><h5>三个时间</h5><div class="mono">周转 = 完成 − 到达<br>等待 = 周转 − 执行时间<br>响应 = 首次运行 − 到达</div></div>
+    <div><h5>FCFS</h5><div class="mono">非抢占、简单、切换少<br>护航效应：短任务被长任务挡住</div></div>
+    <div><h5>SJF / SRTF</h5><div class="mono">同时到达：SJF 平均等待最小<br>SRTF = 抢占版，平均等待最优<br>要预测长度；长任务会饥饿</div></div>
+    <div><h5>指数平均</h5><div class="mono">τₙ₊₁ = α·tₙ + (1−α)·τₙ<br>α=0 只看旧预测；α=1 只看上次</div></div>
+    <div><h5>HRRN</h5><div class="mono">R = (等待 + 服务) / 服务<br>非抢占；兼顾两者，不饥饿</div></div>
+    <div><h5>RR</h5><div class="mono">用完 q 回队尾（新到达的排前面）<br>q 太大 → FCFS；q 太小 → 开销大<br>最多等 (n−1)q；不饥饿</div></div>
+    <div><h5>优先级</h5><div class="mono">先看清数字大还是小优先<br>饥饿 → 老化（等久了提优先级）</div></div>
+    <div><h5>MLQ vs MLFQ</h5><div class="mono">MLQ：按类型固定入队，不换队<br>MLFQ：按时间片分层，降级/升级<br>短任务快、长任务不饿、无需预知</div></div>
+    <div><h5>多核</h5><div class="mono">共享队列 / 每核队列 + 负载均衡<br>软/硬亲和；NUMA；4 核 8 线程 ≠ 8 核</div></div>
+    <div><h5>实时</h5><div class="mono">U = Σ C/T<br>EDF：U ≤ 1<br>RM：U ≤ n(2^(1/n)−1)，n=2 → 0.828</div></div>
+    <div><h5>Linux / Windows</h5><div class="mono">O(1) → CFS(2.6.23) → EEVDF(6.6)<br>nice −20~19，越小分得越多<br>Windows 0–31，16–31 实时，动态提升</div></div>
+    <div><h5>评估</h5><div class="mono">确定性建模 排队模型 仿真 实现<br>Little：L = λ·W</div></div>
   </div>
 </section>
 
 <!-- ============ 真题 ============ -->
 <section class="chap" id="exam">
   <div class="chap-head"><span class="chap-no">EXAM</span><h2>真题精讲</h2></div>
-  <p class="sub">2018、2019、2020 三份期中卷。先列 Lesson 1–4 范围内的题，再列后续章节的题（附答案，先混个眼熟）。判断题错的一定要写理由。</p>
+  <p class="sub">2018、2019、2020 三份期中卷。先列 Lesson 1–4 范围内的题，再列 Lesson 5 调度题，最后是后续章节（同步、死锁）的题（附答案，先混个眼熟）。判断题错的一定要写理由。</p>
 
   <h3 id="e-judge">判断题（本范围）</h3>
   <details><summary>作业调度是高级调度，进程调度是低级调度。<span class="src">2018</span></summary><div class="ans"><p><strong>✓</strong></p></div></details>
-  <details><summary>时间片越小，系统的响应时间就越小，系统的效率就越高。<span class="src">2018</span></summary><div class="ans"><p><strong>✗</strong> 时间片小能缩短响应时间，但进程切换开销占比增大，系统效率降低。</p></div></details>
   <details><summary>进程执行的相对速度不能由进程自己来控制。<span class="src">2018</span></summary><div class="ans"><p><strong>✓</strong> 由调度和资源情况决定。</p></div></details>
   <details><summary>进程执行的相对速度与资源无关。<span class="src">2019</span></summary><div class="ans"><p><strong>✗</strong> 有关：需要的资源得不到满足时只能等待。</p></div></details>
   <details><summary>在多处理器系统中，通过关中断的方式可以解决进程间互斥访问的问题。<span class="src">2019·2020</span></summary><div class="ans"><p><strong>✗</strong> 关中断只对当前 CPU 有效，其他 CPU 上的进程仍可进入临界区。</p></div></details>
@@ -1528,23 +2098,63 @@ sem_init(&amp;shared-&gt;ready, 1, 0);   <span class="c">// 第 2 个参数 1 = 
   <details><summary>线程三态 Ready/Running/Waiting 的所有可能转换及条件（5 分）<span class="src">2020</span></summary><div class="ans"><p>Ready→Running：被调度程序选中；Running→Ready：时间片用完或被抢占；Running→Waiting：等待 I/O 或事件；Waiting→Ready：等待的事件发生（如 I/O 完成）。</p></div></details>
   <details><summary>三段程序写 file.txt 的可能结果（10 分）<span class="src">2020</span></summary><div class="ans"><p>程序一（fork 后各自 open）：<strong>BC</strong>；程序二（先 open 后 fork）：<strong>EF</strong>；程序三（线程）：<strong>CEF</strong>。详见 <a href="#l3-fork">3.6</a>。</p></div></details>
 
-  <h3 id="e-later">后续章节的题（调度 / 同步 / 死锁）</h3>
+  <h3 id="e-sched">调度题（Lesson 5）</h3>
+  <details><summary>判断：时间片越小，系统的响应时间就越小，系统的效率就越高。<span class="src">2018</span></summary><div class="ans"><p><strong>✗</strong> 时间片小能缩短响应时间，但进程切换开销占比增大，系统效率降低。见 <a href="#l5-rr">5.7</a>。</p></div></details>
+  <details><summary>判断：RR、短进程优先、FCFS 及高响应比优先调度算法都没有综合考虑进程等待时间和执行时间。<span class="src">2019</span></summary><div class="ans"><p><strong>✗</strong> 高响应比优先（响应比 = (等待时间 + 服务时间)/服务时间）综合考虑了两者。见 <a href="#l5-hrrn">5.6</a>。</p></div></details>
+  <details><summary>判断：多级反馈队列的调度中就绪队列按时间片的大小划分；多级反馈队列中，进程可以在不同队列中移动。<span class="src">2019</span></summary><div class="ans"><p>两句都 <strong>✓</strong>。</p></div></details>
+  <details><summary>判断：RR 策略不仅无需预知任务的运行时间，且不会出现长任务饥饿的情况。<span class="src">2020</span></summary><div class="ans"><p><strong>✓</strong> 而 SJF、SRTF（STCF）需要预知（预测）运行时间，且长任务可能饥饿。</p></div></details>
+  <details><summary>选择：可以在以下哪种情况下进行抢占式调度？A 运行→等待 B 等待→就绪 C 进程终止 D 以上都不是<span class="src">2020</span></summary><div class="ans"><p><strong>B</strong>。A、C 时当前进程自己跑不了，属于非抢占调度时机；只有运行→就绪、等待→就绪时“当前进程还能跑却被换下”才叫抢占。见 <a href="#l5-when">5.2</a>。</p></div></details>
+  <details><summary>选择：以下哪种调度算法可能会出现护航效应？SJF / FCFS / RR / Multilevel queue<span class="src">2020</span></summary><div class="ans"><p><strong>B FCFS</strong>。见 <a href="#l5-fcfs">5.4</a>。</p></div></details>
+  <details><summary>不定项选择：多级队列与多级反馈队列的叙述，正确的是？A MLFQ 不像多级队列那样按作业性质划分，而是按时间片大小划分 B 多级队列用到优先权，MLFQ 没有用到优先权 C 多级队列的进程固定在某一个队列中，MLFQ 的进程不固定 D 多级队列每个队列按作业性质采用不同算法，MLFQ 除个别队列外均采用相同算法<span class="src">2018</span></summary><div class="ans">
+    <p>原卷答案：<strong>A</strong>。</p>
+    <p>B 错：MLFQ 的队列之间就是按优先级排的。D 不是 MLFQ 的定义性特征（课件的 MLFQ 例子 Q0、Q1 都是 RR、Q2 是 FCFS，但各队列完全可以用不同算法）。</p>
+    <p><strong>C 需要注意</strong>：本学期课件 P39 原话是 MLQ “任务按固定类别入队，不根据运行行为自动换队”，P42 是 MLFQ “任务可以在队列之间移动”，这正是 C 的意思。按课件，C 也成立，我认为选 <strong>AC</strong> 更符合今年的讲法。不定项选择少选多选都不给分，如果遇到原题，按课件理解写 AC；拿不准就在考前问一下老师或助教。</p>
+  </div></details>
+  <details><summary>简答：SRTF 在什么指标上是最优的？在什么指标上 FCFS 优于 RR？（5 分）<span class="src">2020</span></summary><div class="ans"><p>SRTF 的<strong>平均等待时间（平均响应时间）</strong>最优。FCFS 在<strong>吞吐量</strong>上优于 RR，也省去了频繁上下文切换的开销。</p></div></details>
+  <details><summary>辨析：多级反馈队列调度与 FCFS（5 分）<span class="src">2019</span></summary><div class="ans">
+    <p><strong>FCFS</strong>：按到达就绪队列的先后顺序分配 CPU，非抢占，一个任务运行到结束或阻塞。实现简单、切换少，但短任务排在长任务后面会等很久（护航效应），不适合交互系统。</p>
+    <p><strong>多级反馈队列</strong>：设置多个优先级不同、时间片不同的就绪队列；新任务进最高队列，用完时间片未完成就降级，等待过久可升级；高队列空了才调度低队列，可抢占。短任务和交互任务响应快，长任务也不会饿死，不需要预知运行时间。</p>
+    <p><strong>联系</strong>：MLFQ 的最低一级队列常用 FCFS；若 MLFQ 只有一个队列且时间片无穷大，就退化成 FCFS。<strong>区别</strong>：FCFS 单队列、非抢占、不看任务行为；MLFQ 多队列、抢占式、按运行行为动态调整。</p>
+  </div></details>
+  <details><summary>综合：举例说明什么是多级反馈队列调度算法，其有哪些优点（10 分）<span class="src">2019</span></summary><div class="ans">
+    <p>举例：三级队列 Q0（RR，q=8 ms）、Q1（RR，q=16 ms）、Q2（FCFS），高队列优先。新任务进 Q0；在 Q0 用完 8 ms 未完成降到 Q1；在 Q1 再用完 16 ms 未完成降到 Q2；一个需要 30 ms 的任务依次运行 8、16、6 ms 后结束。</p>
+    <p>优点（原卷答案要点）：① 交互型短作业通常在第一队列的时间片内就能完成，终端用户满意；② 短批处理作业在第一或第一、二队列各执行一个时间片就能完成，周转时间短；③ 长批处理作业依次在各队列获得时间片运行，不会得不到处理；④ 不需要事先知道作业运行时间，能自动区分 I/O 密集与 CPU 密集任务。</p>
+  </div></details>
+  <details><summary>综合：5 个任务 A–E 运行时间 10、6、2、4、8 ms，优先级 3、5、2、1、4（5 最高），几乎同时到达，求 FCFS、优先级、RR(q=2) 的平均周转时间（15 分）<span class="src">2018</span></summary><div class="ans">
+    <div class="gfig" data-p="e2018" data-alg="FCFS"></div>
+    <p>FCFS：完成时刻 10、16、18、22、30 → 平均周转 (10+16+18+22+30)/5 = <strong>19.2 ms</strong>。</p>
+    <div class="gfig" data-p="e2018" data-alg="PRIO" data-hi="big"></div>
+    <p>优先级（B、E、A、C、D）：完成时刻 6、14、24、26、30 → 平均 (6+14+24+26+30)/5 = <strong>20 ms</strong>。</p>
+    <div class="gfig" data-p="e2018" data-alg="RR" data-q="2"></div>
+    <p>RR：轮次 (A,B,C,D,E)(A,B,D,E)(A,B,E)(A,E)(A)；完成 C=6、D=16、B=22、E=28、A=30 → 平均 102/5 = <strong>20.4 ms</strong>。</p>
+  </div></details>
+  <details><summary>综合：P1–P4 需要 CPU 时间 9、2、3、2，优先级 3、1、2、4（数字小优先），同时到达。画 FCFS、SJF、RR、非抢占优先级的甘特图，求各进程等待时间，哪个平均等待最少？（10 分）<span class="src">2019</span></summary><div class="ans">
+    <div class="gfig" data-p="e2019" data-alg="FCFS"></div>
+    <div class="gfig" data-p="e2019" data-alg="SJF"></div>
+    <div class="gfig" data-p="e2019" data-alg="RR" data-q="1"></div>
+    <div class="gfig" data-p="e2019" data-alg="PRIO" data-hi="small"></div>
+    <div class="tbl"><table>
+      <thead><tr><th>等待时间</th><th class="c">FCFS</th><th class="c">SJF</th><th class="c">RR（q=1）</th><th class="c">优先级</th></tr></thead>
+      <tbody>
+        <tr><td>P1</td><td class="c">0</td><td class="c">7</td><td class="c">7</td><td class="c">5</td></tr>
+        <tr><td>P2</td><td class="c">9</td><td class="c">0</td><td class="c">4</td><td class="c">0</td></tr>
+        <tr><td>P3</td><td class="c">11</td><td class="c">4</td><td class="c">7</td><td class="c">2</td></tr>
+        <tr><td>P4</td><td class="c">14</td><td class="c">2</td><td class="c">6</td><td class="c">14</td></tr>
+        <tr><th>平均</th><th class="c">8.5</th><th class="c">3.25</th><th class="c">6</th><th class="c">5.25</th></tr>
+      </tbody>
+    </table></div>
+    <p><strong>SJF 平均等待最少。</strong></p>
+    <div class="box trap" style="margin-bottom:0"><span class="tag trap">关于原卷答案</span><p>原卷没写 RR 的时间片。答案表的 RR 列是 6、4、7、6（平均写 5.6），其中 P2、P3、P4 与 q=1 吻合；但 P1 无论 q 取多少都在时刻 16 最后完成，等待只能是 16 − 9 = 7，所以 6 是笔误。考试时如果题目没给时间片，<strong>自己写明假设</strong>（如“设 q=1”）再算。</p></div>
+  </div></details>
+
+  <h3 id="e-later">后续章节的题（同步 / 死锁）</h3>
   <div class="box tip"><span class="tag tip">先看个大概</span><p>这些知识点要等后面的课件讲到才系统学。答案先放在这里，学到那一章时回来对照。</p></div>
   <details><summary>判断：资源分配图中存在环时，系统（中某些）进程处于死锁状态。<span class="src">2018·2020</span></summary><div class="ans"><p><strong>✗</strong> 每类资源只有一个实例时，有环才一定死锁；资源有多个实例时，有环不一定死锁。</p></div></details>
   <details><summary>判断：A、B 共享 S1 需互斥，B、C 共享 S2 需互斥，所以 A 与 C 也必须互斥。<span class="src">2018</span></summary><div class="ans"><p><strong>✗</strong> 互斥没有传递性。</p></div></details>
-  <details><summary>判断：RR、SJF、FCFS、高响应比优先都没有综合考虑等待时间和执行时间。<span class="src">2019</span></summary><div class="ans"><p><strong>✗</strong> 高响应比优先（响应比 = (等待时间 + 服务时间)/服务时间）综合考虑了两者。</p></div></details>
-  <details><summary>判断：多级反馈队列的就绪队列按时间片大小划分；进程可在不同队列间移动。<span class="src">2018·2019</span></summary><div class="ans"><p><strong>✓</strong>。多级队列按作业性质划分且进程固定在一个队列；多级反馈队列按时间片划分，进程会在队列间移动。</p></div></details>
   <details><summary>判断：信号量 S 当前值 −6，表示系统中共有 6 个等待的进程。<span class="src">2020</span></summary><div class="ans"><p><strong>✗</strong> 表示有 6 个进程在等待<strong>这个信号量</strong>（对应的临界区），不是全系统。</p></div></details>
   <details><summary>判断：取值为 0 或 1 的信号量只能实现互斥。<span class="src">2020</span></summary><div class="ans"><p><strong>✗</strong> 二值信号量也能实现同步（如初值 0 用于“先后顺序”）。</p></div></details>
-  <details><summary>判断：RR 不需要预知运行时间，且不会出现长任务饥饿。<span class="src">2020</span></summary><div class="ans"><p><strong>✓</strong></p></div></details>
   <details><summary>判断：管程中条件变量的 signal() 与信号量的 signal() 效果相同。<span class="src">2020</span></summary><div class="ans"><p><strong>✗</strong> 条件变量的 signal 在没有等待者时什么都不做；信号量的 signal 一定会把值加 1。</p></div></details>
   <details><summary>选择：P/V 信号量 S 初值 2，当前 −1，表示有几个等待进程？<span class="src">2019</span></summary><div class="ans"><p><strong>1 个</strong>（负值的绝对值）。</p></div></details>
-  <details><summary>选择：可能出现护航效应（convoy effect）的调度算法？可发生抢占式调度的时机？<span class="src">2020</span></summary><div class="ans"><p>护航效应：<strong>FCFS</strong>（短作业排在长作业后面）。抢占式调度时机：<strong>进程从等待切换到就绪时</strong>。</p></div></details>
-  <details><summary>简答：SRTF 在什么指标上最优？FCFS 在什么指标上优于 RR？<span class="src">2020</span></summary><div class="ans"><p>SRTF 平均等待（响应）时间最优；FCFS 在吞吐量上优于 RR，也省去上下文切换开销。</p></div></details>
-  <details><summary>综合：5 个任务 A–E 运行时间 10,6,2,4,8 ms，优先级 3,5,2,1,4（5 最高），求 FCFS、优先级、RR(q=2) 的平均周转时间（15 分）<span class="src">2018</span></summary><div class="ans">
-    <p>FCFS（A,B,C,D,E）：完成时刻 10,16,18,22,30 → 平均 <strong>19.2 ms</strong>。</p>
-    <p>优先级（B,E,A,C,D）：完成时刻 6,14,24,26,30 → 平均 <strong>20 ms</strong>。</p>
-    <p>RR：C 6、D 16、B 22、E 28、A 30 → 平均 102/5 = <strong>20.4 ms</strong>。</p></div></details>
   <details><summary>综合：售票厅最多容纳 20 人，用 P/V 操作管理（15 分）<span class="src">2018</span></summary><div class="ans">
     <p>信号量 S 初值 20。S&gt;0：还能进的人数；S=0：厅内已满 20 人；S&lt;0：|S| 是在外等待的人数。</p>
     <p>每个购票者：<code>P(S); 进入售票厅; 购票; 退出; V(S);</code></p>
@@ -1584,7 +2194,7 @@ Consumer: while (1) { P(full);  P(mutex); 取产品; V(mutex); V(empty); }</div>
 </section>
 
 <footer>
-  资料来源：华东师范大学《操作系统》课件 lesson1–4（周炽金），2018–2019、2019–2020、2020–2021 学年期中试卷及答案。教材：Silberschatz《Operating System Concepts》第 10 版。整理于 2026 年 10 月。
+  资料来源：华东师范大学《操作系统》课件 lesson1–5（周炽金），2018–2019、2019–2020、2020–2021 学年期中试卷及答案。教材：Silberschatz《Operating System Concepts》第 10 版。整理于 2026 年 10 月。
 </footer>
 </div>
 
@@ -1738,6 +2348,195 @@ function store(){try{return window.localStorage;}catch(e){return null;}}
   S.addEventListener("input",draw);Nn.addEventListener("input",draw);draw();
 })();
 
+/* ---------- Lesson 5: scheduling simulator ---------- */
+var SCHED=(function(){
+  var COLORS=["var(--l3)","var(--exam)","var(--l2)","var(--l4)","var(--l5)","var(--l1)","var(--accent)","var(--trap)","var(--muted)","var(--ex)"];
+  var ALGN={FCFS:"FCFS",SJF:"SJF（非抢占）",SRTF:"SRTF",HRRN:"HRRN",RR:"RR",PRIO:"优先级（非抢占）",PPRIO:"优先级（抢占）",PRR:"优先级 + 同级 RR"};
+  var PRESETS={
+    slide16:{t:"课件 P16：FCFS，P1 先排",p:[["P1",0,24,0],["P2",0,3,0],["P3",0,3,0]],alg:"FCFS"},
+    slide17:{t:"课件 P17：FCFS，P2、P3 先排",p:[["P2",0,3,0],["P3",0,3,0],["P1",0,24,0]],alg:"FCFS"},
+    slide20:{t:"课件 P20：SJF",p:[["P1",0,6,0],["P2",0,8,0],["P3",0,7,0],["P4",0,3,0]],alg:"SJF"},
+    slide23:{t:"课件 P23：SRTF（到达时间不同）",p:[["P1",0,8,0],["P2",1,4,0],["P3",2,9,0],["P4",3,5,0]],alg:"SRTF"},
+    slide28:{t:"课件 P28：RR q=4",p:[["P1",0,24,0],["P2",0,3,0],["P3",0,3,0]],alg:"RR",q:4},
+    slide33:{t:"课件 P33：优先级（数字小优先）",p:[["P1",0,10,3],["P2",0,1,1],["P3",0,2,4],["P4",0,1,5],["P5",0,5,2]],alg:"PRIO",hi:"small"},
+    slide35:{t:"课件 P35：优先级 + RR q=2",p:[["P1",0,4,3],["P2",0,5,2],["P3",0,8,2],["P4",0,7,1],["P5",0,3,3]],alg:"PRR",q:2,hi:"small"},
+    class36:{t:"课件 P36 课堂练习（数字大优先，q=2）",p:[["P1",0,2,2],["P2",0,1,1],["P3",0,8,4],["P4",0,4,2],["P5",0,5,3]],alg:"FCFS",q:2,hi:"big",note:"四种算法的平均等待：FCFS 6.2、SJF 4.6、优先级 11、RR 7.2。切换上面的“算法”看每一种。"},
+    e2018:{t:"2018 期中综合题（数字大优先，q=2）",p:[["A",0,10,3],["B",0,6,5],["C",0,2,2],["D",0,4,1],["E",0,8,4]],alg:"RR",q:2,hi:"big",note:"题目问平均周转时间：FCFS 19.2 ms、优先级 20 ms、RR(q=2) 20.4 ms。"},
+    e2019:{t:"2019 期中综合题（数字小优先）",p:[["P1",0,9,3],["P2",0,2,1],["P3",0,3,2],["P4",0,2,4]],alg:"RR",q:1,hi:"small",note:"原卷没写 RR 的时间片。答案表里 P2、P3、P4 的等待时间（4、7、6）与 q=1 一致；P1 必定最后完成于 16，等待应为 16−9 = 7（答案表写 6、平均 5.6 是笔误，按 q=1 平均应为 6.0）。FCFS 8.5、SJF 3.25、优先级 5.25（答案表写 5.2）。"},
+    slide67:{t:"课件 P67：确定性评估（q=10）",p:[["P1",0,10,0],["P2",0,29,0],["P3",0,3,0],["P4",0,7,0],["P5",0,12,0]],alg:"RR",q:10,note:"平均等待：FCFS 28、SJF 13、RR(q=10) 23。"},
+    hrrn:{t:"高响应比 HRRN 例",p:[["A",0,3,0],["B",2,6,0],["C",4,4,0],["D",6,5,0],["E",8,2,0]],alg:"HRRN"},
+    slide31:{t:"课件 P31：改 q 看平均周转",p:[["P1",0,6,0],["P2",0,3,0],["P3",0,1,0],["P4",0,7,0]],alg:"RR",q:3},
+    mixed:{t:"练手：到达时间各不相同",p:[["P1",0,7,3],["P2",2,4,1],["P3",4,1,4],["P4",5,4,2]],alg:"SRTF",q:2,hi:"small"}
+  };
+  function minBy(arr,key){var best=null,bk=null;arr.forEach(function(x){var k=key(x);if(best===null){best=x;bk=k;return;}for(var i=0;i<k.length;i++){if(k[i]<bk[i]){best=x;bk=k;return;}if(k[i]>bk[i]){return;}}});return best;}
+  function simulate(procs,alg,q,hi){
+    q=Math.max(1e-9,+q||1);
+    var P=procs.map(function(p,i){return {n:String(p[0]),a:+p[1],b:+p[2],p:+p[3],rem:+p[2],start:null,end:null,i:i,arr:false};});
+    var t=0,segs=[],ready=[],done=0,guard=0;
+    function pk(x){return hi==="big"?-x.p:x.p;}
+    function admit(){P.filter(function(x){return !x.arr&&x.a<=t+1e-9;}).sort(function(u,v){return u.a-v.a||u.i-v.i;}).forEach(function(x){x.arr=true;ready.push(x);});}
+    function nextArr(){var m=Infinity;P.forEach(function(x){if(!x.arr&&x.a<m){m=x.a;}});return m;}
+    function take(x){ready.splice(ready.indexOf(x),1);return x;}
+    admit();
+    while(done<P.length&&guard++<20000){
+      if(!ready.length){t=nextArr();admit();continue;}
+      var x,run,na=nextArr();
+      if(alg==="FCFS"){x=ready.shift();run=x.rem;}
+      else if(alg==="SJF"){x=take(minBy(ready,function(y){return [y.rem,y.a,y.i];}));run=x.rem;}
+      else if(alg==="HRRN"){x=take(minBy(ready,function(y){return [-((t-y.a)+y.b)/y.b,y.i];}));run=x.rem;}
+      else if(alg==="PRIO"){x=take(minBy(ready,function(y){return [pk(y),y.i];}));run=x.rem;}
+      else if(alg==="RR"){x=ready.shift();run=Math.min(q,x.rem);}
+      else if(alg==="SRTF"){x=take(minBy(ready,function(y){return [y.rem,y.a,y.i];}));run=Math.min(x.rem,na-t);}
+      else if(alg==="PPRIO"){x=take(minBy(ready,function(y){return [pk(y),y.i];}));run=Math.min(x.rem,na-t);}
+      else{var best=Math.min.apply(null,ready.map(pk));x=take(ready.filter(function(y){return pk(y)===best;})[0]);run=Math.min(q,x.rem,na-t);}
+      if(x.start===null){x.start=t;}
+      var last=segs[segs.length-1];
+      if(last&&last.n===x.n&&Math.abs(last.e-t)<1e-9){last.e=t+run;}else{segs.push({n:x.n,s:t,e:t+run,i:x.i});}
+      t+=run;x.rem-=run;if(Math.abs(x.rem)<1e-9){x.rem=0;}
+      admit();
+      if(x.rem===0){x.end=t;done++;}else{ready.push(x);}
+    }
+    var res=P.map(function(x){var turn=x.end-x.a;return {n:x.n,a:x.a,b:x.b,p:x.p,start:x.start,end:x.end,turn:turn,w:turn/x.b,wait:turn-x.b,resp:x.start-x.a,i:x.i};});
+    var avg={turn:0,w:0,wait:0,resp:0};res.forEach(function(r){avg.turn+=r.turn;avg.w+=r.w;avg.wait+=r.wait;avg.resp+=r.resp;});
+    Object.keys(avg).forEach(function(k){avg[k]/=res.length;});
+    return {segs:segs,res:res,avg:avg};
+  }
+  function fmt(v){if(v===null||v===undefined||isNaN(v)){return "–";}var r=Math.round(v*100)/100;return String(r);}
+  function drawGantt(svg,segs,W){
+    clear(svg);
+    var L=10,R=16,H=82,maxT=segs.length?segs[segs.length-1].e:1,s0=segs.length?Math.min(0,segs[0].s):0;
+    var k=(W-L-R)/(maxT-s0||1);
+    svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.setAttribute("width",W);svg.setAttribute("height",H);
+    function X(v){return L+(v-s0)*k;}
+    var prevEnd=s0;
+    segs.forEach(function(g){
+      if(g.s>prevEnd+1e-9){el("rect",{x:X(prevEnd),y:8,width:X(g.s)-X(prevEnd),height:34,fill:"var(--surface)",stroke:"var(--line)","stroke-dasharray":"3 3"},svg);}
+      el("rect",{x:X(g.s),y:8,width:Math.max(1,X(g.e)-X(g.s)),height:34,fill:COLORS[g.i%COLORS.length],stroke:"var(--surface)","stroke-width":"1.5"},svg);
+      var w=X(g.e)-X(g.s);
+      if(w>=8*g.n.length+6){txt(svg,(X(g.s)+X(g.e))/2,30,g.n,{"text-anchor":"middle","font-size":"12.5","font-weight":"700",style:"fill:var(--surface)"});}
+      prevEnd=g.e;
+    });
+    var ticks=[s0];segs.forEach(function(g){[g.s,g.e].forEach(function(v){if(ticks.indexOf(v)<0){ticks.push(v);}});});
+    ticks.sort(function(a,b){return a-b;});
+    var lastX=[-99,-99];
+    ticks.forEach(function(v){
+      var x=X(v),lab=fmt(v),w=lab.length*7+4,row=(x-lastX[0]>=w)?0:((x-lastX[1]>=w)?1:0);
+      lastX[row]=x;
+      el("line",{x1:x,y1:42,x2:x,y2:row?62:48,stroke:"var(--muted)"},svg);
+      txt(svg,x,row?75:60,lab,{"text-anchor":"middle","font-size":"11",class:"mono"});
+    });
+  }
+  function boxWidth(node){var w=node.clientWidth||600;return Math.max(300,Math.min(760,Math.floor(w)));}
+  var figs=[];
+  function renderFig(div){
+    var pr=PRESETS[div.getAttribute("data-p")];if(!pr){return;}
+    var alg=div.getAttribute("data-alg")||pr.alg,q=+(div.getAttribute("data-q")||pr.q||2),hi=div.getAttribute("data-hi")||pr.hi||"small";
+    var r=simulate(pr.p,alg,q,hi);
+    if(!div.firstChild){
+      div.innerHTML='<div class="gcap"></div><div class="gbox"><svg role="img"></svg></div>';
+    }
+    var cap=div.querySelector(".gcap");
+    cap.innerHTML="<b>"+ALGN[alg]+(alg==="RR"||alg==="PRR"?"，q = "+q:"")+"</b>　"+pr.p.map(function(p){return p[0]+"="+p[2];}).join("　")+"　·　平均等待 <b>"+fmt(r.avg.wait)+"</b>　平均周转 "+fmt(r.avg.turn);
+    var svg=div.querySelector("svg");svg.setAttribute("aria-label",ALGN[alg]+" 甘特图");
+    drawGantt(svg,r.segs,boxWidth(div.querySelector(".gbox")));
+  }
+  return {PRESETS:PRESETS,ALGN:ALGN,simulate:simulate,drawGantt:drawGantt,fmt:fmt,boxWidth:boxWidth,renderFig:renderFig,COLORS:COLORS};
+})();
+
+(function(){
+  var divs=[].slice.call(document.querySelectorAll(".gfig"));
+  function all(){divs.forEach(SCHED.renderFig);}
+  all();
+  var tm=null;window.addEventListener("resize",function(){clearTimeout(tm);tm=setTimeout(function(){all();if(window.__smRun){window.__smRun();}},150);});
+})();
+
+/* simulator tool */
+(function(){
+  var tb=$("smRows");if(!tb){return;}
+  var S=SCHED,rows=[];
+  var selP=$("smPreset"),selA=$("smAlg"),inQ=$("smQ"),selH=$("smHi");
+  Object.keys(S.PRESETS).forEach(function(k){var o=document.createElement("option");o.value=k;o.textContent=S.PRESETS[k].t;selP.appendChild(o);});
+  function readRows(){return rows.map(function(r,i){return [$("smN"+i).value||("P"+(i+1)),parseFloat($("smA"+i).value)||0,parseFloat($("smB"+i).value),parseFloat($("smP"+i).value)||0];});}
+  function paintRows(){
+    tb.innerHTML="";
+    rows.forEach(function(r,i){
+      var tr=document.createElement("tr");
+      tr.innerHTML='<td><input type="text" id="smN'+i+'" aria-label="进程名"></td><td><input type="number" id="smA'+i+'" min="0" step="1" aria-label="到达时间"></td><td><input type="number" id="smB'+i+'" min="1" step="1" aria-label="执行时间"></td><td><input type="number" id="smP'+i+'" step="1" aria-label="优先级"></td><td><button type="button" class="btn ghost xs" aria-label="删除这一行">✕</button></td>';
+      tb.appendChild(tr);
+      $("smN"+i).value=r[0];$("smA"+i).value=r[1];$("smB"+i).value=r[2];$("smP"+i).value=r[3];
+      tr.querySelector("button").addEventListener("click",function(){rows=readRows();if(rows.length>1){rows.splice(i,1);paintRows();run();}});
+      tr.querySelectorAll("input").forEach(function(inp){inp.addEventListener("input",function(){rows=readRows();run();});});
+    });
+  }
+  function load(k){var p=S.PRESETS[k];rows=p.p.map(function(x){return x.slice();});selA.value=p.alg;inQ.value=p.q||2;selH.value=p.hi||"small";paintRows();run();}
+  function table(res,avg){
+    var h='<table><thead><tr><th>进程</th><th>到达</th><th>执行</th><th>优先级</th><th>首次运行</th><th>完成</th><th>周转</th><th>带权周转</th><th>等待</th><th>响应</th></tr></thead><tbody>';
+    res.forEach(function(r){h+="<tr><td><b>"+esc(r.n)+"</b></td><td>"+S.fmt(r.a)+"</td><td>"+S.fmt(r.b)+"</td><td>"+S.fmt(r.p)+"</td><td>"+S.fmt(r.start)+"</td><td>"+S.fmt(r.end)+"</td><td>"+S.fmt(r.turn)+"</td><td>"+S.fmt(r.w)+"</td><td><b>"+S.fmt(r.wait)+"</b></td><td>"+S.fmt(r.resp)+"</td></tr>";});
+    h+='<tr><th colspan="6">平均</th><th>'+S.fmt(avg.turn)+"</th><th>"+S.fmt(avg.w)+"</th><th>"+S.fmt(avg.wait)+"</th><th>"+S.fmt(avg.resp)+"</th></tr></tbody></table>";
+    return h;
+  }
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function run(){
+    var procs=readRows(),bad=procs.filter(function(p){return !(p[2]>0)||p[1]<0;});
+    var note=$("smNote");
+    if(bad.length){note.textContent="执行时间要大于 0，到达时间不能为负。";return;}
+    var q=Math.max(1,parseFloat(inQ.value)||1),alg=selA.value,hi=selH.value;
+    var r=S.simulate(procs,alg,q,hi);
+    S.drawGantt($("smGantt"),r.segs,S.boxWidth($("smGantt").parentNode));
+    $("smTable").innerHTML=table(r.res,r.avg);
+    var pk=selP.value,pre=S.PRESETS[pk],same=pre&&JSON.stringify(pre.p)===JSON.stringify(procs);
+    note.innerHTML="顺序："+r.segs.map(function(g){return esc(g.n)+"["+S.fmt(g.s)+"–"+S.fmt(g.e)+"]";}).join(" → ")+(same&&pre.note?"<br>"+pre.note:"");
+    var algs=["FCFS","SJF","SRTF","HRRN","RR","PRIO","PPRIO"],out=algs.map(function(a){return {a:a,r:S.simulate(procs,a,q,hi).avg};});
+    var mn=Math.min.apply(null,out.map(function(o){return Math.round(o.r.wait*1000);}));
+    var h='<table><thead><tr><th>算法</th><th>平均等待</th><th>平均周转</th><th>平均响应</th></tr></thead><tbody>';
+    out.forEach(function(o){var best=Math.round(o.r.wait*1000)===mn;h+="<tr"+(o.a===alg?' class="cur"':"")+"><td>"+S.ALGN[o.a]+(o.a==="RR"?"（q="+S.fmt(q)+"）":"")+"</td><td>"+(best?"<b>"+S.fmt(o.r.wait)+" 最小</b>":S.fmt(o.r.wait))+"</td><td>"+S.fmt(o.r.turn)+"</td><td>"+S.fmt(o.r.resp)+"</td></tr>";});
+    $("smCmp").innerHTML=h+"</tbody></table>";
+  }
+  window.__smRun=run;
+  selP.addEventListener("change",function(){load(selP.value);});
+  [selA,inQ,selH].forEach(function(x){x.addEventListener("input",run);x.addEventListener("change",run);});
+  $("smAdd").addEventListener("click",function(){rows=readRows();if(rows.length>=10){return;}var n=rows.length+1;rows.push(["P"+n,0,3,1]);paintRows();run();});
+  selP.value="class36";load("class36");
+})();
+
+/* RR quantum vs average turnaround */
+(function(){
+  var svg=$("rrqSvg");if(!svg){return;}
+  var p=SCHED.PRESETS.slide31.p,vals=[];
+  for(var q=1;q<=7;q++){vals.push(SCHED.simulate(p,"RR",q,"small").avg.turn);}
+  var x0=60,x1=600,y0=190,y1=24,lo=9,hi=13;
+  function X(q){return x0+(q-1)/6*(x1-x0);}function Y(v){return y0-(v-lo)/(hi-lo)*(y0-y1);}
+  [9,10,11,12,13].forEach(function(v){el("line",{x1:x0,y1:Y(v),x2:x1,y2:Y(v),stroke:"var(--line)"},svg);txt(svg,x0-8,Y(v)+4,String(v),{"text-anchor":"end","font-size":"11",class:"mono mut"});});
+  var d="";vals.forEach(function(v,i){d+=(i?"L":"M")+X(i+1)+" "+Y(v).toFixed(1);});
+  el("path",{d:d,fill:"none",stroke:"var(--accent)","stroke-width":"2.5"},svg);
+  vals.forEach(function(v,i){el("circle",{cx:X(i+1),cy:Y(v),r:"4.5",fill:"var(--accent)"},svg);txt(svg,X(i+1),Y(v)-10,SCHED.fmt(v),{"text-anchor":"middle","font-size":"11.5",class:"mono","font-weight":"700"});txt(svg,X(i+1),y0+18,"q="+(i+1),{"text-anchor":"middle","font-size":"11.5",class:"mono"});});
+  txt(svg,x0,14,"平均周转时间",{"font-size":"11",class:"mut"});
+})();
+
+/* exponential averaging */
+(function(){
+  var svg=$("eaSvg"),A=$("eaA"),T0=$("eaT0"),av=$("eaAv"),out=$("eaOut");if(!svg){return;}
+  var act=[6,4,6,4,13,13,13];
+  function draw(){
+    var a=+A.value,t0=Math.max(0,parseFloat(T0.value)||0),tau=[t0];av.textContent=a.toFixed(2);
+    act.forEach(function(x,i){tau.push(a*x+(1-a)*tau[i]);});
+    clear(svg);
+    var x0=50,x1=610,y0=190,y1=20,top=Math.max(16,Math.ceil(Math.max.apply(null,tau.concat(act))/2)*2);
+    function X(i){return x0+i/7*(x1-x0);}function Y(v){return y0-v/top*(y0-y1);}
+    for(var v=0;v<=top;v+=top/4){el("line",{x1:x0,y1:Y(v),x2:x1,y2:Y(v),stroke:"var(--line)"},svg);txt(svg,x0-8,Y(v)+4,SCHED.fmt(v),{"text-anchor":"end","font-size":"11",class:"mono mut"});}
+    for(var i=0;i<=7;i++){txt(svg,X(i),y0+18,"第"+i+"次",{"text-anchor":"middle","font-size":"10.5",class:"mut"});}
+    var d="";act.forEach(function(x,i){d+=(i?"L":"M")+X(i)+" "+Y(x).toFixed(1)+"L"+X(i+1)+" "+Y(x).toFixed(1);});
+    el("path",{d:d,fill:"none",stroke:"var(--ink)","stroke-width":"2"},svg);
+    var p="";tau.forEach(function(x,i){p+=(i?"L":"M")+X(i)+" "+Y(x).toFixed(1);});
+    el("path",{d:p,fill:"none",stroke:"var(--accent)","stroke-width":"2.5"},svg);
+    tau.forEach(function(x,i){el("circle",{cx:X(i),cy:Y(x),r:"4",fill:"var(--accent)"},svg);});
+    el("line",{x1:x1-170,y1:14,x2:x1-150,y2:14,stroke:"var(--ink)","stroke-width":"2"},svg);txt(svg,x1-144,18,"实际 tᵢ",{"font-size":"11"});
+    el("line",{x1:x1-90,y1:14,x2:x1-70,y2:14,stroke:"var(--accent)","stroke-width":"2.5"},svg);txt(svg,x1-64,18,"预测 τᵢ",{"font-size":"11"});
+    out.innerHTML="实际 t：<b>"+act.join(", ")+"</b><br>预测 τ："+tau.map(function(x){return SCHED.fmt(x);}).join(", ");
+  }
+  A.addEventListener("input",draw);T0.addEventListener("input",draw);draw();
+})();
+
 /* ---------- quiz ---------- */
 (function(){
   var box=$("quizBox");if(!box){return;}
@@ -1769,7 +2568,26 @@ function store(){try{return window.localStorage;}catch(e){return null;}}
     ["并发与并行的区别，正确的是？",["并发要求多核","并行是同一时刻多个任务执行，需要多个处理单元","两者完全相同","并行一定不是并发"],1,""],
     ["多处理器系统中，用关中断实现互斥？",["可以","不可以，关中断只影响当前 CPU","只能用于用户态","只能用于线程"],1,""],
     ["管道 read 返回 0 表示？",["管道暂时没数据","出错","所有写端都已关闭且没有数据（EOF）","读到一个字节 0"],2,""],
-    ["线程取消的默认类型是？",["异步取消","延迟取消，到取消点才响应","立即终止","不允许取消"],1,""]
+    ["线程取消的默认类型是？",["异步取消","延迟取消，到取消点才响应","立即终止","不允许取消"],1,""],
+    ["下列哪种调度算法可能出现护航效应？",["SJF","FCFS","RR","多级队列"],1,"长任务挡在前面，短任务排成车队。"],
+    ["可以进行抢占式调度的时机是？",["运行→等待","等待→就绪","进程终止","以上都不是"],1,"运行→等待和终止时进程自己跑不了，那是非抢占时机。"],
+    ["P1=24、P2=3、P3=3 同时到达，按 P1、P2、P3 做 FCFS，平均等待时间是？",["3","17","27","10"],1,"(0+24+27)/3 = 17。"],
+    ["一组任务同时到达、执行时间已知，平均等待时间最小的算法是？",["FCFS","RR","SJF","优先级"],2,""],
+    ["SRTF 与非抢占 SJF 的区别是？",["SRTF 不需要预知执行时间","新任务到达时 SRTF 比较剩余时间，更短就抢占","SJF 会饥饿而 SRTF 不会","两者完全一样"],1,""],
+    ["指数平均 α=0.5，上次预测 τ=10，上次实际 t=6，下一次预测是？",["6","8","10","16"],1,"0.5×6 + 0.5×10 = 8。"],
+    ["RR 的时间片取得非常大时，RR 退化为？",["SJF","FCFS","优先级","MLFQ"],1,""],
+    ["“时间片越小，响应时间越小，系统效率越高”？",["正确","错误：切换开销占比增大，效率降低","错误：响应时间会变大","只对批处理正确"],1,"2018 判断题。"],
+    ["综合考虑了等待时间和执行时间的调度算法是？",["RR","SJF","FCFS","高响应比优先"],3,"响应比 = (等待 + 服务)/服务。"],
+    ["解决低优先级任务饥饿的方法是？",["抢占","老化：等得越久优先级越高","缩短时间片","增加 CPU"],1,""],
+    ["多级队列与多级反馈队列最本质的区别是？",["队列数量不同","MLFQ 中任务会根据运行行为在队列间移动","MLQ 不用优先级","MLFQ 只能用 FCFS"],1,""],
+    ["MLFQ：Q0 q=8、Q1 q=16、Q2 FCFS，一个 30 ms 且不阻塞的任务在 Q2 中运行多久？",["30 ms","14 ms","6 ms","22 ms"],2,"30 − 8 − 16 = 6。"],
+    ["周转时间指的是？",["第一次上 CPU 前的等待","在就绪队列中等待的总时间","从到达到完成的总时间","CPU 执行时间"],2,""],
+    ["任务在时刻 1 到达，在 3–5 和 8–10 运行，它的等待时间是？",["2","5","9","4"],1,"(3−1) + (8−5) = 5；响应是 2，周转是 9。"],
+    ["Linux 的 nice 值？",["−20~19，越大越优先","−20~19，越小权重越高、分到的 CPU 越多","1~99 的实时优先级","0~31"],1,""],
+    ["四核八线程的 CPU 在操作系统看来是？",["4 个物理核，没有逻辑 CPU","8 个逻辑 CPU，但只有 4 个物理核","8 个独立物理核","16 个逻辑 CPU"],1,""],
+    ["周期任务 A(C=1, T=4)、B(C=2, T=5)，CPU 利用率需求 U 是？",["0.45","0.65","0.828","1"],1,"1/4 + 2/5 = 0.65。"],
+    ["单 CPU、可抢占、D=T 的周期任务模型中，EDF 可调度的条件是？",["U ≤ 0.69","U ≤ n(2^(1/n)−1)","U ≤ 1","U < 0.5"],2,"n(2^(1/n)−1) 是 RM 的充分条件。"],
+    ["Little 定律：每秒到达 7 个任务，队列里平均 14 个，平均排队时间是？",["0.5 秒","2 秒","7 秒","98 秒"],1,"W = L / λ = 14 / 7。"]
   ];
   var answered=0,right=0;
   function upd(){$("quizScore").textContent="已答 "+answered+" / "+Q.length+" 题，答对 "+right+" 题";}
@@ -1832,7 +2650,20 @@ function store(){try{return window.localStorage;}catch(e){return null;}}
     "写出 pthread_create / pthread_join 的用法；说出 count++ 为什么不原子、start 与 run 的区别",
     "解释线程池、Fork-Join、OpenMP reduction 的作用；说出 GIL 的影响",
     "说出多线程下 fork/exec、信号、线程取消、TLS 的规则",
-    "说出 Linux clone 标志和 Windows ETHREAD/KTHREAD/TEB 的作用"
+    "说出 Linux clone 标志和 Windows ETHREAD/KTHREAD/TEB 的作用",
+    "说出 CPU 区间与 I/O 区间、CPU 密集与 I/O 密集；调度器与分派程序的分工",
+    "列出 4 个调度时机并区分抢占/非抢占；答出 2020“抢占发生在等待→就绪”",
+    "背出五个评价指标，会用 周转 = 完成 − 到达、等待 = 周转 − 执行时间 计算",
+    "解释护航效应；用交换论证说明 SJF 平均等待最小",
+    "会画 FCFS、SJF、SRTF、RR、优先级的甘特图并算平均等待/周转（做完 2018、2019 综合题和课堂练习）",
+    "用指数平均预测下一段 CPU 区间；说出 α=0、α=1 的含义",
+    "说出 HRRN 的响应比公式，以及它为什么不会饥饿",
+    "说出 RR 时间片太大/太小的后果；解释饥饿与老化",
+    "比较多级队列与多级反馈队列；举例说明 MLFQ 及其优点；辨析 MLFQ 与 FCFS",
+    "说出 PCS/SCS、共享队列 vs 每核队列、负载均衡、亲和性、NUMA、超线程",
+    "说出 RM 与 EDF 的规则和可调度条件，会算 U",
+    "说出 Linux 调度器的演变（O(1)、CFS、EEVDF）、nice 范围；Windows 0–31 与动态提升",
+    "说出四种算法评估方法；会用 Little 定律"
   ];
   var KEY="os-l14-checklist",saved={},st=store();
   try{saved=JSON.parse((st&&st.getItem(KEY))||"{}")||{};}catch(e){saved={};}
