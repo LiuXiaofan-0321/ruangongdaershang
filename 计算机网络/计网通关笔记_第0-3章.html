@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>计网通关笔记·第1–2章</title>
+<title>计网通关笔记·第1–3章</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -186,6 +186,14 @@ input[type=range]{width:min(16rem,100%);accent-color:var(--accent)}
 .cheat>div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.7rem .85rem;min-width:0}
 .cheat h5{margin:0 0 .3rem;font-size:.82rem;letter-spacing:.06em;color:var(--muted);font-family:var(--f-body)}
 .cheat .mono{font-size:.95rem;line-height:1.7;overflow-wrap:anywhere}
+.out .code{white-space:pre;font-size:.85rem}
+.tool .svgbox{overflow-x:auto}
+details>summary{display:block;position:relative;padding-left:2.1rem}
+details>summary::before{position:absolute;left:1rem;top:.7rem}
+details>summary .src{margin-left:.5rem}
+.tbl table.wide{min-width:40rem}
+.tbl table.mid{min-width:30rem}
+.tool label.chk{flex-direction:row;align-items:center;gap:.4rem;font-size:.85rem;color:var(--ink)}
 footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}
 </style>
 </head>
@@ -197,6 +205,7 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
   <a href="#pre">零基础预备</a>
   <a href="#ch1">第1章 引论</a>
   <a href="#ch2">第2章 物理层</a>
+  <a href="#ch3">第3章 链路层</a>
   <a href="#cheat">公式速查</a>
   <a href="#exam">真题精讲</a>
   <a href="#quiz">自测</a>
@@ -207,8 +216,8 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 
 <header class="top" id="start">
   <div class="eyebrow">COMPUTER NETWORKS · 华东师大软件工程 · 王廷老师课件</div>
-  <h1>计网通关笔记 <span>第 0–2 章</span></h1>
-  <p class="lede">把课件 <code>0 Intro</code>、<code>1 Introduction</code>、<code>2 Physical Layer</code> 三份 PPT 重新讲一遍，写给完全零基础的同学。每个知识点都配了图或小工具，结合 2020–2023 四年期中真题、老版作业答案和本学期第一章作业/自测题标出考点。</p>
+  <h1>计网通关笔记 <span>第 0–3 章</span></h1>
+  <p class="lede">把课件 <code>0 Intro</code>、<code>1 Introduction</code>、<code>2 Physical Layer</code> 三份 PPT 重新讲一遍，写给完全零基础的同学。每个知识点都配了图或小工具，结合 2020–2023 四年期中真题、老版作业答案和<strong>本学期（2026）第 1–3 章全部作业与自测题</strong>标出考点。第 3 章数据链路层按今年的作业和老版课件补齐。</p>
   <div class="legend" aria-label="图例">
     <span class="tag exam">考点</span>
     <span class="tag trap">易错</span>
@@ -259,12 +268,32 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
   </figure>
   <p>考试题型（教学大纲）：<strong>选择、填空、名词解释、简答、计算</strong>。往年期中卷子 100 分，大致是 选择 20 + 填空 16~20 + 名词解释 15~20 + 简答 15~30 + 计算/分析 20~30。</p>
 
-  <h3 id="c0-map">考情地图：第 1–2 章哪些点年年考</h3>
-  <p>下表统计的是 4 份期中卷里<strong>属于第 1、2 章</strong>的题目。实心点 = 出现过，空心点 = 以变体出现。</p>
+  <h3 id="c0-hw">2026 作业与自测：在哪里讲</h3>
+  <p>老师布置的作业和自测一定是重点。今年的 6 份（文件夹 <code>2026作业题</code>）全部逐题讲解：</p>
+  <div class="tbl"><table>
+    <thead><tr><th>作业 / 自测</th><th>题量</th><th>内容</th><th>讲解位置</th></tr></thead>
+    <tbody>
+      <tr><td>第一章作业</td><td class="c">10</td><td>拓扑计数、分层优缺点、TCP/UDP、传输时间计算</td><td><a href="#c1-hw">1.9</a></td></tr>
+      <tr><td>第一章自测</td><td class="c">30</td><td>拓扑、网络分类、协议三要素、OSI 各层</td><td><a href="#c1-self">1.10</a></td></tr>
+      <tr><td>第二章作业</td><td class="c">12</td><td>Δf、奈奎斯特/香农、FDM、CDMA、电路/分组交换、VSAT</td><td><a href="#c2-hw">2.14</a></td></tr>
+      <tr><td>第二章自测</td><td class="c">35</td><td>带宽、四种转换、编码、复用、交换、ADSL、HFC</td><td><a href="#c2-self">2.15</a></td></tr>
+      <tr><td>第三章作业</td><td class="c">10</td><td>字节填充、海明码、CRC、校验和、停等、滑动窗口、协议 6</td><td><a href="#c3-hw">3.11</a></td></tr>
+      <tr><td>第三章自测</td><td class="c">20</td><td>差错检测、海明距离、ARQ 窗口、PPP</td><td><a href="#c3-self">3.12</a></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="c0-map">考情地图：第 1–3 章哪些点年年考</h3>
+  <p>下表统计的是 4 份期中卷里<strong>属于第 1–3 章</strong>的题目。实心点 = 出现过，空心点 = 以变体出现。</p>
   <div class="tbl">
   <table>
     <thead><tr><th>知识点</th><th class="c">2020</th><th class="c">2021</th><th class="c">2022</th><th class="c">2023</th><th>本笔记位置</th></tr></thead>
     <tbody>
+      <tr><td><strong>滑动窗口：窗口大小、序号位数、信道利用率</strong></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c3-win">3.9</a></td></tr>
+      <tr><td><strong>CRC 计算；生成式含 x+1</strong></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c3-crc">3.7</a></td></tr>
+      <tr><td><strong>海明码编码 / 纠错；海明距离</strong></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c3-ham">3.5</a></td></tr>
+      <tr><td><strong>位填充 / 字节填充</strong></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c3-frame">3.2</a></td></tr>
+      <tr><td>停等协议：50% 利用率帧长、超时重传、为什么要序号</td><td class="c"><i class="dot"></i></td><td class="c"></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c3-sw">3.8</a></td></tr>
+      <tr><td>链路层服务类型、子层、PPP</td><td class="c"></td><td class="c"></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c3-role">3.1</a></td></tr>
       <tr><td>OSI 七层：层次顺序、每层功能</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c1-osi">1.6</a></td></tr>
       <tr><td>奈奎斯特 / 香农 求最大速率</td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c2-limit">2.3</a></td></tr>
       <tr><td>CDMA 码片计算</td><td class="c"><i class="dot lo"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td><a href="#c2-cdma">2.8</a></td></tr>
@@ -286,7 +315,7 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
   </div>
   <div class="box exam">
     <span class="tag exam">提醒</span>
-    <p>往年期中还考了第 3、4 章的内容（成帧/位填充、CRC、海明码、停等与滑动窗口、ALOHA、CSMA/CD），分值约占一半。它们不在这三份 PPT 里，所以本笔记不展开；等老师讲完第 3 章，再用同样的方式补上那部分。</p>
+    <p>第 3 章（成帧、CRC、海明码、停等与滑动窗口）已按今年的作业补齐，见 <a href="#ch3">第 3 章</a>。往年期中还考第 4 章的 ALOHA、CSMA/CD 等介质访问内容，等发了第 4 章的课件和作业再补。</p>
   </div>
 </section>
 
@@ -334,6 +363,7 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     <li><a href="#c1-history"><span>1.7</span>示例网络、标准化组织</a></li>
     <li><a href="#c1-perf"><span>1.8</span>性能：带宽、时延</a></li>
     <li><a href="#c1-hw"><span>1.9</span>本章作业逐题讲</a></li>
+    <li><a href="#c1-self"><span>1.10</span>自测 30 题速查</a></li>
   </ul>
 
   <h3 id="c1-what">1.1 什么是计算机网络<span class="stars">★★</span></h3>
@@ -892,6 +922,44 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     <p>请求要上去再下来（2 × 40,000），响应也要上去再下来（2 × 40,000），共 <code>160,000 km</code>。</p>
     <p>光速 300,000 km/s → <code>160,000 / 300,000 ≈ 0.533 s = 533 ms</code>。</p>
   </div></details>
+
+  <h3 id="c1-self">1.10 第一章自测 30 题速查</h3>
+  <p class="muted">题目来自 <code>2026作业题/第一章自测题</code>（已批改，30 题全对）。考试选择题常从这个题库改编，记住每题的关键词。</p>
+  <div class="tbl"><table>
+    <thead><tr><th class="c">#</th><th>关键词</th><th>答案</th></tr></thead>
+    <tbody>
+      <tr><td class="c">1</td><td>故障频率、故障后恢复时间衡量的是</td><td><b>Reliability 可靠性</b></td></tr>
+      <tr><td class="c">2</td><td>未授权用户是 ____ 问题</td><td><b>Security 安全</b></td></tr>
+      <tr><td class="c">3</td><td>需要中心控制器或集线器的拓扑</td><td><b>Star 星型</b></td></tr>
+      <tr><td class="c">4</td><td>两台设备之间专用链路</td><td><b>point-to-point</b></td></tr>
+      <tr><td class="c">5</td><td>两台以上设备共享一条链路</td><td><b>multipoint</b></td></tr>
+      <tr><td class="c">6</td><td>第一个网络</td><td><b>ARPANET</b></td></tr>
+      <tr><td class="c">7</td><td>当前因特网的协议族</td><td><b>TCP/IP</b></td></tr>
+      <tr><td class="c">8</td><td>数据的结构或格式、出现的顺序</td><td><b>Syntax 语法</b></td></tr>
+      <tr><td class="c">9</td><td>比特模式如何解释、据此做什么动作</td><td><b>Semantics 语义</b></td></tr>
+      <tr><td class="c">10</td><td>何时发送、发多快</td><td><b>Timing 时序</b></td></tr>
+      <tr><td class="c">11</td><td>一栋楼、工厂、校园内</td><td><b>LAN</b></td></tr>
+      <tr><td class="c">12</td><td>跨州、跨国、全球</td><td><b>WAN</b></td></tr>
+      <tr><td class="c">13</td><td>许多独立网络的集合</td><td><b>An internet</b></td></tr>
+      <tr><td class="c">14</td><td>管理数据通信的一组规则</td><td><b>protocol 协议</b></td></tr>
+      <tr><td class="c">15</td><td>成为因特网标准之前的想法或概念</td><td><b>RFC</b></td></tr>
+      <tr><td class="c">16</td><td>把比特变成电磁信号的层</td><td><b>Physical 物理层</b></td></tr>
+      <tr><td class="c">17</td><td>远程登录、文件传输、邮件属于应用层服务吗</td><td><b>All the above</b></td></tr>
+      <tr><td class="c">18</td><td>为什么提出 OSI</td><td><b>需要标准让任何两个系统都能通信</b></td></tr>
+      <tr><td class="c">19</td><td>OSI 有几层</td><td><b>seven</b></td></tr>
+      <tr><td class="c">20</td><td>数据从低层往高层走，头部被</td><td><b>removed 移除</b></td></tr>
+      <tr><td class="c">21</td><td>A 的第 5 层加的头部由 B 的哪一层读</td><td><b>session 会话层</b>（对等层读对等层的头）</td></tr>
+      <tr><td class="c">22</td><td>OSI 传输层的主要功能</td><td><b>process-to-process 交付</b></td></tr>
+      <tr><td class="c">23</td><td>加密和解密</td><td><b>presentation 表示层</b></td></tr>
+      <tr><td class="c">24</td><td>IP 协议是 ____ 协议</td><td><b>none of the above</b>（不可靠、无连接）</td></tr>
+      <tr><td class="c">25</td><td>七层 ____ 模型为通用协议开发提供指导</td><td><b>OSI</b>（由 ISO 制定）</td></tr>
+      <tr><td class="c">26</td><td>一站到下一站无差错交付</td><td><b>data link 数据链路层</b></td></tr>
+      <tr><td class="c">27</td><td>分组跨多条链路从源到目的</td><td><b>network 网络层</b></td></tr>
+      <tr><td class="c">28</td><td>建立、维护、同步通信设备间的交互</td><td><b>session 会话层</b></td></tr>
+      <tr><td class="c">29</td><td>把数据转换成双方约定格式，保证互操作</td><td><b>presentation 表示层</b></td></tr>
+      <tr><td class="c">30</td><td>TCP/IP 哪层 = OSI 会话 + 表示 + 应用</td><td><b>application 应用层</b></td></tr>
+    </tbody>
+  </table></div>
 </section>
 
 <!-- ============ 第2章 ============ -->
@@ -912,7 +980,8 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     <li><a href="#c2-switch"><span>2.11</span>电路交换 vs 分组交换</a></li>
     <li><a href="#c2-mobile"><span>2.12</span>移动通信 1G–5G</a></li>
     <li><a href="#c2-cable"><span>2.13</span>有线电视上网</a></li>
-    <li><a href="#c2-hw"><span>2.14</span>老版作业精讲</a></li>
+    <li><a href="#c2-hw"><span>2.14</span>本学期作业 12 题</a></li>
+    <li><a href="#c2-self"><span>2.15</span>自测 35 题速查</a></li>
   </ul>
 
   <div class="box tip"><span class="tag tip">一句话</span><p>物理层是所有层的地基：电线、光纤、无线电的物理性质，决定了网络最快能多快。它的核心问题是<strong>只能用模拟的物理信号（电压、光强、电磁波）去表示数字比特</strong>，这个转换叫<strong>调制（modulation）</strong>。家里的“猫” = Modem = <strong>Mo</strong>dulator（调制器）+ <strong>Dem</strong>odulator（解调器）。</p></div>
@@ -931,6 +1000,21 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     <li><strong>时域</strong>图：横轴是时间，看信号怎么随时间变。<strong>频域</strong>图：横轴是频率，看信号由哪些频率组成。一个纯正弦波在频域里只是一根竖线。</li>
     <li>单一频率的正弦波没法携带信息（电力公司送 60 Hz 交流电、防盗报警可以用）。通信要用<strong>复合信号</strong>，即许多正弦波的叠加。</li>
   </ul>
+  <h4 id="c2-convert">四种“转换”和两种信道（第二章自测高频）</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>转换</th><th>做什么</th><th>技术</th><th>例子</th></tr></thead>
+    <tbody>
+      <tr><td><strong>数字 → 数字</strong></td><td>把比特变成数字信号</td><td>线路编码（NRZ、曼彻斯特…）、块编码（4B/5B、8B/10B）、扰码（B8ZS、HDB3）</td><td>以太网网线</td></tr>
+      <tr><td><strong>数字 → 模拟</strong></td><td>用数字数据改变模拟载波的某个特征（调制）</td><td>ASK、FSK、PSK、QAM</td><td>Modem、WiFi</td></tr>
+      <tr><td><strong>模拟 → 数字</strong></td><td>把模拟信号数字化</td><td>PCM、增量调制 DM</td><td>电话干线里的话音</td></tr>
+      <tr><td><strong>模拟 → 模拟</strong></td><td>用模拟信号调制模拟载波</td><td>AM、FM、PM</td><td>收音机广播</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2">
+    <div class="mini"><h5>低通信道 low-pass</h5>能通过从 0 Hz 开始的低频。数字信号可以<strong>直接基带传输</strong>（如网线）。</div>
+    <div class="mini"><h5>带通信道 bandpass</h5>只让某一段频率通过，不含 0 附近。<strong>不能直接送数字信号</strong>，必须先调制成通带信号（数字→模拟）。无线都是带通。</div>
+  </div>
+
   <h4 id="c2-duplex">单工、半双工、全双工</h4>
   <figure>
     <div class="svgbox">
@@ -1028,6 +1112,7 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
   </div>
   <div class="formula"><span class="big">信噪比 dB = 10 × log₁₀(S/N)</span>　⇔　<span class="big">S/N = 10^(dB/10)</span>
 <span class="cap">10 dB → 10；20 dB → 100；30 dB → 1000；36 dB → 约 3981；40 dB → 10000。</span></div>
+  <div class="box tip"><span class="tag tip">分贝也用来比较两点功率</span><p>dB = 10 lg(P2/P1)：正数表示放大，负数表示衰减（光纤衰减就是这么算的），<strong>0 dB 表示两点功率相等 P2 = P1</strong>（第二章自测第 2 题）。</p></div>
   <div class="box trap"><span class="tag trap">易错 · 最常见的丢分点</span>
     <p>题目同时给了<strong>“二进制信号/几种电平”</strong>和<strong>“信噪比”</strong>时，要<strong>两个公式都算，取较小的那个</strong>。因为信道必须同时满足两个限制。</p>
     <p>香农公式里一定先把 dB 换成比值，再代入。<code>20 dB ≠ S/N = 20</code>，而是 S/N = 100。</p>
@@ -1177,6 +1262,11 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     <li><strong>光传输</strong>：激光点对点，方向性极强、带宽大，但空气对流、雨雾会干扰。</li>
     <li><strong>频谱要管理</strong>：大部分频段需要许可证（拍卖）。但 <strong>ISM 频段</strong>（工业、科学、医疗；如 900 MHz、<strong>2.4 GHz</strong>、5 GHz）免许可，低功率可随便用，<strong>WiFi、蓝牙、Zigbee</strong> 都在这里。</li>
   </ul>
+  <div class="tbl"><table>
+    <thead><tr><th>无线电波</th><th>微波</th><th>红外线</th></tr></thead>
+    <tbody><tr><td><strong>全向</strong>（omnidirectional）：天线往四面八方发，适合广播（收音机、AM/FM）</td><td><strong>单向</strong>（unidirectional）：天线要对准，适合点对点（蜂窝、卫星、无线局域网）</td><td><strong>短距离</strong>：穿不过墙，用于电脑和外设、遥控器之间（自测第 10 题）</td></tr></tbody>
+  </table></div>
+  <p class="muted">反过来，<strong>主要使用有导向介质</strong>的是本地电话系统（双绞线），自测第 9 题。</p>
   <div class="grid2">
     <div class="mini"><h5>无线</h5>部署简单便宜；天然支持移动和广播；但会互相干扰，信号强度和速率变化大。</div>
     <div class="mini"><h5>有线 / 光纤</h5>点对点容易做到固定速率；但长距离铺设贵；不方便移动和广播。</div>
@@ -1263,6 +1353,12 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     </tbody></table></div>
   </div></details>
 
+  <div class="box tip"><span class="tag tip">块编码与扰码（自测提到的“数字→数字”另外两种）</span>
+    <p><strong>块编码</strong>（mB/nB）：每 m 位换成 n 位的码组，多出来的冗余用来保证有足够的跳变、还能发现错误。4B/5B（快速以太网）、8B/10B（千兆以太网）都是。</p>
+    <p><strong>扰码</strong>：在不增加位数的前提下，把长串的 0 替换成一个特殊的电平图案，接收方再换回来，用于 AMI 这类双极编码。<strong>B8ZS</strong>（北美 T1）：连续 8 个 0 替换；<strong>HDB3</strong>（欧洲 E1）：连续 4 个 0 替换。</p>
+    <p class="muted">曼彻斯特每位中间的跳变是为了<strong>同步</strong>，所需最小带宽是 NRZ 的<strong>两倍</strong>（自测第 13、15 题）。</p>
+  </div>
+
   <h3 id="c2-pass">2.6 通带传输：调制与星座图<span class="stars">★★</span></h3>
   <p>无线和光纤不能直接加 0/1 电压，要找一个高频<strong>载波</strong>（正弦波），改变它的三要素之一来表示比特：</p>
   <figure>
@@ -1332,6 +1428,11 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     <tbody><tr><td>时隙预先分好、固定不变；某用户没数据，他的时隙也空着 → 浪费</td><td>按需动态分配时隙，谁有数据给谁；还能多给某用户几个时隙提高速率。（就是 1.1 的“统计复用”）</td></tr></tbody>
   </table></div>
   <p class="muted"><strong>TDM vs TDMA</strong>：都把时间切成时隙。TDM 用于“复用”，时隙由发送方预先排好；TDMA（时分多址）用于“多址接入”，多个节点争用有限的时隙。课件比喻：商家自己排好供货顺序是 TDM；谁抢到谁供货是 TDMA。</p>
+  <div class="box exam"><span class="tag exam">自测高频</span><ul>
+    <li>FDM 和 WDM 传的是<strong>模拟</strong>信号，TDM 传的是<strong>数字</strong>信号。</li>
+    <li>链路带宽（Hz）比各路信号带宽之和还大时可以用 <strong>FDM</strong>；链路数据率比各路之和还大时可以用 TDM。</li>
+    <li>分“同步”和“统计”两种的是 <strong>TDM</strong>。</li>
+  </ul></div>
   <div class="box exam"><span class="tag exam">简答 · 2022</span><p>列举四种多路复用并说明原理：<strong>时分</strong>（按时间片轮流）、<strong>频分</strong>（按不重叠的频带，加保护带）、<strong>波分</strong>（一根光纤里传多个波长）、<strong>码分</strong>（每个用户一个相互正交的码片序列，同时同频发送）。</p></div>
 
   <h3 id="c2-cdma">2.8 码分多址 CDMA<span class="stars">★★★★</span></h3>
@@ -1486,6 +1587,17 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
       <tr><td>计费</td><td>按时间</td><td>按流量</td></tr>
     </tbody>
   </table></div>
+  <h4>分组交换的两种做法：数据报 vs 虚电路</h4>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>数据报网络</th><th>虚电路网络</th></tr></thead>
+    <tbody>
+      <tr><td>要不要建立连接</td><td>不要，每个分组带完整目的地址、独立选路</td><td>先建立一条“虚电路”（选好路径），分组只带短的虚电路号</td></tr>
+      <tr><td>路径</td><td>同一报文的分组可能走不同路径、乱序到达</td><td>所有分组走同一路径、按序到达</td></tr>
+      <tr><td>资源</td><td>不预留</td><td>可以在建立时预留部分资源</td></tr>
+      <tr><td>例子</td><td><strong>因特网的网络层（IP）</strong></td><td>ATM、帧中继、X.25</td></tr>
+    </tbody>
+  </table></div>
+  <p>虚电路是电路交换与数据报网络的<strong>折中</strong>：像电路交换一样有建立、传输、拆除三阶段，又像分组交换一样按分组存储转发（自测第 26、31、33 题）。</p>
   <div class="box exam"><span class="tag exam">考点 · 2021</span><ul>
     <li>本地电话网采用<strong>电路</strong>交换。</li>
     <li>简答：应用以稳定速率长时间发送数据（每 k 个时间单位发 N 位），适合哪种网络？→ <strong>电路交换</strong>。因为速率已知且稳定，可以预留带宽而不太浪费；会话很长，建立和拆除电路的开销可以摊薄。</li>
@@ -1552,6 +1664,10 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 
   <h3 id="c2-cable">2.13 有线电视网上网<span class="stars">★</span></h3>
   <p>复用有线电视的电缆：数据从头端（head-end）经光纤到光纤节点，再经<strong>共享的同轴电缆树</strong>送到各家（光纤+同轴，HFC）。用户端用 <strong>Cable Modem</strong>，标准是 <strong>DOCSIS</strong>；上行用 QPSK，下行用 QAM-64。</p>
+  <ul>
+    <li><strong>传统</strong>有线电视网只有<strong>下行</strong>（头端广播给用户）；要上网必须改造成双向的 HFC。</li>
+    <li>头端的设备叫 <strong>CMTS</strong>（电缆调制解调器终端系统），用户端是 Cable Modem。数据传输标准 <strong>DOCSIS</strong> 由 MCNS（CableLabs）制定（自测第 34 题）。</li>
+  </ul>
   <figure>
     <div class="svgbox">
     <svg viewBox="0 0 640 110" role="img" aria-label="有线电视频谱分配：上行 5 到 42 兆赫，电视 54 到 550 兆赫，下行数据 550 到 750 兆赫">
@@ -1578,25 +1694,576 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     </tbody>
   </table></div>
 
-  <h3 id="c2-hw">2.14 老版第二章作业精讲</h3>
-  <details><summary>2-1 波长 1 μm 处 0.1 μm 的光谱有多少带宽？</summary><div class="ans"><p>Δf = cΔλ/λ² = 3×10⁸ × 10⁻⁷ / 10⁻¹² = 3×10¹³ Hz = <strong>30 THz</strong>。（也可以分别算 0.95 μm 和 1.05 μm 对应的频率再相减，得到约 30,000 GHz。）</p></div></details>
-  <details><summary>2-2 3 kHz 信道、信噪比 20 dB、二进制信号，最大速率？</summary><div class="ans"><p>香农 ≈ 19.975 kbps；奈奎斯特 = 6 kbps；取小 → <strong>6 kbps</strong>。</p></div></details>
-  <details><summary>2-3 10 路各 4000 Hz 的信号 FDM，保护带 400 Hz，最小带宽？</summary><div class="ans"><p>4000 × 10 + 400 × 9 = <strong>43,600 Hz</strong>。</p></div></details>
-  <details><summary>2-4 A、B、C 同时发 0（课本图 2-22(a) 码片），结果码片序列？</summary><div class="ans"><p>课本码片：A (−1 −1 −1 +1 +1 −1 +1 +1)，B (−1 −1 +1 −1 +1 +1 +1 −1)，C (−1 +1 −1 +1 +1 +1 −1 −1)。发 0 就取反后相加（或先加再取反）：<strong>(+3 +1 +1 −1 −3 −1 −1 +1)</strong>。</p></div></details>
+  <h3 id="c2-hw">2.14 本学期第二章作业 12 题逐题讲</h3>
+  <p class="muted">题目来自 <code>2026作业题/第二章作业</code>，和老版第二章作业是同一套题（2-6 拆成了 3 小题）。</p>
+  <details><summary>2-1 波长 1 μm 处 0.1 μm 的光谱有多少带宽？</summary><div class="ans">
+    <p><strong>方法一（公式）</strong>：Δf = c·Δλ/λ² = 3×10⁸ × 0.1×10⁻⁶ / (10⁻⁶)² = 3×10¹³ Hz。</p>
+    <p><strong>方法二（两端相减）</strong>：波长范围 0.95 ~ 1.05 μm，f = c/λ：3×10⁸/0.95×10⁻⁶ − 3×10⁸/1.05×10⁻⁶ ≈ 3.01×10¹³ Hz。</p>
+    <p>答：约 <strong>3×10¹³ Hz = 30 THz = 30 000 GHz</strong>。</p>
+  </div></details>
+  <details><summary>2-2 3 kHz 信道、信噪比 20 dB、传二进制信号，最大速率？</summary><div class="ans"><p>20 dB → S/N = 100。香农 3000 × log₂101 ≈ 19 975 bps；奈奎斯特 2 × 3000 × log₂2 = 6000 bps。两个限制取小：<strong>6 kbps</strong>。</p></div></details>
+  <details><summary>2-3 10 路各 4000 Hz 的信号 FDM，保护带 400 Hz，最小带宽？</summary><div class="ans"><p>10 路之间 9 条保护带：10 × 4000 + 9 × 400 = <strong>43 600 Hz</strong>。</p></div></details>
+  <details><summary>2-4 A、B、C 同时发 0（课本图 2-22(a) 码片），合成的码片序列？</summary><div class="ans"><p>课本码片：A (−1 −1 −1 +1 +1 −1 +1 +1)，B (−1 −1 +1 −1 +1 +1 +1 −1)，C (−1 +1 −1 +1 +1 +1 −1 −1)。发 0 = 发码片的反码，三者取反后相加：−A − B − C = <strong>(+3 +1 +1 −1 −3 −1 −1 +1)</strong>。</p></div></details>
   <details><summary>2-5 收到 (−1 +1 −3 +1 −1 −3 +1 +1)，用课本码片，哪些站发了什么？</summary><div class="ans">
-    <p>课本码片另有 D (−1 +1 −1 −1 −1 −1 +1 −1)。逐个做内积除以 8：</p>
-    <p>S·A = (1−1+3+1−1+3+1+1)/8 = 8/8 = <strong>+1 → A 发 1</strong><br>S·B = (1−1−3−1−1−3+1−1)/8 = −8/8 = <strong>−1 → B 发 0</strong><br>S·C = (1+1+3+1−1−3−1−1)/8 = <strong>0 → C 没发</strong><br>S·D = (1+1+3−1+1+3+1−1)/8 = <strong>+1 → D 发 1</strong></p>
-    <p class="muted">课本 A、B、C 的字母和期中卷不同（卷子里的 A 是课本的 B），但方法一样。可以用上面的 CDMA 计算器验证。</p>
+    <p>课本 D = (−1 +1 −1 −1 −1 −1 +1 −1)。逐个做内积再除以 8：</p>
+    <p>S·A/8 = +1 → <strong>A 发 1</strong>；S·B/8 = −1 → <strong>B 发 0</strong>；S·C/8 = 0 → <strong>C 没发</strong>；S·D/8 = +1 → <strong>D 发 1</strong>。</p>
+    <p class="muted">可以用 <a href="#c2-cdma">2.8</a> 的 CDMA 计算器验证（把码片换成课本的）。</p>
   </div></details>
-  <details><summary>2-6 k 跳路径上电路交换与分组交换的时延比较</summary><div class="ans"><p>电路：s + x/b + kd；分组：x/b + (k−1)p/b + kd。分组更快当且仅当 <strong>s &gt; (k−1)p/b</strong>。另外需要在交换机故障时容错，分组交换更好。</p></div></details>
-  <details><summary>2-7 每个分组 p 位数据 + h 位头部，传播时延忽略，p 取多少总时延最小？</summary><div class="ans">
-    <p>分组数 x/p，总流量 (p+h)·x/p 位，源端发送用时 (p+h)x/(pb)；最后一个分组在中间路由器再转发 k−1 次，用时 (k−1)(p+h)/b。</p>
-    <p>总时间 T = (p+h)x/(pb) + (k−1)(p+h)/b。对 p 求导令其为 0：−hx/(p²b) + (k−1)/b = 0。</p>
-    <p><strong>p = √( hx / (k−1) )</strong>。</p>
+  <details><summary>2-6-1 比较 k 跳路径上电路交换与（轻负载）分组交换发 x 位报文的时延</summary><div class="ans">
+    <p>电路交换：<strong>s + x/b + kd</strong>（建立电路 + 发送整条报文 + k 跳传播）。</p>
+    <p>分组交换：<strong>x/b + (k−1)p/b + kd</strong>（源端发完所有分组 + 最后一个分组在中间 k−1 个节点各存储转发一次 + 传播）。假设 x ≥ p，忽略头部、排队和处理时延。推导见 <a href="#c2-switch">2.11</a> 的流水线图。</p>
   </div></details>
-  <details><summary>2-8 5000 户，每根同轴 100 Mbps 下行，保证每户至少 2 Mbps，怎么办？</summary><div class="ans"><p>每根电缆最多 100/2 = 50 户，所以要把电缆拆成 5000/50 = <strong>100 根</strong>同轴电缆，每根直接连到一个光纤节点。</p></div></details>
-  <details><summary>2-9 两个 VSAT 经 hub 传 1 GB 文件，上行 1 Mbps、下行 7 Mbps，电路交换建立 1.2 s，要多久？</summary><div class="ans"><p>瓶颈是 1 Mbps 的上行。传输：1 GB = 1024 × 8 Mb → 8192 s。单向时延：经 hub 要上下两次共 4 段，4 × 35800/300000 ≈ 0.48 s。总计 1.2 + 8192 + 0.48 = <strong>8193.68 s</strong>。</p></div></details>
-  <details><summary>2-10 同上改用分组交换：分组 64 KB，卫星和 hub 交换时延 10 μs，头部 32 字节</summary><div class="ans"><p>1 GB / 64 KB = 16384 个分组（老答案写的“16”应理解为 16K）；头部 16384 × 32 B = 512 KB，总共 1024.5 MB → 发送 1024.5 × 8 = 8196 s；加传播 0.48 s 与 3 次交换 30 μs，约 <strong>8196.48 s</strong>。</p></div></details>
+  <details><summary>2-6-2 什么条件下分组交换时延更小？</summary><div class="ans"><p>两式相减：<strong>s &gt; (k−1)·p/b</strong>，即电路建立时间大于最后一个分组多出来的 k−1 次转发时间。</p></div></details>
+  <details><summary>2-6-3 什么情况下分组交换比电路交换更合适？</summary><div class="ans">
+    <ul>
+      <li>满足上面的时延条件时（建立电路很慢、分组小、跳数少）。</li>
+      <li><strong>突发性流量</strong>：大家统计复用链路，不用为空闲的电路占着带宽。</li>
+      <li><strong>需要容错</strong>：某个交换机或链路坏了，分组可以绕路走；电路交换的整条电路就断了。</li>
+    </ul>
+  </div></details>
+  <details><summary>2-7 每个分组 p 位数据 + h 位头部，x ≫ p+h，传播时延忽略，p 取多少总时延最小？</summary><div class="ans">
+    <p>分组数约 x/p，总位数 (p+h)·x/p，源端发送用时 (p+h)x/(pb)；最后一个分组在中间路由器再转发 k−1 次，用时 (k−1)(p+h)/b。</p>
+    <p>T(p) = (p+h)/b · (x/p + k − 1)。对 p 求导：dT/dp = (1/b)·[(k−1) − xh/p²] = 0。</p>
+    <p><strong>p = √( hx / (k−1) )</strong>（k &gt; 1）。直觉：分组太大，流水线不起来；太小，头部开销太大。</p>
+  </div></details>
+  <details><summary>2-8 5000 户，每根同轴电缆下行 100 Mbps，保证每户至少 2 Mbps，怎么办？</summary><div class="ans"><p>一根电缆最多带 100/2 = 50 户，5000 户要 5000/50 = <strong>100 根</strong>同轴电缆段，每段直接接到一个光纤节点（光纤这一侧也要有足够容量）。</p></div></details>
+  <details><summary>2-9 两个 VSAT 经 hub 传 1 GB 文件，上行 1 Mbps、下行 7 Mbps，电路交换，建立 1.2 s，要多久？</summary><div class="ans">
+    <p>瓶颈是 1 Mbps 的上行。按课件约定 1 GB = 1024 × 8 Mb，发送用时 8192 s。</p>
+    <p>经 hub 要“上-下-上-下”四段：4 × 35 800 / 300 000 ≈ 0.48 s。</p>
+    <p>总计 1.2 + 8192 + 0.48 = <strong>8193.68 s</strong>（约 2 小时 17 分）。</p>
+    <p class="muted">单位口径不同结果会差几百秒：若 1 GB = 10⁹ 字节、1 Mbps = 10⁶ bps，约 8001.68 s；若 1 GB = 2³⁰ 字节、Mbps 按十进制，约 8591.6 s。考试写清楚你的假设即可。</p>
+  </div></details>
+  <details><summary>2-10 同上改用分组交换：分组 64 KB，卫星和 hub 交换时延 10 μs，头部 32 字节</summary><div class="ans">
+    <p>1 GB / 64 KB = 16 384 个分组（老版答案写的“16”应理解为 16K），头部共 16 384 × 32 B = 512 KB，总共 1024.5 MB。</p>
+    <p>按课件口径：发送 1024.5 × 8 = 8196 s，加传播 0.48 s 和 3 次交换 3 × 10 μs，约 <strong>8196.48 s</strong>。比电路交换还慢一点：省掉了 1.2 s 建立时间，却多传了 512 KB 头部（4 s）。</p>
+    <p class="muted">更严格的存储转发流水线算法（四段链路 1、7、1、7 Mbps，十进制速率，1 GiB 文件）约 8595 s。结论一样：链路这么慢时，分组交换的头部开销反而让它更慢。</p>
+  </div></details>
+
+  <h3 id="c2-self">2.15 第二章自测 35 题速查</h3>
+  <p class="muted">题目来自 <code>2026作业题/第二章自测题</code>（Forouzan 题库）。有些点课件没细讲，已在对应小节补充，表里给了链接。</p>
+  <div class="tbl"><table class="mid">
+    <thead><tr><th class="c">#</th><th>题意</th><th>答案</th><th>理由 / 位置</th></tr></thead>
+    <tbody>
+      <tr><td class="c">1</td><td>带宽 5 kHz，最低频率 52 kHz，最高频率？</td><td><b>D 57 kHz</b></td><td>带宽 = 最高 − 最低</td></tr>
+      <tr><td class="c">2</td><td>两点功率 P1、P2，分贝值为 0 表示</td><td><b>B P2 = P1</b></td><td>10 lg(P2/P1) = 0，见 <a href="#c2-limit">2.3</a></td></tr>
+      <tr><td class="c">3</td><td>奈奎斯特公式适用于 ____ 信道</td><td><b>B noiseless</b></td><td>无噪声</td></tr>
+      <tr><td class="c">4</td><td>香农容量适用于 ____ 信道</td><td><b>A noisy</b></td><td>有噪声</td></tr>
+      <tr><td class="c">5</td><td>起始位和停止位框住一个字符</td><td><b>A asynchronous serial</b></td><td>异步串行，见 <a href="#c2-modes">2.1</a></td></tr>
+      <tr><td class="c">6</td><td>比特一个接一个发，没有起止位，由接收方分组</td><td><b>A synchronous</b></td><td>同步传输</td></tr>
+      <tr><td class="c">7</td><td>微波是</td><td><b>B unidirectional</b></td><td>单向（定向），天线要对准</td></tr>
+      <tr><td class="c">8</td><td>无线电波是</td><td><b>A omnidirectional</b></td><td>全向</td></tr>
+      <tr><td class="c">9</td><td>主要使用有导向介质的是</td><td><b>B local telephone system</b></td><td>本地电话用双绞线</td></tr>
+      <tr><td class="c">10</td><td>PC 与外设之间的短距通信用</td><td><b>C Infrared waves</b></td><td>红外，见 <a href="#c2-wireless">2.4</a></td></tr>
+      <tr><td class="c">11</td><td>____ 信道不能直接送数字信号</td><td><b>B bandpass</b></td><td>带通信道要先调制</td></tr>
+      <tr><td class="c">12</td><td>数字信号基带传输需要 ____ 信道</td><td><b>A low-pass</b></td><td>低通（从 0 Hz 起）</td></tr>
+      <tr><td class="c">13</td><td>曼彻斯特中间跳变用于</td><td><b>C synchronization</b></td><td>同步（时钟恢复）</td></tr>
+      <tr><td class="c">14</td><td>PCM 是 ____ 转换</td><td><b>D analog-to-digital</b></td><td>模拟 → 数字</td></tr>
+      <tr><td class="c">15</td><td>曼彻斯特 / 差分曼彻斯特最小带宽是 NRZ 的</td><td><b>B twice</b></td><td>两倍</td></tr>
+      <tr><td class="c">16</td><td>线路编码、块编码、扰码属于</td><td><b>D digital-to-digital</b></td><td>数字 → 数字，见 <a href="#c2-convert">四种转换</a></td></tr>
+      <tr><td class="c">17</td><td>QPSK 波特率 400，比特率</td><td><b>C 800</b></td><td>400 × log₂4</td></tr>
+      <tr><td class="c">18</td><td>QAM 同时改变载波的</td><td><b>C amplitude and phase</b></td><td>振幅和相位</td></tr>
+      <tr><td class="c">19</td><td>ASK、PSK、FSK、QAM 属于</td><td><b>B digital-to-analog</b></td><td>数字 → 模拟</td></tr>
+      <tr><td class="c">20</td><td>可分为同步和统计两种的是</td><td><b>B TDM</b></td><td>同步 TDM / 统计 TDM</td></tr>
+      <tr><td class="c">21</td><td>传输模拟信号的复用技术</td><td><b>D (a) 和 (c)</b></td><td>FDM 和 WDM</td></tr>
+      <tr><td class="c">22</td><td>传输数字信号的复用技术</td><td><b>B TDM</b></td><td></td></tr>
+      <tr><td class="c">23</td><td>链路带宽（Hz）大于各路信号带宽之和时可用</td><td><b>B FDM</b></td><td>按频率切分</td></tr>
+      <tr><td class="c">24</td><td>按数字数据改变模拟信号某个特征的过程</td><td><b>A Digital-to-analog</b></td><td>就是调制</td></tr>
+      <tr><td class="c">25</td><td>让多路信号同时通过一条链路的技术</td><td><b>B Multiplexing</b></td><td>多路复用</td></tr>
+      <tr><td class="c">26</td><td>介于电路交换网和数据报网之间的网络</td><td><b>A virtual-circuit</b></td><td>虚电路，见 <a href="#c2-switch">2.11</a></td></tr>
+      <tr><td class="c">27</td><td>本地电话网属于</td><td><b>B circuit-switched</b></td><td>电路交换</td></tr>
+      <tr><td class="c">28</td><td>传统有线电视网传输方向</td><td><b>B downstream</b></td><td>只有下行，见 <a href="#c2-cable">2.13</a></td></tr>
+      <tr><td class="c">29</td><td>计算机数据是 ____；本地回路处理 ____ 信号</td><td><b>D digital; analog</b></td><td>所以要 Modem</td></tr>
+      <tr><td class="c">30</td><td>建立阶段预留资源、整个传输期间独占</td><td><b>B circuit switching</b></td><td></td></tr>
+      <tr><td class="c">31</td><td>分组交换网分为几类（虚电路、数据报）</td><td><b>C two</b></td><td></td></tr>
+      <tr><td class="c">32</td><td>ADSL 最大一部分带宽传</td><td><b>C downstream data</b></td><td>下行数据</td></tr>
+      <tr><td class="c">33</td><td>因特网的网络层设计为 ____ 网络</td><td><b>B datagram</b></td><td>数据报（IP 无连接）</td></tr>
+      <tr><td class="c">34</td><td>HFC 网络上数据传输的标准</td><td><b>B DOCSIS</b></td><td></td></tr>
+      <tr><td class="c">35</td><td>modem 由信号的 ____ 和 ____ 组成</td><td><b>A modulator; demodulator</b></td><td>调制器、解调器</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 第3章 ============ -->
+<section class="chap" id="ch3">
+  <div class="chap-head"><span class="chap-no">CH 3</span><h2>数据链路层：把比特变成可靠的帧</h2></div>
+  <p class="sub">本学期第三章作业（10 题）和自测（20 题）已经布置，期中卷里这一章的分值和第 2 章差不多。内容按老版课件 <code>3 Chapter3-The Data Link Layer</code> 整理（今年的第 3 章课件还没放进文件夹），题目全部来自 2026 作业、自测和往年期中卷。</p>
+  <div class="box exam"><span class="tag exam">本章必考计算（四年都考）</span>
+    <ul>
+      <li><strong>位填充 / 字节填充</strong>：给一串数据，写出填充后的结果。</li>
+      <li><strong>海明码</strong>：给数据求海明码；或者给收到的码字，找出错位、还原数据。</li>
+      <li><strong>CRC</strong>：给数据和生成多项式，用模 2 除法求校验码。</li>
+      <li><strong>停等 / 回退 N / 选择重传</strong>：窗口最大多大、要几位序号、信道利用率是多少。</li>
+    </ul>
+    <p>下面每一种都配了计算器，先自己算，再用计算器对答案。</p>
+  </div>
+  <ul class="toc">
+    <li><a href="#c3-role"><span>3.1</span>链路层干什么；三种服务</a></li>
+    <li><a href="#c3-frame"><span>3.2</span>成帧：字节填充与位填充</a></li>
+    <li><a href="#c3-err"><span>3.3</span>差错控制与流量控制</a></li>
+    <li><a href="#c3-dist"><span>3.4</span>海明距离</a></li>
+    <li><a href="#c3-ham"><span>3.5</span>奇偶校验与海明码</a></li>
+    <li><a href="#c3-sum"><span>3.6</span>校验和 Checksum</a></li>
+    <li><a href="#c3-crc"><span>3.7</span>循环冗余校验 CRC</a></li>
+    <li><a href="#c3-sw"><span>3.8</span>停等协议与 ARQ</a></li>
+    <li><a href="#c3-win"><span>3.9</span>滑动窗口：回退 N 与选择重传</a></li>
+    <li><a href="#c3-ppp"><span>3.10</span>HDLC 与 PPP</a></li>
+    <li><a href="#c3-hw"><span>3.11</span>本学期第三章作业 10 题</a></li>
+    <li><a href="#c3-self"><span>3.12</span>第三章自测 20 题速查</a></li>
+  </ul>
+
+  <h3 id="c3-role">3.1 链路层干什么；三种服务<span class="stars">★★★</span></h3>
+  <p>物理层只会送“一串比特”，不管它们是什么意思、错没错。数据链路层要做到：<strong>相邻两个节点之间</strong>（一条链路、一跳）可靠、高效地传数据。它做四件事：</p>
+  <div class="grid4">
+    <div class="mini"><h5>① 成帧</h5>把网络层的分组装进<strong>帧</strong>（帧头 + 数据 + 帧尾），让接收方知道一帧从哪开始、到哪结束。</div>
+    <div class="mini"><h5>② 差错控制</h5>发现（甚至纠正）传输中翻转的比特；出错就重传。</div>
+    <div class="mini"><h5>③ 流量控制</h5>别让快的发送方把慢的接收方“淹没”。</div>
+    <div class="mini"><h5>④ 向网络层提供服务</h5>一个定义良好的接口。</div>
+  </div>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 150" role="img" aria-label="网络层分组被装进帧：帧头、分组、帧尾">
+      <g font-size="13" text-anchor="middle">
+        <text x="70" y="44" text-anchor="start" font-weight="700" style="fill:var(--l3)">网络层</text>
+        <rect x="250" y="24" width="220" height="32" fill="var(--l3s)" stroke="var(--l3)"/><text x="360" y="45" style="fill:var(--l3)">分组 packet</text>
+        <text x="70" y="104" text-anchor="start" font-weight="700" style="fill:var(--l2)">链路层</text>
+        <rect x="160" y="84" width="90" height="32" fill="var(--l2s)" stroke="var(--l2)"/><text x="205" y="105" style="fill:var(--l2)">帧头</text>
+        <rect x="250" y="84" width="220" height="32" fill="var(--l3s)" stroke="var(--l3)"/><text x="360" y="105" style="fill:var(--l3)">载荷（就是那个分组）</text>
+        <rect x="470" y="84" width="90" height="32" fill="var(--l2s)" stroke="var(--l2)"/><text x="515" y="105" style="fill:var(--l2)">帧尾（校验）</text>
+        <g stroke="var(--muted)" stroke-dasharray="4 3"><line x1="250" y1="56" x2="250" y2="84"/><line x1="470" y1="56" x2="470" y2="84"/></g>
+        <text x="330" y="140" class="mut" font-size="12">帧头放地址、类型、序号等控制信息；帧尾放 CRC 等校验码</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <ul>
+    <li><strong>链路</strong> = 两个相邻节点之间的物理通路（中间没有交换节点）；<strong>数据链路</strong> = 链路 + 控制传输的协议。</li>
+    <li><strong>点到点链路</strong>独占介质（如 PPP、HDLC）；<strong>广播链路</strong>多对设备共享介质（如以太网、WiFi），要先解决“谁能发”的问题，那是第 4 章的 MAC 子层。</li>
+    <li>链路层分两个子层：<strong>逻辑链路控制 LLC</strong>（也叫数据链路控制 DLC，处理点到点和广播都有的问题）和<strong>介质访问控制 MAC</strong>（只处理广播链路的争用问题）。2023 填空就考这两个名字。</li>
+  </ul>
+  <div class="tbl"><table>
+    <thead><tr><th>链路层能提供的服务</th><th>特点</th><th>例子</th></tr></thead>
+    <tbody>
+      <tr><td><strong>无确认的无连接服务</strong></td><td>直接发，不确认、不重传，丢了靠上层处理</td><td><strong>以太网</strong>（误码率低）</td></tr>
+      <tr><td><strong>有确认的无连接服务</strong></td><td>每帧都要确认，没确认就重传</td><td><strong>802.11 无线局域网</strong>（误码率高，确认有必要）</td></tr>
+      <tr><td><strong>有确认的面向连接服务</strong></td><td>先建立连接、帧编号、保证每帧恰好收到一次且按顺序</td><td>很少见（如长距离不可靠链路）</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点 · 2023 简答原题</span><p>“请给出数据链路层可能提供的服务类型及对应的网络实例” → 直接答上表三行。注意没有“无确认的面向连接服务”这一种。</p></div>
+
+  <h3 id="c3-frame">3.2 成帧：字节计数、字节填充、位填充<span class="stars">★★★★</span></h3>
+  <p>接收方收到的是连续的比特流，怎么知道一帧在哪里结束？课件给了四种方法：</p>
+  <figure>
+    <div class="svgbox">
+    <svg viewBox="0 0 660 250" role="img" aria-label="四种成帧方法：字节计数、带字节填充的标志字节、带位填充的标志位、物理层违例编码">
+      <g font-size="12">
+        <text x="8" y="26" font-weight="700">① 字节计数</text>
+        <g text-anchor="middle" class="mono">
+          <rect x="140" y="10" width="30" height="26" fill="var(--exam-soft)" stroke="var(--exam)"/><text x="155" y="28" style="fill:var(--exam)" font-weight="700">5</text>
+          <rect x="170" y="10" width="30" height="26" fill="var(--surface-2)" stroke="var(--line)"/><text x="185" y="28">1</text>
+          <rect x="200" y="10" width="30" height="26" fill="var(--surface-2)" stroke="var(--line)"/><text x="215" y="28">2</text>
+          <rect x="230" y="10" width="30" height="26" fill="var(--surface-2)" stroke="var(--line)"/><text x="245" y="28">3</text>
+          <rect x="260" y="10" width="30" height="26" fill="var(--surface-2)" stroke="var(--line)"/><text x="275" y="28">4</text>
+          <rect x="290" y="10" width="30" height="26" fill="var(--exam-soft)" stroke="var(--exam)"/><text x="305" y="28" style="fill:var(--exam)" font-weight="700">5</text>
+          <rect x="320" y="10" width="30" height="26" fill="var(--surface-2)" stroke="var(--line)"/><text x="335" y="28">6</text>
+          <rect x="350" y="10" width="30" height="26" fill="var(--surface-2)" stroke="var(--line)"/><text x="365" y="28">7</text>
+          <text x="400" y="28">…</text>
+        </g>
+        <text x="420" y="22" font-size="11" class="mut">帧头写“本帧共 5 字节（含自己）”</text>
+        <text x="420" y="36" font-size="11" style="fill:var(--trap)">计数字段一出错，后面全部错位，无法再同步</text>
+        <text x="8" y="80" font-weight="700">② 字节填充</text>
+        <g text-anchor="middle" class="mono">
+          <rect x="140" y="64" width="54" height="26" fill="var(--l2)"/><text x="167" y="82" style="fill:var(--surface)" font-weight="700">FLAG</text>
+          <rect x="194" y="64" width="60" height="26" fill="var(--surface-2)" stroke="var(--line)"/><text x="224" y="82">帧头</text>
+          <rect x="254" y="64" width="130" height="26" fill="var(--surface)" stroke="var(--line)"/><text x="319" y="82">数据（可能含 FLAG）</text>
+          <rect x="384" y="64" width="60" height="26" fill="var(--surface-2)" stroke="var(--line)"/><text x="414" y="82">帧尾</text>
+          <rect x="444" y="64" width="54" height="26" fill="var(--l2)"/><text x="471" y="82" style="fill:var(--surface)" font-weight="700">FLAG</text>
+        </g>
+        <text x="506" y="82" font-size="11" class="mut">FLAG/ESC 前插 ESC</text>
+        <text x="8" y="134" font-weight="700">③ 位填充</text>
+        <g class="mono" font-size="13">
+          <text x="140" y="124">数据：0110<tspan font-weight="700">11111</tspan><tspan font-weight="700">11111</tspan>0010</text>
+          <text x="140" y="146">发送：0110<tspan font-weight="700">11111</tspan><tspan style="fill:var(--exam)" font-weight="700">0</tspan><tspan font-weight="700">11111</tspan><tspan style="fill:var(--exam)" font-weight="700">0</tspan>0010</text>
+        </g>
+        <text x="420" y="124" font-size="11" class="mut">帧以 01111110（0x7E）开始和结束</text>
+        <text x="420" y="140" font-size="11" class="mut">数据里连续 5 个 1 后面插一个 0</text>
+        <text x="8" y="196" font-weight="700">④ 违例编码</text>
+        <text x="140" y="190" font-size="12">曼彻斯特里 1 = 高→低、0 = 低→高；“高-高”“低-低”在数据中不会出现，</text>
+        <text x="140" y="208" font-size="12">就拿来当帧的起止标记（IEEE 802 局域网用过）。不用填充，但只适合有冗余的编码。</text>
+        <text x="330" y="244" text-anchor="middle" font-size="11" class="mut">目前常用：位填充和违例编码；字节计数太脆弱，字节填充依赖 8 位字符</text>
+      </g>
+    </svg>
+    </div>
+  </figure>
+  <h4>字节填充的规则</h4>
+  <ol>
+    <li>帧首尾各放一个标志字节 <code>FLAG</code>。</li>
+    <li>数据里如果出现 <code>FLAG</code>，在它前面插一个转义字节 <code>ESC</code>。</li>
+    <li>数据里如果出现 <code>ESC</code> 本身，也在它前面再插一个 <code>ESC</code>。</li>
+    <li>接收方看到 <code>ESC</code> 就把它删掉，把后面那个字节当普通数据。</li>
+  </ol>
+  <p class="muted">ESC 是 ASCII 里的一个控制字符（一个字节），不是 “E”“S”“C” 三个字母。</p>
+  <h4>位填充的规则</h4>
+  <ol>
+    <li>帧首尾的标志是 <code>01111110</code>（6 个 1）。</li>
+    <li>发送方在数据里每数到<strong>连续 5 个 1</strong>，就在后面<strong>插一个 0</strong>（不管下一位本来是什么）。</li>
+    <li>接收方每数到连续 5 个 1，就把后面紧跟的 0 删掉。这样数据里永远不会出现 6 个连续的 1，不会被误认为标志。</li>
+  </ol>
+  <div class="tool">
+    <h5>填充计算器（插入的部分标红）</h5>
+    <div class="row">
+      <label for="stMode">方式<select id="stMode"><option value="bit">位填充</option><option value="unbit">位去填充（接收方）</option><option value="byte">字节填充</option></select></label>
+      <label for="stIn">输入<input type="text" id="stIn" class="bits" value="01111110111110" style="width:20rem"></label>
+    </div>
+    <div class="out" id="stOut" aria-live="polite"></div>
+    <p class="muted" style="font-size:.84rem;margin-bottom:0">字节填充时用空格分隔，如 <code>A B ESC C ESC FLAG FLAG D</code>。</p>
+  </div>
+  <div class="box exam"><span class="tag exam">考点 · 四年都考</span>
+    <ul>
+      <li><strong>作业 3-1 / 2022 填空</strong>：<code>A B ESC C ESC FLAG FLAG D</code> → <strong><code>A B ESC ESC C ESC ESC ESC FLAG ESC FLAG D</code></strong>。</li>
+      <li><strong>2020 填空</strong>：<code>01111110111110</code> 位填充 → <strong><code>0111110101111100</code></strong>。</li>
+      <li><strong>2021 选择</strong>：<code>0111110111111110</code> → <strong><code>011111001111101110</code></strong>（A）。</li>
+      <li><strong>2023 填空</strong>：<code>010111110</code> → <strong><code>0101111100</code></strong>。注意：最后虽然是数据结尾，凑满 5 个 1 也要补 0。</li>
+    </ul>
+  </div>
+
+  <h3 id="c3-err">3.3 差错控制与流量控制<span class="stars">★★</span></h3>
+  <div class="grid2">
+    <div class="mini"><h5>单比特错误</h5>一个数据单元里只有 1 位翻转（0↔1）。</div>
+    <div class="mini"><h5>突发错误 burst</h5>2 位或更多位翻转（自测第 2 题）。突发长度从第一个错位算到最后一个错位，中间的位不一定都错。</div>
+  </div>
+  <p>纠错比检错难：检错只要回答“有没有错”；纠错还得知道<strong>错了几位、错在哪</strong>。</p>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>前向纠错 FEC（开环）</th><th>检错 + 重传 ARQ（反馈）</th></tr></thead>
+    <tbody>
+      <tr><td>做法</td><td>多加冗余，接收方自己把错纠正</td><td>只检错，出错就让发送方重发</td></tr>
+      <tr><td>代表</td><td>海明码、卷积码、RS 码、LDPC</td><td>奇偶校验、校验和、CRC + 停等 / 滑动窗口</td></tr>
+      <tr><td>适合</td><td>重传代价大的情况（见作业 3-2）</td><td>误码率低、往返时延小的链路</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><strong>差错控制</strong>的三件套：接收方发<strong>确认</strong>（ACK 肯定 / NAK 否定）；发送方设<strong>定时器</strong>，防止帧或确认丢了以后永远等下去；给帧<strong>编序号</strong>，接收方才能分辨“这是重传的旧帧还是新帧”。</li>
+    <li><strong>流量控制</strong>两种：<strong>基于反馈</strong>（接收方告诉发送方“还能发多少”，链路层和传输层都用）；<strong>基于速率</strong>（协议内置速率上限，不用反馈，只在传输层见到）。</li>
+  </ul>
+
+  <h3 id="c3-dist">3.4 海明距离<span class="stars">★★★</span></h3>
+  <p>一个 (n, m) 码：m 位数据 + r 位校验 = n 位<strong>码字</strong>。</p>
+  <ul>
+    <li>两个码字的<strong>海明距离</strong> = 对应位不同的个数（两者异或后数 1 的个数）。例：10001001 与 10110001 异或 = 00111000，距离 3。</li>
+    <li>一套编码的海明距离 = 所有合法码字两两之间距离的<strong>最小值</strong>。例：{0000000000, 0000011111, 1111100000, 1111111111} 的距离是 5。</li>
+    <li>相同码字之间的距离是 <strong>0</strong>（自测第 7 题）。</li>
+  </ul>
+  <div class="formula">检测 d 位错误：需要海明距离 ≥ <span class="big">d + 1</span>
+<br>纠正 d 位错误：需要海明距离 ≥ <span class="big">2d + 1</span>
+<span class="cap">直觉：从一个合法码字出发走 d 步（错 d 位）到不了另一个合法码字，就能发现；如果离原码字比离任何别的码字都近，就能“就近”改回去。例：距离 5 的码能检测 4 位错、纠正 2 位错。课件例 {00000, 01011, 10101, 11110} 距离 3：检 2 纠 1。</span></div>
+  <div class="box exam"><span class="tag exam">考点</span><ul>
+    <li><strong>2022 填空</strong>：海明距离为 d+1 的编码能检测出 <strong>d</strong> 个比特错误；要纠正 d 个比特错误，需要海明距离为 <strong>2d+1</strong> 的编码。</li>
+    <li><strong>自测第 5 题</strong>：保证纠正 5 位错，最小海明距离至少 2×5+1 = <strong>11</strong>。</li>
+    <li>2021、2022 名词解释考过“海明距离”：两个码字对应位不同的位数；一种编码的海明距离是任意两个合法码字间距离的最小值，它决定了检错和纠错能力。</li>
+  </ul></div>
+
+  <h3 id="c3-ham">3.5 奇偶校验与海明码<span class="stars">★★★★</span></h3>
+  <h4>奇偶校验</h4>
+  <p>加一个校验位，让 1 的个数变成偶数（偶校验）或奇数（奇校验）。例：1110000 偶校验 → 11100001。</p>
+  <ul>
+    <li>只能发现<strong>奇数个</strong>位出错（错 1 位、3 位能查出，错 2 位查不出）——自测第 6 题。对随机长突发错误，只有一半概率查出。</li>
+    <li><strong>二维奇偶 / 交织</strong>：把数据排成 k 行 n 列，每列算一个校验位，按行发送。n 个校验位能查出长度 ≤ n 的突发错误。</li>
+  </ul>
+  <h4>海明码：能纠正 1 位错</h4>
+  <p>思路：用好几个奇偶校验位，每个只管一部分位置。哪几组算出来不对，组合起来正好是出错位的位置号。</p>
+  <div class="formula"><span class="big">(m + r + 1) ≤ 2<sup>r</sup></span>　m 位数据需要 r 个校验位
+<span class="cap">r 个校验位的组合有 2<sup>r</sup> 种，要能表示“没错”以及 m + r 个位置中任何一位错。速查：m=4→r=3；m=5~11→r=4；m=12~26→r=5。2023 填空：20 位数据 → 25+1 ≤ 32 → <strong>5 位</strong>；2020 填空：6 位数据 → <strong>4 位</strong>。</span></div>
+  <div class="tbl"><table class="mono">
+    <thead><tr><th>位置</th><th class="c">1</th><th class="c">2</th><th class="c">3</th><th class="c">4</th><th class="c">5</th><th class="c">6</th><th class="c">7</th><th class="c">8</th><th class="c">9</th><th class="c">10</th><th class="c">11</th><th class="c">12</th></tr></thead>
+    <tbody>
+      <tr><td>二进制</td><td class="c">0001</td><td class="c">0010</td><td class="c">0011</td><td class="c">0100</td><td class="c">0101</td><td class="c">0110</td><td class="c">0111</td><td class="c">1000</td><td class="c">1001</td><td class="c">1010</td><td class="c">1011</td><td class="c">1100</td></tr>
+      <tr><td>放什么</td><td class="c"><b>P1</b></td><td class="c"><b>P2</b></td><td class="c">D</td><td class="c"><b>P4</b></td><td class="c">D</td><td class="c">D</td><td class="c">D</td><td class="c"><b>P8</b></td><td class="c">D</td><td class="c">D</td><td class="c">D</td><td class="c">D</td></tr>
+      <tr><td>P1 管</td><td class="c">✓</td><td></td><td class="c">✓</td><td></td><td class="c">✓</td><td></td><td class="c">✓</td><td></td><td class="c">✓</td><td></td><td class="c">✓</td><td></td></tr>
+      <tr><td>P2 管</td><td></td><td class="c">✓</td><td class="c">✓</td><td></td><td></td><td class="c">✓</td><td class="c">✓</td><td></td><td></td><td class="c">✓</td><td class="c">✓</td><td></td></tr>
+      <tr><td>P4 管</td><td></td><td></td><td></td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td></td><td></td><td></td><td></td><td class="c">✓</td></tr>
+      <tr><td>P8 管</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td><td class="c">✓</td></tr>
+    </tbody>
+  </table></div>
+  <ol>
+    <li><strong>放校验位</strong>：位置 1、2、4、8、16…（2 的幂）放校验位，其余位置按顺序放数据位。</li>
+    <li><strong>分组</strong>：把位置号写成二进制，最低位是 1 的归 P1，次低位是 1 的归 P2，依此类推（上表的 ✓）。</li>
+    <li><strong>算校验位</strong>（偶校验）：让每组里 1 的个数为偶数。</li>
+    <li><strong>纠错</strong>：接收方对每组重新数 1；某组是奇数就记 1，否则记 0。把 P8 P4 P2 P1 的结果从高到低排成二进制数（<strong>校正子 syndrome</strong>），它的值就是出错的位置，0 表示没错。把那一位取反即可。</li>
+  </ol>
+  <div class="box trap"><span class="tag trap">易错 · 位置从哪边数</span><p>2020 卷和作业规定“从左到右第 1 位、第 2 位…”；2022 卷题干写“从右到左”，但答案图实际按第 1 位在最左算的，结果和 2020 一样。2023 卷 16 位码字时第 16 位也是校验位（P16）。考试按题目规定编号，并在答案里写出编号方向。下面计算器两种方向都能算。</p></div>
+  <div class="tool">
+    <h5>海明码计算器（偶校验）</h5>
+    <div class="row">
+      <label for="hmMode">操作<select id="hmMode"><option value="enc">编码：数据 → 海明码</option><option value="dec">纠错：收到的码字 → 数据</option></select></label>
+      <label for="hmDir">位置编号<select id="hmDir"><option value="ltr">从左到右（最左是第 1 位）</option><option value="rtl">从右到左（最右是第 1 位）</option></select></label>
+      <label for="hmIn">输入（二进制，或 0x 开头的十六进制）<input type="text" id="hmIn" class="bits" value="10101111" style="width:16rem"></label>
+    </div>
+    <div class="out" id="hmOut" aria-live="polite"></div>
+  </div>
+  <div class="box ex"><span class="tag ex">例题 · 作业 3-3</span>
+    <p>8 位数据 10101111 用偶校验海明码编码。</p>
+    <p>m = 8 → r = 4，共 12 位。数据依次放在位置 3、5、6、7、9、10、11、12：1、0、1、0、1、1、1、1。</p>
+    <p>P1（1,3,5,7,9,11）：数据 1+0+0+1+1 = 3 个 1 → P1 = 1；P2（2,3,6,7,10,11）：1+1+0+1+1 = 4 → P2 = 0；P4（4,5,6,7,12）：0+1+0+1 = 2 → P4 = 0；P8（8,9,10,11,12）：1+1+1+1 = 4 → P8 = 0。</p>
+    <p>码字：<strong><code>1010 0100 1111</code></strong>（= 101001001111）。</p>
+  </div>
+  <div class="box ex"><span class="tag ex">例题 · 2020 / 2022 期中（12 分）</span>
+    <p>① 10100101 的偶校验海明码（从左到右编号）→ <strong>111001000101</strong>。（2022 按从右到左编号写成 101000100111，是同一个码字倒过来写。）</p>
+    <p>② 收到 0xA0F = 1010 0000 1111：P1 组 1+1+0+0+1+1 = 偶 → 0；P2 组 0+1+0+0+1+1 = 奇 → 1；P4 组 0+0+0+0+1 = 奇 → 1；P8 组 0+1+1+1+1 = 偶 → 0。校正子 0110 = <strong>6</strong>，第 6 位错，改正后 1010 0100 1111 = <strong>0xA4F</strong>，原始数据 1010 1111 = 0xAF。</p>
+    <p>③ 2023：收到 16 位 0x8A10，校正子 = 1111 = 15，第 15 位错，正确码字 1000 1010 0001 0010，去掉第 1、2、4、8、16 位的校验位，数据为 <strong>0101 0001 001</strong>。</p>
+  </div>
+  <div class="box exam"><span class="tag exam">考点</span><ul>
+    <li><strong>2022 选择</strong>：关于海明码正确的是 → <strong>A 利用奇偶性进行检错和纠错</strong>。它只能纠 1 位错，可以纠错，数据位和校验位长度不必相同。</li>
+    <li>2021 填空：纠正单比特错误需满足 <strong>(m + r + 1) ≤ 2<sup>r</sup></strong>，常用的纠单比特错误码是<strong>海明码</strong>。</li>
+  </ul></div>
+
+  <h3 id="c3-sum">3.6 校验和 Checksum<span class="stars">★★★</span></h3>
+  <p>把数据切成若干个 N 位的“字”，全部相加，结果取反作为校验和。因特网用 16 位，作业里用 4 位练手。</p>
+  <ol>
+    <li><strong>反码求和</strong>（one's complement sum）：普通相加，<strong>最高位溢出的进位要加回最低位</strong>（循环进位）。</li>
+    <li><strong>校验和 = 和的反码</strong>（每位取反）。</li>
+    <li>接收方把所有字连同校验和一起反码求和，结果应为全 1，取反为全 0 → 无错。</li>
+  </ol>
+  <div class="tool">
+    <h5>校验和计算器</h5>
+    <div class="row"><label for="csIn">各个字（空格分隔，位数相同）<input type="text" id="csIn" class="bits" value="1001 1100 1010 0011" style="width:20rem"></label></div>
+    <div class="out" id="csOut" aria-live="polite"></div>
+  </div>
+  <div class="box ex"><span class="tag ex">例题 · 作业 3-5</span>
+    <p>消息 1001 1100 1010 0011，4 位字：1001 + 1100 = 1 0101 → 进位加回：0101 + 1 = 0110；0110 + 1010 = 1 0000 → 0000 + 1 = 0001；0001 + 0011 = 0100。校验和 = 0100 取反 = <strong>1011</strong>。</p>
+  </div>
+  <ul>
+    <li>4 位反码：+7 = 0111，−7 = <strong>1000</strong>（每位取反，自测第 9 题）。</li>
+    <li>1111 和 1111 的校验和：1111 + 1111 = 1 1110 → 1110 + 1 = 1111，取反 = <strong>0000</strong>（自测第 10 题）。</li>
+    <li>检错方法里<strong>用反码运算的是校验和</strong>（自测第 1 题）。</li>
+    <li>缺点：对字的顺序不敏感，两个字对调就查不出来 → 改进算法 Fletcher、Adler 校验和。</li>
+  </ul>
+
+  <h3 id="c3-crc">3.7 循环冗余校验 CRC<span class="stars">★★★★★</span></h3>
+  <p>比特串看成多项式的系数：<code>1000011</code> ↔ x<sup>6</sup> + x + 1。发送方和接收方事先约定一个<strong>生成多项式 G(x)</strong>（最高位和最低位都是 1）。</p>
+  <div class="formula">设 G(x) 是 r 次（对应 r+1 位），CRC 校验码就是 r 位：
+<br>① 数据后面补 <span class="big">r 个 0</span>
+<br>② 用 G(x) 做<span class="big">模 2 除法</span>（每一步都是“异或”，不借位不进位）
+<br>③ 余数（不足 r 位前面补 0）就是 CRC，接在原数据后面发出去
+<br>④ 接收方用整串除以 G(x)，余数为 0 → 没错；不为 0 → 出错
+<span class="cap">模 2 运算里加法和减法都是异或（XOR），自测第 3 题。</span></div>
+  <div class="tool">
+    <h5>CRC 计算器（带竖式过程）</h5>
+    <div class="row">
+      <label for="crcD">数据位<input type="text" id="crcD" class="bits" value="1010001101" style="width:14rem"></label>
+      <label for="crcG">生成多项式（如 110101 或 x5+x4+x2+1）<input type="text" id="crcG" class="bits" value="x5+x4+x2+1" style="width:14rem"></label>
+      <label class="chk" for="crcRaw"><input type="checkbox" id="crcRaw"> 直接相除（不补 0，只求余数）</label>
+    </div>
+    <div class="out" id="crcOut" aria-live="polite"></div>
+  </div>
+  <div class="box ex"><span class="tag ex">例题 · 2022 期中</span><p>数据 1010001101，G(x) = x<sup>5</sup>+x<sup>4</sup>+x<sup>2</sup>+1（110101），r = 5。补 5 个 0 后做模 2 除法，余数 <strong>01110</strong>，发送 1010001101<strong>01110</strong>。用上面的计算器能看到每一步。</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>CRC 的检错能力</th><th>条件</th></tr></thead>
+    <tbody>
+      <tr><td>所有单比特错误</td><td>G(x) 不止一项，且含 x<sup>0</sup> 项（最低位是 1）</td></tr>
+      <tr><td><strong>所有奇数个位的错误</strong></td><td>G(x) 含因子 <strong>x + 1</strong></td></tr>
+      <tr><td>所有长度 ≤ r 的突发错误</td><td>r 位校验</td></tr>
+      <tr><td>长度 = r+1 的突发：概率 1 − (1/2)<sup>r−1</sup>；长度 &gt; r+1：概率 1 − (1/2)<sup>r</sup></td><td></td></tr>
+      <tr><td>查不出来的</td><td>错误多项式 E(x) 恰好能被 G(x) 整除</td></tr>
+    </tbody>
+  </table></div>
+  <p>常用标准：CRC-12 = x<sup>12</sup>+x<sup>11</sup>+x<sup>3</sup>+x<sup>2</sup>+x+1，CRC-16 = x<sup>16</sup>+x<sup>15</sup>+x<sup>2</sup>+1，CRC-CCITT = x<sup>16</sup>+x<sup>12</sup>+x<sup>5</sup>+1，以太网用 32 位 CRC。CRC 比校验和强，可以用移位寄存器 + 异或电路高速实现。</p>
+  <div class="box exam"><span class="tag exam">考点</span><ul>
+    <li><strong>2020、2021、2022 选择 + 自测第 8 题</strong>：生成多项式含 <strong>x + 1</strong> 因子时，可检测所有奇数位错误。</li>
+    <li><strong>作业 3-4</strong>：x<sup>7</sup>+x<sup>5</sup>+1 除以 x<sup>3</sup>+1 的余数 → 10100001 ÷ 1001，余数 <strong>111</strong>，即 x<sup>2</sup>+x+1。（这里是直接相除，不补 0。）</li>
+    <li><strong>2021 期中</strong>：消息 11100011，G = x<sup>3</sup>+1 → 余数 100，发送 11100011100；最左位翻转后收到 01100011100，余数 010 ≠ 0 → 发现错误。</li>
+    <li><strong>2023 期中</strong>：帧 1010，G = x<sup>2</sup>+x+1 → CRC = <strong>10</strong>，最终编码 101010。</li>
+    <li>名词解释“循环冗余校验码”：把信息看作多项式 M(x)，补 r 个 0 后用约定的生成多项式 G(x) 做模 2 除法，余数作为校验位附在后面发送；接收方相除余数为 0 则认为无错。能检测所有奇数位错（G 含 x+1）、所有双比特错和所有长度 ≤ r 的突发错。</li>
+  </ul></div>
+
+  <h3 id="c3-sw">3.8 基本协议：从乌托邦到停等 ARQ<span class="stars">★★★★</span></h3>
+  <div class="tbl"><table>
+    <thead><tr><th>协议</th><th>假设</th><th>加了什么</th></tr></thead>
+    <tbody>
+      <tr><td>p1 乌托邦单工</td><td>信道不出错，接收方无限快</td><td>什么控制都没有，发送方一直发</td></tr>
+      <tr><td>p2 无差错信道停等</td><td>信道不出错，但接收方可能慢</td><td><strong>流量控制</strong>：发一帧，等接收方回一个“哑帧”（确认）再发下一帧。这个确认只表示“可以发下一帧了”</td></tr>
+      <tr><td>p3 有噪声信道停等（ARQ / PAR）</td><td>帧和确认都可能出错或丢失</td><td><strong>差错控制</strong>：校验码 + 确认 + 定时器 + 1 位序号（0/1 交替）</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>ARQ</strong> = Automatic Repeat reQuest，自动重传请求（自测第 11 题）；也叫 PAR（带重传的肯定确认）。802.11 就是停等 + 重传，序号 12 位。</p>
+  <figure>
+    <div class="svgbox"><svg id="swFig" viewBox="0 0 660 285" role="img" aria-label="停等协议三种情况：正常、帧丢失后超时重传、确认丢失导致重复帧"></svg></div>
+    <figcaption>③ 是为什么必须给帧编序号：确认丢了，发送方超时重发，如果没有序号，接收方会把同一帧交给网络层两次（2023 简答原题）。有了 0/1 序号，接收方发现“又是 1 号”就丢掉，但仍回确认。</figcaption>
+  </figure>
+  <div class="box exam"><span class="tag exam">考点</span><ul>
+    <li><strong>2022 选择</strong>：停等协议中数据帧丢失，发送方会永远等下去，解决办法是 → <strong>超时重传</strong>（D）。</li>
+    <li><strong>2023 简答（6 分）</strong>：没有序号会怎样？→ 上图 ③。发送方成功发送一帧，接收方的 ACK 丢失，发送方超时重传，接收方无法分辨重传帧和新帧，会把它当新帧<strong>重复交给上层</strong>。有了序号，接收方能丢弃重复帧，并通过确认号告诉发送方期待的帧。</li>
+    <li>老版作业：没有任何帧丢失，也可能收到重复帧吗？→ 可能：确认到得太晚（接收方 CPU 忙），发送方的定时器先到期重发了。</li>
+  </ul></div>
+  <h4>停等协议的信道利用率</h4>
+  <div class="formula">t<sub>f</sub> = L / b（发一帧的时间），t<sub>p</sub> = 单程传播时延
+<br><span class="big">U = t<sub>f</sub> / (t<sub>f</sub> + 2t<sub>p</sub>)</span>　（确认帧很短、处理时间忽略）
+<br>确认要捎带在一个数据帧上时：U = t<sub>f</sub> / (2t<sub>f</sub> + 2t<sub>p</sub>)
+<span class="cap">U ≥ 50% ⇔ t<sub>f</sub> ≥ 2t<sub>p</sub> ⇔ <strong>L ≥ 2·b·t<sub>p</sub></strong>：发一帧的时间至少等于往返传播时延。</span></div>
+  <div class="box ex"><span class="tag ex">例题三连</span><ul>
+    <li><strong>作业 3-6</strong>：4 kbps，传播时延 20 ms，利用率 ≥ 50% → L ≥ 2 × 4000 × 0.02 = <strong>160 位</strong>。帧长 ≥ 160 bit 即可。</li>
+    <li><strong>2020 / 2022 期中</strong>：20 kb/s，传播时延 30 ms → L ≥ 2 × 20000 × 0.03 = <strong>1200 位</strong>。（原卷的数字在公式图片里：l<sub>f</sub> ≥ C × 2t<sub>p</sub> = 20000 × 0.06 = 1200。）</li>
+    <li><strong>2023 选择</strong>：卫星传播时延 270 ms，64 kb/s，帧长 4000 bit，停等最大利用率 → t<sub>f</sub> = 62.5 ms，U = 62.5 / (62.5 + 540) ≈ <strong>0.104</strong>（A）。</li>
+  </ul></div>
+
+  <h3 id="c3-win">3.9 滑动窗口：回退 N（协议 5）与选择重传（协议 6）<span class="stars">★★★★★</span></h3>
+  <p>停等一次只有一帧在路上，长链路上大部分时间在干等。<strong>滑动窗口</strong>让发送方在收到确认前连续发多帧（流水线）。</p>
+  <ul>
+    <li><strong>发送窗口</strong>：已发出但还没被确认、以及允许马上发的帧序号范围。收到确认，窗口下沿向前滑。发送方要把窗口内的帧都缓存着，以备重传。</li>
+    <li><strong>接收窗口</strong>：接收方愿意接收的序号范围，按序收到后向前滑。</li>
+    <li><strong>捎带确认（piggybacking）</strong>：收到数据帧后先不单独回 ACK，等自己有数据要发时，把确认号顺便放进数据帧的头部。省带宽；但等太久会让对方超时重传（名词解释 2021）。</li>
+    <li><strong>累积确认</strong>：ACK n 表示 n 以及 n 之前的帧都收到了。ACK 2 丢了，ACK 3 也能顶上。</li>
+    <li><strong>NAK</strong>（否定确认）：接收方发现缺帧时立即要求重传那一帧，不用等超时。</li>
+  </ul>
+  <div class="tbl"><table class="wide">
+    <thead><tr><th>n 位序号（0 ~ 2<sup>n</sup>−1）</th><th>发送窗口最大</th><th>接收窗口</th><th>出错时重传</th><th>接收方</th></tr></thead>
+    <tbody>
+      <tr><td><strong>停等</strong>（1 位滑动窗口，协议 4）</td><td>1</td><td>1</td><td>那一帧</td><td>最简单</td></tr>
+      <tr><td><strong>回退 N（GBN，协议 5）</strong></td><td><strong>2<sup>n</sup> − 1</strong></td><td><strong>1</strong></td><td>出错帧<strong>及其后面所有</strong>已发的帧</td><td>只按序接收，乱序的直接丢弃，只缓存 1 帧</td></tr>
+      <tr><td><strong>选择重传（SR，协议 6）</strong></td><td><strong>2<sup>n−1</sup></strong></td><td><strong>2<sup>n−1</sup></strong></td><td><strong>只重传</strong>出错/丢失的那一帧</td><td>窗口内乱序帧先缓存，配合 NAK；每帧一个定时器</td></tr>
+    </tbody>
+  </table></div>
+  <figure>
+    <div class="svgbox"><svg id="gbnFig" viewBox="0 0 660 230" role="img" aria-label="2 号帧丢失时回退 N 与选择重传的区别"></svg></div>
+    <figcaption>同样是 2 号帧丢了。回退 N：接收方把 3~6 号都丢掉，发送方超时后从 2 号开始全部重发。选择重传：接收方把 3~6 号缓存起来、发 NAK 2，发送方只补发 2 号。</figcaption>
+  </figure>
+  <h4>为什么窗口不能再大</h4>
+  <div class="grid2">
+    <div class="mini"><h5>回退 N：W ≤ 2<sup>n</sup> − 1</h5>3 位序号（0~7）时若窗口取 8：发送 0~7，收到对 7 的确认，再发新的 0~7，又收到对 7 的确认。发送方分不清是“第二批全到了”还是“第二批全丢了、对方在重复确认上一批”。所以最多同时有 MAX_SEQ = 7 帧未确认。</div>
+    <div class="mini"><h5>选择重传：W ≤ 2<sup>n−1</sup>，即 NR_BUFS = (MAX_SEQ+1)/2</h5>接收窗口向前滑之后，新窗口和老窗口的序号<strong>不能重叠</strong>。否则所有确认丢失时，发送方重传的旧帧会落进新窗口，被当成新帧收下，接收方区分不出来（见下图）。</div>
+  </div>
+  <figure>
+    <div class="svgbox"><svg id="srFig" viewBox="0 0 660 250" role="img" aria-label="3 位序号时选择重传窗口取 7 会和新窗口重叠，取 4 不会重叠"></svg></div>
+    <figcaption>序号 0~7。窗口 7：老窗口 0~6，滑动后新窗口 7,0~5，有 6 个序号重叠 → 重传的旧 0 号会被误收。窗口 4：老窗口 0~3，新窗口 4~7，不重叠 → 没有歧义。</figcaption>
+  </figure>
+  <div class="box exam"><span class="tag exam">简答 · 2020、2022 原题</span><p>为何选择重传协议中要设置 <code>#define NR_BUFS ((MAX_SEQ + 1)/2)</code>？→ 把窗口最大尺寸限制为序号空间的一半，确保接收方向前移动窗口后，<strong>新窗口与老窗口的序号没有重叠</strong>。否则当所有确认都丢失时，后续到来的帧可能是重复的旧帧，也可能是新帧，接收方无法区分，会把错误的分组交给网络层。</p></div>
+  <h4>利用率与需要的窗口</h4>
+  <div class="formula">一个周期 T = t<sub>f</sub> + 2t<sub>p</sub>（确认要占一帧时间时再 + t<sub>f</sub>）
+<br>一个周期内最多能发 a = T / t<sub>f</sub> 帧
+<br><span class="big">U = min(1, W·t<sub>f</sub> / T) = min(1, W / a)</span>
+<br>要让管道一直满：W ≥ a，即课件的 <span class="big">W ≥ 2BD + 1</span>（BD = 带宽 × 单程时延 / 帧长，以帧为单位）
+<span class="cap">然后由 W 反推序号位数：回退 N 要 2<sup>n</sup> − 1 ≥ W；选择重传要 2<sup>n−1</sup> ≥ W。课件例：50 kbps，单程 250 ms，1000 位帧 → BD = 12.5 → W = 26。</span></div>
+  <div class="tool">
+    <h5>滑动窗口计算器（停等 / 回退 N / 选择重传）</h5>
+    <div class="row">
+      <label for="wnPre">载入题目<select id="wnPre"></select></label>
+    </div>
+    <div class="row" style="margin-top:.5rem">
+      <label for="wnL">帧长（bit）<input type="number" id="wnL" min="1"></label>
+      <label for="wnB">速率（bps）<input type="number" id="wnB" min="1"></label>
+      <label for="wnTp">单程传播时延（ms）<input type="number" id="wnTp" min="0" step="any"></label>
+      <label for="wnN">序号位数 n<input type="number" id="wnN" min="1" max="16"></label>
+      <label for="wnAck">确认<select id="wnAck"><option value="0">确认很短，忽略</option><option value="1">确认占一帧时间（捎带 / 等长）</option></select></label>
+    </div>
+    <div class="out" id="wnOut" aria-live="polite"></div>
+  </div>
+  <div class="box ex"><span class="tag ex">例题 · 作业 3-10（老作业原题，答案已验证）</span>
+    <p>1000 位帧，1 Mbps，同步卫星单程 270 ms，确认总是捎带在数据帧上，3 位序号。</p>
+    <p>t=0 开始发，t=1 ms 发完，t=271 ms 对方收完；对方发一个捎带确认的数据帧又要 1 ms，t=272 ms 发完，t=542 ms 收完。周期 <strong>542 ms</strong>，每帧 1 ms。</p>
+    <p>(a) 停等：1/542 = <strong>0.18%</strong>；(b) 协议 5（W = 7）：7/542 = <strong>1.29%</strong>；(c) 协议 6（W = 4）：4/542 = <strong>0.74%</strong>。</p>
+  </div>
+  <div class="box ex"><span class="tag ex">例题 · 作业 3-7</span>
+    <p>3000 km 的 T1 干线，64 字节帧，协议 5，传播 6 μs/km。</p>
+    <p>单程 3000 × 6 μs = 18 ms；T1 有效速率 1.536 Mbps，一帧 512 位要 0.333 ms；周期 0.333 + 36 = 36.33 ms，可发 36.33 / 0.333 ≈ 109 帧（= 2BD + 1）。协议 5 需要 2<sup>n</sup> − 1 ≥ 109 → <strong>n = 7 位</strong>。</p>
+  </div>
+  <div class="box exam"><span class="tag exam">考点 · 历年期中</span><ul>
+    <li><strong>2020、2022 选择</strong>：发送窗口 W<sub>T</sub> = 15，已发到 7 号帧，收到 5 号帧的确认 → 0~5 已确认，6、7 还在路上，还可连续发 15 − 2 = <strong>13 帧</strong>。</li>
+    <li><strong>2021 选择</strong>：回退 N，W<sub>s</sub> = 7，已发 0~6，超时前只收到 0、2、3 号的确认 → 累积确认，0~3 都已收到，重发 <strong>4、5、6</strong>（B）。</li>
+    <li><strong>2020、2021、2022 填空 + 自测 14~17</strong>：5 位序号，回退 N 发送窗口最大 <strong>31</strong>、接收窗口 <strong>1</strong>；选择重传都是 <strong>16</strong>。<strong>2023</strong>：7 位序号回退 N → <strong>127</strong>。自测 19：8 位序号字段 → 序号按<strong>模 256</strong> 运算。</li>
+    <li><strong>2021 计算</strong>：1000 位帧，1 Mbps，线路 2 km，5 ms/km，3 位序号 → t<sub>p</sub> = 10 ms，周期 21 ms：停等 1/21 = <strong>4.8%</strong>，回退 N 7/21 = <strong>33.3%</strong>，选择重传 4/21 = <strong>19.0%</strong>。</li>
+    <li><strong>2022 计算</strong>：2000 位帧，1 Mbps，1 km，199 ms/km，4 位序号 → 周期 2 + 398 = 400 ms，窗口 1、15、8 → 利用率 <strong>0.5%、7.5%、4%</strong>。</li>
+    <li><strong>2023 简答</strong>：3000 km，1 Mbps，信号 200 km/ms，数据帧和确认帧都 64 字节 → 周期 2 × (0.512 + 15) = 31.024 ms，可发 60.6 帧 → W ≥ 61：协议 5 需 <strong>6 位</strong>（63），协议 6 需 <strong>7 位</strong>（64）。</li>
+  </ul></div>
+  <h4>协议 6 的两段代码（作业 3-8、3-9）</h4>
+  <div class="code"><span class="c">/* 协议 6（选择重传）收到帧时的处理，节选 */</span>
+<span class="k">case</span> frame_arrival:
+  <span class="k">if</span> (r.kind == data) {
+    <span class="k">if</span> ((r.seq != frame_expected) &amp;&amp; no_nak)
+        send_frame(nak, 0, frame_expected, out_buf);   <span class="c">// 乱序且还没发过 NAK：发 NAK</span>
+    <span class="k">else</span> start_ack_timer();                            <span class="c">// ← 作业 3-8 问去掉这个 else</span>
+    …缓存/按序上交…
+  }
+  …处理 NAK…
+  <span class="k">while</span> (between(ack_expected, r.ack, next_frame_to_send)) {   <span class="c">// ← 作业 3-9 问去掉这个循环</span>
+      nbuffered = nbuffered - 1;           <span class="c">// 处理捎带回来的确认：</span>
+      stop_timer(ack_expected % NR_BUFS);  <span class="c">// 停掉已确认帧的定时器</span>
+      inc(ack_expected);                   <span class="c">// 发送窗口下沿前移</span>
+  }</div>
+  <ul>
+    <li><strong>3-8 去掉 else（不再启动确认定时器）</strong>：影响<strong>正确性</strong>，会死锁。设想一批帧都正确收到、接收窗口已前移，但所有确认都丢了。发送方超时重发第一帧，接收方发 NAK，NAK 也丢了。之后发送方一直重发对方已接收过的帧，接收方因为 no_nak 已为假既不发 NAK，又不启动确认定时器，<strong>永远不会再回确认</strong>，双方卡死。有了 else，确认定时器到期会单独发一个确认，让双方重新同步。</li>
+    <li><strong>3-9 去掉 while 循环</strong>：影响<strong>正确性</strong>，会死锁。这是唯一处理收到的确认的地方；去掉后发送方的窗口永远不会前移，缓冲区一直占满、定时器不停超时重传，<strong>协议无法继续前进</strong>。</li>
+  </ul>
+
+  <h3 id="c3-ppp">3.10 HDLC 与 PPP<span class="stars">★★</span></h3>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>HDLC 高级数据链路控制</th><th>PPP 点对点协议</th></tr></thead>
+    <tbody>
+      <tr><td>类型</td><td><strong>面向比特</strong></td><td><strong>面向字节</strong>（帧长都是整数个字节）</td></tr>
+      <tr><td>帧定界</td><td>标志 01111110 + <strong>位填充</strong></td><td>标志 0x7E + <strong>字节填充</strong>（转义字节 0x7D）</td></tr>
+      <tr><td>链路</td><td>点到点和多点</td><td>点到点（拨号、ADSL、SONET 上的 IP）</td></tr>
+      <tr><td>可靠性</td><td>有编号的帧、确认、重传</td><td>默认“无编号模式”：不确认、不重传，只用校验检错</td></tr>
+      <tr><td>特点</td><td>两种模式：NRM（正常响应，主站轮询从站）、ABM（异步平衡，任何站都能发起）；三种帧：<strong>I 帧</strong>（信息，带 N(S)/N(R)）、<strong>S 帧</strong>（监控：RR、RNR、REJ、SREJ）、<strong>U 帧</strong>（无编号：SABM、UA、DISC 等）</td><td><strong>LCP</strong>：建立、维护、配置、测试、终止链路；<strong>NCP</strong>：协商网络层协议（如 IPCP 配置 IP）；认证：<strong>PAP</strong>（两次握手，明文）、<strong>CHAP</strong>（三次握手，挑战-响应）</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box exam"><span class="tag exam">考点</span><ul>
+    <li><strong>2022 选择 + 自测第 18 题</strong>：PPP 是一种 <strong>面向字节的</strong> 协议。</li>
+    <li><strong>自测第 20 题</strong>：PPP 中负责建立、维护、配置和终止链路的是 <strong>LCP</strong>。</li>
+    <li>HDLC 的 N(R) = 5 表示“5 号以前的帧都收到了，下一帧想要 5 号”；N(S)、N(R) 是 3 位，取值 0~7。</li>
+  </ul></div>
+  <p class="muted">ADSL 上 IP 分组的走法：IP → PPP → AAL5 帧 → 切成 48 字节一片装进 53 字节的 ATM 信元（PPPoA）。了解即可。</p>
+
+  <h3 id="c3-hw">3.11 本学期第三章作业 10 题</h3>
+  <p class="muted">题目来自 <code>2026作业题/第三章作业</code>（截止 11 月 24 日）。数字类答案都用脚本复算过。</p>
+  <details><summary>3-1 字节填充：A B ESC C ESC FLAG FLAG D 填充后是什么？</summary><div class="ans"><p>每个 ESC 和 FLAG 前面各插一个 ESC：<strong>A B ESC ESC C ESC ESC ESC FLAG ESC FLAG D</strong>。</p></div></details>
+  <details><summary>3-2 什么情况下开环协议（如海明码）比本章的反馈式协议更好？</summary><div class="ans">
+    <ul><li><strong>传播时延很长</strong>：如火星、金星探测器，等重传要几十分钟，只能前向纠错。</li>
+    <li><strong>不能或不方便发反馈</strong>：如军事场合接收方不想发信号暴露位置；单向广播信道。</li>
+    <li><strong>实时系统</strong>：语音、视频等等不起重传。</li>
+    <li>误码率低到纠错码就足够时，用纠错码更简单。</li></ul>
+  </div></details>
+  <details><summary>3-3 10101111 的偶校验海明码</summary><div class="ans"><p><strong>101001001111</strong>（过程见 <a href="#c3-ham">3.5</a> 例题）。</p></div></details>
+  <details><summary>3-4 x<sup>7</sup>+x<sup>5</sup>+1 除以生成多项式 x<sup>3</sup>+1 的余数</summary><div class="ans">
+    <p>被除数 10100001（x<sup>7</sup>+x<sup>5</sup>+1），除数 1001（x<sup>3</sup>+1），模 2 除法，直接相除、不补 0：</p>
+    <ol>
+      <li>取前 4 位 1010，首位是 1 → 异或 1001 → 0011，余下 011。</li>
+      <li>带下一位 0 → 0110，首位是 0 → 不减（商 0），余下 110。</li>
+      <li>带下一位 0 → 1100 → 异或 1001 → 0101，余下 101。</li>
+      <li>带下一位 0 → 1010 → 异或 1001 → 0011，余下 011。</li>
+      <li>带下最后一位 1 → 0111，首位是 0 → 不减，余数 111。</li>
+    </ol>
+    <p>余数 <strong>111</strong>，即 <strong>x<sup>2</sup> + x + 1</strong>。在 CRC 计算器里勾选“直接相除”，数据填 10100001、除数填 1001 可以验证。</p>
+  </div></details>
+  <details><summary>3-5 消息 1001 1100 1010 0011，4 位字的因特网校验和</summary><div class="ans"><p>反码和 0100，校验和 <strong>1011</strong>（过程见 <a href="#c3-sum">3.6</a>）。</p></div></details>
+  <details><summary>3-6 4 kbps 信道、传播时延 20 ms，帧长多大时停等效率 ≥ 50%？</summary><div class="ans"><p>需要发送一帧的时间 ≥ 往返传播时延 40 ms。4 kbps 下 40 ms 能发 160 位，所以帧长 <strong>≥ 160 位</strong>。</p></div></details>
+  <details><summary>3-7 3000 km T1 干线，64 字节帧，协议 5，6 μs/km，序号要几位？</summary><div class="ans"><p>约 109 帧才能填满管道，<strong>7 位</strong>（过程见 <a href="#c3-win">3.9</a>）。老版答案用 0.3 ms 近似得 121 帧，结论同样是 7 位。</p></div></details>
+  <details><summary>3-8 协议 6 中去掉 else（启动确认定时器），会影响正确性吗？</summary><div class="ans"><p>会，可能死锁。见 <a href="#c3-win">3.9</a> 末尾的代码说明。<span class="muted">（老版答案把这一题和下一题的答案写串了，下一题的“这是唯一处理确认的地方”才是 while 循环的答案。）</span></p></div></details>
+  <details><summary>3-9 去掉协议 6 末尾的三语句 while 循环，影响正确性还是只影响性能？</summary><div class="ans"><p>影响<strong>正确性</strong>：这是唯一处理收到的确认的地方，去掉后发送方窗口不前移、一直超时重传，协议无法前进（死锁）。</p></div></details>
+  <details><summary>3-10 卫星信道 1000 位帧、1 Mbps、单程 270 ms、捎带确认、3 位序号，三种协议最大利用率</summary><div class="ans"><p>周期 542 ms：停等 <strong>0.18%</strong>，协议 5 <strong>1.29%</strong>，协议 6 <strong>0.74%</strong>。</p></div></details>
+
+  <h3 id="c3-self">3.12 第三章自测 20 题速查</h3>
+  <div class="tbl"><table class="mid">
+    <thead><tr><th class="c">#</th><th>题意</th><th>答案</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td class="c">1</td><td>用反码运算的检错方法</td><td><b>D Checksum</b></td><td>反码求和再取反</td></tr>
+      <tr><td class="c">2</td><td>两位或更多位改变</td><td><b>B burst</b></td><td>突发错误</td></tr>
+      <tr><td class="c">3</td><td>模 2 运算加减都用</td><td><b>A XOR</b></td><td>不进位不借位</td></tr>
+      <tr><td class="c">4</td><td>两个字对应位不同的个数</td><td><b>B Hamming distance</b></td><td></td></tr>
+      <tr><td class="c">5</td><td>保证纠正 5 位错的最小海明距离</td><td><b>C 11</b></td><td>2d + 1</td></tr>
+      <tr><td class="c">6</td><td>简单奇偶校验能检测</td><td><b>D 奇数个</b>错误</td><td>偶数个错会互相抵消</td></tr>
+      <tr><td class="c">7</td><td>相同码字之间的海明距离</td><td><b>C 0</b></td><td></td></tr>
+      <tr><td class="c">8</td><td>能检测所有奇数位错的生成多项式因子</td><td><b>B x + 1</b></td><td></td></tr>
+      <tr><td class="c">9</td><td>反码中 +7 = 0111，−7 = ?</td><td><b>C 1000</b></td><td>逐位取反</td></tr>
+      <tr><td class="c">10</td><td>1111 与 1111 的校验和</td><td><b>B 0000</b></td><td>和为 1111，取反 0000</td></tr>
+      <tr><td class="c">11</td><td>ARQ 全称</td><td><b>B Automatic repeat request</b></td><td></td></tr>
+      <tr><td class="c">12</td><td>没收到确认就重发所有未确认帧</td><td><b>B Go-Back-N</b></td><td></td></tr>
+      <tr><td class="c">13</td><td>只重发出错的帧</td><td><b>C Selective-Repeat</b></td><td></td></tr>
+      <tr><td class="c">14</td><td>GBN，5 位序号，发送窗口最大</td><td><b>C 31</b></td><td>2<sup>5</sup> − 1</td></tr>
+      <tr><td class="c">15</td><td>GBN，5 位序号，接收窗口</td><td><b>D 1</b></td><td></td></tr>
+      <tr><td class="c">16</td><td>SR，5 位序号，发送窗口最大</td><td><b>B 16</b></td><td>2<sup>4</sup></td></tr>
+      <tr><td class="c">17</td><td>SR，5 位序号，接收窗口最大</td><td><b>B 16</b></td><td></td></tr>
+      <tr><td class="c">18</td><td>PPP 是什么类型的协议</td><td><b>B byte-oriented</b></td><td>面向字节</td></tr>
+      <tr><td class="c">19</td><td>GBN 序号字段 8 位，序号运算</td><td><b>C modulo-256</b></td><td>2<sup>8</sup> = 256</td></tr>
+      <tr><td class="c">20</td><td>PPP 中建立、维护、配置、终止链路的</td><td><b>B LCP</b></td><td>NCP 管网络层协议；PAP/CHAP 管认证</td></tr>
+    </tbody>
+  </table></div>
 </section>
 
 <!-- ============ 公式速查 ============ -->
@@ -1620,13 +2287,23 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
     <div><h5>码元位数</h5><div class="mono">QPSK 2；QAM-16 4；QAM-64 6</div></div>
     <div><h5>卫星</h5><div class="mono">GEO 35786 km，单程 ~270 ms<br>全球覆盖 3 颗；间隔 ≥2°</div></div>
     <div><h5>OSI 自下而上</h5><div class="mono">物 链 网 传 会 表 应<br>bit 帧 分组 段</div></div>
+    <div><h5>四种转换</h5><div class="mono">数→数：线路/块编码、扰码<br>数→模：ASK FSK PSK QAM<br>模→数：PCM　模→模：AM FM</div></div>
+    <div><h5>填充（第 3 章）</h5><div class="mono">位填充：5 个 1 后插 0<br>标志 01111110<br>字节填充：FLAG/ESC 前插 ESC</div></div>
+    <div><h5>海明距离</h5><div class="mono">检 d 位错：≥ d+1<br>纠 d 位错：≥ 2d+1</div></div>
+    <div><h5>海明码</h5><div class="mono">(m+r+1) ≤ 2^r<br>校验位在 1,2,4,8,16…<br>校正子 = 出错位置</div></div>
+    <div><h5>CRC</h5><div class="mono">补 r 个 0，模 2 除（异或）<br>余数 r 位 = 校验码<br>含 x+1 → 查出所有奇数位错</div></div>
+    <div><h5>校验和</h5><div class="mono">反码和（进位加回）<br>校验和 = 和取反</div></div>
+    <div><h5>停等利用率</h5><div class="mono">U = t_f / (t_f + 2t_p)<br>≥50% ⇔ L ≥ 2·b·t_p</div></div>
+    <div><h5>窗口（n 位序号）</h5><div class="mono">GBN：发 2ⁿ−1，收 1<br>SR：发 = 收 = 2ⁿ⁻¹<br>U = min(1, W·t_f/T)</div></div>
+    <div><h5>链路层服务</h5><div class="mono">无确认无连接：以太网<br>有确认无连接：802.11<br>有确认面向连接：少见</div></div>
+    <div><h5>HDLC / PPP</h5><div class="mono">HDLC 面向比特，位填充<br>PPP 面向字节，0x7E + 字节填充<br>LCP 管链路，NCP 管网络层</div></div>
   </div>
 </section>
 
 <!-- ============ 真题 ============ -->
 <section class="chap" id="exam">
-  <div class="chap-head"><span class="chap-no">EXAM</span><h2>真题精讲：第 1–2 章相关题汇总</h2></div>
-  <p class="sub">四年期中卷里和这两章有关的题全部列在这里。先遮住答案自己做。</p>
+  <div class="chap-head"><span class="chap-no">EXAM</span><h2>真题精讲：第 1–3 章相关题汇总</h2></div>
+  <p class="sub">四年期中卷里和前三章有关的题全部列在这里（第 3 章的在最后一组）。先遮住答案自己做。</p>
 
   <h3 id="e-choice">选择题</h3>
   <details><summary>OSI 模型中第二、三、四、六层分别是？<span class="src">2020·2022</span></summary><div class="ans"><p><strong>D</strong> 数据链路层、网络层、传输层、表示层。</p></div></details>
@@ -1696,12 +2373,54 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
   <details><summary>两种文件确认机制分别适合什么网络（6 分）<span class="src">2023</span></summary><div class="ans"><p>见 <a href="#c1-perf">1.8</a>。质量差 → 逐分组确认；质量好 → 整个文件确认一次。各 3 分：结论 + 原因。</p></div></details>
   <details><summary>CDMA 四站四码片 T0~T3 计算（10 分）<span class="src">2023</span></summary><div class="ans"><p>答案：T0 (0 −4 0 0)，T1 (0 +4 0 0)，T2 (0 0 0 +4)，T3 (−2 −2 +2 −2)。过程表格见 <a href="#c2-cdma">2.8</a>。</p></div></details>
   <details><summary>k 跳路径：电路交换和分组交换的时延，分组交换何时更低？（10 分）<span class="src">2023</span></summary><div class="ans"><p>（1）电路交换：s + x/b + kd（3 分：建立、传输、传播各一项）。（2）分组交换：x/b + (k−1)p/b + kd（5 分，说明分组数 ⌈x/p⌉、第一个分组 k 跳、其余流水线；排队和处理时延忽略）。（3）条件 s &gt; (k−1)p/b（2 分）。</p></div></details>
+  <h3 id="e-ch3">第 3 章（数据链路层）相关题</h3>
+  <p class="muted">四年期中卷里第 3 章的题全部列在这里，讲解在 <a href="#ch3">第 3 章</a> 各节。</p>
+  <details><summary>选择：CRC 生成式包含（ ）因子时，可检测出所有奇数位错误<span class="src">2020·2021·2022</span></summary><div class="ans"><p><strong>x + 1</strong>。</p></div></details>
+  <details><summary>选择：发送窗口 W<sub>T</sub> = 15，发送 7 号帧并收到 5 号帧的确认后，还可连续发送几帧？<span class="src">2020·2022</span></summary><div class="ans"><p>0~5 已确认，6、7 未确认，还能发 15 − 2 = <strong>13 帧</strong>（D）。</p></div></details>
+  <details><summary>选择：位填充，数据 0111110111111110 填充后是？<span class="src">2021</span></summary><div class="ans"><p><strong>A 011111001111101110</strong>。</p></div></details>
+  <details><summary>选择：回退 N，W<sub>s</sub> = 7，已发 0~6，超时时只收到 0、2、3 的确认，需重发？<span class="src">2021</span></summary><div class="ans"><p>累积确认，收到 3 的确认说明 0~3 都到了，重发 <strong>4、5、6</strong>（B）。</p></div></details>
+  <details><summary>选择：PPP 是一种（ ）协议<span class="src">2022</span></summary><div class="ans"><p><strong>B 面向字节的</strong>。</p></div></details>
+  <details><summary>选择：停等协议中数据帧丢失，发送端会永远等下去，解决办法是？<span class="src">2022</span></summary><div class="ans"><p><strong>D 超时重传</strong>。</p></div></details>
+  <details><summary>选择：关于海明码，正确的是？<span class="src">2022</span></summary><div class="ans"><p><strong>A 利用奇偶性进行检错和纠错</strong>。（只能纠 1 位，能纠错，数据位与校验位长度不必相同。）</p></div></details>
+  <details><summary>选择：卫星链路传播延迟 270 ms，64 Kb/s，帧长 4000 bit，停等协议最大链路利用率？<span class="src">2023</span></summary><div class="ans"><p>t<sub>f</sub> = 62.5 ms，U = 62.5 / (62.5 + 540) ≈ <strong>0.104</strong>（A）。</p></div></details>
+  <details><summary>选择：回退 N ARQ，帧编号 7 位，发送窗口最大长度？<span class="src">2023</span></summary><div class="ans"><p>2<sup>7</sup> − 1 = <strong>127</strong>（B）。</p></div></details>
+  <details><summary>填空：海明码纠正单比特错误，信息位 6 位，冗余位至少？<span class="src">2020</span></summary><div class="ans"><p>6 + r + 1 ≤ 2<sup>r</sup> → r = <strong>4</strong>。</p></div></details>
+  <details><summary>填空：位填充，01111110111110 → ？<span class="src">2020</span></summary><div class="ans"><p><strong>0111110101111100</strong>。</p></div></details>
+  <details><summary>填空：回退 N，5 位序号，发送窗口最大？接收窗口最大？<span class="src">2020·2021·2022</span></summary><div class="ans"><p><strong>31；1</strong>。</p></div></details>
+  <details><summary>填空：m 个信息位、r 个校验位，纠单比特错要满足？常见的纠单比特错误码？<span class="src">2021·2022</span></summary><div class="ans"><p><strong>(m + r + 1) ≤ 2<sup>r</sup></strong>；<strong>海明码</strong>。</p></div></details>
+  <details><summary>填空：海明距离 d+1 能检测几位错？纠正 d 位错需要海明距离？<span class="src">2022</span></summary><div class="ans"><p><strong>d</strong>；<strong>2d + 1</strong>。</p></div></details>
+  <details><summary>填空：字节填充 A B ESC C ESC FLAG FLAG D<span class="src">2022</span></summary><div class="ans"><p><strong>A B ESC ESC C ESC ESC ESC FLAG ESC FLAG D</strong>。</p></div></details>
+  <details><summary>填空：数据位 20 位，校验位至少几位？数据链路层的两个子层？位填充 010111110？<span class="src">2023</span></summary><div class="ans"><p><strong>5</strong> 位（海明码）；<strong>MAC</strong> 和 <strong>LLC</strong>；<strong>0101111100</strong>。</p></div></details>
+  <details><summary>名词解释：循环冗余校验码 / 海明距离 / Piggybacking / ARQ / Sliding Window<span class="src">2020–2022</span></summary><div class="ans">
+    <p><strong>CRC</strong>：把要传的信息看作多项式，补 r 个 0 后用约定的生成多项式做模 2 除法，余数作为校验位附在后面；接收方相除余数为 0 则无错。可检测所有奇数位错（生成式含 x+1）、双比特错和长度 ≤ r 的突发错。</p>
+    <p><strong>海明距离</strong>：两个码字对应位不同的位数；一种编码的海明距离是任意两个合法码字之间距离的最小值，检测 d 位错需要 d+1，纠正 d 位错需要 2d+1。</p>
+    <p><strong>Piggybacking 捎带确认</strong>：接收方收到数据帧后暂不单独发确认，而是把确认号附在自己下一个发出的数据帧里，节省带宽；等待不能超过对方的超时时间。</p>
+    <p><strong>ARQ 自动重传请求</strong>：接收方检错并回送确认，发送方设定时器，超时或收到否定确认就重传；帧要编序号以识别重复帧。停等、回退 N、选择重传都是 ARQ。</p>
+    <p><strong>Sliding Window 滑动窗口</strong>：发送方在收到确认前可以连续发送窗口内的多个帧，收到确认后窗口向前滑动；接收方按接收窗口接收。提高长时延链路的利用率，同时实现流量控制。</p>
+  </div></details>
+  <details><summary>简答：设两站间信道速率 20 kb/s，停止等待协议，传播时延 30 ms，确认帧和处理时间忽略，帧长多少才能使利用率至少 50%？（6 分）<span class="src">2020·2022</span></summary><div class="ans"><p>利用率 ≥ 50% 要求发送时间 ≥ 往返传播时延：t<sub>f</sub> = l<sub>f</sub>/C ≥ 2t<sub>p</sub>，所以 l<sub>f</sub> ≥ C × 2t<sub>p</sub> = 20000 × 0.06 = <strong>1200 bit</strong>。</p></div></details>
+  <details><summary>简答：为何选择重传协议要设置 #define NR_BUFS ((MAX_SEQ + 1)/2)？（6 分）<span class="src">2020·2022</span></summary><div class="ans"><p>把窗口最大尺寸限制为序号空间的一半，确保接收方移动窗口后，新窗口与老窗口的序号没有重叠；否则确认全部丢失时，接收方无法区分重传的旧帧和新帧，会把错误的分组交给网络层。见 <a href="#c3-win">3.9</a>。</p></div></details>
+  <details><summary>分析：窗口序号 3 位，发送窗口 4，回退 N，根据窗口变化图说明相继发生的事件（10 分）<span class="src">2021</span></summary><div class="ans">
+    <p><img src="data:image/png;base64,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" alt="2021 期中题：a 到 g 七个时刻的发送窗口和接收窗口，阴影表示窗口位置" style="display:block;max-width:100%;height:auto;margin:.4rem auto;background:#fff;border-radius:8px;padding:4px"></p>
+    <p>（a）发送 0 号帧；（b）发送 1 号帧；（c）接收 0 号帧；（d）收到 0 号帧的确认；（e）发送 2 号帧；（f）接收 1 号帧；（g）收到 1 号帧的确认。</p>
+    <p class="muted">看图方法：发送窗口里阴影 = 已发未确认的帧，阴影变多 = 发了新帧，阴影从头部减少 = 收到确认；接收窗口阴影 = 期待的下一个序号，向前移 = 收到了一帧。</p>
+  </div></details>
+  <details><summary>计算：用 CRC 多项式 x<sup>3</sup>+1 保护 11100011；最左位反转后接收方如何发现？（10 分）<span class="src">2021</span></summary><div class="ans"><p>补 3 个 0 → 11100011000，除以 1001 余 <strong>100</strong>，发送 <strong>11100011100</strong>。最左位反转后 01100011100，除以 1001 余 <strong>010</strong>，不为 0 → 出错。</p></div></details>
+  <details><summary>计算：1000 位帧，1 Mbps，线路 2 km，5 ms/km，3 位序号，停等 / 回退 N / 选择重传最大利用率？（10 分）<span class="src">2021</span></summary><div class="ans"><p>周期 1 + 2 × 10 = 21 ms：<strong>1/21 = 4.8%</strong>；<strong>7/21 = 33.3%</strong>；<strong>4/21 = 19.0%</strong>。</p></div></details>
+  <details><summary>计算：2000 位帧，1 Mbps，1 km，199 ms/km，4 位序号，三种协议的发送窗口和利用率？<span class="src">2022</span></summary><div class="ans"><p>窗口 1、15、8；周期 2 + 2 × 199 = 400 ms：<strong>0.5%、7.5%、4%</strong>。</p></div></details>
+  <details><summary>计算：数据 1010001101，g(x) = x<sup>5</sup>+x<sup>4</sup>+x<sup>2</sup>+1，求 CRC<span class="src">2022</span></summary><div class="ans"><p><strong>01110</strong>。</p></div></details>
+  <details><summary>计算：10100101 的偶校验海明码；收到 0xA0F，至多 1 位错，原值？<span class="src">2020·2022</span></summary><div class="ans"><p>111001000101（从左编号）；第 6 位错，原值 <strong>0xA4F</strong>。详见 <a href="#c3-ham">3.5</a>。</p></div></details>
+  <details><summary>简答：G(x) = x<sup>2</sup>+x+1，帧 1010，求 CRC 校验位和最终编码<span class="src">2023</span></summary><div class="ans"><p>x<sup>3</sup>+x 补 2 个 0 → x<sup>5</sup>+x<sup>3</sup>，除以 x<sup>2</sup>+x+1 余 x，CRC = <strong>10</strong>，最终编码 <strong>101010</strong>。</p></div></details>
+  <details><summary>简答：数据链路层可能提供的服务类型及网络实例<span class="src">2023</span></summary><div class="ans"><p>无确认无连接（以太网）；有确认无连接（802.11）；有确认面向连接（很少见）。</p></div></details>
+  <details><summary>简答：A、B 相距 3000 km，1 Mbps，200 km/ms，数据帧和确认帧都 64 字节，协议 5 / 协议 6 各需几位序号？<span class="src">2023</span></summary><div class="ans"><p>周期 2 × (0.512 + 15) = 31.024 ms，可发 60.6 帧：协议 5 <strong>6 位</strong>，协议 6 <strong>7 位</strong>。</p></div></details>
+  <details><summary>简答：有噪声停等协议若不给数据帧和确认帧编号，会出什么问题？<span class="src">2023</span></summary><div class="ans"><p>确认丢失后发送方超时重传，接收方无法区分重传帧和新帧，会重复交给上层。见 <a href="#c3-sw">3.8</a> 的图 ③。</p></div></details>
+  <details><summary>分析：收到 16 位海明码 0x8A10（从左编号，偶校验，至多 1 位错），原始数据？（10 分）<span class="src">2023</span></summary><div class="ans"><p>校正子 15 → 第 15 位错，正确码字 1000 1010 0001 0010，去掉第 1、2、4、8、16 位，数据 <strong>0101 0001 001</strong>。</p></div></details>
 </section>
 
 <!-- ============ 自测 ============ -->
 <section class="chap" id="quiz">
   <div class="chap-head"><span class="chap-no">QUIZ</span><h2>自测：点选项看对错</h2></div>
-  <p class="sub">题目改编自本学期第一章自测、往年期中卷。点一下立刻显示正误和解析。</p>
+  <p class="sub">题目改编自本学期第 1–3 章自测、作业和往年期中卷。点一下立刻显示正误和解析。</p>
   <p class="score" id="quizScore">已答 0 题，答对 0 题</p>
   <div class="quiz" id="quizBox"></div>
   <button class="btn ghost" type="button" id="quizReset">清空重做</button>
@@ -1717,7 +2436,7 @@ footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </section>
 
 <footer>
-  资料来源：华东师范大学《计算机网络》课件 0、1、2（王廷），2020–2023 学年期中试卷及答案，老版第一、二章作业答案，本学期第一章作业与自测题，教学大纲（2025）。教材：Tanenbaum《Computer Networks》第 6 版。整理于 2026 年 10 月。
+  资料来源：华东师范大学《计算机网络》课件 0、1、2 与老版课件 3（王廷），2020–2023 学年期中试卷及答案，老版第一至三章作业答案，2026 学年第一至三章作业与自测题，教学大纲（2025）。教材：Tanenbaum《Computer Networks》第 6 版。整理于 2026 年 10 月。
 </footer>
 </div>
 
@@ -1949,6 +2668,226 @@ function sinePath(x0,w,yc,A,cyc,ph){var d="";for(var i=0;i<=w;i+=2){var t=i/w;va
   $("cdma4").addEventListener("click",function(){set([["A","1001","1"],["B","1010","1"],["C","1100","0"],["D","1111","0"]]);go();});
 })();
 
+/* ---------- Chapter 3 helpers ---------- */
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function toBits(v){v=(v||"").trim();if(/^0x[0-9a-f]+$/i.test(v)){return v.slice(2).split("").map(function(h){return ("000"+parseInt(h,16).toString(2)).slice(-4);}).join("");}return v.replace(/[^01]/g,"");}
+function bitsToHex(b){if(!b.length||b.length%4){return "";}var h="";for(var i=0;i<b.length;i+=4){h+=parseInt(b.substr(i,4),2).toString(16).toUpperCase();}return "0x"+h;}
+function grp4(b){return b.replace(/(.{4})(?=.)/g,"$1 ");}
+
+/* stuffing */
+(function(){
+  var mode=$("stMode"),inp=$("stIn"),out=$("stOut");if(!out){return;}
+  var ex={bit:"01111110111110",unbit:"011001111100111101111101",byte:"A B ESC C ESC FLAG FLAG D"};
+  function run(){
+    var m=mode.value,v=inp.value;
+    if(m==="byte"){
+      var t=v.trim().split(/\s+/).filter(Boolean),r=[];
+      t.forEach(function(x){var u=x.toUpperCase();if(u==="FLAG"||u==="ESC"){r.push('<b style="color:var(--trap)">ESC</b>');}r.push(esc(x));});
+      out.innerHTML="填充后：<b>FLAG</b> "+r.join(" ")+" <b>FLAG</b><br><span class=\"muted\">红色 ESC 是插入的；首尾 FLAG 是帧定界符（题目一般只问中间部分）。</span>";return;
+    }
+    var b=v.replace(/[^01]/g,""),o="",c=0,i,n=0;
+    if(m==="bit"){
+      for(i=0;i<b.length;i++){o+=b[i];if(b[i]==="1"){c++;if(c===5){o+='<b style="color:var(--trap)">0</b>';c=0;n++;}}else{c=0;}}
+      out.innerHTML="填充后：<b>"+o+"</b><br>共插入 "+n+" 个 0，长度 "+b.length+" → "+(b.length+n)+"。";
+    }else{
+      var warn="";
+      for(i=0;i<b.length;i++){
+        o+=b[i];
+        if(b[i]==="1"){c++;if(c===5){if(i+1<b.length){if(b[i+1]==="0"){o+='<s style="color:var(--trap)">0</s>';n++;}else{warn="第 "+(i+2)+" 位出现第 6 个 1：这是帧标志 01111110 或传输错误。";}i++;if(b[i]==="1"){o+="1";}}c=0;}}
+        else{c=0;}
+      }
+      out.innerHTML="去填充后：<b>"+o.replace(/<s[^>]*>0<\/s>/g,"")+"</b><br>删除过程（划掉的是删除的 0）："+o+"<br>"+(warn?'<span style="color:var(--trap)">'+warn+"</span>":"共删除 "+n+" 个 0。");
+    }
+  }
+  mode.addEventListener("change",function(){inp.value=ex[mode.value];run();});
+  inp.addEventListener("input",run);run();
+})();
+
+/* Hamming */
+(function(){
+  var mode=$("hmMode"),dir=$("hmDir"),inp=$("hmIn"),out=$("hmOut");if(!out){return;}
+  function cover(p,n){var a=[];for(var k=1;k<=n;k++){if(k&p){a.push(k);}}return a;}
+  function run(){
+    var bits=toBits(inp.value),rtl=dir.value==="rtl",lines=[];
+    if(!bits.length){out.textContent="请输入二进制数据（或 0x 开头的十六进制）。";return;}
+    if(mode.value==="enc"){
+      var m=bits.length,r=0;while((1<<r)<m+r+1){r++;}
+      var n=m+r,c=[0],d=rtl?bits.split("").reverse():bits.split(""),j=0,k;
+      for(k=1;k<=n;k++){c[k]=(k&(k-1))?+d[j++]:0;}
+      lines.push("m = "+m+" 位数据，(m + r + 1) ≤ 2^r → r = <b>"+r+"</b>，码字共 "+n+" 位。");
+      for(var i=0;i<r;i++){var p=1<<i,cv=cover(p,n).filter(function(x){return x!==p;}),s=0;cv.forEach(function(x){s+=c[x];});c[p]=s%2;
+        lines.push("P"+p+" 管位置 "+cover(p,n).join(",")+"：其余位共 "+s+" 个 1 → P"+p+" = <b>"+c[p]+"</b>");}
+      var code=c.slice(1).join("");if(rtl){code=code.split("").reverse().join("");}
+      lines.push("海明码（"+(rtl?"最右是第 1 位":"最左是第 1 位")+"）：<b>"+grp4(code)+"</b>"+(bitsToHex(code)?"　= "+bitsToHex(code):""));
+    }else{
+      var s2=rtl?bits.split("").reverse():bits.split(""),n2=s2.length,cc=[0].concat(s2.map(Number)),syn=0,p2=1,parts=[];
+      while(p2<=n2){var cv2=cover(p2,n2),sum=0;cv2.forEach(function(x){sum+=cc[x];});var bad=sum%2;if(bad){syn|=p2;}
+        lines.push("P"+p2+" 组（"+cv2.join(",")+"）：共 "+sum+" 个 1 → "+(bad?"<b>奇数，记 1</b>":"偶数，记 0"));parts.unshift(bad);p2<<=1;}
+      lines.push("校正子（从高到低）"+parts.join("")+" = <b>"+syn+"</b>"+(syn?"：第 "+syn+" 位出错"+(syn>n2?"（超出码长，说明不止 1 位错）":""):"：没有错误"));
+      if(syn&&syn<=n2){cc[syn]^=1;}
+      var fixed=cc.slice(1).join(""),data=[];for(var k2=1;k2<=n2;k2++){if(k2&(k2-1)){data.push(cc[k2]);}}
+      var dataS=rtl?data.reverse().join(""):data.join("");if(rtl){fixed=fixed.split("").reverse().join("");}
+      lines.push("改正后的码字：<b>"+grp4(fixed)+"</b>"+(bitsToHex(fixed)?"　= "+bitsToHex(fixed):""));
+      lines.push("去掉校验位，原始数据：<b>"+grp4(dataS)+"</b>"+(bitsToHex(dataS)?"　= "+bitsToHex(dataS):""));
+    }
+    out.innerHTML=lines.join("<br>");
+  }
+  mode.addEventListener("change",function(){inp.value=mode.value==="enc"?"10101111":"0xA0F";run();});
+  [dir,inp].forEach(function(x){x.addEventListener("input",run);x.addEventListener("change",run);});
+  run();
+})();
+
+/* CRC */
+(function(){
+  var D=$("crcD"),G=$("crcG"),raw=$("crcRaw"),out=$("crcOut");if(!out){return;}
+  function parseG(v){
+    v=(v||"").replace(/\s/g,"").toLowerCase();
+    if(v.indexOf("x")<0){return v.replace(/[^01]/g,"");}
+    var ex=[];v.replace(/\^/g,"").split("+").forEach(function(t){if(!t){return;}if(t==="1"){ex.push(0);}else if(t==="x"){ex.push(1);}else{var m=/^x(\d+)$/.exec(t);if(m){ex.push(+m[1]);}}});
+    if(!ex.length){return "";}var hi=Math.max.apply(null,ex),b="";for(var i=hi;i>=0;i--){b+=ex.indexOf(i)>=0?"1":"0";}return b;
+  }
+  function run(){
+    var d=D.value.replace(/[^01]/g,""),g=parseG(G.value);
+    if(!d||g.length<2||g[0]!=="1"){out.textContent="请输入数据位和最高位为 1 的生成多项式。";return;}
+    var r=g.length-1,direct=raw&&raw.checked,a=(direct?d:d+"0".repeat(r)).split(""),L=[],q="";
+    var lead=direct?"被除数":"数据补 "+r+" 个 0";
+    L.push(lead+"："+a.join(""));
+    var steps=a.length-r;
+    if(steps<1){out.textContent="被除数比除数短，余数就是它本身。";return;}
+    var pre=[];pre.push(a.join(""));
+    for(var i=0;i<steps;i++){
+      if(a[i]==="1"){q+="1";var sp=" ".repeat(i);pre.push(sp+g);pre.push(sp+"-".repeat(g.length));for(var j=0;j<g.length;j++){a[i+j]=String(+a[i+j]^+g[j]);}
+        pre.push(" ".repeat(i+1)+a.slice(i+1,Math.min(a.length,i+g.length+1)).join(""));}
+      else{q+="0";}
+    }
+    var rem=a.slice(-r).join("");
+    L.push("除数（G）："+g+"　（"+r+" 次，余数取 "+r+" 位）");
+    out.innerHTML=L.join("<br>")+'<div class="code" style="margin:.5rem 0">'+esc(pre.join("\n"))+"</div>商："+q.replace(/^0+(?=.)/,"")+"<br>余数：<b>"+rem+"</b>"+(direct?"":"<br>发送的帧：<b>"+d+"</b><b style=\"color:var(--trap)\">"+rem+"</b>（原数据 + CRC）");
+  }
+  [D,G,raw].forEach(function(x){if(x){x.addEventListener("input",run);x.addEventListener("change",run);}});run();
+})();
+
+/* checksum */
+(function(){
+  var inp=$("csIn"),out=$("csOut");if(!out){return;}
+  function run(){
+    var w=inp.value.trim().split(/\s+/).map(function(x){return x.replace(/[^01]/g,"");}).filter(Boolean);
+    if(w.length<1){out.textContent="请输入至少一个字。";return;}
+    var N=w[0].length;if(w.some(function(x){return x.length!==N;})){out.textContent="每个字的位数要相同。";return;}
+    var M=(1<<N)-1,s=parseInt(w[0],2),L=["第 1 个字："+w[0]];
+    function f(v){return ("0".repeat(N)+v.toString(2)).slice(-N);}
+    for(var i=1;i<w.length;i++){var t=s+parseInt(w[i],2),line=f(s)+" + "+w[i]+" = "+(t>M?t.toString(2):f(t));if(t>M){t=(t&M)+(t>>N);line+=" → 进位加回最低位 → "+f(t);}s=t;L.push(line);}
+    var cs=M^s;L.push("反码和：<b>"+f(s)+"</b>，取反得校验和：<b>"+f(cs)+"</b>");
+    var chk=s+cs;if(chk>M){chk=(chk&M)+(chk>>N);}
+    L.push("接收方：全部字 + 校验和的反码和 = "+f(chk)+"，取反 = "+f(M^chk)+(M^chk?"（≠0，有错）":"（全 0，无错）"));
+    out.innerHTML=L.join("<br>");
+  }
+  inp.addEventListener("input",run);run();
+})();
+
+/* sliding window calculator */
+(function(){
+  var pre=$("wnPre"),out=$("wnOut");if(!out){return;}
+  var P={
+    hw310:["作业 3-10 卫星（捎带确认）",1000,1e6,270,3,1],
+    hw37:["作业 3-7 T1 干线",512,1.536e6,18,7,0],
+    hw36:["作业 3-6 停等 50%（帧长 160）",160,4000,20,1,0],
+    e2021:["2021 期中：2 km × 5 ms/km",1000,1e6,10,3,0],
+    e2022:["2022 期中：1 km × 199 ms/km",2000,1e6,199,4,0],
+    e2023:["2023 期中：3000 km，64 字节帧和确认",512,1e6,15,6,1],
+    e2023s:["2023 选择：卫星 64 kb/s",4000,64000,270,1,0],
+    slide:["课件例：50 kbps，单程 250 ms",1000,50000,250,5,0]
+  };
+  Object.keys(P).forEach(function(k){var o=document.createElement("option");o.value=k;o.textContent=P[k][0];pre.appendChild(o);});
+  var ids=["wnL","wnB","wnTp","wnN","wnAck"];
+  function load(k){var p=P[k];$("wnL").value=p[1];$("wnB").value=p[2];$("wnTp").value=p[3];$("wnN").value=p[4];$("wnAck").value=String(p[5]);run();}
+  function pct(x){return (Math.round(x*10000)/100)+"%";}
+  function run(){
+    var L=+$("wnL").value,b=+$("wnB").value,tp=(+$("wnTp").value)/1000,n=Math.max(1,Math.round(+$("wnN").value)),ack=$("wnAck").value==="1";
+    if(!(L>0&&b>0&&tp>=0)){out.textContent="请填写正数。";return;}
+    var tf=L/b,T=tf+2*tp+(ack?tf:0),a=T/tf;
+    var wg=Math.pow(2,n)-1,ws=Math.pow(2,n-1);
+    var need=Math.ceil(a-1e-9),bg=Math.ceil(Math.log2(need+1)-1e-9),bs=Math.ceil(Math.log2(2*need)-1e-9);
+    function ms(x){return (Math.round(x*1e6)/1e3)+" ms";}
+    out.innerHTML="发送一帧 t<sub>f</sub> = "+L+" / "+b+" = <b>"+ms(tf)+"</b><br>一个周期 T = t<sub>f</sub> + 2t<sub>p</sub>"+(ack?" + t<sub>f</sub>（确认）":"")+" = <b>"+ms(T)+"</b>，一个周期最多发 T/t<sub>f</sub> = <b>"+(Math.round(a*100)/100)+"</b> 帧"+
+      "<br>停等（W = 1）：U = 1/"+(Math.round(a*100)/100)+" = <b>"+pct(Math.min(1,1/a))+"</b>"+
+      "<br>回退 N（"+n+" 位序号，W = 2^"+n+" − 1 = "+wg+"）：U = <b>"+pct(Math.min(1,wg/a))+"</b>"+
+      "<br>选择重传（W = 2^"+(n-1)+" = "+ws+"）：U = <b>"+pct(Math.min(1,ws/a))+"</b>"+
+      "<br>要让管道一直满需要 W ≥ "+need+" → 回退 N 至少 <b>"+bg+"</b> 位序号，选择重传至少 <b>"+bs+"</b> 位序号";
+  }
+  pre.addEventListener("change",function(){load(pre.value);});
+  ids.forEach(function(id){$(id).addEventListener("input",run);$(id).addEventListener("change",run);});
+  load("hw310");
+})();
+
+/* stop-and-wait figure */
+(function(){
+  var svg=$("swFig");if(!svg){return;}
+  var defs=el("defs",{},svg);
+  [["swa","var(--accent)"],["swk","var(--ex)"]].forEach(function(m){var mk=el("marker",{id:m[0],viewBox:"0 0 10 10",refX:"9",refY:"5",markerWidth:"7",markerHeight:"7",orient:"auto"},defs);el("path",{d:"M0 0L10 5L0 10z",fill:m[1]},mk);});
+  function arrow(x1,y1,x2,y2,kind,label,lx,ly){el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:kind==="d"?"var(--accent)":"var(--ex)","stroke-width":"2","marker-end":"url(#"+(kind==="d"?"swa":"swk")+")"},svg);if(label){txt(svg,lx,ly,label,{"font-size":"11",style:"fill:"+(kind==="d"?"var(--accent)":"var(--ex)"),"font-weight":"700"});}}
+  function lost(x1,y1,x2,y2,kind,label,lx,ly){el("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:kind==="d"?"var(--accent)":"var(--ex)","stroke-width":"2","stroke-dasharray":"5 3"},svg);txt(svg,x2,y2+5,"✗",{"text-anchor":"middle","font-size":"16","font-weight":"700",style:"fill:var(--trap)"});if(label){txt(svg,lx,ly,label,{"font-size":"11",style:"fill:"+(kind==="d"?"var(--accent)":"var(--ex)"),"font-weight":"700"});}}
+  [["① 正常",0],["② 数据帧丢失",220],["③ 确认丢失",440]].forEach(function(p){
+    var o=p[1],S=o+40,R=o+180;
+    txt(svg,o+110,18,p[0],{"text-anchor":"middle","font-size":"13","font-weight":"700"});
+    txt(svg,S,36,"发送方",{"text-anchor":"middle","font-size":"11",class:"mut"});txt(svg,R,36,"接收方",{"text-anchor":"middle","font-size":"11",class:"mut"});
+    el("line",{x1:S,y1:42,x2:S,y2:228,stroke:"var(--ink)","stroke-width":"1.5"},svg);el("line",{x1:R,y1:42,x2:R,y2:228,stroke:"var(--ink)","stroke-width":"1.5"},svg);
+  });
+  arrow(40,52,180,82,"d","帧 0",100,58);arrow(180,88,40,118,"k","ACK",100,96);arrow(40,124,180,154,"d","帧 1",100,130);arrow(180,160,40,190,"k","ACK",100,168);
+  txt(svg,110,252,"发一帧，等确认，再发下一帧",{"text-anchor":"middle","font-size":"11",class:"mut"});
+  lost(260,52,330,67,"d","帧 0",280,52);
+  el("path",{d:"M252 52 V150",stroke:"var(--exam)","stroke-width":"2",fill:"none"},svg);txt(svg,248,104,"定时器",{"text-anchor":"end","font-size":"10.5",style:"fill:var(--exam)"});txt(svg,248,118,"到期",{"text-anchor":"end","font-size":"10.5",style:"fill:var(--exam)"});
+  arrow(260,152,400,182,"d","重发帧 0",300,158);arrow(400,188,260,218,"k","ACK",320,196);
+  txt(svg,330,252,"没有定时器就会永远等下去",{"text-anchor":"middle","font-size":"11",class:"mut"});
+  arrow(480,52,620,82,"d","帧 1",520,58);txt(svg,626,86,"交付",{"font-size":"10.5"});lost(620,88,550,103,"k","ACK",590,98);
+  el("path",{d:"M472 52 V150",stroke:"var(--exam)","stroke-width":"2",fill:"none"},svg);txt(svg,468,110,"超时",{"text-anchor":"end","font-size":"10.5",style:"fill:var(--exam)"});
+  arrow(480,152,620,182,"d","重发帧 1",510,158);arrow(620,188,480,218,"k","ACK",540,196);
+  txt(svg,550,252,"无序号：再交付一次 → 重复",{"text-anchor":"middle","font-size":"11",style:"fill:var(--trap)","font-weight":"700"});
+  txt(svg,550,272,"有序号：认出旧帧，丢弃并重发 ACK",{"text-anchor":"middle","font-size":"11",style:"fill:var(--ex)","font-weight":"700"});
+})();
+
+/* GBN vs SR figure */
+(function(){
+  var svg=$("gbnFig");if(!svg){return;}
+  var W=36,x0=110;
+  function box(x,y,t,fill,stroke,tc){el("rect",{x:x,y:y,width:W-4,height:26,rx:"4",fill:fill,stroke:stroke||"none"},svg);txt(svg,x+(W-4)/2,y+18,t,{"text-anchor":"middle","font-size":"12","font-weight":"700",class:"mono",style:"fill:"+(tc||"var(--ink)")});}
+  function row(y,label,items){txt(svg,8,y+18,label,{"font-size":"12","font-weight":"700"});items.forEach(function(it,i){if(it){box(x0+i*W,y,it[0],it[1],it[2],it[3]);}});}
+  var ok=["var(--accent-soft)","var(--accent)"],ls=["var(--trap-soft)","var(--trap)"],dis=["var(--surface-2)","var(--line)"];
+  function f(t,c,tc){return [t,c[0],c[1],tc];}
+  txt(svg,8,22,"回退 N",{"font-size":"13","font-weight":"700",style:"fill:var(--l3)"});
+  row(30,"发送",[f("0",ok),f("1",ok),f("2✗",ls,"var(--trap)"),f("3",ok),f("4",ok),f("5",ok),f("6",ok),null,f("2",ok),f("3",ok),f("4",ok),f("5",ok),f("6",ok)]);
+  row(62,"接收",[f("收",dis),f("收",dis),null,f("丢",ls,"var(--trap)"),f("丢",ls,"var(--trap)"),f("丢",ls,"var(--trap)"),f("丢",ls,"var(--trap)"),null,f("收",dis),f("收",dis),f("收",dis),f("收",dis),f("收",dis)]);
+  txt(svg,x0+7*W+W/2-2,26,"超时",{"text-anchor":"middle","font-size":"11",style:"fill:var(--exam)","font-weight":"700"});
+  txt(svg,8,124,"选择重传",{"font-size":"13","font-weight":"700",style:"fill:var(--l5)"});
+  row(132,"发送",[f("0",ok),f("1",ok),f("2✗",ls,"var(--trap)"),f("3",ok),f("4",ok),f("5",ok),f("6",ok),null,f("2",ok)]);
+  row(164,"接收",[f("收",dis),f("收",dis),null,f("存",["var(--ex-soft)","var(--ex)"],"var(--ex)"),f("存",["var(--ex-soft)","var(--ex)"],"var(--ex)"),f("存",["var(--ex-soft)","var(--ex)"],"var(--ex)"),f("存",["var(--ex-soft)","var(--ex)"],"var(--ex)"),null,f("收",dis)]);
+  txt(svg,x0+7*W+W/2-2,128,"NAK 2",{"text-anchor":"middle","font-size":"11",style:"fill:var(--exam)","font-weight":"700"});
+  txt(svg,x0+9*W+4,182,"收到 2 后把 2~6 一起按序交给网络层",{"font-size":"11",class:"mut"});
+  txt(svg,330,220,"回退 N 重发了 5 帧，选择重传只重发 1 帧；代价是接收方要缓存、发送方每帧一个定时器",{"text-anchor":"middle","font-size":"11",class:"mut"});
+})();
+
+/* SR window overlap figure */
+(function(){
+  var svg=$("srFig");if(!svg){return;}
+  function sector(cx,cy,r0,r1,k,fill,stroke){var a0=(-90+k*45-22.5)*Math.PI/180,a1=(-90+k*45+22.5)*Math.PI/180;
+    var p=[[cx+r1*Math.cos(a0),cy+r1*Math.sin(a0)],[cx+r1*Math.cos(a1),cy+r1*Math.sin(a1)],[cx+r0*Math.cos(a1),cy+r0*Math.sin(a1)],[cx+r0*Math.cos(a0),cy+r0*Math.sin(a0)]];
+    el("path",{d:"M"+p[0].join(" ")+" A"+r1+" "+r1+" 0 0 1 "+p[1].join(" ")+" L"+p[2].join(" ")+" A"+r0+" "+r0+" 0 0 0 "+p[3].join(" ")+"Z",fill:fill,stroke:stroke,"stroke-width":"1"},svg);}
+  function wheel(cx,title,oldW,newW){
+    txt(svg,cx,18,title,{"text-anchor":"middle","font-size":"13","font-weight":"700"});
+    for(var k=0;k<8;k++){
+      var inOld=oldW.indexOf(k)>=0,inNew=newW.indexOf(k)>=0;
+      sector(cx,124,40,68,k,inOld?"var(--l3s)":"var(--surface)","var(--line)");
+      sector(cx,124,70,94,k,inNew?(inOld?"var(--trap)":"var(--ex-soft)"):"var(--surface)","var(--line)");
+      var a=(-90+k*45)*Math.PI/180;txt(svg,cx+54*Math.cos(a),124+54*Math.sin(a)+4,String(k),{"text-anchor":"middle","font-size":"12","font-weight":"700",class:"mono"});
+    }
+  }
+  wheel(165,"窗口 7（错误）",[0,1,2,3,4,5,6],[7,0,1,2,3,4,5]);
+  wheel(495,"窗口 4（正确）",[0,1,2,3],[4,5,6,7]);
+  el("rect",{x:150,y:230,width:12,height:12,fill:"var(--l3s)",stroke:"var(--line)"},svg);txt(svg,166,240,"内圈：老接收窗口",{"font-size":"11"});
+  el("rect",{x:290,y:230,width:12,height:12,fill:"var(--ex-soft)",stroke:"var(--line)"},svg);txt(svg,306,240,"外圈：滑动后的新窗口",{"font-size":"11"});
+  el("rect",{x:450,y:230,width:12,height:12,fill:"var(--trap)"},svg);txt(svg,466,240,"新老重叠 → 有歧义",{"font-size":"11"});
+})();
+
 /* ---------- quiz ---------- */
 (function(){
   var box=$("quizBox");if(!box){return;}
@@ -1978,7 +2917,26 @@ function sinePath(x0,w,yc,A,cyc,ph){var d="";for(var i=0;i<=w;i+=2){var t=i/w;va
     ["4B/5B 编码的效率是？",["50%","80%","100%","125%"],1,"4 位数据用 5 位传。曼彻斯特才是 50%。"],
     ["码片 A=00101110 的站发送比特 0 时，发出的序列是？",["(−1 −1 +1 −1 +1 +1 +1 −1)","(+1 +1 −1 +1 −1 −1 −1 +1)","(0 0 1 0 1 1 1 0)","全 0"],1,"先转双极 (−1 −1 +1 −1 +1 +1 +1 −1)，发 0 再取反。"],
     ["本地电话网采用什么交换技术？",["电路交换","分组交换","报文交换","以上都不是"],0,""],
-    ["10 路各 4000 Hz 的信号 FDM 复用，保护带 400 Hz，至少需要多少带宽？",["40000 Hz","43600 Hz","44000 Hz","40400 Hz"],1,"10 路之间只需 9 条保护带。"]
+    ["10 路各 4000 Hz 的信号 FDM 复用，保护带 400 Hz，至少需要多少带宽？",["40000 Hz","43600 Hz","44000 Hz","40400 Hz"],1,"10 路之间只需 9 条保护带。"],
+    ["信号带宽 5 kHz，最低频率 52 kHz，最高频率是？",["5 kHz","47 kHz","52 kHz","57 kHz"],3,"带宽 = 最高 − 最低。"],
+    ["两点功率测得分贝值为 0，说明？",["P2 = 0","P2 = P1","P2 远大于 P1","P2 远小于 P1"],1,"10 lg(P2/P1) = 0。"],
+    ["ASK、PSK、FSK、QAM 属于哪种转换？",["数字→数字","数字→模拟","模拟→模拟","模拟→数字"],1,"用数字数据去改变模拟载波。"],
+    ["QPSK 信号波特率 400，比特率是？",["100","400","800","1600"],2,"每个码元 2 位。"],
+    ["因特网的网络层被设计为？",["虚电路网络","数据报网络","电路交换网络","以上都不是"],1,"IP 无连接，分组独立选路。"],
+    ["位填充：数据 010111110 填充后是？",["010111110","0101111100","01011111010","0101111110"],1,"凑满 5 个 1 就插 0，结尾也一样。"],
+    ["字节填充：数据中的 ESC 字节怎么处理？",["删掉","前面再插一个 ESC","换成 FLAG","不用处理"],1,"FLAG 和 ESC 前都要插 ESC。"],
+    ["要保证纠正 2 位错误，编码的最小海明距离至少是？",["2","3","4","5"],3,"2d + 1 = 5。"],
+    ["8 位数据做海明码（纠 1 位错），至少需要几个校验位？",["3","4","5","8"],1,"8 + r + 1 ≤ 2^r → r = 4。"],
+    ["CRC 生成多项式含有哪个因子时，能检测出所有奇数位错误？",["x","x + 1","x² + 1","1"],1,""],
+    ["4 位字 1111 与 1111 的因特网校验和是？",["1111","1110","0000","0001"],2,"反码和 1111，取反 0000。"],
+    ["停等协议中数据帧丢失，发送方会一直等，解决办法是？",["检错码","帧编号","NAK","超时重传"],3,"2022 期中原题。"],
+    ["有噪声停等协议为什么要给帧编序号？",["为了加密","确认丢失后重传时，接收方能认出重复帧","为了提高速率","为了流量控制"],1,"2023 简答原题。"],
+    ["回退 N 协议，序号 5 位，发送窗口最大和接收窗口分别是？",["31 和 1","16 和 16","32 和 1","31 和 31"],0,""],
+    ["选择重传协议，序号 3 位，窗口最大是？",["3","4","7","8"],1,"2^(3−1) = 4，新老窗口才不重叠。"],
+    ["1000 位帧、1 Mbps、单程 10 ms、确认忽略，停等协议利用率约为？",["1%","4.8%","33%","50%"],1,"1 / (1 + 20) = 1/21。"],
+    ["PPP 协议属于？",["面向比特","面向字节","面向字符","以上都不是"],1,"HDLC 才是面向比特。"],
+    ["PPP 中负责建立、配置、维护和终止链路的是？",["NCP","LCP","CHAP","PAP"],1,""],
+    ["以太网提供的数据链路层服务是？",["无确认的无连接服务","有确认的无连接服务","有确认的面向连接服务","无确认的面向连接服务"],0,"802.11 才是有确认的无连接。"]
   ];
   var answered=0,right=0;
   function upd(){$("quizScore").textContent="已答 "+answered+" / "+Q.length+" 题，答对 "+right+" 题";}
@@ -2034,7 +2992,22 @@ function sinePath(x0,w,yc,A,cyc,ph){var d="";for(var i=0;i<=w;i+=2){var t=i/w;va
     "会算 PCM 数据率（64k/56k），记住 T1 1.544M、E1 2.048M、帧时 125 μs",
     "列出电路交换与分组交换的区别，推出 k 跳时延公式和分组交换更快的条件",
     "说出 1G–5G 各代的关键技术，解释频率复用和软/硬切换",
-    "比较 Cable 与 ADSL 上网"
+    "比较 Cable 与 ADSL 上网",
+    "说出四种转换（数→数、数→模、模→数、模→模）各有哪些技术；区分低通和带通信道",
+    "区分数据报网络和虚电路网络，知道因特网网络层是数据报",
+    "独立做完第二章作业 12 题和自测 35 题",
+    "说出数据链路层的四个功能、两个子层（LLC/MAC）和三种服务（各举一例）",
+    "会做位填充、位去填充和字节填充",
+    "说出 FEC 与 ARQ 的区别，以及什么时候用开环纠错（作业 3-2）",
+    "会算海明距离，背出“检 d 位要 d+1、纠 d 位要 2d+1”",
+    "会用 (m+r+1) ≤ 2^r 求校验位数，能编出海明码、用校正子找错位（两种编号方向）",
+    "会算 4 位/16 位反码校验和",
+    "会做 CRC 模 2 除法求校验码，知道生成多项式含 x+1 的作用",
+    "说出停等协议为什么需要定时器和序号，会算 50% 利用率的最小帧长",
+    "背出停等、回退 N、选择重传的窗口上限，并能解释 NR_BUFS = (MAX_SEQ+1)/2",
+    "会算三种协议的信道利用率和需要的序号位数（含捎带确认的情况）",
+    "说出 HDLC 与 PPP 的区别，LCP、NCP、PAP、CHAP 各做什么",
+    "独立做完第三章作业 10 题和自测 20 题"
   ];
   var KEY="cn-ch12-checklist",saved={};
   var st=store();
