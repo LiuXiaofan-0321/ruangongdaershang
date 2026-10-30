@@ -69,5 +69,7 @@ int main() {
         cout << "System " << c.system << ", row " << i % 2 + 1
              << ": " << modelT3(c.y, c.epsilon, c.rho) << '\n';
     }
+    cout << "\nPress Enter to exit..." << flush;
+    cin.get();
     return 0;
 }
