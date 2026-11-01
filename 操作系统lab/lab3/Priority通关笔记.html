@@ -1,0 +1,1556 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pintos Priority 通关笔记</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column (~48rem) under a sticky chapter bar, same system as 操作系统通关笔记; H/M/L thread colors follow the 作业3.2 PPT everywhere. */
+:root{
+  --bg:#F2F5F7; --surface:#FFFFFF; --surface-2:#E7EDF1; --ink:#14202B; --muted:#56646F; --line:#D2DBE2;
+  --accent:#0A6A8C; --accent-soft:#DCEEF4;
+  --exam:#B9460E; --exam-soft:#FBE8DB;
+  --trap:#B4232F; --trap-soft:#FBE3E5;
+  --ex:#2C7A4B; --ex-soft:#DFF1E6;
+  --hi:#C8412F; --hi-soft:#FBE4E0;
+  --mid:#B57A0C; --mid-soft:#FBEFD6;
+  --lo:#2A66AD; --lo-soft:#DFEAF7;
+  --chip-ink:#FFFFFF;
+  --term:#16212C; --term-ink:#D5DEE6; --term-hl:#F2C14E; --term-bad:#F28B82; --term-ok:#7FD1AE;
+  --f-display:"Noto Serif SC","Songti SC","STSong",serif;
+  --f-body:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E151B; --surface:#16202A; --surface-2:#1E2A35; --ink:#E2E9EF; --muted:#95A4B1; --line:#2B3946;
+  --accent:#55B9DD; --accent-soft:#123241;
+  --exam:#F2914F; --exam-soft:#3A2415;
+  --trap:#F0737D; --trap-soft:#3B1A1E;
+  --ex:#6CCB93; --ex-soft:#15301F;
+  --hi:#F07A68; --hi-soft:#3A1C18;
+  --mid:#E8B04A; --mid-soft:#352712;
+  --lo:#72A8EE; --lo-soft:#15263A;
+  --chip-ink:#0E151B; --term:#0A1016; --term-ink:#D5DEE6; --term-hl:#F2C14E; --term-bad:#F28B82; --term-ok:#7FD1AE;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E151B; --surface:#16202A; --surface-2:#1E2A35; --ink:#E2E9EF; --muted:#95A4B1; --line:#2B3946;
+  --accent:#55B9DD; --accent-soft:#123241;
+  --exam:#F2914F; --exam-soft:#3A2415;
+  --trap:#F0737D; --trap-soft:#3B1A1E;
+  --ex:#6CCB93; --ex-soft:#15301F;
+  --hi:#F07A68; --hi-soft:#3A1C18;
+  --mid:#E8B04A; --mid-soft:#352712;
+  --lo:#72A8EE; --lo-soft:#15263A;
+  --chip-ink:#0E151B; --term:#0A1016; --term-ink:#D5DEE6; --term-hl:#F2C14E; --term-bad:#F28B82; --term-ok:#7FD1AE;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75}
+.wrap{max-width:48rem;margin:0 auto;padding-inline:16px;padding-block:0 4rem}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;line-height:1.3;margin:0}
+h2{font-size:1.6rem;font-weight:900}
+h3{font-size:1.22rem;font-weight:900;margin-top:2.4rem;margin-bottom:.6rem;scroll-margin-top:4.5rem}
+h4{font-size:1.04rem;font-weight:600;margin-top:1.6rem;margin-bottom:.4rem}
+p{margin:.6rem 0}
+a{color:var(--accent)}
+strong{font-weight:700}
+.muted{color:var(--muted)}
+code,.mono{font-family:var(--f-mono);font-size:.9em}
+code{background:var(--surface-2);padding:.08em .35em;border-radius:4px;overflow-wrap:anywhere}
+ul,ol{padding-left:1.3rem;margin:.5rem 0}
+li{margin:.2rem 0}
+li::marker{color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.top{padding-block:2.6rem 1.4rem}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;color:var(--muted);font-weight:600}
+.top h1{font-size:clamp(2rem,7vw,3rem);font-weight:900;margin-top:.4rem;letter-spacing:.01em}
+.top h1 span{color:var(--accent)}
+.lede{font-size:1.05rem;color:var(--muted);max-width:40rem}
+.legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.tag{display:inline-flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:700;padding:.12rem .55rem;border-radius:999px;letter-spacing:.04em;white-space:nowrap}
+.tag.exam{background:var(--exam-soft);color:var(--exam)}
+.tag.trap{background:var(--trap-soft);color:var(--trap)}
+.tag.tip{background:var(--accent-soft);color:var(--accent)}
+.tag.ex{background:var(--ex-soft);color:var(--ex)}
+
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:48rem;margin:0 auto;padding:.55rem 16px;display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.nav a{flex:none;text-decoration:none;color:var(--ink);font-size:.86rem;padding:.3rem .75rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);white-space:nowrap}
+.nav a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.chap{margin-top:3.5rem;padding-top:1.4rem;border-top:2px solid var(--ink);scroll-margin-top:3.6rem}
+.chap-head{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+.chap-no{font-family:var(--f-mono);font-size:.85rem;color:var(--muted);font-weight:600}
+.chap .sub{color:var(--muted);margin-top:.3rem}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.3rem 1.2rem;margin:1rem 0 0;padding:0;list-style:none;font-size:.92rem}
+.toc a{text-decoration:none;color:var(--ink);display:block;padding:.15rem 0;border-bottom:1px dashed var(--line)}
+.toc a span{font-family:var(--f-mono);color:var(--muted);font-size:.8rem;margin-right:.4rem}
+
+.box{border-radius:10px;padding:.8rem 1rem;margin:1rem 0;background:var(--surface);border:1px solid var(--line)}
+.box>.tag{margin-bottom:.2rem}
+.box p:first-of-type{margin-top:.3rem}
+.box p:last-child,.box ul:last-child,.box ol:last-child{margin-bottom:0}
+.box.exam{background:var(--exam-soft);border-color:transparent}
+.box.trap{background:var(--trap-soft);border-color:transparent}
+.box.tip{background:var(--accent-soft);border-color:transparent}
+.box.exam .tag,.box.trap .tag,.box.tip .tag{background:var(--surface)}
+
+.formula{font-family:var(--f-mono);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;margin:1rem 0;overflow-x:auto;font-size:1.02rem;line-height:1.9}
+.formula .big{font-size:1.2rem;font-weight:600;color:var(--accent)}
+.formula .cap{display:block;font-family:var(--f-body);font-size:.85rem;color:var(--muted)}
+
+.tbl{overflow-x:auto;margin:1rem 0;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:.5rem .7rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--surface-2);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.c,th.c{text-align:center}
+.tbl table.wide{min-width:40rem}
+
+figure{margin:1.2rem 0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.8rem}
+figure .svgbox{overflow-x:auto}
+figure svg{display:block;max-width:100%;height:auto;margin:0 auto}
+figure svg.wide{max-width:none}
+figcaption{font-size:.84rem;color:var(--muted);margin-top:.5rem;text-align:center}
+svg text{font-family:var(--f-body);fill:var(--ink)}
+svg .mono{font-family:var(--f-mono)}
+svg .mut{fill:var(--muted)}
+svg .f-hi{fill:var(--hi)} svg .f-mid{fill:var(--mid)} svg .f-lo{fill:var(--lo)}
+svg .f-his{fill:var(--hi-soft)} svg .f-mids{fill:var(--mid-soft)} svg .f-los{fill:var(--lo-soft)}
+svg .f-sf{fill:var(--surface)} svg .f-sf2{fill:var(--surface-2)} svg .f-acc{fill:var(--accent)} svg .f-accs{fill:var(--accent-soft)}
+svg .f-ok{fill:var(--ex)} svg .f-oks{fill:var(--ex-soft)}
+svg .s-line{stroke:var(--line)} svg .s-ink{stroke:var(--ink)} svg .s-mut{stroke:var(--muted)} svg .s-hi{stroke:var(--hi)} svg .s-acc{stroke:var(--accent)} svg .s-ok{stroke:var(--ex)}
+svg .t-w{fill:var(--chip-ink)} svg .t-hi{fill:var(--hi)} svg .t-acc{fill:var(--accent)} svg .t-ok{fill:var(--ex)} svg .t-lo{fill:var(--lo)} svg .t-mid{fill:var(--mid)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.8rem}
+.grid2>*{min-width:0}
+
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:.8rem 0}
+details>summary{cursor:pointer;padding:.7rem 1rem;font-weight:600;list-style:none;display:flex;gap:.6rem;align-items:flex-start}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"+";font-family:var(--f-mono);color:var(--accent);font-weight:700;flex:none}
+details[open]>summary::before{content:"−"}
+details>.ans{padding:0 1rem .9rem;border-top:1px dashed var(--line)}
+.lvl{font-size:.72rem;font-weight:700;padding:.05rem .45rem;border-radius:5px;flex:none;margin-top:.2rem;white-space:nowrap}
+.lvl.l1{background:var(--ex-soft);color:var(--ex)} .lvl.l2{background:var(--mid-soft);color:var(--mid)} .lvl.l3{background:var(--hi-soft);color:var(--hi)}
+
+/* code */
+.code{font-family:var(--f-mono);font-size:.84rem;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.8rem 1rem;margin:1rem 0;overflow-x:auto;white-space:pre;line-height:1.65;tab-size:2}
+.code .c{color:var(--muted);font-style:italic}
+.code .k{color:var(--accent);font-weight:600}
+.code .s{color:var(--ex)}
+.code .n{color:var(--mid)}
+.code .ln{display:block}
+.code .hl{background:var(--mid-soft);margin-inline:-1rem;padding-inline:1rem}
+code,.mono,.code,.term,.console,.th,.formula,.stepno,.score,.simtabs button,.tcard .pri,.seg button,svg .mono{font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+.code-cap{font-size:.8rem;color:var(--muted);margin:-.6rem 0 1rem;font-family:var(--f-mono)}
+.term{font-family:var(--f-mono);font-size:.82rem;background:var(--term);color:var(--term-ink);border-radius:10px;padding:.8rem 1rem;margin:1rem 0;overflow-x:auto;white-space:pre;line-height:1.6}
+.term .bad{color:var(--term-bad)} .term .ok{color:var(--term-ok)} .term .hl{color:var(--term-hl)}
+
+/* thread chips */
+.th{display:inline-flex;align-items:center;gap:.25rem;font-family:var(--f-mono);font-size:.8rem;font-weight:600;padding:.05rem .5rem;border-radius:999px;white-space:nowrap;color:var(--chip-ink)}
+.th.h{background:var(--hi)} .th.m{background:var(--mid)} .th.l{background:var(--lo)} .th.n{background:var(--muted)}
+
+/* tools */
+.tool{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1rem;margin:1.2rem 0}
+.tool h5{margin:0 0 .6rem;font-family:var(--f-display);font-size:1.02rem}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.btn{font:inherit;font-size:.88rem;padding:.4rem .8rem;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--surface);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex-wrap:wrap}
+.seg button{font:inherit;font-size:.85rem;padding:.35rem .7rem;border:0;background:var(--surface);color:var(--ink);cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.qrow{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center;min-height:2.2rem}
+.qlab{font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.06em;min-width:4.5rem}
+
+/* simulator */
+.simtabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.8rem}
+.simtabs button{font:inherit;font-size:.82rem;padding:.3rem .65rem;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;font-family:var(--f-mono)}
+.simtabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.simhead{display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap}
+.stepno{font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
+.simtext{background:var(--accent-soft);border-radius:8px;padding:.6rem .8rem;margin:.7rem 0;font-size:.95rem;min-height:3.2rem}
+.simgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.7rem}
+.simgrid>div{min-width:0}
+.simcol h6{margin:0 0 .35rem;font-size:.75rem;letter-spacing:.08em;color:var(--muted);font-family:var(--f-body)}
+.tcard{display:flex;align-items:center;gap:.5rem;padding:.3rem .55rem;border:1px solid var(--line);border-radius:8px;margin-bottom:.3rem;background:var(--bg);font-size:.85rem}
+.tcard .who{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:.15rem .4rem}
+.donerow{display:flex;flex-wrap:wrap;gap:.3rem;align-items:center;margin-top:.2rem;font-size:.75rem;color:var(--muted)}
+.donerow .th{opacity:.55}
+.tcard .pri{font-family:var(--f-mono);font-weight:700;white-space:nowrap}
+.tcard .pri s{color:var(--muted);font-weight:400}
+.tcard .pri b{color:var(--hi)}
+.tcard .st{font-size:.72rem;font-weight:700;padding:.03rem .4rem;border-radius:5px;white-space:nowrap}
+.st.run{background:var(--ex-soft);color:var(--ex)} .st.ready{background:var(--accent-soft);color:var(--accent)} .st.blk{background:var(--trap-soft);color:var(--trap)} .st.done{background:var(--surface-2);color:var(--muted)}
+.tcard .why{font-size:.75rem;color:var(--muted)}
+.tcard.changed{border-color:var(--hi);box-shadow:0 0 0 1px var(--hi)}
+.lcard{padding:.35rem .55rem;border:1px dashed var(--line);border-radius:8px;margin-bottom:.35rem;font-size:.82rem;background:var(--bg)}
+.lcard .mono{font-size:.82rem}
+.lcard.changed{border-color:var(--hi);border-style:solid}
+.console{font-family:var(--f-mono);font-size:.76rem;background:var(--term);color:var(--term-ink);border-radius:8px;padding:.55rem .7rem;margin-top:.7rem;max-height:13rem;overflow:auto;white-space:pre-wrap;line-height:1.55}
+.console .new{color:var(--term-hl)}
+.console .empty{color:var(--muted)}
+
+/* quiz + checklist */
+.quiz{display:grid;gap:.8rem;margin:1rem 0}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.8rem 1rem}
+.q .qt{font-weight:600}
+.q .opts{display:grid;gap:.35rem;margin-top:.5rem}
+.q button.opt{font:inherit;text-align:left;padding:.45rem .7rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.q button.opt:hover{border-color:var(--accent)}
+.q button.opt.right{background:var(--ex-soft);border-color:var(--ex)}
+.q button.opt.wrong{background:var(--trap-soft);border-color:var(--trap)}
+.q .why{margin-top:.5rem;font-size:.9rem;color:var(--muted)}
+.score{font-family:var(--f-mono);font-size:.9rem;color:var(--muted)}
+.check{list-style:none;padding:0;display:grid;gap:.3rem}
+.check label{display:flex;gap:.6rem;align-items:flex-start;cursor:pointer;padding:.35rem .5rem;border-radius:8px}
+.check label:hover{background:var(--surface-2)}
+.check input{margin-top:.45rem;accent-color:var(--ex);flex:none}
+.check input:checked+span{color:var(--muted);text-decoration:line-through}
+.progress{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin:.6rem 0}
+.progress i{display:block;height:100%;background:var(--ex);width:0;transition:width .3s}
+.cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.7rem}
+.cheat>div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.7rem .85rem;min-width:0}
+.cheat h5{margin:0 0 .3rem;font-size:.82rem;letter-spacing:.06em;color:var(--muted);font-family:var(--f-body)}
+.cheat p{margin:.2rem 0;font-size:.9rem}
+.plan{display:grid;gap:.6rem;margin:1rem 0}
+.plan>div{display:grid;grid-template-columns:6.5rem 1fr;gap:.8rem;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem}
+.plan>div>div{min-width:0}
+.plan b.when{font-family:var(--f-display);font-size:1rem}
+.plan .when small{display:block;font-family:var(--f-body);font-weight:400;color:var(--muted);font-size:.78rem}
+@media (max-width:30rem){.plan>div{grid-template-columns:1fr;gap:.2rem}}
+footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+
+<nav class="nav" aria-label="章节导航"><div class="nav-in" id="navIn">
+  <a href="#start">开始</a>
+  <a href="#c1">1 先导</a>
+  <a href="#c2">2 线程</a>
+  <a href="#c3">3 中断</a>
+  <a href="#c4">4 C 与链表</a>
+  <a href="#c5">5 同步</a>
+  <a href="#c6">6 测试</a>
+  <a href="#c7">7 排序</a>
+  <a href="#c8">8 抢占</a>
+  <a href="#c9">9 唤醒</a>
+  <a href="#c10">10 反转</a>
+  <a href="#c11">11 捐赠</a>
+  <a href="#sim">推演器</a>
+  <a href="#c13">13 踩坑</a>
+  <a href="#hard">难题</a>
+  <a href="#quiz">自测</a>
+  <a href="#cheat">一页纸</a>
+</div></nav>
+
+<div class="wrap">
+
+<header class="top" id="start">
+  <div class="eyebrow">OS LAB 3 · PROJECT 1 THREADS · PRIORITY SCHEDULING</div>
+  <h1>Pintos Priority <span>通关笔记</span></h1>
+  <p class="lede">写给零基础、下周二要上台讲 priority 的自己。从“CPU 一次只能干一件事”讲起，一直讲到 12 个 priority 测试的每一行代码，最后是老师可能追问的难题。所有代码都来自我们自己通过了 <code>make check</code> 的实现（<code>lab3/修改后的源文件/</code>）。</p>
+  <div class="legend" aria-label="图例">
+    <span class="tag exam">老师可能问</span>
+    <span class="tag trap">易错</span>
+    <span class="tag tip">比喻 / 直觉</span>
+    <span class="tag ex">动手 / 例子</span>
+    <span class="th h">H 高</span><span class="th m">M 中</span><span class="th l">L 低</span>
+  </div>
+
+  <div class="box tip" style="margin-top:1.2rem">
+    <span class="tag tip">两天冲刺路线</span>
+    <div class="plan">
+      <div><b class="when">周日<small>约 3 小时</small></b><div>读第 1–5 章（基础）。目标：能用自己的话说出“线程四种状态”“ready_list 是什么”“中断里为什么不能 yield”“信号量的 P/V 怎么排队”。</div></div>
+      <div><b class="when">周一白天<small>约 3 小时</small></b><div>读第 6–11 章（实现）。对照 <code>修改后的源文件/src/threads/</code> 看代码。把<a href="#sim">推演器</a>里 7 个场景每个点一遍，再<strong>合上电脑在纸上画</strong> donate-multiple、donate-nest、donate-sema 三个。</div></div>
+      <div><b class="when">周一晚上<small>约 2 小时</small></b><div>读第 13 章踩坑和<a href="#hard">难题区</a>，每题先自己说一遍再展开答案。做完<a href="#quiz">自测</a>，对着 PPT 讲两遍并计时。</div></div>
+      <div><b class="when">周二早上<small>30 分钟</small></b><div>只看<a href="#cheat">一页纸</a>和<a href="#todo">掌握清单</a>里没打勾的项。</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- =============================================================== 1 -->
+<section class="chap" id="c1">
+  <div class="chap-head"><span class="chap-no">CHAPTER 1</span><h2>零基础先导：CPU、线程、调度、优先级</h2></div>
+  <p class="sub">这一章不看代码，只建立直觉。</p>
+
+  <h3 id="c1-1">1.1 CPU 一次只能干一件事</h3>
+  <p>电脑里同时“在跑”的程序有很多，但 Pintos 运行在<strong>单核</strong> CPU 上：任何一个时刻，CPU 只在执行一段代码。看起来“同时”，是因为 CPU 在不同任务之间<strong>来回切换得很快</strong>（每秒上百次），人感觉不出来。</p>
+  <p>每一个可以被 CPU 单独执行、单独切换的“任务”，在 Pintos 里叫一个<strong>线程（thread）</strong>。你可以把线程理解成“一份正在进行的工作”：它有自己做到哪一步了（寄存器、栈），被切走之后还能从原地接着做。</p>
+
+  <div class="box tip">
+    <span class="tag tip">比喻：只有一个医生的诊室</span>
+    <p>CPU 是诊室里唯一的医生，线程是病人。医生一次只能看一个病人（RUNNING），其他能看病的人在走廊排队（READY），还有人去拍片子了，结果出来之前叫到也没用（BLOCKED）。<strong>调度器</strong>就是护士站：决定下一个叫谁进来。</p>
+  </div>
+
+  <h3 id="c1-2">1.2 调度：下一个轮到谁？</h3>
+  <p>“调度”就是回答一个问题：<strong>当 CPU 空出来（或者该换人了），从排队的线程里选哪一个？</strong></p>
+  <ul>
+    <li><strong>先来先服务 / 轮转（Round-Robin）</strong>：谁先排队叫谁，每人最多连续看 4 个时间单位，没看完就回到队尾。Pintos 原始代码就是这样。</li>
+    <li><strong>优先级调度（Priority Scheduling）</strong>：每个线程有一个优先级数字，<strong>永远先叫优先级最高的</strong>。这就是 Lab3 priority 部分要实现的。</li>
+  </ul>
+
+  <h3 id="c1-3">1.3 Pintos 里的优先级</h3>
+  <div class="formula">
+    <span class="big">PRI_MIN = 0　≤　priority　≤　PRI_MAX = 63</span>
+    <span class="cap">数字越大越优先；默认 PRI_DEFAULT = 31。测试里经常出现 31、32、33……就是“比默认高一点”。</span>
+  </div>
+  <p>Lab3 课件第 10 页把要做的事总结成三条，这也是整份笔记的主线：</p>
+  <ol>
+    <li><strong>选谁跑</strong>：从就绪队列里选优先级最高的。→ 第 7 章</li>
+    <li><strong>抢占</strong>：新来的线程比正在跑的高，正在跑的要<strong>马上</strong>让出 CPU。→ 第 8 章</li>
+    <li><strong>锁和信号量</strong>：从等待者里叫醒优先级最高的；为锁解决“优先级反转”（捐赠）。→ 第 9–11 章</li>
+  </ol>
+
+  <div class="box tip">
+    <span class="tag tip">诊室比喻的延伸</span>
+    <ul>
+      <li>选谁跑 = 急诊病人优先。</li>
+      <li>抢占 = 来了一个更急的病人，医生<strong>立刻</strong>停下手里的普通病人去看急诊。</li>
+      <li>捐赠 = 急诊病人要用的仪器被一个普通病人占着，那就先让这个普通病人“插队”用完仪器，急诊病人才能尽快用上。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- =============================================================== 2 -->
+<section class="chap" id="c2">
+  <div class="chap-head"><span class="chap-no">CHAPTER 2</span><h2>Pintos 的线程机器</h2></div>
+  <p class="sub">看懂 <code>thread.c</code> 里最核心的几十行：线程长什么样、有哪几种状态、怎么切换。</p>
+
+  <h3 id="c2-1">2.1 一个线程 = 一页 4 KB 内存</h3>
+  <p>Pintos 给每个线程分配一页（4 KB）。页的<strong>最底部</strong>放 <code>struct thread</code>（线程的“档案”），剩下的空间是这个线程的<strong>内核栈</strong>，从页顶往下长。</p>
+  <figure>
+    <div class="svgbox"><svg viewBox="0 0 520 230" role="img" aria-label="一页内存：底部是 struct thread，上面是向下生长的内核栈">
+      <rect x="40" y="20" width="200" height="190" rx="6" class="f-sf2 s-line" stroke-width="1.5"/>
+      <rect x="40" y="160" width="200" height="50" rx="0" class="f-accs"/>
+      <text x="140" y="190" text-anchor="middle" font-size="14" font-weight="700" class="t-acc">struct thread</text>
+      <text x="140" y="50" text-anchor="middle" font-size="13">内核栈</text>
+      <line x1="140" y1="62" x2="140" y2="120" class="s-mut" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="150" y="98" font-size="12" class="mut">向下长</text>
+      <text x="250" y="26" font-size="12" class="mono mut">4 KB</text>
+      <text x="250" y="212" font-size="12" class="mono mut">0</text>
+      <text x="290" y="160" font-size="13">thread_current() 的秘密：</text>
+      <text x="290" y="182" font-size="13">把栈指针 esp 向下取整到页边界，</text>
+      <text x="290" y="204" font-size="13">就正好落在 struct thread 上。</text>
+      <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="f-acc"/></marker></defs>
+    </svg></div>
+    <figcaption>所以 struct thread 不能太大，否则会被向下长的栈“撞上”。这也是 Pintos 要求“别在栈上开大数组”的原因。</figcaption>
+  </figure>
+  <p><code>struct thread</code> 里和 priority 有关的字段（带 ★ 的是我们加的）：</p>
+<pre class="code"><span class="ln"><span class="k">struct</span> thread</span><span class="ln">  {</span><span class="ln">    tid_t tid;                     <span class="c">/* 线程编号 */</span></span><span class="ln">    <span class="k">enum</span> thread_status status;     <span class="c">/* RUNNING / READY / BLOCKED / DYING */</span></span><span class="ln">    <span class="k">char</span> name[<span class="n">16</span>];                 <span class="c">/* 名字，调试用 */</span></span><span class="ln">    <span class="k">int</span> priority;                  <span class="c">/* 实际优先级（含捐赠） */</span></span><span class="ln">    <span class="k">struct</span> list_elem elem;         <span class="c">/* 挂在 ready_list 或某个 waiters 上的“钩子” */</span></span><span class="ln hl">    <span class="k">int</span> base_priority;             <span class="c">/* ★ 自己设置的原始优先级 */</span></span><span class="ln hl">    <span class="k">struct</span> list locks;             <span class="c">/* ★ 当前持有的所有锁 */</span></span><span class="ln hl">    <span class="k">struct</span> lock *waiting_lock;     <span class="c">/* ★ 正在等的那一把锁，没有就是 NULL */</span></span><span class="ln">    <span class="k">unsigned</span> magic;                <span class="c">/* 检测栈溢出用的“魔数” */</span></span><span class="ln">  };</span></pre>
+
+  <h3 id="c2-2">2.2 四种状态</h3>
+  <figure>
+    <div class="svgbox"><svg viewBox="0 0 600 250" role="img" aria-label="线程状态转换图">
+      <defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="f-acc"/></marker></defs>
+      <rect x="230" y="20" width="140" height="48" rx="24" class="f-accs"/>
+      <text x="300" y="50" text-anchor="middle" font-size="15" font-weight="700" class="t-acc">READY 就绪</text>
+      <rect x="230" y="170" width="140" height="48" rx="24" class="f-oks"/>
+      <text x="300" y="200" text-anchor="middle" font-size="15" font-weight="700" class="t-ok">RUNNING 运行</text>
+      <rect x="20" y="95" width="150" height="48" rx="24" class="f-his"/>
+      <text x="95" y="125" text-anchor="middle" font-size="15" font-weight="700" class="t-hi">BLOCKED 阻塞</text>
+      <rect x="440" y="170" width="140" height="48" rx="24" class="f-sf2"/>
+      <text x="510" y="200" text-anchor="middle" font-size="15" font-weight="700" class="mut">DYING 结束</text>
+      <path d="M320,68 C350,110 350,130 320,168" fill="none" class="s-acc" stroke-width="2" marker-end="url(#a2)"/>
+      <text x="356" y="122" font-size="12">schedule() 选中</text>
+      <path d="M280,168 C250,130 250,110 280,70" fill="none" class="s-acc" stroke-width="2" marker-end="url(#a2)"/>
+      <text x="160" y="80" font-size="12" class="mono">thread_yield()</text>
+      <path d="M230,196 C150,196 100,170 95,145" fill="none" class="s-acc" stroke-width="2" marker-end="url(#a2)"/>
+      <text x="80" y="185" font-size="12" class="mono">thread_block()</text>
+      <path d="M110,95 C140,50 190,44 228,44" fill="none" class="s-acc" stroke-width="2" marker-end="url(#a2)"/>
+      <text x="40" y="60" font-size="12" class="mono">thread_unblock()</text>
+      <line x1="372" y1="194" x2="436" y2="194" class="s-acc" stroke-width="2" marker-end="url(#a2)"/>
+      <text x="376" y="186" font-size="12" class="mono">thread_exit()</text>
+    </svg></div>
+    <figcaption>RUNNING 任何时刻只有一个；READY 的线程在 ready_list 里排队；BLOCKED 的线程挂在某个等待队列里，不在 ready_list 里。</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <tr><th>状态</th><th>意思</th><th>在哪</th></tr>
+    <tr><td>RUNNING</td><td>正在 CPU 上执行</td><td>就是 <code>thread_current()</code></td></tr>
+    <tr><td>READY</td><td>随时可以跑，只是 CPU 被占着</td><td><code>ready_list</code></td></tr>
+    <tr><td>BLOCKED</td><td>在等某件事（信号量、锁、睡眠到点）</td><td>某个信号量的 <code>waiters</code>，或 <code>sleep_list</code></td></tr>
+    <tr><td>DYING</td><td>已经结束，等下一个线程替它释放那一页内存</td><td>—</td></tr>
+  </table></div>
+
+  <h3 id="c2-3">2.3 换人的唯一入口：schedule()</h3>
+  <p>不管因为什么要换线程，最后都走到 <code>schedule()</code>：</p>
+<pre class="code"><span class="ln"><span class="k">static</span> <span class="k">void</span></span><span class="ln">schedule (<span class="k">void</span>)</span><span class="ln">{</span><span class="ln">  <span class="k">struct</span> thread *cur = running_thread ();</span><span class="ln">  <span class="k">struct</span> thread *next = next_thread_to_run ();   <span class="c">/* 选下一个 */</span></span><span class="ln">  <span class="k">struct</span> thread *prev = <span class="k">NULL</span>;</span><span class="ln"> </span><span class="ln">  ASSERT (intr_get_level () == INTR_OFF);        <span class="c">/* 必须关着中断 */</span></span><span class="ln">  ASSERT (cur-&gt;status != THREAD_RUNNING);        <span class="c">/* 调用者已经改好了自己的状态 */</span></span><span class="ln">  ASSERT (is_thread (next));</span><span class="ln"> </span><span class="ln">  <span class="k">if</span> (cur != next)</span><span class="ln">    prev = switch_threads (cur, next);           <span class="c">/* 汇编：保存/恢复寄存器和栈 */</span></span><span class="ln">  thread_schedule_tail (prev);</span><span class="ln">}</span><span class="ln"> </span><span class="ln"><span class="k">static</span> <span class="k">struct</span> thread *</span><span class="ln">next_thread_to_run (<span class="k">void</span>)</span><span class="ln">{</span><span class="ln">  <span class="k">if</span> (list_empty (&amp;ready_list))</span><span class="ln">    <span class="k">return</span> idle_thread;                          <span class="c">/* 没人可跑就跑 idle */</span></span><span class="ln">  <span class="k">else</span></span><span class="ln">    <span class="k">return</span> list_entry (list_pop_front (&amp;ready_list), <span class="k">struct</span> thread, elem);</span><span class="ln">}</span></pre>
+  <div class="box exam">
+    <span class="tag exam">老师可能问</span>
+    <p><strong>“你改了 next_thread_to_run 吗？”</strong>没有。它一直是“取队首”。我们改的是<strong>放进 ready_list 的方式</strong>（按优先级排好），所以队首自然就是最高优先级。另一种做法是放的时候随便放、取的时候遍历找最大，两种都对，第 14 章难题区有对比。</p>
+  </div>
+  <p>调用 <code>schedule()</code> 的三个函数，记住它们把当前线程变成什么：</p>
+  <div class="tbl"><table>
+    <tr><th>函数</th><th>当前线程变成</th><th>什么时候用</th></tr>
+    <tr><td><code>thread_yield()</code></td><td>READY（重新排进 ready_list）</td><td>主动让出 CPU、时间片用完、被抢占</td></tr>
+    <tr><td><code>thread_block()</code></td><td>BLOCKED（不进 ready_list）</td><td>等信号量、等锁、睡眠</td></tr>
+    <tr><td><code>thread_exit()</code></td><td>DYING</td><td>线程函数执行完</td></tr>
+  </table></div>
+  <p>还有一个相关函数 <code>thread_unblock(t)</code>：把一个 BLOCKED 的线程变成 READY，放进 ready_list。<strong>它不会切换线程</strong>（原始代码的注释专门强调了这一点，第 8 章会讲为什么这很重要）。</p>
+
+  <h3 id="c2-4">2.4 idle 线程和 main 线程</h3>
+  <ul>
+    <li><strong>main 线程</strong>：Pintos 启动时正在跑的那段代码被“包装”成第一个线程，叫 main，优先级 31。测试代码就跑在 main 线程里，所以测试里说的“主线程”就是它。</li>
+    <li><strong>idle 线程</strong>：优先级 0。ready_list 空了没人可跑时，CPU 就跑 idle，它只做一件事：执行 <code>hlt</code> 指令让 CPU 休息到下一次中断。idle 不会出现在 ready_list 里，是 <code>next_thread_to_run</code> 的特例。</li>
+  </ul>
+
+  <h3 id="c2-5">2.5 原始代码为什么“不认优先级”</h3>
+<pre class="code"><span class="ln"><span class="c">/* thread_unblock() 和 thread_yield() 里，原始代码： */</span></span><span class="ln">list_push_back (&amp;ready_list, &amp;t-&gt;elem);      <span class="c">/* 插到队尾 */</span></span><span class="ln"> </span><span class="ln"><span class="c">/* next_thread_to_run() 里： */</span></span><span class="ln">list_pop_front (&amp;ready_list);                <span class="c">/* 从队首取 */</span></span></pre>
+  <p>队尾进、队首出 = 先来先服务。<code>priority</code> 字段虽然存在、<code>thread_create</code> 也会设置它，但<strong>调度时根本没人看它</strong>。<code>sema_up</code> 叫醒等待者也是 <code>list_pop_front</code>，同样不看优先级。这就是 lab2 结束时 <code>make check</code> 还挂着 19 个测试的原因（其中 12 个是 priority）。</p>
+</section>
+
+<!-- =============================================================== 3 -->
+<section class="chap" id="c3">
+  <div class="chap-head"><span class="chap-no">CHAPTER 3</span><h2>时钟中断、时间片、中断上下文</h2></div>
+  <p class="sub">这一章是老师最容易“往深里问”的地方，也是我踩过 kernel panic 的地方。</p>
+
+  <h3 id="c3-1">3.1 中断是什么</h3>
+  <p>CPU 正在执行线程 A 的代码，硬件（比如定时器）发来一个信号：“有事！”CPU 会<strong>暂停</strong>A，跳去执行一段专门的处理函数（中断处理程序），处理完再<strong>回到</strong> A 被打断的地方继续。</p>
+  <div class="box tip">
+    <span class="tag tip">比喻</span>
+    <p>医生正在看病人 A，护士敲门递进来一张纸条（中断）。医生看完纸条、做个记录（中断处理），再继续给 A 看病。纸条可能写着“该换下一位了”，但医生不会在看纸条的过程中站起来换人，而是<strong>看完纸条、回到座位上之后</strong>再换。</p>
+  </div>
+
+  <h3 id="c3-2">3.2 时钟中断和时间片</h3>
+  <p>定时器每秒中断 100 次（<code>TIMER_FREQ = 100</code>），每一次叫一个 <strong>tick</strong>。处理函数 <code>timer_interrupt</code> 做三件事：</p>
+<pre class="code"><span class="ln"><span class="k">static</span> <span class="k">void</span></span><span class="ln">timer_interrupt (<span class="k">struct</span> intr_frame *args UNUSED)</span><span class="ln">{</span><span class="ln">  ticks++;              <span class="c">/* 全局计时 +1 */</span></span><span class="ln">  thread_tick ();       <span class="c">/* 统计 + 检查时间片 */</span></span><span class="ln">  thread_wake (ticks);  <span class="c">/* lab2 加的：叫醒睡到点的线程 */</span></span><span class="ln">}</span><span class="ln"> </span><span class="ln"><span class="c">/* thread_tick() 里检查时间片的部分 */</span></span><span class="ln">  <span class="k">if</span> (++thread_ticks &gt;= TIME_SLICE)   <span class="c">/* TIME_SLICE = 4 */</span></span><span class="ln">    intr_yield_on_return ();</span></pre>
+  <p>每个线程连续跑满 4 个 tick 就要让出 CPU，这就是“时间片”。注意这里用的不是 <code>thread_yield()</code>，而是 <code>intr_yield_on_return()</code>。</p>
+
+  <h3 id="c3-3">3.3 中断上下文 vs 线程上下文</h3>
+  <div class="grid2">
+    <div class="box"><strong>线程上下文</strong><p>普通代码，属于某个线程。可以睡眠（<code>sema_down</code>）、可以切换线程（<code>thread_yield</code>）。</p></div>
+    <div class="box"><strong>中断上下文</strong><p>正在执行中断处理程序。CPU 只是“借用”被打断线程的栈，<strong>不能睡眠、不能切换线程</strong>。<code>intr_context()</code> 返回 true。</p></div>
+  </div>
+  <p>所以 <code>thread_yield()</code> 的第一行就是：</p>
+<pre class="code"><span class="ln">ASSERT (!intr_context ());</span></pre>
+  <p>在中断里想换人，只能“预约”：</p>
+<pre class="code"><span class="ln"><span class="k">void</span></span><span class="ln">intr_yield_on_return (<span class="k">void</span>)</span><span class="ln">{</span><span class="ln">  ASSERT (intr_context ());</span><span class="ln">  yield_on_return = <span class="k">true</span>;          <span class="c">/* 只是设一个标志 */</span></span><span class="ln">}</span><span class="ln"> </span><span class="ln"><span class="c">/* interrupt.c 的 intr_handler() 末尾，处理完外部中断后： */</span></span><span class="ln">      in_external_intr = <span class="k">false</span>;    <span class="c">/* 从这一刻起 intr_context() 为 false */</span></span><span class="ln">      pic_end_of_interrupt (frame-&gt;vec_no);</span><span class="ln">      <span class="k">if</span> (yield_on_return)</span><span class="ln">        thread_yield ();           <span class="c">/* 这里才真正让出，已经不算中断上下文了 */</span></span></pre>
+  <figure>
+    <div class="svgbox"><svg viewBox="0 0 620 150" class="wide" width="620" role="img" aria-label="时钟中断到让出 CPU 的流程">
+      <defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="f-acc"/></marker></defs>
+      <rect x="10" y="40" width="110" height="44" rx="8" class="f-oks"/><text x="65" y="67" text-anchor="middle" font-size="13">线程 A 在跑</text>
+      <rect x="150" y="40" width="130" height="44" rx="8" class="f-his"/><text x="215" y="60" text-anchor="middle" font-size="12" class="mono">timer_interrupt</text><text x="215" y="76" text-anchor="middle" font-size="11" class="mut">中断上下文</text>
+      <rect x="310" y="40" width="150" height="44" rx="8" class="f-his"/><text x="385" y="60" text-anchor="middle" font-size="12" class="mono">intr_yield_on_return</text><text x="385" y="76" text-anchor="middle" font-size="11" class="mut">只设标志</text>
+      <rect x="490" y="40" width="120" height="44" rx="8" class="f-accs"/><text x="550" y="60" text-anchor="middle" font-size="12" class="mono">thread_yield</text><text x="550" y="76" text-anchor="middle" font-size="11" class="mut">中断结束后</text>
+      <line x1="120" y1="62" x2="148" y2="62" class="s-acc" stroke-width="2" marker-end="url(#a3)"/>
+      <line x1="280" y1="62" x2="308" y2="62" class="s-acc" stroke-width="2" marker-end="url(#a3)"/>
+      <line x1="460" y1="62" x2="488" y2="62" class="s-acc" stroke-width="2" marker-end="url(#a3)"/>
+      <text x="310" y="120" text-anchor="middle" font-size="12" class="mut">intr_handler() 末尾把 in_external_intr 置为 false 之后才调用 thread_yield()</text>
+    </svg></div>
+    <figcaption>“看完纸条、回到座位上再换人”。</figcaption>
+  </figure>
+  <div class="box trap">
+    <span class="tag trap">我踩过的坑</span>
+    <p>做抢占时，我想让睡醒的高优先级线程马上运行，就在 <code>thread_wake()</code>（在时钟中断里被调用）里直接写了 <code>thread_yield()</code>，结果 <code>alarm-priority</code> 一跑就 <code>Kernel PANIC ... assertion `!intr_context ()' failed</code>。改成 <code>intr_yield_on_return()</code> 就好了。详细排查过程见<a href="#c13">第 13 章</a>。</p>
+  </div>
+
+  <h3 id="c3-4">3.4 关中断 = 原子操作</h3>
+  <p>Pintos 是单核的。只要把中断关掉，就不会有时钟中断来打断当前代码，也就不会切到别的线程。所以“关中断”就能保证一段代码<strong>不被打断地一口气执行完</strong>（原子性）。内核里修改共享数据（ready_list、等待队列、优先级）的标准写法：</p>
+<pre class="code"><span class="ln"><span class="k">enum</span> intr_level old_level = intr_disable ();   <span class="c">/* 关中断，并记住原来的状态 */</span></span><span class="ln"><span class="c">/* …… 修改共享数据 …… */</span></span><span class="ln">intr_set_level (old_level);                    <span class="c">/* 恢复成原来的状态 */</span></span></pre>
+  <div class="box exam">
+    <span class="tag exam">老师可能问</span>
+    <p><strong>“为什么恢复用 <code>intr_set_level(old_level)</code> 而不是直接 <code>intr_enable()</code>？”</strong>因为调用者可能本来就关着中断（比如 <code>lock_release</code> 关着中断去调 <code>sema_up</code>）。如果 <code>sema_up</code> 结束时直接开中断，就把调用者的“原子区”提前打破了。恢复成原来的状态才不会影响外层。</p>
+    <p><strong>“为什么锁的实现里不用锁保护，而用关中断？”</strong>锁本身就是要实现的东西，用锁保护锁会无限递归；而且信号量、锁要能在单核上原子地检查和修改 <code>value</code> / 等待队列，关中断是最底层的手段。</p>
+  </div>
+</section>
+
+<!-- =============================================================== 4 -->
+<section class="chap" id="c4">
+  <div class="chap-head"><span class="chap-no">CHAPTER 4</span><h2>读懂代码需要的 C 和 Pintos 链表</h2></div>
+  <p class="sub">后面所有代码都在操作链表。这一章看懂了，后面的代码就只剩逻辑。</p>
+
+  <h3 id="c4-1">4.1 侵入式链表：钩子长在结构体里</h3>
+  <p>平时学的链表是“节点里存数据的指针”。Pintos 反过来：<strong>链表节点 <code>struct list_elem</code> 嵌在 <code>struct thread</code> 里面</strong>，就是那个 <code>elem</code> 字段。链表只把这些“钩子”串起来。</p>
+  <figure>
+    <div class="svgbox"><svg viewBox="0 0 620 170" class="wide" width="620" role="img" aria-label="ready_list 把各个线程里的 elem 串起来">
+      <defs><marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="f-acc"/></marker></defs>
+      <rect x="10" y="60" width="80" height="40" rx="6" class="f-sf2"/><text x="50" y="85" text-anchor="middle" font-size="12" class="mono">head</text>
+      <g><rect x="120" y="20" width="130" height="120" rx="8" class="f-sf s-line" stroke-width="1.5"/>
+        <text x="185" y="42" text-anchor="middle" font-size="12" font-weight="700">struct thread A</text>
+        <text x="185" y="62" text-anchor="middle" font-size="11" class="mono mut">priority = 33</text>
+        <rect x="140" y="72" width="90" height="28" rx="5" class="f-accs"/><text x="185" y="91" text-anchor="middle" font-size="12" class="mono t-acc">elem</text>
+        <text x="185" y="125" text-anchor="middle" font-size="11" class="mono mut">…其他字段</text></g>
+      <g><rect x="290" y="20" width="130" height="120" rx="8" class="f-sf s-line" stroke-width="1.5"/>
+        <text x="355" y="42" text-anchor="middle" font-size="12" font-weight="700">struct thread B</text>
+        <text x="355" y="62" text-anchor="middle" font-size="11" class="mono mut">priority = 32</text>
+        <rect x="310" y="72" width="90" height="28" rx="5" class="f-accs"/><text x="355" y="91" text-anchor="middle" font-size="12" class="mono t-acc">elem</text>
+        <text x="355" y="125" text-anchor="middle" font-size="11" class="mono mut">…其他字段</text></g>
+      <rect x="460" y="60" width="80" height="40" rx="6" class="f-sf2"/><text x="500" y="85" text-anchor="middle" font-size="12" class="mono">tail</text>
+      <line x1="90" y1="86" x2="138" y2="86" class="s-acc" stroke-width="2" marker-end="url(#a4)"/>
+      <line x1="230" y1="86" x2="308" y2="86" class="s-acc" stroke-width="2" marker-end="url(#a4)"/>
+      <line x1="400" y1="86" x2="458" y2="86" class="s-acc" stroke-width="2" marker-end="url(#a4)"/>
+      <text x="560" y="84" font-size="12" class="mut">ready_list</text>
+    </svg></div>
+    <figcaption>链表里串的是 elem，不是 thread。拿到一个 elem，要“倒推”出它所在的 thread。</figcaption>
+  </figure>
+  <p>倒推用的宏 <code>list_entry</code>：</p>
+<pre class="code"><span class="ln"><span class="k">struct</span> thread *t = list_entry (e, <span class="k">struct</span> thread, elem);</span><span class="ln"><span class="c">/* 意思：e 是某个 struct thread 里的 elem 字段，请给我那个 struct thread 的地址。</span></span><span class="ln"><span class="c">   原理：elem 在 struct thread 里的偏移量是固定的（offsetof），</span></span><span class="ln"><span class="c">         用 e 的地址减去这个偏移量，就是结构体开头的地址。 */</span></span></pre>
+  <div class="box trap">
+    <span class="tag trap">一个 elem 只能挂一个链表</span>
+    <p>每个线程只有一个 <code>elem</code>，所以同一时刻只能挂在一个链表上。READY 的线程挂在 <code>ready_list</code>；BLOCKED 的线程挂在某个信号量的 <code>waiters</code> 或 <code>sleep_list</code>。这两种状态互斥，所以够用。（<code>allelem</code> 是另一个字段，挂在所有线程的 <code>all_list</code> 上。）同理，<code>struct lock</code> 里我们加的 <code>elem</code> 用来挂在持有者的 <code>locks</code> 链表上，一把锁同一时刻只有一个持有者，也够用。</p>
+  </div>
+
+  <h3 id="c4-2">4.2 比较函数：把“怎么比大小”交给调用者</h3>
+  <p>链表的排序、找最大最小都要比较两个元素。Pintos 不知道你想按什么比，所以让你传一个<strong>函数指针</strong>进去：</p>
+<pre class="code"><span class="ln"><span class="c">/* list.h 里的类型定义：一个“判断 a 是否小于 b”的函数 */</span></span><span class="ln"><span class="k">typedef</span> <span class="k">bool</span> list_less_func (<span class="k">const</span> <span class="k">struct</span> list_elem *a,</span><span class="ln">                             <span class="k">const</span> <span class="k">struct</span> list_elem *b,</span><span class="ln">                             <span class="k">void</span> *aux);</span><span class="ln"> </span><span class="ln"><span class="c">/* 我们写的：a 的优先级是否“大于”b（注意是严格大于） */</span></span><span class="ln"><span class="k">bool</span></span><span class="ln">thread_priority_more (<span class="k">const</span> <span class="k">struct</span> list_elem *a, <span class="k">const</span> <span class="k">struct</span> list_elem *b,</span><span class="ln">                      <span class="k">void</span> *aux UNUSED)</span><span class="ln">{</span><span class="ln">  <span class="k">return</span> list_entry (a, <span class="k">struct</span> thread, elem)-&gt;priority</span><span class="ln">         &gt; list_entry (b, <span class="k">struct</span> thread, elem)-&gt;priority;</span><span class="ln">}</span></pre>
+  <p>名字里叫“less”，但链表只关心“谁排前面”。我们把“优先级更高”当成“更小（排前面）”传进去，就得到降序排列。<code>aux</code> 是额外参数，我们用不到，所以标 <code>UNUSED</code>。</p>
+
+  <h3 id="c4-3">4.3 要用到的 6 个链表函数</h3>
+  <div class="tbl"><table class="wide">
+    <tr><th>函数</th><th>作用</th><th>我们在哪用</th></tr>
+    <tr><td><code>list_push_back(list, e)</code></td><td>插到队尾</td><td>持有者的 <code>locks</code></td></tr>
+    <tr><td><code>list_pop_front(list)</code></td><td>取出并删除队首</td><td><code>next_thread_to_run</code>、<code>thread_wake</code></td></tr>
+    <tr><td><code>list_insert_ordered(list, e, less, aux)</code></td><td>从头找<strong>第一个</strong>满足 <code>less(e, x)</code> 的 x，插在 x <strong>前面</strong>；找不到就插到最后</td><td>ready_list、sema 的 waiters、sleep_list</td></tr>
+    <tr><td><code>list_min(list, less, aux)</code></td><td>返回最小的元素；有并列时返回<strong>最前面</strong>那个（不删除）</td><td><code>sema_up</code>、<code>lock_acquire</code></td></tr>
+    <tr><td><code>list_max(list, less, aux)</code></td><td>返回最大的元素；有并列时返回<strong>最前面</strong>那个</td><td><code>cond_signal</code></td></tr>
+    <tr><td><code>list_remove(e)</code></td><td>把 e 从它所在的链表里摘下来</td><td>到处都用</td></tr>
+  </table></div>
+  <p><code>list_insert_ordered</code> 的源码只有几行，后面“为什么必须严格大于”就靠它：</p>
+<pre class="code"><span class="ln"><span class="k">void</span></span><span class="ln">list_insert_ordered (<span class="k">struct</span> list *list, <span class="k">struct</span> list_elem *elem,</span><span class="ln">                     list_less_func *less, <span class="k">void</span> *aux)</span><span class="ln">{</span><span class="ln">  <span class="k">struct</span> list_elem *e;</span><span class="ln">  <span class="k">for</span> (e = list_begin (list); e != list_end (list); e = list_next (e))</span><span class="ln">    <span class="k">if</span> (less (elem, e, aux))       <span class="c">/* 新元素“小于”e，就停下 */</span></span><span class="ln">      break;</span><span class="ln">  <span class="k">return</span> list_insert (e, elem);    <span class="c">/* 插在 e 前面 */</span></span><span class="ln">}</span></pre>
+</section>
+
+<!-- =============================================================== 5 -->
+<section class="chap" id="c5">
+  <div class="chap-head"><span class="chap-no">CHAPTER 5</span><h2>同步原语：信号量、锁、条件变量</h2></div>
+  <p class="sub">priority 测试里一半在考“等待者被叫醒的顺序”，所以先搞懂这三样东西本来怎么工作。</p>
+
+  <h3 id="c5-1">5.1 为什么需要同步</h3>
+  <p>两个线程同时执行 <code>count = count + 1</code>，这一行在 CPU 上其实是三步：读 count、加 1、写回。如果 A 读完还没写回就被切走，B 也读了同一个旧值，最后两次加法只生效一次。这叫<strong>竞态条件</strong>。需要一种机制保证“同一时刻只有一个线程在改 count”，这就是锁和信号量的用处。</p>
+
+  <h3 id="c5-2">5.2 信号量 semaphore</h3>
+  <p>一个非负整数 <code>value</code> 加一个等待队列 <code>waiters</code>：</p>
+<pre class="code"><span class="ln"><span class="k">void</span></span><span class="ln">sema_down (<span class="k">struct</span> semaphore *sema)        <span class="c">/* P 操作：要一个资源 */</span></span><span class="ln">{</span><span class="ln">  <span class="k">enum</span> intr_level old_level = intr_disable ();</span><span class="ln">  <span class="k">while</span> (sema-&gt;value == <span class="n">0</span>)                <span class="c">/* 没资源：排队并睡下 */</span></span><span class="ln">    {</span><span class="ln">      list_insert_ordered (&amp;sema-&gt;waiters, &amp;thread_current ()-&gt;elem,</span><span class="ln">                           thread_priority_more, <span class="k">NULL</span>);   <span class="c">/* 原来是 push_back */</span></span><span class="ln">      thread_block ();</span><span class="ln">    }</span><span class="ln">  sema-&gt;value--;                          <span class="c">/* 醒来后再拿走一个 */</span></span><span class="ln">  intr_set_level (old_level);</span><span class="ln">}</span><span class="ln"> </span><span class="ln"><span class="k">void</span></span><span class="ln">sema_up (<span class="k">struct</span> semaphore *sema)          <span class="c">/* V 操作：还一个资源 */</span></span><span class="ln">{</span><span class="ln">  <span class="k">enum</span> intr_level old_level = intr_disable ();</span><span class="ln">  <span class="k">if</span> (!list_empty (&amp;sema-&gt;waiters))</span><span class="ln">    <span class="c">/* 原来：thread_unblock (list_pop_front (...))，第 9 章改成挑最高优先级 */</span></span><span class="ln">    ...</span><span class="ln">  sema-&gt;value++;</span><span class="ln">  intr_set_level (old_level);</span><span class="ln">}</span></pre>
+  <div class="box exam">
+    <span class="tag exam">老师可能问</span>
+    <p><strong>“sema_down 里为什么是 while 不是 if？”</strong>被叫醒只说明“有人 up 过”，不保证轮到自己时 value 还大于 0：在被叫醒到真正运行之间，可能有别的线程（比如调用 <code>sema_try_down</code> 的，或者刚好执行 <code>sema_down</code> 没阻塞的）先把 value 拿走了。所以醒来要重新检查。这是 Mesa 风格的典型写法。</p>
+    <p><strong>“sema_up 能在中断里调用吗？”</strong>能，它不会睡眠。这一点决定了我们在 <code>sema_up</code> 里做抢占时要区分中断上下文（第 8 章）。</p>
+  </div>
+
+  <h3 id="c5-3">5.3 锁 lock</h3>
+  <p>锁 = 初值为 1 的信号量 + 一个 <code>holder</code>（谁拿着它）。</p>
+<pre class="code"><span class="ln"><span class="k">struct</span> lock</span><span class="ln">  {</span><span class="ln">    <span class="k">struct</span> thread *holder;      <span class="c">/* 持有者 */</span></span><span class="ln">    <span class="k">struct</span> semaphore semaphore; <span class="c">/* 初值为 1 的信号量 */</span></span><span class="ln hl">    <span class="k">struct</span> list_elem elem;      <span class="c">/* ★ 挂在持有者的 locks 链表上 */</span></span><span class="ln hl">    <span class="k">int</span> max_priority;           <span class="c">/* ★ 正在等这把锁的线程中的最高优先级 */</span></span><span class="ln">  };</span></pre>
+  <div class="tbl"><table>
+    <tr><th></th><th>信号量</th><th>锁</th></tr>
+    <tr><td>值</td><td>可以大于 1</td><td>只有 0/1</td></tr>
+    <tr><td>谁能释放</td><td>谁都能 up</td><td>只有持有者能 release</td></tr>
+    <tr><td>有没有“主人”</td><td>没有</td><td>有 <code>holder</code></td></tr>
+    <tr><td>Pintos 要求捐赠吗</td><td>不要求</td><td><strong>要求</strong></td></tr>
+  </table></div>
+  <div class="box tip">
+    <span class="tag tip">关键直觉</span>
+    <p><strong>正因为锁有主人，才能做优先级捐赠</strong>：我知道是谁挡住了我，才能把优先级借给它。信号量没有主人，不知道该捐给谁，所以 Pintos 文档只要求对锁做捐赠。</p>
+  </div>
+
+  <h3 id="c5-4">5.4 条件变量 condition</h3>
+  <p>条件变量用来“等某个条件成立”：<code>cond_wait(cond, lock)</code> 释放锁、睡下去等信号、醒来后重新拿锁；<code>cond_signal</code> 叫醒一个等的人。</p>
+  <p>Pintos 的实现很巧：每个等待者在<strong>自己的栈上</strong>建一个只属于自己的信号量（<code>struct semaphore_elem</code>），把它挂到 <code>cond->waiters</code> 上，然后在这个私人信号量上 <code>sema_down</code>。<code>cond_signal</code> 就是从 <code>cond->waiters</code> 里挑一个，对它的私人信号量 <code>sema_up</code>。</p>
+<pre class="code"><span class="ln"><span class="k">struct</span> semaphore_elem</span><span class="ln">  {</span><span class="ln">    <span class="k">struct</span> list_elem elem;              <span class="c">/* 挂在 cond-&gt;waiters 上 */</span></span><span class="ln">    <span class="k">struct</span> semaphore semaphore;         <span class="c">/* 这个等待者的私人信号量，初值 0 */</span></span><span class="ln hl">    <span class="k">struct</span> thread *thread;              <span class="c">/* ★ 是哪个线程在等 */</span></span><span class="ln">  };</span><span class="ln"> </span><span class="ln"><span class="k">void</span></span><span class="ln">cond_wait (<span class="k">struct</span> condition *cond, <span class="k">struct</span> lock *lock)</span><span class="ln">{</span><span class="ln">  <span class="k">struct</span> semaphore_elem waiter;</span><span class="ln">  sema_init (&amp;waiter.semaphore, <span class="n">0</span>);</span><span class="ln hl">  waiter.thread = thread_current ();  <span class="c">/* ★ */</span></span><span class="ln">  list_push_back (&amp;cond-&gt;waiters, &amp;waiter.elem);</span><span class="ln">  lock_release (lock);                <span class="c">/* 先放锁 */</span></span><span class="ln">  sema_down (&amp;waiter.semaphore);      <span class="c">/* 再睡 */</span></span><span class="ln">  lock_acquire (lock);                <span class="c">/* 醒来重新拿锁 */</span></span><span class="ln">}</span></pre>
+  <div class="box exam">
+    <span class="tag exam">老师可能问</span>
+    <p><strong>“Mesa 和 Hoare 管程有什么区别？Pintos 是哪种？”</strong>Hoare：signal 之后被唤醒的线程<strong>立刻</strong>运行，条件一定成立。Mesa：signal 只是把等待者放回就绪状态，它要重新竞争锁，等它真正运行时条件可能又不成立了，所以使用者要用 <code>while</code> 重新检查条件。Pintos 是 <strong>Mesa</strong>（<code>synch.c</code> 注释原话）。</p>
+  </div>
+</section>
+
+<!-- =============================================================== 6 -->
+<section class="chap" id="c6">
+  <div class="chap-head"><span class="chap-no">CHAPTER 6</span><h2>12 个 priority 测试，各自在问什么</h2></div>
+  <p class="sub">先读测试再写代码。每个测试其实都在问一个很具体的问题。</p>
+
+  <h3 id="c6-1">6.1 测试是怎么跑、怎么判分的</h3>
+  <ul>
+    <li>测试源码：<code>src/tests/threads/priority-xxx.c</code>。测试函数跑在 main 线程里，用 <code>msg("...")</code> 打印，每行自动带上 <code>(priority-xxx)</code> 前缀。</li>
+    <li>期望输出：同名的 <code>priority-xxx.ck</code>（Perl 脚本），里面写死了期望的每一行。</li>
+    <li>在 <code>src/threads/build</code> 下：<code>make check</code> 跑全部 27 个；<code>make tests/threads/priority-fifo.result</code> 只跑一个。</li>
+    <li>结果：<code>.output</code> 是实际输出，<code>.result</code> 是判分结果，失败时会用 <code>diff -u</code> 格式列出差异：<code>-</code> 开头是期望有但没有的行，<code>+</code> 开头是多出来的行。</li>
+  </ul>
+  <div class="box tip">
+    <span class="tag tip">读测试的窍门</span>
+    <p>测试输出的<strong>顺序</strong>就是在考调度。比如“A 打印的话出现在 B 前面”，意思就是“A 必须先被调度”。所以看 .ck 的时候，问自己：这一行之前，谁应该在 CPU 上？</p>
+  </div>
+
+  <h3 id="c6-2">6.2 第一类：调度与抢占（3 个）</h3>
+  <div class="tbl"><table class="wide">
+    <tr><th>测试</th><th>过程</th><th>考什么</th></tr>
+    <tr><td><code>priority-change</code></td><td>main(31) 创建 thread 2(32) → thread 2 立刻运行，把自己降到 30 → main 立刻抢回来 → main 把自己降到 29 → thread 2 立刻运行并退出</td><td>创建更高优先级线程要马上让它跑；<strong>自己降低优先级</strong>后如果别人更高，也要马上让出</td></tr>
+    <tr><td><code>priority-preempt</code></td><td>main(31) 创建一个 32 的线程，它循环 5 次“打印 + <code>thread_yield</code>”</td><td>高优先级线程必须在 <code>thread_create</code> 返回<strong>之前</strong>就跑完（它 yield 时也只有它自己最高，还是它）</td></tr>
+    <tr><td><code>priority-fifo</code></td><td>main 先升到 33，创建 16 个优先级都是 32 的线程，再降回 31；每个线程循环 16 次“拿锁 → 记下自己的编号 → 放锁 → yield”</td><td><strong>同优先级之间必须轮转</strong>：16 轮的顺序完全一样</td></tr>
+  </table></div>
+<pre class="term">(priority-change) Creating a high-priority thread 2.
+(priority-change) Thread 2 now lowering priority.         ← thread 2 一创建就跑了
+(priority-change) Thread 2 should have just lowered its priority.   ← 它降到 30，main(31) 抢回
+(priority-change) Thread 2 exiting.                       ← main 降到 29，thread 2 又抢回
+(priority-change) Thread 2 should have just exited.</pre>
+
+  <h3 id="c6-3">6.3 第二类：按优先级唤醒（2 个）</h3>
+  <div class="tbl"><table class="wide">
+    <tr><th>测试</th><th>过程</th><th>考什么</th></tr>
+    <tr><td><code>priority-sema</code></td><td>main 先把自己降到 PRI_MIN(0)，再创建 10 个优先级 21～30（乱序）的线程。每个线程一创建就比 main 高，立刻运行，在同一个信号量上 <code>sema_down</code> 睡下。然后 main <code>sema_up</code> 10 次</td><td>每次 <code>sema_up</code> 叫醒剩下的里面<strong>优先级最高</strong>的，而且它比 main 高，要<strong>立刻</strong>运行。输出是 30、29……21 和 “Back in main thread.” 交替</td></tr>
+    <tr><td><code>priority-condvar</code></td><td>同样的套路，换成条件变量：10 个线程 <code>cond_wait</code>，main <code>cond_signal</code> 10 次</td><td>同上。开头的 “starting” 顺序是创建顺序（23、22、21、30……），因为每个线程一创建就抢占 main 先打印</td></tr>
+  </table></div>
+
+  <h3 id="c6-4">6.4 第三类：优先级捐赠（7 个）</h3>
+  <div class="tbl"><table class="wide">
+    <tr><th>测试</th><th>场景</th><th>考什么</th></tr>
+    <tr><td><code>donate-one</code></td><td>main(31) 拿着锁；acquire1(32)、acquire2(33) 先后来等</td><td>最基本的捐赠：main 先变 32 再变 33；放锁后 33 先拿到锁</td></tr>
+    <tr><td><code>donate-multiple</code></td><td>main 拿着 a、b；32 等 a，33 等 b；先放 b 再放 a</td><td><strong>多重捐赠</strong>：放 b 后应该回到 32（a 上的捐赠还在），不是 31</td></tr>
+    <tr><td><code>donate-multiple2</code></td><td>main 拿 a、b；34 等 a，一个不等锁的 c(32)，36 等 b；先放 a 再放 b</td><td>放 a 后仍是 36；全放完后运行顺序必须是 b(36)、a(34)、c(32)</td></tr>
+    <tr><td><code>donate-nest</code></td><td>L=main(31) 拿 a；M(32) 拿 b 再等 a；H(33) 等 b</td><td><strong>嵌套捐赠</strong>：H→M→L，L 也要变成 33</td></tr>
+    <tr><td><code>donate-chain</code></td><td>7 层锁链，main(0) 在最底下；每层旁边还有一个比捐赠者低 1 的 interloper</td><td>嵌套捐赠一路传到底（深度 7）；释放时逐层收回，interloper 不能插队</td></tr>
+    <tr><td><code>donate-sema</code></td><td>L(32) 拿锁后在信号量上等，M(34) 也在这个信号量上等，H(36) 等 L 的锁；main <code>sema_up</code></td><td>线程<strong>在等待队列里时</strong>被捐赠，<code>sema_up</code> 还能挑对人（L 而不是 M）</td></tr>
+    <tr><td><code>donate-lower</code></td><td>main 被捐赠到 41 后，把自己的优先级设成 21</td><td>被捐赠期间改优先级，只改“原始优先级”，实际仍是 41；放锁后才变 21</td></tr>
+  </table></div>
+  <div class="box ex">
+    <span class="tag ex">动手</span>
+    <p>这 7 个捐赠测试在<a href="#sim">推演器</a>里都有逐步动画（状态、锁、输出一起变），看完第 11 章再去点。</p>
+  </div>
+</section>
+
+<!-- =============================================================== 7 -->
+<section class="chap" id="c7">
+  <div class="chap-head"><span class="chap-no">CHAPTER 7</span><h2>实现①：就绪队列按优先级排序</h2></div>
+  <p class="sub">对应测试：所有测试的基础；priority-fifo 专门考同优先级的顺序。</p>
+
+  <h3 id="c7-1">7.1 改两个地方</h3>
+  <p>往 <code>ready_list</code> 里放线程只有两处：<code>thread_unblock</code>（BLOCKED → READY）和 <code>thread_yield</code>（RUNNING → READY）。都从 <code>list_push_back</code> 改成按优先级有序插入：</p>
+<pre class="code"><span class="ln"><span class="k">void</span></span><span class="ln">thread_unblock (<span class="k">struct</span> thread *t)</span><span class="ln">{</span><span class="ln">  <span class="k">enum</span> intr_level old_level;</span><span class="ln">  ASSERT (is_thread (t));</span><span class="ln">  old_level = intr_disable ();</span><span class="ln">  ASSERT (t-&gt;status == THREAD_BLOCKED);</span><span class="ln hl">  list_insert_ordered (&amp;ready_list, &amp;t-&gt;elem, thread_priority_more, <span class="k">NULL</span>);</span><span class="ln">  t-&gt;status = THREAD_READY;</span><span class="ln">  intr_set_level (old_level);</span><span class="ln">}</span><span class="ln"> </span><span class="ln"><span class="k">void</span></span><span class="ln">thread_yield (<span class="k">void</span>)</span><span class="ln">{</span><span class="ln">  <span class="k">struct</span> thread *cur = thread_current ();</span><span class="ln">  <span class="k">enum</span> intr_level old_level;</span><span class="ln">  ASSERT (!intr_context ());</span><span class="ln">  old_level = intr_disable ();</span><span class="ln">  <span class="k">if</span> (cur != idle_thread)</span><span class="ln hl">    list_insert_ordered (&amp;ready_list, &amp;cur-&gt;elem, thread_priority_more, <span class="k">NULL</span>);</span><span class="ln">  cur-&gt;status = THREAD_READY;</span><span class="ln">  schedule ();</span><span class="ln">  intr_set_level (old_level);</span><span class="ln">}</span></pre>
+  <p>这样 <code>ready_list</code> 永远从高到低排好，<code>next_thread_to_run()</code> 照旧取队首，取到的就是最高优先级。</p>
+
+  <h3 id="c7-2">7.2 为什么必须是 <code>&gt;</code> 而不是 <code>&gt;=</code></h3>
+  <p>回忆 <code>list_insert_ordered</code>：找到第一个满足 <code>less(新元素, x)</code> 的 x，插在 x 前面。</p>
+  <ul>
+    <li>用 <code>&gt;</code>：同优先级时 <code>32 &gt; 32</code> 为假，一路找不到，就插到所有 32 的<strong>后面</strong> → 轮转（FIFO）。</li>
+    <li>用 <code>&gt;=</code>：<code>32 &gt;= 32</code> 为真，第一个就停，插到所有 32 的<strong>最前面</strong> → 刚 yield 的线程又排在队首，下一次又选中它，<code>thread_yield</code> 等于没让。</li>
+  </ul>
+
+  <div class="tool" id="fifoTool">
+    <h5>动手：同优先级 yield 之后谁上 CPU</h5>
+    <div class="row">
+      <span class="qlab">比较函数</span>
+      <div class="seg" role="group" aria-label="比较函数">
+        <button type="button" id="cmpGt" aria-pressed="true">a &gt; b</button>
+        <button type="button" id="cmpGe" aria-pressed="false">a &gt;= b</button>
+      </div>
+    </div>
+    <div class="qrow" style="margin-top:.6rem"><span class="qlab">RUNNING</span><span id="fifoRun"></span></div>
+    <div class="qrow"><span class="qlab">ready_list</span><span id="fifoReady" class="qrow"></span></div>
+    <div class="row" style="margin-top:.5rem">
+      <button type="button" class="btn" id="fifoYield">当前线程调用 thread_yield()</button>
+      <button type="button" class="btn ghost" id="fifoReset">重置</button>
+    </div>
+    <div class="console" id="fifoLog" aria-live="polite"></div>
+  </div>
+  <p>用 <code>&gt;=</code> 时我真实跑出来的 priority-fifo 输出：</p>
+<pre class="term"><span class="bad">(priority-fifo) iteration: 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15</span>
+<span class="bad">(priority-fifo) iteration: 14 14 14 14 14 14 14 14 14 14 14 14 14 14 14 14</span>
+...
+<span class="bad">(priority-fifo) iteration: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span></pre>
+  <div class="box trap">
+    <span class="tag trap">为什么别的测试发现不了这个 bug</span>
+    <p>alarm-priority、priority-sema 里每个线程优先级都不一样，<code>&gt;</code> 和 <code>&gt;=</code> 只在“相等”时有区别，所以它们照样通过。只有 priority-fifo 专门制造了 16 个同优先级线程。</p>
+  </div>
+</section>
+
+<!-- =============================================================== 8 -->
+<section class="chap" id="c8">
+  <div class="chap-head"><span class="chap-no">CHAPTER 8</span><h2>实现②：抢占——什么时候必须马上让出 CPU</h2></div>
+  <p class="sub">对应测试：priority-preempt、priority-change，以及所有“唤醒后要立刻运行”的测试。</p>
+
+  <h3 id="c8-1">8.1 只排序为什么不够</h3>
+  <p>排序只决定“<strong>下次</strong>换人时选谁”。如果当前线程不主动让出，高优先级线程只能等到时间片用完（最多 4 个 tick）。Pintos 文档要求：<strong>一个比当前线程优先级高的线程进入 ready_list 时，当前线程必须立即让出 CPU</strong>；当前线程降低自己的优先级、不再是最高时，也要立即让出。</p>
+
+  <h3 id="c8-2">8.2 thread_preempt：一个公共函数</h3>
+<pre class="code"><span class="ln"><span class="c">/* 如果就绪队列里有比当前线程优先级更高的线程，就让出 CPU。 */</span></span><span class="ln"><span class="k">void</span></span><span class="ln">thread_preempt (<span class="k">void</span>)</span><span class="ln">{</span><span class="ln">  <span class="k">enum</span> intr_level old_level = intr_disable ();</span><span class="ln"> </span><span class="ln">  <span class="k">if</span> (!list_empty (&amp;ready_list)</span><span class="ln">      &amp;&amp; list_entry (list_front (&amp;ready_list), <span class="k">struct</span> thread, elem)-&gt;priority</span><span class="ln">         &gt; thread_current ()-&gt;priority)</span><span class="ln">    {</span><span class="ln">      <span class="k">if</span> (intr_context ())</span><span class="ln">        intr_yield_on_return ();   <span class="c">/* 中断里只能预约 */</span></span><span class="ln">      <span class="k">else</span></span><span class="ln">        thread_yield ();</span><span class="ln">    }</span><span class="ln">  intr_set_level (old_level);</span><span class="ln">}</span></pre>
+  <ul>
+    <li>因为 ready_list 有序，<strong>只看队首</strong>就知道有没有比我高的。</li>
+    <li>用严格 <code>&gt;</code>：同优先级不抢占，让当前线程把时间片用完，保持轮转。</li>
+    <li>判断 <code>intr_context()</code>：<code>sema_up</code> 可能在中断处理程序里被调用，那时不能 <code>thread_yield</code>。</li>
+  </ul>
+
+  <h3 id="c8-3">8.3 在哪里调用</h3>
+  <p>原则：<strong>任何可能让“ready_list 里出现比我更高的线程”的地方</strong>，或者“我自己变低”的地方。</p>
+  <div class="tbl"><table class="wide">
+    <tr><th>位置</th><th>为什么</th><th>对应测试</th></tr>
+    <tr><td><code>thread_create()</code> 末尾（<code>thread_unblock</code> 之后）</td><td>新线程可能比我高</td><td>priority-preempt、priority-change、donate-*</td></tr>
+    <tr><td><code>thread_set_priority()</code> 末尾</td><td>我降低了自己的优先级</td><td>priority-change、priority-fifo、donate-lower</td></tr>
+    <tr><td><code>sema_up()</code> 末尾（<code>value++</code> 之后）</td><td>被叫醒的线程可能比我高</td><td>priority-sema、condvar、所有锁的测试（<code>lock_release</code> 里调用 <code>sema_up</code>）</td></tr>
+    <tr><td><code>thread_wake()</code>（时钟中断里）</td><td>睡醒的线程可能比当前线程高</td><td>alarm-priority 的语义；这里直接用 <code>intr_yield_on_return()</code></td></tr>
+  </table></div>
+
+  <h3 id="c8-4">8.4 为什么不直接在 thread_unblock 里抢占</h3>
+  <p>看起来最省事的做法是：<code>thread_unblock</code> 把线程放进 ready_list 后顺手检查一下。但原始代码的注释专门说了：<em>“This function does not preempt the running thread. This can be important: if the caller had disabled interrupts itself, it may expect that it can atomically unblock a thread and update other data.”</em></p>
+  <p>举个我们代码里的真实例子，<code>sema_up</code>：</p>
+<pre class="code"><span class="ln">  <span class="k">if</span> (!list_empty (&amp;sema-&gt;waiters))</span><span class="ln">    thread_unblock (被选中的线程);   <span class="c">/* ① 先叫醒 */</span></span><span class="ln">  sema-&gt;value++;                     <span class="c">/* ② 再加 1 */</span></span><span class="ln">  thread_preempt ();                 <span class="c">/* ③ 最后才检查抢占 */</span></span></pre>
+  <div class="box exam">
+    <span class="tag exam">老师可能问</span>
+    <p><strong>“如果 thread_unblock 里就抢占，会出什么问题？”</strong>在 ① 就切走的话，被叫醒的高优先级线程立刻运行，回到 <code>sema_down</code> 的 <code>while (sema->value == 0)</code> 检查——这时 ② 还没执行，value 还是 0，它又睡回去了，而且这次没人再叫醒它。所以抢占必须放在“调用者把相关数据都改完之后”。这也是我们把抢占写成单独的 <code>thread_preempt()</code>、放在各个函数<strong>末尾</strong>的原因。</p>
+  </div>
+
+  <h3 id="c8-5">8.5 不抢占会怎样（真实输出）</h3>
+  <p>把 <code>thread_create</code> 末尾的 <code>thread_preempt()</code> 删掉，priority-preempt 输出变成：</p>
+<pre class="term"><span class="bad">(priority-preempt) (priority-preempt) Thread high-priority iteration 0</span>
+(priority-preempt) Thread high-priority iteration 1
+...
+(priority-preempt) Thread high-priority done!
+<span class="bad">The high-priority thread should have already completed.</span></pre>
+  <p>main 没让出 CPU，接着去打印 “The high-priority thread should have…”，刚打印了前缀 <code>(priority-preempt) </code> 就被时钟中断打断（时间片到了），高优先级线程这才上 CPU，于是两行输出搅在一起。这个现象说明：<strong>没有立即抢占，高优先级线程最多要等一个时间片</strong>。</p>
+</section>
+
+<!-- =============================================================== 9 -->
+<section class="chap" id="c9">
+  <div class="chap-head"><span class="chap-no">CHAPTER 9</span><h2>实现③：信号量和条件变量按优先级唤醒</h2></div>
+  <p class="sub">对应测试：priority-sema、priority-condvar、donate-sema，以及所有锁（锁的底层就是信号量）。</p>
+
+  <h3 id="c9-1">9.1 sema_up：取出时重新找最高的</h3>
+<pre class="code"><span class="ln"><span class="k">void</span></span><span class="ln">sema_up (<span class="k">struct</span> semaphore *sema)</span><span class="ln">{</span><span class="ln">  <span class="k">enum</span> intr_level old_level;</span><span class="ln">  ASSERT (sema != <span class="k">NULL</span>);</span><span class="ln"> </span><span class="ln">  old_level = intr_disable ();</span><span class="ln">  <span class="k">if</span> (!list_empty (&amp;sema-&gt;waiters))</span><span class="ln">    {</span><span class="ln hl">      <span class="k">struct</span> list_elem *e = list_min (&amp;sema-&gt;waiters,</span><span class="ln hl">                                      thread_priority_more, <span class="k">NULL</span>);</span><span class="ln hl">      list_remove (e);</span><span class="ln">      thread_unblock (list_entry (e, <span class="k">struct</span> thread, elem));</span><span class="ln">    }</span><span class="ln">  sema-&gt;value++;</span><span class="ln hl">  thread_preempt ();          <span class="c">/* 叫醒的线程可能比我高 */</span></span><span class="ln">  intr_set_level (old_level);</span><span class="ln">}</span></pre>
+  <div class="box trap">
+    <span class="tag trap">只在插入时排序为什么不够</span>
+    <p><code>sema_down</code> 时我们已经按优先级插入了，为什么 <code>sema_up</code> 还要重新找？因为线程在<strong>等待期间</strong>优先级可能被捐赠改变，插入时排好的顺序就“过期”了。donate-sema 就是这样：L 插入时是 32 排在 M(34) 后面，之后被捐赠成 36，位置却没变。取队首会叫醒 M。（第 12 章推演器里有这个场景。）</p>
+  </div>
+  <p><strong><code>list_min</code> 配“大于”比较函数</strong>有点绕：<code>list_min(list, less)</code> 返回“没有谁比它更 less”的那个元素，我们传进去的 less 其实是“优先级更高”，所以“最 less”的就是<strong>优先级最高</strong>的；有并列时返回最前面的，也就是最早来的，同优先级仍然先来先服务。写一个“小于”比较函数配 <code>list_max</code> 效果一样，我只是想少写一个函数。</p>
+
+  <h3 id="c9-2">9.2 cond_signal：在 semaphore_elem 里记下线程</h3>
+<pre class="code"><span class="ln"><span class="c">/* cond-&gt;waiters 的比较函数：等待线程优先级低的为“小”。 */</span></span><span class="ln"><span class="k">static</span> <span class="k">bool</span></span><span class="ln">sema_elem_priority_less (<span class="k">const</span> <span class="k">struct</span> list_elem *a,</span><span class="ln">                         <span class="k">const</span> <span class="k">struct</span> list_elem *b, <span class="k">void</span> *aux UNUSED)</span><span class="ln">{</span><span class="ln">  <span class="k">return</span> list_entry (a, <span class="k">struct</span> semaphore_elem, elem)-&gt;thread-&gt;priority</span><span class="ln">         &lt; list_entry (b, <span class="k">struct</span> semaphore_elem, elem)-&gt;thread-&gt;priority;</span><span class="ln">}</span><span class="ln"> </span><span class="ln"><span class="k">void</span></span><span class="ln">cond_signal (<span class="k">struct</span> condition *cond, <span class="k">struct</span> lock *lock UNUSED)</span><span class="ln">{</span><span class="ln">  ASSERT (lock_held_by_current_thread (lock));</span><span class="ln">  <span class="k">if</span> (!list_empty (&amp;cond-&gt;waiters))</span><span class="ln">    {</span><span class="ln hl">      <span class="k">struct</span> list_elem *e = list_max (&amp;cond-&gt;waiters,</span><span class="ln hl">                                      sema_elem_priority_less, <span class="k">NULL</span>);</span><span class="ln hl">      list_remove (e);</span><span class="ln">      sema_up (&amp;list_entry (e, <span class="k">struct</span> semaphore_elem, elem)-&gt;semaphore);</span><span class="ln">    }</span><span class="ln">}</span></pre>
+  <div class="box exam">
+    <span class="tag exam">老师可能问</span>
+    <p><strong>“为什么不直接看每个私人信号量 waiters 的队首线程，而要加一个 thread 字段？”</strong>因为 <code>cond_wait</code> 是<strong>先</strong> <code>lock_release</code> <strong>再</strong> <code>sema_down</code> 的，中间可能被抢占。另一个线程拿到锁、调用 <code>cond_signal</code> 时，这个等待者可能还没来得及 <code>sema_down</code>，它的私人信号量等待队列是空的，取队首会出错。直接存线程指针最稳。</p>
+    <p><strong>“cond_broadcast 要改吗？”</strong>不用，它就是循环调用 <code>cond_signal</code>，每次都会挑当前最高的。</p>
+  </div>
+</section>
+
+<!-- =============================================================== 10 -->
+<section class="chap" id="c10">
+  <div class="chap-head"><span class="chap-no">CHAPTER 10</span><h2>优先级反转与优先级捐赠：原理</h2></div>
+  <p class="sub">这是 PPT 的重点，也是老师最可能深挖的地方。</p>
+
+  <h3 id="c10-1">10.1 什么是优先级反转</h3>
+  <figure>
+    <div class="svgbox"><svg viewBox="0 0 640 300" class="wide" width="640" role="img" aria-label="没有捐赠和有捐赠两种情况下 H、M、L 三个线程的时间线">
+      <text x="10" y="22" font-size="13" font-weight="700" class="t-hi">没有捐赠：H 被一直在跑的 M 卡住</text>
+      <g font-size="13" font-weight="700"><text x="10" y="55" class="t-hi">H</text><text x="10" y="85" class="t-mid">M</text><text x="10" y="115" class="t-lo">L</text></g>
+      <g class="s-line" stroke-width="1"><line x1="30" y1="50" x2="630" y2="50"/><line x1="30" y1="80" x2="630" y2="80"/><line x1="30" y1="110" x2="630" y2="110"/></g>
+      <rect x="30" y="98" width="80" height="24" rx="5" class="f-lo"/><text x="70" y="115" text-anchor="middle" font-size="11" class="t-w">拿锁</text>
+      <rect x="110" y="38" width="40" height="24" rx="5" class="f-hi"/>
+      <rect x="150" y="38" width="370" height="24" rx="5" fill="none" class="s-hi" stroke-width="1.5" stroke-dasharray="5 3"/><text x="335" y="55" text-anchor="middle" font-size="11" class="t-hi">等锁（阻塞）</text>
+      <rect x="150" y="68" width="330" height="24" rx="5" class="f-mid"/><text x="315" y="85" text-anchor="middle" font-size="11" class="t-w">M 一直在跑（和锁无关）</text>
+      <rect x="480" y="98" width="40" height="24" rx="5" class="f-lo"/><text x="500" y="115" text-anchor="middle" font-size="10" class="t-w">放锁</text>
+      <rect x="520" y="38" width="110" height="24" rx="5" class="f-hi"/><text x="575" y="55" text-anchor="middle" font-size="11" class="t-w">终于拿到</text>
+
+      <text x="10" y="172" font-size="13" font-weight="700" class="t-ok">有捐赠：L 借到 H 的优先级，尽快放锁</text>
+      <g font-size="13" font-weight="700"><text x="10" y="205" class="t-hi">H</text><text x="10" y="235" class="t-mid">M</text><text x="10" y="265" class="t-lo">L</text></g>
+      <g class="s-line" stroke-width="1"><line x1="30" y1="200" x2="630" y2="200"/><line x1="30" y1="230" x2="630" y2="230"/><line x1="30" y1="260" x2="630" y2="260"/></g>
+      <rect x="30" y="248" width="80" height="24" rx="5" class="f-lo"/><text x="70" y="265" text-anchor="middle" font-size="11" class="t-w">拿锁</text>
+      <rect x="110" y="188" width="40" height="24" rx="5" class="f-hi"/>
+      <rect x="150" y="188" width="90" height="24" rx="5" fill="none" class="s-hi" stroke-width="1.5" stroke-dasharray="5 3"/><text x="195" y="205" text-anchor="middle" font-size="11" class="t-hi">等锁</text>
+      <rect x="150" y="248" width="90" height="24" rx="5" class="f-lo s-hi" stroke-width="2.5"/><text x="195" y="265" text-anchor="middle" font-size="11" class="t-w">借 H 的优先级</text>
+      <rect x="240" y="188" width="140" height="24" rx="5" class="f-hi"/><text x="310" y="205" text-anchor="middle" font-size="11" class="t-w">拿到锁</text>
+      <rect x="380" y="218" width="250" height="24" rx="5" class="f-mid"/><text x="505" y="235" text-anchor="middle" font-size="11" class="t-w">M 排在后面</text>
+      <text x="330" y="292" text-anchor="middle" font-size="11" class="mut">时间 →</text>
+    </svg></div>
+    <figcaption>上：H 等的锁在 L 手里，M 比 L 高，一直抢占 L，L 放不了锁，H 就被和锁毫无关系的 M 卡住。下：H 把优先级借给 L。</figcaption>
+  </figure>
+  <p><strong>优先级反转</strong>：高优先级线程 H 在等低优先级线程 L 手里的资源（锁），而中优先级线程 M 又一直抢占 L，结果 H 实际上被 M 卡住了，表现得好像 H 的优先级比 M 还低。</p>
+  <ul>
+    <li><strong>有界反转</strong>：只有 H 和 L，H 等 L 放锁，等待时间不超过 L 的临界区长度。这是用锁就不可避免的，可以接受。</li>
+    <li><strong>无界反转</strong>：中间插进来 M（甚至很多个 M），H 的等待时间和锁完全无关、没有上限。这才是真正的问题，捐赠解决的就是它。</li>
+  </ul>
+
+  <div class="box tip">
+    <span class="tag tip">真实事故：1997 年火星探路者号</span>
+    <p>探路者号用的是 VxWorks 实时操作系统。低优先级的气象数据任务拿着“信息总线”的互斥锁，高优先级的总线管理任务等这把锁，而一个运行时间较长的中优先级通信任务一直抢占气象任务。总线管理任务长时间没运行，看门狗认为系统出错，于是整个系统<strong>反复重启</strong>。工程师在地面复现后，远程打开了那个互斥锁的“优先级继承”选项（默认是关的），问题解决。课件第 16–21 页讲的就是这个。</p>
+  </div>
+
+  <h3 id="c10-2">10.2 解决：优先级捐赠（优先级继承）</h3>
+  <p>H 等 L 的锁时，把自己的优先级“借”给 L。L 变得和 H 一样高，M 就抢不了它了；L 尽快跑完临界区放锁，<strong>放锁时把借来的优先级还回去</strong>，H 立刻拿到锁。</p>
+  <p>要处理三种情况：</p>
+  <div class="grid2">
+    <div class="box"><strong>单一捐赠</strong><p>一个线程等一把锁。<br><code>donate-one</code></p></div>
+    <div class="box"><strong>多重捐赠</strong><p>一个线程同时拿着几把锁，每把锁上都有人等。优先级取这些捐赠里<strong>最高的</strong>；放掉一把锁时<strong>只收回这把锁带来的</strong>。<br><code>donate-multiple(2)</code></p></div>
+    <div class="box"><strong>嵌套捐赠</strong><p>H 等 M 的锁，M 又在等 L 的锁。H 的优先级要沿着链一路传到 L，否则 L 还是会被别人抢占。<br><code>donate-nest</code>、<code>donate-chain</code></p></div>
+  </div>
+  <figure>
+    <div class="svgbox"><svg viewBox="0 0 620 120" class="wide" width="620" role="img" aria-label="嵌套捐赠链：H 等锁 b，b 的持有者 M 等锁 a，a 的持有者 L">
+      <defs><marker id="a10" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="f-acc"/></marker></defs>
+      <rect x="10" y="40" width="90" height="40" rx="20" class="f-hi"/><text x="55" y="65" text-anchor="middle" font-size="13" font-weight="700" class="t-w">H 33</text>
+      <rect x="150" y="45" width="70" height="30" rx="6" class="f-sf2"/><text x="185" y="65" text-anchor="middle" font-size="12" class="mono">锁 b</text>
+      <rect x="270" y="40" width="110" height="40" rx="20" class="f-mid"/><text x="325" y="65" text-anchor="middle" font-size="13" font-weight="700" class="t-w">M 32→33</text>
+      <rect x="430" y="45" width="70" height="30" rx="6" class="f-sf2"/><text x="465" y="65" text-anchor="middle" font-size="12" class="mono">锁 a</text>
+      <rect x="520" y="40" width="95" height="40" rx="20" class="f-lo s-hi" stroke-width="2.5"/><text x="567" y="65" text-anchor="middle" font-size="12" font-weight="700" class="t-w">L 31→33</text>
+      <line x1="100" y1="60" x2="148" y2="60" class="s-acc" stroke-width="2" marker-end="url(#a10)"/><text x="124" y="34" text-anchor="middle" font-size="11" class="mut">等</text>
+      <line x1="220" y1="60" x2="268" y2="60" class="s-acc" stroke-width="2" marker-end="url(#a10)"/><text x="244" y="34" text-anchor="middle" font-size="11" class="mut">持有者</text>
+      <line x1="380" y1="60" x2="428" y2="60" class="s-acc" stroke-width="2" marker-end="url(#a10)"/><text x="404" y="34" text-anchor="middle" font-size="11" class="mut">等</text>
+      <line x1="500" y1="60" x2="518" y2="60" class="s-acc" stroke-width="2" marker-end="url(#a10)"/><text x="509" y="104" text-anchor="middle" font-size="11" class="mut">持有者</text>
+    </svg></div>
+    <figcaption>沿着“等的锁 → 锁的持有者 → 持有者等的锁 → …”一路走，这就是代码里的 waiting_lock 和 holder。</figcaption>
+  </figure>
+
+  <h3 id="c10-3">10.3 理论补充：继承协议 vs 天花板协议</h3>
+  <div class="tbl"><table class="wide">
+    <tr><th></th><th>优先级继承 Priority Inheritance（Pintos 要求的）</th><th>优先级天花板 Priority Ceiling</th></tr>
+    <tr><td>什么时候提升</td><td><strong>有人来等</strong>的时候，持有者临时继承等待者的优先级</td><td><strong>一拿到锁</strong>就提升到这把锁预先设定的“天花板”（所有可能用它的线程里最高的优先级）</td></tr>
+    <tr><td>需要预先知道什么</td><td>什么都不用</td><td>每把锁会被哪些线程用</td></tr>
+    <tr><td>能防死锁吗</td><td>不能（两个线程互相等对方的锁，捐赠也救不了）</td><td>经典的天花板协议可以防止死锁和链式阻塞</td></tr>
+    <tr><td>实现</td><td>要追踪持有者、等待者、嵌套链</td><td>简单，但需要静态分析</td></tr>
+  </table></div>
+</section>
+
+<!-- =============================================================== 11 -->
+<section class="chap" id="c11">
+  <div class="chap-head"><span class="chap-no">CHAPTER 11</span><h2>实现④：优先级捐赠，逐行讲代码</h2></div>
+  <p class="sub">对应测试：7 个 donate-*。这一章是上台讲解的核心。</p>
+
+  <h3 id="c11-1">11.1 设计：按“锁”记账</h3>
+  <p>课件第 22 页建议给线程维护一个“捐赠者线程列表”。我想了一下：<strong>捐赠总是按锁收回的</strong>，放掉哪把锁，就收回因为这把锁得到的捐赠。所以换了个记法：</p>
+  <div class="tbl"><table>
+    <tr><th>字段</th><th>在哪</th><th>记什么</th></tr>
+    <tr><td><code>base_priority</code></td><td>thread</td><td>自己设置的原始优先级</td></tr>
+    <tr><td><code>locks</code></td><td>thread</td><td>我当前持有的所有锁</td></tr>
+    <tr><td><code>waiting_lock</code></td><td>thread</td><td>我正在等的那一把锁（用来沿链嵌套捐赠）</td></tr>
+    <tr><td><code>max_priority</code></td><td>lock</td><td>正在等这把锁的线程里最高的优先级</td></tr>
+    <tr><td><code>elem</code></td><td>lock</td><td>把锁挂到持有者的 <code>locks</code> 链表上</td></tr>
+  </table></div>
+  <div class="formula">
+    <span class="big">priority = max( base_priority, 我持有的每把锁的 max_priority )</span>
+    <span class="cap">例：main 自己 31，拿着 a、b，a 上有 32 在等，b 上有 33 在等 → max(31, 32, 33) = 33。放掉 b → max(31, 32) = 32。全放掉 → 31。</span>
+  </div>
+  <figure>
+    <div class="svgbox"><svg viewBox="0 0 560 170" role="img" aria-label="main 线程持有锁 a 和锁 b，每把锁记录等待者的最高优先级">
+      <rect x="20" y="40" width="190" height="96" rx="10" class="f-los"/>
+      <text x="115" y="66" text-anchor="middle" font-size="15" font-weight="700">main 线程</text>
+      <text x="115" y="92" text-anchor="middle" font-size="12" class="mono">base_priority = 31</text>
+      <text x="115" y="116" text-anchor="middle" font-size="12" class="mono">locks = { a, b }</text>
+      <rect x="290" y="20" width="200" height="56" rx="8" class="f-mids"/>
+      <text x="390" y="42" text-anchor="middle" font-size="14" font-weight="700">锁 a</text><text x="390" y="64" text-anchor="middle" font-size="12" class="mono">max_priority = 32</text>
+      <rect x="290" y="96" width="200" height="56" rx="8" class="f-his"/>
+      <text x="390" y="118" text-anchor="middle" font-size="14" font-weight="700">锁 b</text><text x="390" y="140" text-anchor="middle" font-size="12" class="mono">max_priority = 33</text>
+      <line x1="210" y1="78" x2="288" y2="50" class="s-mut" stroke-width="1.5"/>
+      <line x1="210" y1="98" x2="288" y2="122" class="s-mut" stroke-width="1.5"/>
+      <text x="510" y="52" font-size="12" class="mut">← 32 在等</text>
+      <text x="510" y="128" font-size="12" class="mut">← 33 在等</text>
+    </svg></div>
+    <figcaption>实际优先级 = max(31, 32, 33) = 33。</figcaption>
+  </figure>
+  <div class="box exam">
+    <span class="tag exam">老师可能问：为什么不用捐赠者列表？</span>
+    <p>两种都能过测试。记锁的好处：放锁时只要 <code>list_remove</code> 这把锁再重算；记捐赠者的话，放锁时要遍历捐赠者列表，把所有“在等这把锁的”删掉，嵌套时还要想清楚间接捐赠者算谁的，更容易错。而且实际优先级永远由一个公式<strong>算</strong>出来，不在各处“加一点、减一点”，多重、嵌套、捐赠期间改优先级这几种情况都不用写特判。</p>
+  </div>
+
+  <h3 id="c11-2">11.2 thread_update_priority：唯一“算优先级”的地方</h3>
+<pre class="code"><span class="ln"><span class="k">void</span></span><span class="ln">thread_update_priority (<span class="k">struct</span> thread *t)</span><span class="ln">{</span><span class="ln">  <span class="k">int</span> priority = t-&gt;base_priority;</span><span class="ln">  <span class="k">struct</span> list_elem *e;</span><span class="ln"> </span><span class="ln">  ASSERT (intr_get_level () == INTR_OFF);</span><span class="ln"> </span><span class="ln">  <span class="k">if</span> (thread_mlfqs)            <span class="c">/* MLFQS 模式不做捐赠 */</span></span><span class="ln">    <span class="k">return</span>;</span><span class="ln"> </span><span class="ln">  <span class="k">for</span> (e = list_begin (&amp;t-&gt;locks); e != list_end (&amp;t-&gt;locks);</span><span class="ln">       e = list_next (e))</span><span class="ln">    {</span><span class="ln">      <span class="k">struct</span> lock *l = list_entry (e, <span class="k">struct</span> lock, elem);</span><span class="ln">      <span class="k">if</span> (l-&gt;max_priority &gt; priority)</span><span class="ln">        priority = l-&gt;max_priority;</span><span class="ln">    }</span><span class="ln">  t-&gt;priority = priority;</span><span class="ln"> </span><span class="ln hl">  <span class="c">/* 如果 T 在就绪队列里，优先级变了，位置也要跟着变 */</span></span><span class="ln hl">  <span class="k">if</span> (t-&gt;status == THREAD_READY)</span><span class="ln hl">    {</span><span class="ln hl">      list_remove (&amp;t-&gt;elem);</span><span class="ln hl">      list_insert_ordered (&amp;ready_list, &amp;t-&gt;elem, thread_priority_more, <span class="k">NULL</span>);</span><span class="ln hl">    }</span><span class="ln">}</span></pre>
+  <div class="box trap">
+    <span class="tag trap">最后那段很容易漏</span>
+    <p>被捐赠的线程如果正处于 READY，它在 ready_list 里的位置是按旧优先级排的。不挪的话，调度器取队首还是取不到它，捐赠就白做了。（如果它是 BLOCKED，挂在信号量的 waiters 上，就靠 <code>sema_up</code> 取出时重新找最高的来兜底。）</p>
+  </div>
+
+  <h3 id="c11-3">11.3 lock_acquire：捐出去</h3>
+<pre class="code"><span class="ln"><span class="k">void</span></span><span class="ln">lock_acquire (<span class="k">struct</span> lock *lock)</span><span class="ln">{</span><span class="ln">  <span class="k">struct</span> thread *cur = thread_current ();</span><span class="ln">  <span class="k">enum</span> intr_level old_level;</span><span class="ln"> </span><span class="ln">  ASSERT (lock != <span class="k">NULL</span>);</span><span class="ln">  ASSERT (!intr_context ());</span><span class="ln">  ASSERT (!lock_held_by_current_thread (lock));</span><span class="ln"> </span><span class="ln">  old_level = intr_disable ();                           <span class="c">/* ① */</span></span><span class="ln"> </span><span class="ln">  <span class="k">if</span> (!thread_mlfqs &amp;&amp; lock-&gt;holder != <span class="k">NULL</span>)             <span class="c">/* ② 锁被占用 */</span></span><span class="ln">    {</span><span class="ln">      <span class="k">struct</span> lock *l = lock;</span><span class="ln">      <span class="k">int</span> depth = <span class="n">0</span>;</span><span class="ln"> </span><span class="ln">      cur-&gt;waiting_lock = lock;                          <span class="c">/* ③ */</span></span><span class="ln">      <span class="k">while</span> (l != <span class="k">NULL</span> &amp;&amp; l-&gt;holder != <span class="k">NULL</span> &amp;&amp; depth &lt; DONATE_DEPTH_MAX</span><span class="ln">             &amp;&amp; l-&gt;max_priority &lt; cur-&gt;priority)         <span class="c">/* ④ */</span></span><span class="ln">        {</span><span class="ln">          l-&gt;max_priority = cur-&gt;priority;               <span class="c">/* ⑤ 捐给这把锁 */</span></span><span class="ln">          thread_update_priority (l-&gt;holder);            <span class="c">/* ⑥ 持有者重算 */</span></span><span class="ln">          l = l-&gt;holder-&gt;waiting_lock;                   <span class="c">/* ⑦ 往下一层 */</span></span><span class="ln">          depth++;</span><span class="ln">        }</span><span class="ln">    }</span><span class="ln"> </span><span class="ln">  sema_down (&amp;lock-&gt;semaphore);                          <span class="c">/* ⑧ 真正等锁 */</span></span><span class="ln"> </span><span class="ln">  cur-&gt;waiting_lock = <span class="k">NULL</span>;                              <span class="c">/* ⑨ 拿到了 */</span></span><span class="ln">  lock-&gt;holder = cur;</span><span class="ln">  <span class="k">if</span> (!thread_mlfqs)</span><span class="ln">    {</span><span class="ln">      lock-&gt;max_priority = PRI_MIN;                      <span class="c">/* ⑩ */</span></span><span class="ln">      <span class="k">if</span> (!list_empty (&amp;lock-&gt;semaphore.waiters))</span><span class="ln">        lock-&gt;max_priority = list_entry (list_min (&amp;lock-&gt;semaphore.waiters,</span><span class="ln">                                                   thread_priority_more, <span class="k">NULL</span>),</span><span class="ln">                                         <span class="k">struct</span> thread, elem)-&gt;priority;</span><span class="ln">      list_push_back (&amp;cur-&gt;locks, &amp;lock-&gt;elem);</span><span class="ln">      thread_update_priority (cur);</span><span class="ln">    }</span><span class="ln">  intr_set_level (old_level);</span><span class="ln">}</span></pre>
+  <ol>
+    <li><strong>① 整个函数关中断</strong>：捐赠要同时改好几个线程和锁，中途被打断的话别的线程会看到“改了一半”的数据。</li>
+    <li><strong>② 只在锁被占用时捐赠</strong>；MLFQS 模式下 Pintos 规定不捐赠。</li>
+    <li><strong>③ 记下自己在等哪把锁</strong>：以后别人沿链捐赠到我时，要通过它继续往下走。</li>
+    <li><strong>④ 循环的四个停止条件</strong>：
+      <ul>
+        <li><code>l == NULL</code>：链到头了，最后一个持有者没在等别的锁。</li>
+        <li><code>l->holder == NULL</code>：这把锁刚被释放、新持有者还没设上（见下面“窗口期”）。</li>
+        <li><code>depth &gt;= 8</code>：防止链太长或出现环时死循环。Pintos 文档允许设一个合理的上限（比如 8 层）；donate-chain 是 7 层，够用。</li>
+        <li><code>l->max_priority &gt;= cur->priority</code>：这把锁上已经有同样高或更高的捐赠了，再往下也不用捐（11.6 节证明为什么可以提前停）。</li>
+      </ul></li>
+    <li><strong>⑤⑥ 捐赠</strong>：只改锁的 <code>max_priority</code>，再让持有者按公式重算。不直接写 <code>holder->priority = cur->priority</code>，是为了让“放锁时收回”变得简单。</li>
+    <li><strong>⑦ 嵌套</strong>：持有者如果也在等别的锁，就沿着它继续捐。</li>
+    <li><strong>⑧ <code>sema_down</code></strong> 可能阻塞；被叫醒、拿到锁才往下走。</li>
+    <li><strong>⑩ 拿到锁后重算这把锁的 max_priority</strong>：锁上剩下的等待者原来是捐给上一个持有者的，现在应该改为捐给我。上一个持有者在 <code>lock_release</code> 时已经把这把锁从它的 <code>locks</code> 里删掉了，不会再受影响。</li>
+  </ol>
+  <div class="box exam">
+    <span class="tag exam">窗口期：为什么要判断 l-&gt;holder != NULL</span>
+    <p>A 刚 <code>lock_release</code>，把 <code>holder</code> 置成 NULL 并叫醒了等待者 B；但 B 还没被调度、还没执行到 ⑨，它的 <code>waiting_lock</code> 仍然指着这把锁。如果这时另一个线程 C 沿链捐赠到 B，再往下一步就会访问 <code>NULL->waiting_lock</code>。测试里没有触发，但这是对着代码推演交错情况时发现的隐患，加上判断更安全。</p>
+  </div>
+
+  <h3 id="c11-4">11.4 lock_release 和 lock_try_acquire</h3>
+<pre class="code"><span class="ln"><span class="k">void</span></span><span class="ln">lock_release (<span class="k">struct</span> lock *lock)</span><span class="ln">{</span><span class="ln">  <span class="k">enum</span> intr_level old_level;</span><span class="ln">  ASSERT (lock != <span class="k">NULL</span>);</span><span class="ln">  ASSERT (lock_held_by_current_thread (lock));</span><span class="ln"> </span><span class="ln">  old_level = intr_disable ();</span><span class="ln">  <span class="k">if</span> (!thread_mlfqs)</span><span class="ln">    {</span><span class="ln hl">      list_remove (&amp;lock-&gt;elem);                   <span class="c">/* 这把锁不再算我的 */</span></span><span class="ln hl">      thread_update_priority (thread_current ());  <span class="c">/* 按剩下的锁重算 */</span></span><span class="ln">    }</span><span class="ln">  lock-&gt;holder = <span class="k">NULL</span>;</span><span class="ln">  sema_up (&amp;lock-&gt;semaphore);   <span class="c">/* 叫醒最高的等待者；末尾 thread_preempt 负责让出 */</span></span><span class="ln">  intr_set_level (old_level);</span><span class="ln">}</span><span class="ln"> </span><span class="ln"><span class="k">bool</span></span><span class="ln">lock_try_acquire (<span class="k">struct</span> lock *lock)</span><span class="ln">{</span><span class="ln">  <span class="k">bool</span> success = sema_try_down (&amp;lock-&gt;semaphore);</span><span class="ln">  <span class="k">if</span> (success)</span><span class="ln">    {</span><span class="ln">      <span class="k">enum</span> intr_level old_level = intr_disable ();</span><span class="ln">      lock-&gt;holder = thread_current ();</span><span class="ln">      <span class="k">if</span> (!thread_mlfqs)</span><span class="ln">        {</span><span class="ln">          lock-&gt;max_priority = PRI_MIN;   <span class="c">/* 一次就拿到，说明没人在等 */</span></span><span class="ln">          list_push_back (&amp;thread_current ()-&gt;locks, &amp;lock-&gt;elem);</span><span class="ln">        }</span><span class="ln">      intr_set_level (old_level);</span><span class="ln">    }</span><span class="ln">  <span class="k">return</span> success;</span><span class="ln">}</span></pre>
+  <p><code>lock_release</code> 只做两件事：把锁从 <code>locks</code> 里删掉、按公式重算。<strong>只收回这把锁带来的捐赠</strong>，别的锁上的还在。然后 <code>sema_up</code> 叫醒最高的等锁线程，而且因为我的优先级刚降，<code>sema_up</code> 末尾的 <code>thread_preempt()</code> 会让我马上让出。</p>
+  <p><code>lock_try_acquire</code> 不会等待，所以不捐赠；但拿到了也要挂进 <code>locks</code>，否则以后有人来等这把锁、捐赠给我时，我重算优先级会漏掉它。</p>
+
+  <h3 id="c11-5">11.5 thread_set_priority 和 init_thread</h3>
+<pre class="code"><span class="ln"><span class="k">void</span></span><span class="ln">thread_set_priority (<span class="k">int</span> new_priority)</span><span class="ln">{</span><span class="ln">  <span class="k">struct</span> thread *cur = thread_current ();</span><span class="ln">  <span class="k">enum</span> intr_level old_level;</span><span class="ln"> </span><span class="ln">  <span class="k">if</span> (thread_mlfqs)                    <span class="c">/* MLFQS 下优先级由调度器算，忽略 */</span></span><span class="ln">    <span class="k">return</span>;</span><span class="ln"> </span><span class="ln">  old_level = intr_disable ();</span><span class="ln hl">  cur-&gt;base_priority = new_priority;   <span class="c">/* 只改 base */</span></span><span class="ln hl">  thread_update_priority (cur);        <span class="c">/* 实际优先级按公式重算 */</span></span><span class="ln">  intr_set_level (old_level);</span><span class="ln"> </span><span class="ln">  thread_preempt ();                   <span class="c">/* 降低后可能有人比我高了 */</span></span><span class="ln">}</span><span class="ln"> </span><span class="ln"><span class="c">/* init_thread() 里新增的初始化 */</span></span><span class="ln">  t-&gt;priority = priority;</span><span class="ln">  t-&gt;base_priority = priority;</span><span class="ln">  list_init (&amp;t-&gt;locks);</span><span class="ln">  t-&gt;waiting_lock = <span class="k">NULL</span>;</span></pre>
+  <p>如果直接写 <code>cur->priority = new_priority</code>，被捐赠期间就会把捐赠“覆盖”掉，donate-lower 会输出 <code>Actual priority: 21</code>（期望 41）。<code>thread_get_priority()</code> 不用改，它返回的就是含捐赠的实际优先级，这也是 Pintos 文档的要求。</p>
+
+  <h3 id="c11-6">11.6 进阶：这套设计为什么是对的</h3>
+  <p>下面两条是“不变式”推理，老师问“你怎么保证……”时可以用。</p>
+  <div class="box">
+    <p><strong>不变式 1：每把锁的 max_priority ≥ 每个正在等它的线程的当前优先级。</strong></p>
+    <ul>
+      <li>线程开始等锁时，④⑤ 保证了这一点。</li>
+      <li>等待中的线程优先级只可能<strong>变高</strong>：它被阻塞了，不能自己调 <code>thread_set_priority</code>；它持有的锁也不会被释放（释放要它自己运行）。唯一的变化是有人沿链捐赠给它，而沿链捐赠时 ⑦ 会走到它的 <code>waiting_lock</code>，顺手更新这把锁的 max_priority。</li>
+      <li>所以等待期间 max_priority 不需要降低。</li>
+    </ul>
+    <p><strong>不变式 2：持有者的 priority ≥ 它持有的每把锁的 max_priority。</strong>每次改 max_priority 后都立刻调用 <code>thread_update_priority(holder)</code>。</p>
+    <p><strong>由此，提前停止是安全的</strong>：如果某把锁的 max_priority 已经 ≥ 我的优先级，说明之前有人用同样高的优先级捐赠过这条链，那次捐赠已经沿链传下去了（如果链后来又变长，是因为链上某个线程后来又去等别的锁，那时它会用自己含捐赠的优先级往下捐）。所以我再走下去不会让任何人更高。</p>
+  </div>
+  <div class="box tip">
+    <span class="tag tip">和 MLFQS 的关系</span>
+    <p><code>-o mlfqs</code> 模式下优先级由 recent_cpu 和 nice 自动计算，Pintos 规定这时不做捐赠、<code>thread_set_priority</code> 无效。所以每个相关函数开头都判断 <code>thread_mlfqs</code>。priority-* 测试开头都有 <code>ASSERT (!thread_mlfqs);</code>，只在普通模式下跑。</p>
+  </div>
+</section>
+
+<!-- =============================================================== 12 -->
+<section class="chap" id="sim">
+  <div class="chap-head"><span class="chap-no">CHAPTER 12</span><h2>推演器：7 个捐赠测试一步一步走</h2></div>
+  <p class="sub">每一步都按我们的代码推出来：线程状态、优先级、锁、ready_list 和测试输出一起变。红框是这一步发生变化的地方。</p>
+  <div class="box tip">
+    <span class="tag tip">怎么用</span>
+    <p>先点一遍看懂，再遮住屏幕，自己在纸上画每一步，画完点下一步对答案。键盘左右方向键也能翻页（先点一下推演器）。输出省略了每行开头的 <code>(测试名)</code> 前缀。</p>
+  </div>
+  <div class="tool" id="simTool" tabindex="-1">
+    <div class="simtabs" id="simTabs" role="group" aria-label="选择测试"></div>
+    <div class="simhead">
+      <div><strong id="simName"></strong> <span class="stepno" id="simStep"></span></div>
+      <div class="row">
+        <button type="button" class="btn ghost" id="simPrev">上一步</button>
+        <button type="button" class="btn" id="simNext">下一步</button>
+        <button type="button" class="btn ghost" id="simReset">从头</button>
+      </div>
+    </div>
+    <p class="muted" id="simIntro" style="font-size:.9rem;margin:.4rem 0 0"></p>
+    <div class="simtext" id="simText" aria-live="polite"></div>
+    <div class="simgrid">
+      <div class="simcol"><h6>线程（原始 → 实际优先级）</h6><div id="simThreads"></div></div>
+      <div class="simcol"><h6>锁 / 信号量</h6><div id="simLocks"></div><h6 style="margin-top:.6rem">ready_list（队首在左）</h6><div class="qrow" id="simReady"></div></div>
+    </div>
+    <div class="console" id="simOut"></div>
+  </div>
+</section>
+
+<!-- =============================================================== 13 -->
+<section class="chap" id="c13">
+  <div class="chap-head"><span class="chap-no">CHAPTER 13</span><h2>踩坑实录：改一处，挂哪个测试</h2></div>
+  <p class="sub">下面每一条都是真的把代码改回去重新跑出来的结果。上台讲“遇到的困难”就讲这些。</p>
+
+  <div class="tbl"><table class="wide">
+    <tr><th>改动（只改这一处）</th><th>挂掉的测试</th><th>现象</th></tr>
+    <tr><td>比较函数 <code>&gt;</code> 写成 <code>&gt;=</code></td><td>priority-fifo</td><td><code>iteration: 15 15 15 …</code>，同一个线程连跑 16 次</td></tr>
+    <tr><td><code>thread_create</code> 后不调用 <code>thread_preempt</code></td><td>priority-preempt、change、donate-one</td><td>两行输出搅在一起；donate-one 打印 <code>Actual priority: 31</code></td></tr>
+    <tr><td><code>sema_up</code> 直接 <code>list_pop_front</code></td><td>priority-donate-sema</td><td>M 先结束，L 和 H 没跑完测试就结束了</td></tr>
+    <tr><td><code>cond_signal</code> 按先来后到唤醒</td><td>priority-condvar</td><td>先叫醒 23、22、21（创建顺序）</td></tr>
+    <tr><td><code>lock_release</code> 直接恢复 <code>base_priority</code></td><td>donate-multiple、multiple2</td><td>放 b 后打印 <code>Actual priority: 31</code>（期望 32）</td></tr>
+    <tr><td>只捐给直接持有者，不沿链</td><td>donate-nest、donate-chain</td><td>L 停在 32；chain 里 main 停在 3，interloper 插队</td></tr>
+    <tr><td><code>thread_set_priority</code> 直接覆盖 <code>priority</code></td><td>donate-lower</td><td><code>Actual priority: 21</code>（期望 41）</td></tr>
+    <tr><td>在 <code>thread_wake</code>（中断里）调用 <code>thread_yield</code></td><td>alarm-priority 等</td><td>Kernel PANIC</td></tr>
+  </table></div>
+
+  <h3 id="c13-1">13.1 kernel panic：中断里调用了 thread_yield</h3>
+<pre class="term">(alarm-priority) begin
+<span class="bad">Kernel PANIC at ../../threads/thread.c:354 in thread_yield():</span>
+<span class="bad">    assertion `!intr_context ()' failed.</span>
+Call stack: 0xc002a277.
+The `backtrace' program can make call stacks useful.</pre>
+  <p>用 <code>backtrace kernel.o 0xc002a277</code> 解析，只得到一行 <code>debug_panic</code>。原因是 gcc 在 <code>-O</code> 优化下默认省略帧指针，而 Pintos 打印调用栈靠帧指针一层层往上找（<code>debug.c</code> 里的 <code>__builtin_frame_address</code>），链条第一层就断了。在 <code>src/Make.config</code> 的 <code>CFLAGS</code> 里临时加上 <code>-fno-omit-frame-pointer</code>，<code>make clean</code> 重编，再崩一次：</p>
+<pre class="term">0xc002a0a8: debug_panic (.../../lib/kernel/debug.c:38)
+<span class="hl">0xc0021979: thread_wake (..../../threads/thread.c:547)</span>
+0xc0021a43: thread_wake (..../../threads/thread.c:568)
+<span class="hl">0xc0024c3e: timer_interrupt (...../../devices/timer.c:176)</span>
+0xc0022380: intr_handler (..../threads/interrupt.c:378)
+0xc002266a: intr_entry (intr-stubs.o:?)
+0xc0021706: idle (...d.c:636 (discriminator 1))
+0xc002188b: kernel_thread (..../../threads/thread.c:666)</pre>
+  <p>从下往上读：idle 在跑 → 时钟中断 → <code>timer_interrupt</code> → <code>thread_wake</code> → <code>thread_yield</code>（被内联了）→ 断言失败。结论：<code>thread_wake</code> 在中断上下文执行，要用 <code>intr_yield_on_return()</code>。</p>
+
+  <h3 id="c13-2">13.2 donate-sema：用 printf 看等待队列</h3>
+  <p>diff 只告诉我 L 和 H 没跑完。在 <code>sema_up</code> 里临时加几行打印等待队列（用一个静态变量防止 printf 内部用到锁时递归进来）：</p>
+<pre class="term">(priority-donate-sema) Thread L acquired lock.
+<span class="hl">[debug] sema_up waiters: med(34) low(36)</span>
+(priority-donate-sema) Thread M finished.
+(priority-donate-sema) Main thread finished.</pre>
+  <p>low 已经被捐到 36，却排在 med 后面。原因：只在插入时排序，等待期间的捐赠把顺序打乱了。修复：<code>sema_up</code> 用 <code>list_min</code> 重新找。</p>
+
+  <h3 id="c13-3">13.3 调试三板斧</h3>
+  <ol>
+    <li>读 <code>.result</code> 里的 diff，看差在哪一行，反推“那一刻谁应该在 CPU 上”。</li>
+    <li>关键位置加 <code>printf</code>：打印的不只是优先级，还有<strong>队列的顺序</strong>。</li>
+    <li>panic 时用 <code>backtrace</code>，必要时加 <code>-fno-omit-frame-pointer</code>。</li>
+  </ol>
+  <p>另外，单独跑一个测试用 <code>make tests/threads/xxx.result</code>，不用每次跑十几分钟的 <code>make check</code>。</p>
+</section>
+
+<!-- =============================================================== 14 -->
+<section class="chap" id="hard">
+  <div class="chap-head"><span class="chap-no">CHAPTER 14</span><h2>老师难题区</h2></div>
+  <p class="sub">先遮住答案自己说一遍，再展开。<span class="lvl l1">基础</span> <span class="lvl l2">进阶</span> <span class="lvl l3">难</span></p>
+
+  <h3 id="h-sched">调度与抢占</h3>
+  <details><summary><span class="lvl l1">基础</span>你改了哪些地方让调度器“认优先级”？</summary><div class="ans">
+    <p>往 ready_list 放线程的两处（<code>thread_unblock</code>、<code>thread_yield</code>）改成按优先级降序有序插入；<code>next_thread_to_run</code> 没改，还是取队首。再加一个 <code>thread_preempt()</code>，在 <code>thread_create</code>、<code>thread_set_priority</code>、<code>sema_up</code> 末尾调用，中断里用 <code>intr_yield_on_return</code>。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>插入时排序 vs 取出时找最大，哪个好？复杂度呢？</summary><div class="ans">
+    <p>插入时排序：插入 O(n)，取出 O(1)；取出时找最大：插入 O(1)，取出 O(n)。线程数很少，都可以。</p>
+    <p>区别在于“优先级会变”：插入时排序的话，线程在队列里时优先级一变（被捐赠、MLFQS 每 4 tick 重算），顺序就过期，必须手动挪位置（我们在 <code>thread_update_priority</code> 里挪，MLFQS 里 <code>list_sort</code>）。取出时找最大永远用最新的优先级，反而更不容易出错。我们选有序插入是跟着课件的提示，并且在所有改优先级的地方都处理了重新排序。</p>
+  </div></details>
+  <details><summary><span class="lvl l1">基础</span>同优先级的线程怎么调度？</summary><div class="ans">
+    <p>轮转。比较函数用严格 <code>&gt;</code>，新入队的线程排在同优先级线程最后；时间片用完（4 tick）就 <code>thread_yield</code> 回到同优先级的队尾。<code>thread_preempt</code> 也用严格 <code>&gt;</code>，同优先级不抢占。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>为什么不在 thread_unblock 里直接抢占？</summary><div class="ans">
+    <p>调用者可能关着中断，还要在叫醒之后继续改数据。<code>sema_up</code> 是先 <code>thread_unblock</code> 再 <code>value++</code>：如果在 unblock 里就切走，被叫醒的线程回到 <code>sema_down</code> 的 while 检查时 value 还是 0，又会睡回去，而且没人再叫醒它。所以抢占放在函数末尾。原始代码的注释也专门说了 <code>thread_unblock</code> 不抢占。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>intr_yield_on_return 之后，什么时候真正让出？那时还算中断上下文吗？</summary><div class="ans">
+    <p>在 <code>intr_handler</code> 的末尾：先把 <code>in_external_intr</code> 置为 false、给中断控制器发 EOI，然后检查 <code>yield_on_return</code>，为真才调用 <code>thread_yield()</code>。那时 <code>intr_context()</code> 已经返回 false，所以 <code>thread_yield</code> 的断言能通过。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>thread_preempt 里为什么要关中断？</summary><div class="ans">
+    <p>“看队首优先级”和“让出”要作为一个整体。如果检查完、还没 yield 时来一次时钟中断，ready_list 可能已经变了（比如有线程被 <code>thread_wake</code> 放进来），判断就不准了。关中断保证这一小段原子执行。<code>thread_yield</code> 本身也会关中断，嵌套关中断没问题，因为都用 <code>intr_set_level(old)</code> 恢复。</p>
+  </div></details>
+  <details><summary><span class="lvl l1">基础</span>严格优先级调度会不会让低优先级线程饿死？</summary><div class="ans">
+    <p>会。只要一直有高优先级线程可运行，低优先级的就永远轮不到。Pintos 的 priority 部分不要求解决饥饿；第三部分 MLFQS 通过动态优先级解决：一个线程用 CPU 越多，<code>recent_cpu</code> 越大，优先级越低；不用 CPU 时 recent_cpu 衰减、优先级回升，相当于“老化（aging）”。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>donate-chain 里 main 的优先级是 0，和 idle 一样，为什么不会和 idle 抢？</summary><div class="ans">
+    <p>idle 从来不在 ready_list 里。<code>thread_yield</code> 里专门判断了 <code>cur != idle_thread</code> 才入队；<code>next_thread_to_run</code> 只有在 ready_list 为空时才返回 idle。所以只要 main 是 READY，就一定先选 main。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>priority-fifo 里 main 为什么先把自己升到 33 再创建线程？priority-sema 里为什么先降到 0？</summary><div class="ans">
+    <p>fifo：16 个线程都是 32，main 升到 33 后创建它们不会被抢占，16 个线程按创建顺序整整齐齐排进 ready_list，然后 main 降回 31，它们才一起开始轮转，这样才能检验“每轮顺序一样”。</p>
+    <p>sema：main 降到 0，每个新线程一创建就比 main 高，立刻运行并在 <code>sema_down</code> 睡下；之后每次 <code>sema_up</code> 叫醒的线程也都比 main 高，必须立刻抢占，输出才会和 “Back in main thread.” 交替。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>thread_create 返回之前，新线程可能已经运行完了吗？</summary><div class="ans">
+    <p>可能。新线程优先级更高时，<code>thread_create</code> 末尾的 <code>thread_preempt</code> 就切过去了，它甚至可能跑完、退出、页面被释放，然后 <code>thread_create</code> 才返回 tid。所以调用者不能再访问那个线程的 <code>struct thread</code>，Pintos 的注释也写了要用信号量之类的同步来保证顺序。priority-preempt 就是利用这一点：“The high-priority thread should have already completed.”</p>
+  </div></details>
+
+  <h3 id="h-sync">信号量、锁、条件变量</h3>
+  <details><summary><span class="lvl l1">基础</span>为什么只对锁做捐赠，信号量不捐？</summary><div class="ans">
+    <p>锁有持有者 <code>holder</code>，知道是谁挡住了我，可以捐给它；信号量没有持有者，任何线程都可以 up，等信号量的线程不知道该把优先级借给谁。Pintos 文档也只要求锁的捐赠。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>为什么 sema_up 要重新找最高的？能不能用 list_sort？</summary><div class="ans">
+    <p>线程在等待期间可能被捐赠（donate-sema 的 L），插入时的顺序过期了。用 <code>list_sort</code> 再取队首也可以，但要 O(n log n)，而且要确认排序是稳定的；<code>list_min</code> 线性扫一遍 O(n)，并列时返回最前面那个，天然保持先来先服务。</p>
+  </div></details>
+  <details><summary><span class="lvl l3">难</span>为什么捐赠发生时，不顺便把被捐赠线程在信号量等待队列里的位置也调整好？</summary><div class="ans">
+    <p>捐赠时只知道“持有者是谁”，不知道它此刻挂在哪个链表上：<code>elem</code> 只有一个，可能在 ready_list、某个信号量的 waiters、条件变量私人信号量的 waiters 或 sleep_list 里，<code>struct thread</code> 没有记录它属于哪个链表。我们只处理了 READY 的情况（ready_list 是全局的，知道在哪）；BLOCKED 的情况交给 <code>sema_up</code> 取出时重新找最高的。如果要做，就得在 thread 里再记一个“我在哪个等待队列上”的指针。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>条件变量需要捐赠吗？</summary><div class="ans">
+    <p>不需要，也做不了。<code>cond_wait</code> 等的是“某个条件成立”，没有一个具体的持有者在挡着它；而且 <code>cond_wait</code> 先释放了锁才睡。条件变量只需要 <code>cond_signal</code> 按优先级唤醒。被唤醒后重新 <code>lock_acquire</code> 时，如果锁被占用，那时才会正常捐赠。</p>
+  </div></details>
+  <details><summary><span class="lvl l1">基础</span>lock_release 之后当前线程一定会让出 CPU 吗？</summary><div class="ans">
+    <p>不一定。放锁后它按剩下的锁重算优先级，<code>sema_up</code> 叫醒最高的等锁线程，然后 <code>thread_preempt</code> 比较 ready_list 队首和自己：只有队首更高才让出。比如 donate-multiple2 里 main 放锁 a 后还是 36，被叫醒的 a(34) 就要等着。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>中断处理程序里能调用 lock_acquire 或 sema_down 吗？</summary><div class="ans">
+    <p>不能。它们可能阻塞，而中断上下文不能睡眠；<code>lock_acquire</code> 和 <code>sema_down</code> 开头都有 <code>ASSERT (!intr_context ())</code>。中断里可以用 <code>sema_up</code> 和 <code>sema_try_down</code>、<code>lock_try_acquire</code>（不会阻塞）。</p>
+  </div></details>
+
+  <h3 id="h-donate">优先级捐赠</h3>
+  <details><summary><span class="lvl l1">基础</span>用一句话说清你的捐赠设计。</summary><div class="ans">
+    <p>线程记录持有的锁，锁记录正在等它的线程里最高的优先级，线程的实际优先级 = max(原始优先级, 每把锁的 max_priority)；等锁时沿着 waiting_lock → holder 链把优先级捐到锁上，放锁时把这把锁从列表里删掉，任何变化都调用 <code>thread_update_priority</code> 按公式重算。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>你的设计和课件建议的“捐赠者列表”有什么区别？</summary><div class="ans">
+    <p>课件：线程维护一个“捐赠给我的线程”列表，放锁时删掉等这把锁的捐赠者，再在剩下的捐赠者里取最大。我们：维护“我持有的锁”，每把锁自带 max_priority。两者等价；我们放锁时只要删一个锁，不用遍历捐赠者筛选“谁等的是这把锁”。嵌套时，间接捐赠也自然体现在中间那把锁的 max_priority 里。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>拿到锁之后为什么要重算这把锁的 max_priority？</summary><div class="ans">
+    <p>这把锁上可能还有别人在等，它们之前是捐给上一个持有者的，现在应该改为捐给我。如果不重算，max_priority 可能还是我自己等锁时捐的值（我已经不在等了），或者是上一轮留下的旧值。重算成“剩余等待者的最高优先级”，没人等就是 PRI_MIN。donate-one 里 acquire2 拿到锁后，锁上 acquire1(32) 还在等，所以 max 是 32。</p>
+  </div></details>
+  <details><summary><span class="lvl l3">难</span>捐赠循环为什么可以在 l-&gt;max_priority &gt;= cur-&gt;priority 时提前停？会不会漏捐？</summary><div class="ans">
+    <p>不会。两个不变式：(1) 每把锁的 max_priority ≥ 每个等它的线程的当前优先级；(2) 持有者的优先级 ≥ 它持有的每把锁的 max_priority。如果某把锁的 max 已经 ≥ 我的优先级，说明之前有优先级不低于我的线程捐过这把锁，那次捐赠已经沿链传下去了，链上后面的线程都已经 ≥ 这个值。链如果后来变长，是因为链上某个线程后来又去等新的锁，那时它会用自己<strong>含捐赠</strong>的优先级继续往下捐。所以我再往下走不会让任何人变高。</p>
+  </div></details>
+  <details><summary><span class="lvl l3">难</span>线程在等锁期间，它的优先级会降低吗？max_priority 要不要降？</summary><div class="ans">
+    <p>不会降。等锁的线程被阻塞了，不能调用 <code>thread_set_priority</code>；它持有的锁也不会被释放（释放要它自己运行）。它的优先级只可能因为别人沿链捐赠而升高，而沿链捐赠时循环会经过它的 <code>waiting_lock</code>，顺手把那把锁的 max_priority 也抬高。所以等待期间 max_priority 只升不降，不需要“降低”的逻辑；只有拿到锁、放锁这两个时刻才需要重算。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>嵌套深度限制 8 层有什么代价？超过 8 层会怎样？</summary><div class="ans">
+    <p>超过 8 层后，更深处的持有者拿不到捐赠，可能又出现优先级反转。这是在“正确性”和“防止死循环”之间的取舍：如果线程之间形成了等待环（死锁），没有上限的话理论上可能一直绕圈。Pintos 文档允许设一个合理的上限，比如 8；测试里最深的是 donate-chain 的 7 层。</p>
+  </div></details>
+  <details><summary><span class="lvl l3">难</span>如果两个线程死锁（A 等 B 的锁，B 等 A 的锁），你的代码会怎样？捐赠能解决死锁吗？</summary><div class="ans">
+    <p>捐赠解决不了死锁，两个线程都会永远阻塞。但我们的循环不会卡死：设 A(40) 持 la、B(30) 持 lb。A 等 lb：lb.max = 40，B 变 40，B 没在等锁，停。B 再等 la：la.max = 40，A 重算还是 40；沿 A 的 waiting_lock 到 lb，lb.max 已经是 40，不小于 B 的 40，停。即使条件没让它停，depth &lt; 8 也会兜底。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>被捐赠的线程如果在 READY / 在睡觉（timer_sleep）/ 在等信号量，分别会怎样？</summary><div class="ans">
+    <ul>
+      <li>READY：<code>thread_update_priority</code> 把它从 ready_list 摘下来按新优先级重新插入。</li>
+      <li>在 <code>sleep_list</code> 里睡觉：只改优先级，不动 sleep_list（那里按唤醒时间排序）；睡醒时 <code>thread_unblock</code> 按新优先级插入 ready_list。</li>
+      <li>在信号量上等：位置不动，<code>sema_up</code> 取出时重新找最高的（donate-sema）。</li>
+    </ul>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>为什么 lock_acquire 里关中断，sema_down 里也关中断，嵌套会不会有问题？</summary><div class="ans">
+    <p>不会。每一层都用 <code>old = intr_disable()</code> 和 <code>intr_set_level(old)</code>：<code>sema_down</code> 进来时中断已经关了，它记下的 old 就是“关”，出去时恢复成“关”，外层 <code>lock_acquire</code> 最后才恢复成真正的原状态。<code>sema_down</code> 里阻塞时会切到别的线程，每个线程切回来时恢复的都是它自己的中断状态，Pintos 的设计允许“关着中断调用 thread_block”。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>线程拿着锁就退出了会怎样？</summary><div class="ans">
+    <p>Pintos 没有替你处理：锁永远不会被释放，等它的线程永远阻塞，而且 <code>holder</code> 会指向已经被释放的页。这属于使用错误，内核线程退出前必须释放持有的锁。测试里不会出现这种情况。</p>
+  </div></details>
+  <details><summary><span class="lvl l3">难</span>如果 Pintos 是多核的，你的实现还成立吗？</summary><div class="ans">
+    <p>不成立。关中断只对当前 CPU 有效，另一个 CPU 照样能同时修改 ready_list 和锁的状态。多核下要用自旋锁保护这些数据结构；沿链捐赠要同时访问好几个线程和锁，还要规定加锁顺序避免死锁；“只看 ready_list 队首决定是否抢占”也要变成给别的 CPU 发处理器间中断。我们的实现基于“单核 + 关中断就是原子操作”这个前提。</p>
+  </div></details>
+  <details><summary><span class="lvl l2">进阶</span>MLFQS 模式下，锁和信号量还按优先级唤醒吗？</summary><div class="ans">
+    <p>按。Pintos 要求优先级调度“在所有情况下”都生效，只是 MLFQS 模式下优先级由公式计算、不做捐赠。我们的 <code>sema_up</code> 和 <code>cond_signal</code> 照样挑优先级最高的，<code>thread_update_priority</code> 和捐赠循环在 MLFQS 下直接跳过。</p>
+  </div></details>
+  <details><summary><span class="lvl l3">难</span>火星探路者号是死锁吗？为什么会重启？</summary><div class="ans">
+    <p>不是死锁，是无界优先级反转。高优先级的总线管理任务等低优先级气象任务手里的互斥锁，而中优先级的通信任务一直抢占气象任务，总线管理任务迟迟不能运行。系统里的看门狗发现总线管理任务没有按时完成，判定系统故障，于是复位重启。修复方法是打开那个互斥锁的优先级继承选项。</p>
+  </div></details>
+  <details><summary><span class="lvl l3">难</span>优先级继承和优先级天花板协议有什么区别？</summary><div class="ans">
+    <p>继承：有高优先级线程来等时，持有者临时继承它的优先级，不需要预先知道什么，但防不了死锁，也可能出现一个线程依次被好几把锁挡住（链式阻塞）。天花板：每把锁预先设定一个天花板（可能使用它的线程中的最高优先级），线程拿到锁就提升到天花板；经典的天花板协议能防止死锁和链式阻塞，代价是要静态知道每把锁会被谁用。Pintos 要求的是继承。</p>
+  </div></details>
+  <details><summary><span class="lvl l1">基础</span>如果老师问到你真的不会的</summary><div class="ans">
+    <p>别硬编。先说清楚自己确定的部分（比如“我们的实现基于单核关中断”），再说推理方向（“如果是这样，我会在……加……”），最后坦白“这个情况我们的代码没有处理 / 测试没有覆盖”。老师更看重你理解自己代码的边界。</p>
+  </div></details>
+</section>
+
+<!-- =============================================================== 15 -->
+<section class="chap" id="quiz">
+  <div class="chap-head"><span class="chap-no">CHAPTER 15</span><h2>自测</h2></div>
+  <p class="sub">点选项看对错和解释。<span class="score" id="quizScore"></span></p>
+  <div class="quiz" id="quizBox"></div>
+  <p><button type="button" class="btn ghost" id="quizReset">重做一遍</button></p>
+
+  <h3 id="todo">掌握清单</h3>
+  <p class="muted">能脱稿讲清楚就打勾（只保存在这个浏览器里）。</p>
+  <div class="progress" aria-hidden="true"><i id="todoBar"></i></div>
+  <p class="score" id="todoCount"></p>
+  <ul class="check" id="todoList"></ul>
+</section>
+
+<!-- =============================================================== cheat -->
+<section class="chap" id="cheat">
+  <div class="chap-head"><span class="chap-no">ONE PAGE</span><h2>一页纸</h2></div>
+  <p class="sub">周二早上只看这里。</p>
+  <div class="cheat">
+    <div><h5>三件事</h5><p>① 选最高的跑：ready_list 有序插入（<code>&gt;</code>）。</p><p>② 立即抢占：<code>thread_preempt</code>，中断里 <code>intr_yield_on_return</code>。</p><p>③ 等待者按优先级醒 + 锁的捐赠。</p></div>
+    <div><h5>抢占的四个调用点</h5><p><code>thread_create</code> 末尾</p><p><code>thread_set_priority</code> 末尾</p><p><code>sema_up</code> 末尾（value++ 之后）</p><p><code>thread_wake</code>（中断里，预约）</p></div>
+    <div><h5>捐赠公式</h5><p><code>priority = max(base, 各锁 max_priority)</code></p><p>等锁：沿 <code>waiting_lock → holder</code> 捐，最多 8 层，遇到 max ≥ 我就停。</p><p>放锁：删锁 + 重算。</p><p>set_priority：只改 base。</p></div>
+    <div><h5>为什么 sema_up 重新找</h5><p>等待期间被捐赠，插入时的顺序过期（donate-sema：<code>med(34) low(36)</code>）。<code>list_min</code> + “大于” = 第一个最高的。</p></div>
+    <div><h5>中断上下文</h5><p>不能睡、不能切线程。<code>thread_yield</code> 断言 <code>!intr_context()</code>。预约后在 <code>intr_handler</code> 末尾（已退出中断上下文）才 yield。</p></div>
+    <div><h5>三个难测试</h5><p>multiple：放 b 后 32 不是 31。</p><p>nest：H→M→L，L 变 33。</p><p>sema：L 在等待队列里被捐成 36，要叫醒 L 不是 M。</p></div>
+    <div><h5>为什么不在 unblock 里抢占</h5><p>sema_up 先 unblock 后 value++，提前切走会让被叫醒者看到 value = 0 又睡回去。</p></div>
+    <div><h5>边界</h5><p>只捐锁不捐信号量（没有 holder）。MLFQS 不捐赠。单核关中断 = 原子；多核不成立。捐赠解决不了死锁。</p></div>
+  </div>
+</section>
+
+<footer>
+  <p>Pintos Priority 通关笔记 · 配合 <code>操作系统lab/lab3/</code> 下的代码、实验报告和作业 3.2 PPT 使用。代码片段来自通过了全部 27 个测试的实现；踩坑输出都是把代码改回去真实跑出来的。</p>
+</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function store(key, val) {
+    try {
+      if (val === undefined) return JSON.parse(localStorage.getItem(key) || "null");
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) { return null; }
+  }
+
+  /* ---------------- nav highlight ---------------- */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll("#navIn a"));
+  var targets = navLinks.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+  function markNav() {
+    var y = window.scrollY + 120, cur = 0;
+    targets.forEach(function (t, i) { if (t && t.offsetTop <= y) cur = i; });
+    navLinks.forEach(function (a, i) {
+      var on = i === cur;
+      if (on !== a.classList.contains("on")) {
+        a.classList.toggle("on", on);
+        if (on) a.scrollIntoView({ block: "nearest", inline: "center" });
+      }
+    });
+  }
+  window.addEventListener("scroll", markNav, { passive: true });
+  markNav();
+
+  /* ---------------- FIFO tool ---------------- */
+  var fifo = { ge: false, run: 0, ready: [1, 2, 3], log: [] };
+  function chip(n, p, cls) { return '<span class="th ' + (cls || "l") + '">#' + n + " · " + p + "</span>"; }
+  function fifoDraw() {
+    $("cmpGt").setAttribute("aria-pressed", String(!fifo.ge));
+    $("cmpGe").setAttribute("aria-pressed", String(fifo.ge));
+    $("fifoRun").innerHTML = chip(fifo.run, 32, "h");
+    $("fifoReady").innerHTML = fifo.ready.map(function (n) { return chip(n, 32); }).join("");
+    $("fifoLog").innerHTML = fifo.log.length
+      ? "运行顺序：" + fifo.log.join(" ")
+      : '<span class="empty">点“当前线程调用 thread_yield()”，看下一个上 CPU 的是谁。</span>';
+  }
+  function fifoReset() { fifo.run = 0; fifo.ready = [1, 2, 3]; fifo.log = ["0"]; fifoDraw(); }
+  $("cmpGt").addEventListener("click", function () { fifo.ge = false; fifoReset(); });
+  $("cmpGe").addEventListener("click", function () { fifo.ge = true; fifoReset(); });
+  $("fifoReset").addEventListener("click", fifoReset);
+  $("fifoYield").addEventListener("click", function () {
+    /* list_insert_ordered: with ">" equal priorities never stop the scan -> goes to the back;
+       with ">=" the first equal element stops it -> goes to the front. */
+    if (fifo.ge) fifo.ready.unshift(fifo.run); else fifo.ready.push(fifo.run);
+    fifo.run = fifo.ready.shift();
+    fifo.log.push(String(fifo.run));
+    if (fifo.log.length > 24) fifo.log = fifo.log.slice(-24);
+    fifoDraw();
+  });
+  fifoReset();
+
+  /* ---------------- simulator data ---------------- */
+  /* th: name -> [base, priority, status, note]; status: run|ready|blk|done
+     lk: {n, h (holder or null), m (max_priority), w: [waiters]} or {n, sema:true, v, w} */
+  var SC = [];
+
+  SC.push({ id: "one", name: "donate-one", color: { main: "l", acquire1: "m", acquire2: "h" },
+    intro: "单一捐赠：main(31) 拿着锁，acquire1(32)、acquire2(33) 先后来等。",
+    steps: [
+      { t: "main（31）调用 <code>lock_acquire</code>，锁空闲，直接拿到。",
+        th: { main: [31, 31, "run", "持有 lock"] }, lk: [{ n: "lock", h: "main", m: 0, w: [] }], rq: [], out: ["begin"] },
+      { t: "创建 acquire1（32）。<code>thread_create</code> 末尾 <code>thread_preempt</code>：32 &gt; 31，main 让出。acquire1 执行 <code>lock_acquire</code>：锁被 main 占着 → <code>waiting_lock = lock</code>，<code>lock.max_priority = 32</code>，main 按公式重算为 max(31, 32) = <b>32</b>。acquire1 在 <code>sema_down</code> 里阻塞，main 回到 CPU。",
+        th: { main: [31, 32, "run", "持有 lock"], acquire1: [32, 32, "blk", "等 lock"] },
+        lk: [{ n: "lock", h: "main", m: 32, w: ["acquire1"] }], rq: [], out: ["This thread should have priority 32.  Actual priority: 32."] },
+      { t: "创建 acquire2（33），同样立刻抢占、来等锁：<code>lock.max_priority = 33</code>，main 变成 <b>33</b>。等待队列按优先级插入，acquire2 排在 acquire1 前面。",
+        th: { main: [31, 33, "run", "持有 lock"], acquire1: [32, 32, "blk", "等 lock"], acquire2: [33, 33, "blk", "等 lock"] },
+        lk: [{ n: "lock", h: "main", m: 33, w: ["acquire2", "acquire1"] }], rq: [], out: ["This thread should have priority 33.  Actual priority: 33."] },
+      { t: "main 调用 <code>lock_release</code>：把 lock 从 main.locks 删掉，重算回 <b>31</b>；<code>holder = NULL</code>；<code>sema_up</code> 用 <code>list_min</code> 挑出 acquire2（33）叫醒；末尾 <code>thread_preempt</code>：33 &gt; 31，main 让出。acquire2 从 <code>sema_down</code> 返回、成为持有者；锁上还有 acquire1 在等，所以 <code>lock.max_priority</code> 重算为 32。",
+        th: { main: [31, 31, "ready", ""], acquire1: [32, 32, "blk", "等 lock"], acquire2: [33, 33, "run", "持有 lock"] },
+        lk: [{ n: "lock", h: "acquire2", m: 32, w: ["acquire1"] }], rq: ["main"], out: ["acquire2: got the lock"] },
+      { t: "acquire2 放锁：叫醒 acquire1（32），32 &lt; 33 不抢占；acquire2 打印 done 后退出。ready_list 里 acquire1（32）比 main（31）高，先运行：拿锁、放锁、退出。",
+        th: { main: [31, 31, "run", ""], acquire1: [32, 32, "done", ""], acquire2: [33, 33, "done", ""] },
+        lk: [{ n: "lock", h: null, m: 0, w: [] }], rq: [], out: ["acquire2: done", "acquire1: got the lock", "acquire1: done"] },
+      { t: "最后 main 运行，打印结尾。顺序和 .ck 完全一致：acquire2 先于 acquire1。",
+        th: { main: [31, 31, "run", ""], acquire1: [32, 32, "done", ""], acquire2: [33, 33, "done", ""] },
+        lk: [{ n: "lock", h: null, m: 0, w: [] }], rq: [], out: ["acquire2, acquire1 must already have finished, in that order.", "This should be the last line before finishing this test.", "end"] }
+    ] });
+
+  SC.push({ id: "multiple", name: "donate-multiple", color: { main: "l", "thread a": "m", "thread b": "h" },
+    intro: "多重捐赠：main 拿着锁 a、锁 b；thread a(32) 等锁 a，thread b(33) 等锁 b；先放 b 再放 a。",
+    steps: [
+      { t: "main（31）先后拿到锁 a、锁 b。", th: { main: [31, 31, "run", "持有 锁a、锁b"] },
+        lk: [{ n: "锁 a", h: "main", m: 0, w: [] }, { n: "锁 b", h: "main", m: 0, w: [] }], rq: [], out: ["begin"] },
+      { t: "创建 thread a（32），抢占后去等锁 a：<code>锁a.max = 32</code>，main = max(31, 32, 0) = <b>32</b>。",
+        th: { main: [31, 32, "run", "持有 锁a、锁b"], "thread a": [32, 32, "blk", "等 锁a"] },
+        lk: [{ n: "锁 a", h: "main", m: 32, w: ["thread a"] }, { n: "锁 b", h: "main", m: 0, w: [] }], rq: [],
+        out: ["Main thread should have priority 32.  Actual priority: 32."] },
+      { t: "创建 thread b（33），抢占后去等锁 b：<code>锁b.max = 33</code>，main = max(31, 32, 33) = <b>33</b>。",
+        th: { main: [31, 33, "run", "持有 锁a、锁b"], "thread a": [32, 32, "blk", "等 锁a"], "thread b": [33, 33, "blk", "等 锁b"] },
+        lk: [{ n: "锁 a", h: "main", m: 32, w: ["thread a"] }, { n: "锁 b", h: "main", m: 33, w: ["thread b"] }], rq: [],
+        out: ["Main thread should have priority 33.  Actual priority: 33."] },
+      { t: "main 放锁 b：从 main.locks 删掉锁 b，重算 max(31, 锁a 的 32) = <b>32</b>。<strong>不是 31</strong>，因为锁 a 上的捐赠还在，这就是多重捐赠。<code>sema_up</code> 叫醒 thread b（33），33 &gt; 32，main 让出。",
+        th: { main: [31, 32, "ready", "持有 锁a"], "thread a": [32, 32, "blk", "等 锁a"], "thread b": [33, 33, "run", "持有 锁b"] },
+        lk: [{ n: "锁 a", h: "main", m: 32, w: ["thread a"] }, { n: "锁 b", h: "thread b", m: 0, w: [] }], rq: ["main"], out: [] },
+      { t: "thread b 拿到锁 b、放锁、退出；main 回到 CPU，打印自己是 32。",
+        th: { main: [31, 32, "run", "持有 锁a"], "thread a": [32, 32, "blk", "等 锁a"], "thread b": [33, 33, "done", ""] },
+        lk: [{ n: "锁 a", h: "main", m: 32, w: ["thread a"] }, { n: "锁 b", h: null, m: 0, w: [] }], rq: [],
+        out: ["Thread b acquired lock b.", "Thread b finished.", "Thread b should have just finished.", "Main thread should have priority 32.  Actual priority: 32."] },
+      { t: "main 放锁 a：重算回 <b>31</b>；叫醒 thread a（32）抢占，它跑完后 main 打印 31。",
+        th: { main: [31, 31, "run", ""], "thread a": [32, 32, "done", ""], "thread b": [33, 33, "done", ""] },
+        lk: [{ n: "锁 a", h: null, m: 0, w: [] }, { n: "锁 b", h: null, m: 0, w: [] }], rq: [],
+        out: ["Thread a acquired lock a.", "Thread a finished.", "Thread a should have just finished.", "Main thread should have priority 31.  Actual priority: 31.", "end"] }
+    ] });
+
+  SC.push({ id: "multiple2", name: "donate-multiple2", color: { main: "l", "thread a": "m", "thread c": "n", "thread b": "h" },
+    intro: "main 拿锁 a、b；a(34) 等锁 a，c(32) 不等锁，b(36) 等锁 b；先放 a 再放 b。最后顺序必须是 b、a、c。",
+    steps: [
+      { t: "main（31）先后拿到锁 a、锁 b。", th: { main: [31, 31, "run", "持有 锁a、锁b"] },
+        lk: [{ n: "锁 a", h: "main", m: 0, w: [] }, { n: "锁 b", h: "main", m: 0, w: [] }], rq: [], out: ["begin"] },
+      { t: "创建 thread a（34），抢占后等锁 a：<code>锁a.max = 34</code>，main 变成 <b>34</b>。",
+        th: { main: [31, 34, "run", "持有 锁a、锁b"], "thread a": [34, 34, "blk", "等 锁a"] },
+        lk: [{ n: "锁 a", h: "main", m: 34, w: ["thread a"] }, { n: "锁 b", h: "main", m: 0, w: [] }], rq: [],
+        out: ["Main thread should have priority 34.  Actual priority: 34."] },
+      { t: "创建 thread c（32）：32 &lt; 34，<strong>不抢占</strong>，c 进 ready_list 排队。",
+        th: { main: [31, 34, "run", "持有 锁a、锁b"], "thread a": [34, 34, "blk", "等 锁a"], "thread c": [32, 32, "ready", "不等锁"] },
+        lk: [{ n: "锁 a", h: "main", m: 34, w: ["thread a"] }, { n: "锁 b", h: "main", m: 0, w: [] }], rq: ["thread c"], out: [] },
+      { t: "创建 thread b（36）：36 &gt; 34 抢占，等锁 b：<code>锁b.max = 36</code>，main 变成 <b>36</b>。",
+        th: { main: [31, 36, "run", "持有 锁a、锁b"], "thread a": [34, 34, "blk", "等 锁a"], "thread c": [32, 32, "ready", "不等锁"], "thread b": [36, 36, "blk", "等 锁b"] },
+        lk: [{ n: "锁 a", h: "main", m: 34, w: ["thread a"] }, { n: "锁 b", h: "main", m: 36, w: ["thread b"] }], rq: ["thread c"],
+        out: ["Main thread should have priority 36.  Actual priority: 36."] },
+      { t: "main <strong>先放锁 a</strong>：重算 max(31, 锁b 的 36) = <b>36</b>，没变。<code>sema_up</code> 叫醒 thread a（34），它进 ready_list，但 34 &lt; 36，不抢占。锁 a 此时 holder 为 NULL：thread a 还没运行到“成为持有者”那一步。",
+        th: { main: [31, 36, "run", "持有 锁b"], "thread a": [34, 34, "ready", "已被叫醒，还没上 CPU"], "thread c": [32, 32, "ready", "不等锁"], "thread b": [36, 36, "blk", "等 锁b"] },
+        lk: [{ n: "锁 a", h: null, m: 0, w: [], note: "交接中" }, { n: "锁 b", h: "main", m: 36, w: ["thread b"] }], rq: ["thread a", "thread c"],
+        out: ["Main thread should have priority 36.  Actual priority: 36."] },
+      { t: "main 放锁 b：重算回 <b>31</b>；叫醒 thread b（36），抢占。现在 ready_list 是 a(34)、c(32)、main(31)。",
+        th: { main: [31, 31, "ready", ""], "thread a": [34, 34, "ready", "已被叫醒"], "thread c": [32, 32, "ready", "不等锁"], "thread b": [36, 36, "run", "持有 锁b"] },
+        lk: [{ n: "锁 a", h: null, m: 0, w: [], note: "交接中" }, { n: "锁 b", h: "thread b", m: 0, w: [] }], rq: ["thread a", "thread c", "main"], out: [] },
+      { t: "b(36) 跑完 → a(34) 运行：完成 <code>lock_acquire</code>、成为锁 a 的持有者，跑完 → c(32) 跑完。顺序 b、a、c，正是按优先级。",
+        th: { main: [31, 31, "ready", ""], "thread a": [34, 34, "done", ""], "thread c": [32, 32, "done", ""], "thread b": [36, 36, "done", ""] },
+        lk: [{ n: "锁 a", h: null, m: 0, w: [] }, { n: "锁 b", h: null, m: 0, w: [] }], rq: ["main"],
+        out: ["Thread b acquired lock b.", "Thread b finished.", "Thread a acquired lock a.", "Thread a finished.", "Thread c finished."] },
+      { t: "main 最后运行，优先级 31。",
+        th: { main: [31, 31, "run", ""], "thread a": [34, 34, "done", ""], "thread c": [32, 32, "done", ""], "thread b": [36, 36, "done", ""] },
+        lk: [{ n: "锁 a", h: null, m: 0, w: [] }, { n: "锁 b", h: null, m: 0, w: [] }], rq: [],
+        out: ["Threads b, a, c should have just finished, in that order.", "Main thread should have priority 31.  Actual priority: 31.", "end"] }
+    ] });
+
+  SC.push({ id: "nest", name: "donate-nest", color: { main: "l", medium: "m", high: "h" },
+    intro: "嵌套捐赠：main(L, 31) 拿锁 a；medium(32) 拿锁 b 再等锁 a；high(33) 等锁 b。",
+    steps: [
+      { t: "main（31）拿到锁 a。", th: { main: [31, 31, "run", "持有 锁a"] },
+        lk: [{ n: "锁 a", h: "main", m: 0, w: [] }, { n: "锁 b", h: null, m: 0, w: [] }], rq: [], out: ["begin"] },
+      { t: "创建 medium（32），抢占。medium 先拿到空闲的锁 b，再去拿锁 a：被 main 占着 → <code>锁a.max = 32</code>，main 重算为 <b>32</b>；main 没在等锁（<code>waiting_lock == NULL</code>），链到头。medium 阻塞，main 回来（测试里调了 <code>thread_yield</code>，但 ready_list 是空的，还是 main）。",
+        th: { main: [31, 32, "run", "持有 锁a"], medium: [32, 32, "blk", "持有 锁b，等 锁a"] },
+        lk: [{ n: "锁 a", h: "main", m: 32, w: ["medium"] }, { n: "锁 b", h: "medium", m: 0, w: [] }], rq: [],
+        out: ["Low thread should have priority 32.  Actual priority: 32."] },
+      { t: "创建 high（33），抢占。high 去拿锁 b：被 medium 占着 → <code>锁b.max = 33</code>，medium 重算为 33。<strong>继续沿链</strong>：<code>l = medium-&gt;waiting_lock</code> 是锁 a → <code>锁a.max = 33</code>，main 重算为 <b>33</b>；main 没在等锁，停。这就是嵌套捐赠。",
+        th: { main: [31, 33, "run", "持有 锁a"], medium: [32, 33, "blk", "持有 锁b，等 锁a"], high: [33, 33, "blk", "等 锁b"] },
+        lk: [{ n: "锁 a", h: "main", m: 33, w: ["medium"] }, { n: "锁 b", h: "medium", m: 33, w: ["high"] }], rq: [],
+        out: ["Low thread should have priority 33.  Actual priority: 33."] },
+      { t: "main 放锁 a：重算回 <b>31</b>；叫醒 medium（33）抢占。medium 成为锁 a 的持有者，锁 a 上没人等了，max 重算为 0；medium = max(32, 锁b 的 33, 0) = 33。",
+        th: { main: [31, 31, "ready", ""], medium: [32, 33, "run", "持有 锁a、锁b"], high: [33, 33, "blk", "等 锁b"] },
+        lk: [{ n: "锁 a", h: "medium", m: 0, w: [] }, { n: "锁 b", h: "medium", m: 33, w: ["high"] }], rq: ["main"],
+        out: ["Medium thread should have priority 33.  Actual priority: 33.", "Medium thread got the lock."] },
+      { t: "medium 放锁 a（还是 33，因为锁 b 上 high 在等），yield 后还是它；再放锁 b → 回到 <b>32</b>，叫醒 high（33）抢占。high 拿锁、放锁、退出。",
+        th: { main: [31, 31, "ready", ""], medium: [32, 32, "ready", ""], high: [33, 33, "done", ""] },
+        lk: [{ n: "锁 a", h: null, m: 0, w: [] }, { n: "锁 b", h: null, m: 0, w: [] }], rq: ["medium", "main"],
+        out: ["High thread got the lock.", "High thread finished."] },
+      { t: "medium（32）继续，打印后退出；最后 main 打印回到 31。",
+        th: { main: [31, 31, "run", ""], medium: [32, 32, "done", ""], high: [33, 33, "done", ""] },
+        lk: [{ n: "锁 a", h: null, m: 0, w: [] }, { n: "锁 b", h: null, m: 0, w: [] }], rq: [],
+        out: ["High thread should have just finished.", "Middle thread finished.", "Medium thread should just have finished.", "Low thread should have priority 31.  Actual priority: 31.", "end"] }
+    ] });
+
+  SC.push({ id: "sema", name: "donate-sema", color: { main: "n", low: "l", med: "m", high: "h" },
+    intro: "等待中被捐赠：L(32) 拿锁后在信号量上等，M(34) 也在这个信号量上等，H(36) 等 L 的锁；main sema_up 时要叫醒 L。",
+    steps: [
+      { t: "main（31）准备好一把锁和一个初值为 0 的信号量。",
+        th: { main: [31, 31, "run", ""] },
+        lk: [{ n: "lock", h: null, m: 0, w: [] }, { n: "sema", sema: true, v: 0, w: [] }], rq: [], out: ["begin"] },
+      { t: "创建 low（32），抢占。low 拿到空闲的锁，然后 <code>sema_down</code>：value 是 0，按优先级插入等待队列并阻塞。",
+        th: { main: [31, 31, "run", ""], low: [32, 32, "blk", "持有 lock，等 sema"] },
+        lk: [{ n: "lock", h: "low", m: 0, w: [] }, { n: "sema", sema: true, v: 0, w: ["low"] }], rq: [], out: ["Thread L acquired lock."] },
+      { t: "创建 med（34），抢占，<code>sema_down</code> 阻塞。按优先级插入：34 &gt; 32，med 排在 low 前面。",
+        th: { main: [31, 31, "run", ""], low: [32, 32, "blk", "持有 lock，等 sema"], med: [34, 34, "blk", "等 sema"] },
+        lk: [{ n: "lock", h: "low", m: 0, w: [] }, { n: "sema", sema: true, v: 0, w: ["med", "low"] }], rq: [], out: [] },
+      { t: "创建 high（36），抢占，去拿锁：被 low 占着 → <code>lock.max = 36</code>，low 重算为 <b>36</b>。<strong>但 low 在信号量等待队列里的位置没变</strong>，还排在 med（34）后面。",
+        th: { main: [31, 31, "run", ""], low: [32, 36, "blk", "持有 lock，等 sema"], med: [34, 34, "blk", "等 sema"], high: [36, 36, "blk", "等 lock"] },
+        lk: [{ n: "lock", h: "low", m: 36, w: ["high"] }, { n: "sema", sema: true, v: 0, w: ["med", "low"] }], rq: [], out: [] },
+      { t: "main 调用 <code>sema_up</code>。<code>list_min</code> 找到优先级最高的 low（36）叫醒；<strong>如果只取队首，叫醒的是 med，测试就挂了</strong>。36 &gt; 31，main 让出，low 运行。",
+        th: { main: [31, 31, "ready", ""], low: [32, 36, "run", "持有 lock"], med: [34, 34, "blk", "等 sema"], high: [36, 36, "blk", "等 lock"] },
+        lk: [{ n: "lock", h: "low", m: 36, w: ["high"] }, { n: "sema", sema: true, v: 0, w: ["med"] }], rq: ["main"], out: ["Thread L downed semaphore."] },
+      { t: "low 放锁：重算回 <b>32</b>；叫醒 high（36）抢占。high 拿到锁，<code>sema_up</code> 叫醒 med（34 &lt; 36 不抢占，value 变成 1），放锁，退出。",
+        th: { main: [31, 31, "ready", ""], low: [32, 32, "ready", ""], med: [34, 34, "ready", "已被叫醒"], high: [36, 36, "done", ""] },
+        lk: [{ n: "lock", h: null, m: 0, w: [] }, { n: "sema", sema: true, v: 1, w: [] }], rq: ["med", "low", "main"],
+        out: ["Thread H acquired lock.", "Thread H finished."] },
+      { t: "按优先级依次运行：med（34，拿走 value）→ low（32）→ main（31）。",
+        th: { main: [31, 31, "run", ""], low: [32, 32, "done", ""], med: [34, 34, "done", ""], high: [36, 36, "done", ""] },
+        lk: [{ n: "lock", h: null, m: 0, w: [] }, { n: "sema", sema: true, v: 0, w: [] }], rq: [],
+        out: ["Thread M finished.", "Thread L finished.", "Main thread finished.", "end"] }
+    ] });
+
+  SC.push({ id: "lower", name: "donate-lower", color: { main: "l", acquire: "h" },
+    intro: "被捐赠期间降低自己的优先级：main 被捐赠到 41 后调用 thread_set_priority(21)。",
+    steps: [
+      { t: "main（31）拿到锁。", th: { main: [31, 31, "run", "持有 lock"] }, lk: [{ n: "lock", h: "main", m: 0, w: [] }], rq: [], out: ["begin"] },
+      { t: "创建 acquire（41），抢占后等锁：<code>lock.max = 41</code>，main 变成 <b>41</b>。",
+        th: { main: [31, 41, "run", "持有 lock"], acquire: [41, 41, "blk", "等 lock"] },
+        lk: [{ n: "lock", h: "main", m: 41, w: ["acquire"] }], rq: [], out: ["Main thread should have priority 41.  Actual priority: 41."] },
+      { t: "main 调用 <code>thread_set_priority(21)</code>：只改 <code>base_priority = 21</code>，再按公式重算 max(21, 41) = <b>41</b>。如果直接写 <code>priority = 21</code>，这里就会打印 Actual priority: 21。",
+        th: { main: [21, 41, "run", "持有 lock"], acquire: [41, 41, "blk", "等 lock"] },
+        lk: [{ n: "lock", h: "main", m: 41, w: ["acquire"] }], rq: [], out: ["Lowering base priority...", "Main thread should have priority 41.  Actual priority: 41."] },
+      { t: "main 放锁：重算为 <b>21</b>；acquire（41）抢占、跑完；main 打印 21。",
+        th: { main: [21, 21, "run", ""], acquire: [41, 41, "done", ""] },
+        lk: [{ n: "lock", h: null, m: 0, w: [] }], rq: [],
+        out: ["acquire: got the lock", "acquire: done", "acquire must already have finished.", "Main thread should have priority 21.  Actual priority: 21.", "end"] }
+    ] });
+
+  /* donate-chain is generated: main(0) holds lock 0; thread i (3i) holds lock i (i<7) and waits lock i-1;
+     interloper i has priority 3i-1. */
+  (function () {
+    var color = { main: "l" }, steps = [], i, j;
+    for (i = 1; i <= 7; i++) { color["thread " + i] = i >= 6 ? "h" : (i >= 3 ? "m" : "l"); color["interloper " + i] = "n"; }
+    function locks(holders, maxes, waiters) {
+      var a = [];
+      for (var k = 0; k < 7; k++) {
+        if (holders[k] === undefined) continue;
+        a.push({ n: "lock " + k, h: holders[k], m: maxes[k] || 0, w: waiters[k] || [] });
+      }
+      return a;
+    }
+    steps.push({ t: "main 把自己设成 PRI_MIN（0），拿到 lock 0。", th: { main: [0, 0, "run", "持有 lock 0"] },
+      lk: locks(["main"], [0], []), rq: [], out: ["begin", "main got lock."] });
+    for (i = 1; i <= 7; i++) {
+      var th = {}, holders = ["main"], maxes = [3 * i], waiters = [], rq = [];
+      th.main = [0, 3 * i, "run", "持有 lock 0"];
+      for (j = 1; j <= i; j++) {
+        var holds = j < 7 ? "持有 lock " + j + "，" : "";
+        th["thread " + j] = [3 * j, 3 * i, "blk", holds + "等 lock " + (j - 1)];
+        if (j < 7) { holders[j] = "thread " + j; maxes[j] = j < i ? 3 * i : 0; }
+        waiters[j - 1] = ["thread " + j];
+      }
+      for (j = i; j >= 1; j--) { th["interloper " + j] = [3 * j - 1, 3 * j - 1, "ready", "比 " + (j === 1 ? "main" : "thread " + (j - 1)) + " 的原始优先级高"]; }
+      for (j = i; j >= 1; j--) rq.push("interloper " + j);
+      steps.push({
+        t: "创建 thread " + i + "（" + 3 * i + "），抢占 main。" + (i < 7 ? "它先拿到空闲的 lock " + i + "，再" : "它没有第一把锁，直接") +
+          "去等 lock " + (i - 1) + "。捐赠沿链走了 " + i + " 层：" +
+          (i > 1 ? "thread " + (i - 1) + " → … → " : "") + "main，全部变成 <b>" + 3 * i + "</b>。" +
+          "然后 main 创建 interloper " + i + "（" + (3 * i - 1) + "），它比 main 现在的 " + 3 * i + " 低，只能排队。" +
+          (i === 1 ? "（如果不沿链捐赠，后面的 interloper 就会插到持锁线程前面。）" : ""),
+        th: th, lk: locks(holders, maxes, waiters), rq: rq,
+        out: ["main should have priority " + 3 * i + ".  Actual priority: " + 3 * i + "."] });
+    }
+    var thR = { main: [0, 0, "ready", ""] }, out = [];
+    for (j = 1; j <= 7; j++) {
+      thR["thread " + j] = [3 * j, 3 * j, j === 7 ? "done" : "ready", j === 7 ? "" : "放掉两把锁后回到原始优先级，还没打印 finishing"];
+      out.push("thread " + j + " got lock", "thread " + j + " should have priority 21. Actual priority: 21");
+    }
+    out.push("thread 7 finishing with priority 21.");
+    for (j = 7; j >= 1; j--) thR["interloper " + j] = [3 * j - 1, 3 * j - 1, "ready", ""];
+    var rqR = [];
+    for (j = 7; j >= 1; j--) { rqR.push("interloper " + j); if (j > 1) rqR.push("thread " + (j - 1)); }
+    rqR.push("main");
+    steps.push({ t: "main 放 lock 0：回到 <b>0</b>；thread 1（因为它持有的 lock 1 上有人等，实际是 21）被叫醒并抢占。thread 1 拿到 lock 0、放掉，仍是 21；再放 lock 1，回到 3，thread 2 立刻抢占……像接力一样一直传到 thread 7。thread 7 没有第一把锁，跑完退出。",
+      th: thR, lk: locks([null, null, null, null, null, null, null], [], []), rq: rqR, out: out });
+    var thF = { main: [0, 0, "run", ""] }, outF = [];
+    for (j = 1; j <= 7; j++) { thF["thread " + j] = [3 * j, 3 * j, "done", ""]; thF["interloper " + j] = [3 * j - 1, 3 * j - 1, "done", ""]; }
+    for (j = 7; j >= 1; j--) { outF.push("interloper " + j + " finished."); if (j > 1) outF.push("thread " + (j - 1) + " finishing with priority " + 3 * (j - 1) + "."); }
+    outF.push("main finishing with priority 0.", "end");
+    steps.push({ t: "剩下的按优先级依次运行：interloper 7（20）→ thread 6（18）→ interloper 6（17）→ … → interloper 1（2）→ main（0）。注意 interloper i 排在 thread i−1 前面，因为它的优先级比 thread i−1 的原始优先级高 2。",
+      th: thF, lk: locks([null, null, null, null, null, null, null], [], []), rq: [], out: outF });
+    SC.push({ id: "chain", name: "donate-chain", color: color,
+      intro: "7 层锁链：main(0) 拿 lock 0；thread i(3i) 拿 lock i 再等 lock i−1；每层旁边有一个 interloper(3i−1)。", steps: steps });
+  })();
+
+  /* ---------------- simulator UI ---------------- */
+  var cur = 0, step = 0;
+  var stLabel = { run: "RUNNING", ready: "READY", blk: "BLOCKED", done: "已结束" };
+  function cls(sc, name) { return sc.color[name] || "n"; }
+  function priOf(s, name) { var t = s.th[name]; return t ? t[1] : "?"; }
+  function drawSim() {
+    var sc = SC[cur], s = sc.steps[step], prev = step > 0 ? sc.steps[step - 1] : null;
+    Array.prototype.forEach.call($("simTabs").children, function (b, i) { b.setAttribute("aria-pressed", String(i === cur)); });
+    $("simName").textContent = sc.name;
+    $("simStep").textContent = "第 " + (step + 1) + " / " + sc.steps.length + " 步";
+    $("simIntro").textContent = sc.intro;
+    $("simText").innerHTML = s.t;
+    $("simPrev").disabled = step === 0;
+    $("simNext").disabled = step === sc.steps.length - 1;
+    var names = Object.keys(s.th);
+    var active = names.filter(function (n) { return s.th[n][2] !== "done"; });
+    var gone = names.filter(function (n) { return s.th[n][2] === "done"; });
+    $("simThreads").innerHTML = active.map(function (n) {
+      var t = s.th[n], p = prev && prev.th[n];
+      var changed = !p || p[1] !== t[1] || p[2] !== t[2] || p[0] !== t[0];
+      var pri = t[0] === t[1] ? String(t[1]) : "<s>" + t[0] + "</s> → <b>" + t[1] + "</b>";
+      return '<div class="tcard' + (changed && prev ? " changed" : "") + '"><div class="who"><span class="th ' + cls(sc, n) + '">' + esc(n) + "</span>" +
+        (t[3] ? '<span class="why">' + esc(t[3]) + "</span>" : "") + '</div><span class="pri">' + pri +
+        '</span><span class="st ' + t[2] + '">' + stLabel[t[2]] + "</span></div>";
+    }).join("") + (gone.length ? '<div class="donerow">已结束：' + gone.map(function (n) {
+      return '<span class="th ' + cls(sc, n) + '">' + esc(n) + "</span>";
+    }).join("") + "</div>" : "");
+    $("simLocks").innerHTML = s.lk.map(function (l, i) {
+      var p = prev && prev.lk[i];
+      var changed = prev && (!p || JSON.stringify(p) !== JSON.stringify(l));
+      var w = l.w.length ? l.w.map(function (n) { return esc(n) + "(" + priOf(s, n) + ")"; }).join("，") : "无";
+      if (!l.sema && !l.h && !l.w.length && !l.note)
+        return '<div class="lcard' + (changed ? " changed" : "") + '"><strong class="mono">' + esc(l.n) + "</strong> · 空闲，没人等</div>";
+      var body = l.sema
+        ? "value = " + l.v + "<br>等待队列：" + w
+        : "持有者：" + (l.h ? esc(l.h) : "NULL" + (l.note ? "（" + l.note + "）" : "")) + " · max_priority = " + l.m + "<br>等待队列：" + w;
+      return '<div class="lcard' + (changed ? " changed" : "") + '"><strong class="mono">' + esc(l.n) + "</strong><br>" + body + "</div>";
+    }).join("");
+    $("simReady").innerHTML = s.rq.length
+      ? s.rq.map(function (n) { return '<span class="th ' + cls(sc, n) + '">' + esc(n) + " · " + priOf(s, n) + "</span>"; }).join("")
+      : '<span class="muted" style="font-size:.85rem">空</span>';
+    var lines = [];
+    for (var k = 0; k <= step; k++) sc.steps[k].out.forEach(function (o) { lines.push({ o: o, nw: k === step }); });
+    $("simOut").innerHTML = lines.length
+      ? lines.map(function (x) { return '<span class="' + (x.nw ? "new" : "") + '">' + esc(x.o) + "</span>"; }).join("\n")
+      : '<span class="empty">（还没有输出）</span>';
+    $("simOut").scrollTop = $("simOut").scrollHeight;
+  }
+  SC.forEach(function (sc, i) {
+    var b = document.createElement("button");
+    b.type = "button"; b.textContent = sc.name;
+    b.addEventListener("click", function () { cur = i; step = 0; drawSim(); });
+    $("simTabs").appendChild(b);
+  });
+  $("simPrev").addEventListener("click", function () { if (step > 0) { step--; drawSim(); } });
+  $("simNext").addEventListener("click", function () { if (step < SC[cur].steps.length - 1) { step++; drawSim(); } });
+  $("simReset").addEventListener("click", function () { step = 0; drawSim(); });
+  $("simTool").addEventListener("keydown", function (e) {
+    if (e.target.tagName === "INPUT") return;
+    if (e.key === "ArrowRight") { $("simNext").click(); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { $("simPrev").click(); e.preventDefault(); }
+  });
+  drawSim();
+
+  /* ---------------- quiz ---------------- */
+  var Q = [
+    ["Pintos 里优先级数字越大……", ["越优先", "越不优先", "只在 MLFQS 模式下有意义"], 0, "PRI_MIN = 0，PRI_MAX = 63，数字越大越优先，默认 31。"],
+    ["为了让调度器选到最高优先级的线程，我们主要改了哪里？", ["next_thread_to_run()", "往 ready_list 插入的两处：thread_unblock、thread_yield", "schedule()"], 1, "next_thread_to_run 一直是取队首；我们让插入时按优先级排好，队首自然最高。"],
+    ["比较函数写成 >= 会让哪个测试挂掉？", ["alarm-priority", "priority-sema", "priority-fifo"], 2, "只有同优先级时 > 和 >= 才有区别，fifo 有 16 个同为 32 的线程。>= 会让 yield 的线程插回同优先级最前面。"],
+    ["时钟中断处理过程中想让出 CPU，应该调用：", ["thread_yield()", "intr_yield_on_return()", "thread_block()"], 1, "中断上下文不能切换线程，thread_yield 会断言 !intr_context() 失败。"],
+    ["thread_unblock 为什么不自己抢占？", ["它会在中断里被调用", "调用者可能还要在关中断状态下继续改数据，比如 sema_up 的 value++", "抢占会让 ready_list 乱序"], 1, "如果在 unblock 里就切走，被叫醒的线程看到 value 还是 0，又睡回去。"],
+    ["sema_up 为什么不能直接取等待队列的队首？", ["list_insert_ordered 不稳定", "线程在等待期间优先级可能被捐赠改变，插入时的顺序过期了", "队首一定是优先级最低的"], 1, "donate-sema：L 插入时 32，等待中被捐成 36，却还排在 M(34) 后面。"],
+    ["main(31) 持有锁 a、b，32 等 a，33 等 b。main 放掉 b 后优先级是？", ["31", "32", "33"], 1, "锁 a 上的捐赠还在：max(31, 32) = 32。这是 donate-multiple 考的点。"],
+    ["donate-nest 中 high(33) 开始等锁 b 后，main 的优先级是？", ["31", "32", "33"], 2, "high → 锁 b → medium → 锁 a → main，嵌套捐赠一路传到底。"],
+    ["main 被捐赠到 41 后调用 thread_set_priority(21)，thread_get_priority() 返回？", ["21", "41", "31"], 1, "只改 base_priority，实际优先级 = max(21, 41) = 41；放锁后才变 21。"],
+    ["为什么只对锁做捐赠，不对信号量做？", ["锁有持有者，知道该捐给谁", "信号量不会让线程阻塞", "测试没有用到信号量"], 0, "信号量没有 holder，等它的线程不知道该把优先级借给谁。"],
+    ["捐赠循环里 depth < 8 的作用是：", ["提高性能", "防止锁链太长或出现环（死锁）时无限循环", "测试要求恰好捐 8 层"], 1, "Pintos 文档允许设一个合理的嵌套上限；donate-chain 最深 7 层。"],
+    ["priority-fifo 中 main 为什么先把自己升到 33 再创建 16 个线程？", ["测试写错了", "让 16 个 32 的线程创建时都不抢占 main，整齐排好队后再一起开始", "为了测试捐赠"], 1, "然后 main 降回 31，它们按创建顺序开始轮转，才能检验每轮顺序一致。"],
+    ["donate-multiple2 中，main 放掉两把锁后为什么运行顺序是 b、a、c？", ["按创建顺序", "按放锁顺序", "按优先级：36、34、32"], 2, "a 在放锁 a 时就被叫醒了，但 34 < main 的 36，只能排队；放锁 b 后大家按优先级出队。"],
+    ["我们的实现在 MLFQS 模式下：", ["照样做捐赠", "不做捐赠，但锁和信号量仍按优先级唤醒", "完全不按优先级"], 1, "Pintos 规定 MLFQS 下不捐赠、thread_set_priority 无效；优先级调度本身在所有情况下都生效。"]
+  ];
+  var answered = {};
+  function drawQuiz() {
+    $("quizBox").innerHTML = Q.map(function (q, i) {
+      return '<div class="q" data-i="' + i + '"><div class="qt">' + (i + 1) + ". " + esc(q[0]) + '</div><div class="opts">' +
+        q[1].map(function (o, j) { return '<button type="button" class="opt" data-j="' + j + '">' + esc(o) + "</button>"; }).join("") +
+        '</div><div class="why" hidden></div></div>';
+    }).join("");
+    answered = {};
+    score();
+  }
+  function score() {
+    var n = Object.keys(answered).length, r = 0;
+    Object.keys(answered).forEach(function (k) { if (answered[k]) r++; });
+    $("quizScore").textContent = n ? "已答 " + n + " / " + Q.length + "，答对 " + r : "共 " + Q.length + " 题";
+  }
+  $("quizBox").addEventListener("click", function (e) {
+    var b = e.target.closest("button.opt");
+    if (!b) return;
+    var box = b.closest(".q"), i = +box.dataset.i, j = +b.dataset.j;
+    if (i in answered) return;
+    var ok = j === Q[i][2];
+    answered[i] = ok;
+    b.classList.add(ok ? "right" : "wrong");
+    if (!ok) box.querySelectorAll("button.opt")[Q[i][2]].classList.add("right");
+    var why = box.querySelector(".why");
+    why.textContent = (ok ? "对。" : "不对。") + Q[i][3];
+    why.hidden = false;
+    score();
+  });
+  $("quizReset").addEventListener("click", drawQuiz);
+  drawQuiz();
+
+  /* ---------------- checklist ---------------- */
+  var TODO = [
+    "能说出线程四种状态，以及 thread_yield / thread_block / thread_unblock 各把线程变成什么",
+    "能解释 ready_list、next_thread_to_run 和 idle 线程",
+    "能讲清中断上下文为什么不能 thread_yield，以及 intr_yield_on_return 何时生效",
+    "能解释 list_entry 和比较函数（list_less_func）",
+    "能讲清 list_insert_ordered 为什么要配严格 >（priority-fifo 的 15 15 15）",
+    "能说出 thread_preempt 的四个调用点和原因",
+    "能解释为什么 thread_unblock 不抢占（sema_up 先 unblock 后 value++）",
+    "能讲清 sema_up 为什么要重新找最高的，以及 list_min + “大于”的含义",
+    "能讲清 cond_signal 为什么要在 semaphore_elem 里存线程指针",
+    "能用时间线讲清优先级反转和火星探路者号",
+    "能说出单一 / 多重 / 嵌套三种捐赠，分别对应哪些测试",
+    "能写出 priority = max(base, 各锁 max_priority)，并解释为什么按锁记账",
+    "能逐行讲 lock_acquire 的捐赠循环和四个停止条件",
+    "能解释拿到锁后为什么重算 lock->max_priority",
+    "能解释 lock_release 和 thread_set_priority 为什么都只是“删 / 改再重算”",
+    "能在纸上画出 donate-multiple、donate-nest、donate-sema 的每一步",
+    "能讲 kernel panic 的排查过程（backtrace、-fno-omit-frame-pointer）",
+    "能回答：饥饿、死锁、多核、MLFQS 下捐赠，这几个边界问题"
+  ];
+  var KEY = "prio-guide-checklist";
+  var done = store(KEY) || {};
+  function drawTodo() {
+    $("todoList").innerHTML = TODO.map(function (t, i) {
+      return '<li><label><input type="checkbox" id="todo' + i + '" data-i="' + i + '"' + (done[i] ? " checked" : "") + "><span>" + esc(t) + "</span></label></li>";
+    }).join("");
+    countTodo();
+  }
+  function countTodo() {
+    var n = TODO.filter(function (_, i) { return done[i]; }).length;
+    $("todoBar").style.width = (100 * n / TODO.length) + "%";
+    $("todoCount").textContent = "已掌握 " + n + " / " + TODO.length;
+  }
+  $("todoList").addEventListener("change", function (e) {
+    var i = e.target.dataset.i;
+    if (i === undefined) return;
+    done[i] = e.target.checked;
+    store(KEY, done);
+    countTodo();
+  });
+  drawTodo();
+})();
+</script>
+</body>
+</html>
