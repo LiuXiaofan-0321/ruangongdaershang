@@ -1,0 +1,203 @@
+Frame 4: Packet, 42 bytes on wire (336 bits), 42 bytes captured (336 bits) on interface \Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}, id 0
+    Section number: 1
+    Interface id: 0 (\Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039})
+        Interface name: \Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}
+        Interface description: WLAN
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Nov 10, 2026 15:05:45.246176400 中国标准时间
+    UTC Arrival Time: Nov 10, 2026 07:05:45.246176400 UTC
+    Epoch Arrival Time: 1794294345.246176400
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 780.007500 milliseconds]
+    [Time since reference or first frame: 1.186672100 seconds]
+    Frame Number: 4
+    Frame Length: 42 bytes (336 bits)
+    Capture Length: 42 bytes (336 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:arp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: 14:ac:60:56:df:85, Dst: ff:ff:ff:ff:ff:ff
+    Destination: ff:ff:ff:ff:ff:ff
+        .... ..1. .... .... .... .... = LG bit: Locally administered address (this is NOT the factory default)
+        .... ...1 .... .... .... .... = IG bit: Group address (multicast/broadcast)
+    Source: 14:ac:60:56:df:85
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: ARP (0x0806)
+    [Stream index: 0]
+Address Resolution Protocol (ARP Probe)
+    Hardware type: Ethernet (1)
+    Protocol type: IPv4 (0x0800)
+    Hardware size: 6
+    Protocol size: 4
+    Opcode: request (1)
+    [Is probe: True]
+    Sender MAC address: 14:ac:60:56:df:85
+    Sender IP address: 0.0.0.0 (0.0.0.0)
+    Target MAC address: 00:00:00:00:00:00
+    Target IP address: 172.31.240.50 (172.31.240.50)
+
+Frame 5: Packet, 42 bytes on wire (336 bits), 42 bytes captured (336 bits) on interface \Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}, id 0
+    Section number: 1
+    Interface id: 0 (\Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039})
+        Interface name: \Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}
+        Interface description: WLAN
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Nov 10, 2026 15:05:45.352592500 中国标准时间
+    UTC Arrival Time: Nov 10, 2026 07:05:45.352592500 UTC
+    Epoch Arrival Time: 1794294345.352592500
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 106.416100 milliseconds]
+    [Time delta from previous displayed frame: 106.416100 milliseconds]
+    [Time since reference or first frame: 1.293088200 seconds]
+    Frame Number: 5
+    Frame Length: 42 bytes (336 bits)
+    Capture Length: 42 bytes (336 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:arp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: 14:ac:60:56:df:85, Dst: ff:ff:ff:ff:ff:ff
+    Destination: ff:ff:ff:ff:ff:ff
+        .... ..1. .... .... .... .... = LG bit: Locally administered address (this is NOT the factory default)
+        .... ...1 .... .... .... .... = IG bit: Group address (multicast/broadcast)
+    Source: 14:ac:60:56:df:85
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: ARP (0x0806)
+    [Stream index: 0]
+Address Resolution Protocol (request)
+    Hardware type: Ethernet (1)
+    Protocol type: IPv4 (0x0800)
+    Hardware size: 6
+    Protocol size: 4
+    Opcode: request (1)
+    Sender MAC address: 14:ac:60:56:df:85
+    Sender IP address: 172.31.240.50 (172.31.240.50)
+    Target MAC address: 00:00:00:00:00:00
+    Target IP address: 172.31.0.1 (172.31.0.1)
+
+Frame 6: Packet, 60 bytes on wire (480 bits), 60 bytes captured (480 bits) on interface \Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}, id 0
+    Section number: 1
+    Interface id: 0 (\Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039})
+        Interface name: \Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}
+        Interface description: WLAN
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Nov 10, 2026 15:05:45.360289500 中国标准时间
+    UTC Arrival Time: Nov 10, 2026 07:05:45.360289500 UTC
+    Epoch Arrival Time: 1794294345.360289500
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 7.697000 milliseconds]
+    [Time delta from previous displayed frame: 7.697000 milliseconds]
+    [Time since reference or first frame: 1.300785200 seconds]
+    Frame Number: 6
+    Frame Length: 60 bytes (480 bits)
+    Capture Length: 60 bytes (480 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:arp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: 54:c6:ff:7b:38:02, Dst: 14:ac:60:56:df:85
+    Destination: 14:ac:60:56:df:85
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: 54:c6:ff:7b:38:02
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: ARP (0x0806)
+    [Stream index: 1]
+    Padding: 000000000000000000000000000000000000
+Address Resolution Protocol (reply)
+    Hardware type: Ethernet (1)
+    Protocol type: IPv4 (0x0800)
+    Hardware size: 6
+    Protocol size: 4
+    Opcode: reply (2)
+    Sender MAC address: 54:c6:ff:7b:38:02
+    Sender IP address: 172.31.0.1 (172.31.0.1)
+    Target MAC address: 14:ac:60:56:df:85
+    Target IP address: 172.31.240.50 (172.31.240.50)
+
+Frame 9: Packet, 42 bytes on wire (336 bits), 42 bytes captured (336 bits) on interface \Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}, id 0
+    Section number: 1
+    Interface id: 0 (\Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039})
+        Interface name: \Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}
+        Interface description: WLAN
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Nov 10, 2026 15:05:48.234828600 中国标准时间
+    UTC Arrival Time: Nov 10, 2026 07:05:48.234828600 UTC
+    Epoch Arrival Time: 1794294348.234828600
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 990.582600 milliseconds]
+    [Time delta from previous displayed frame: 2.874539100 seconds]
+    [Time since reference or first frame: 4.175324300 seconds]
+    Frame Number: 9
+    Frame Length: 42 bytes (336 bits)
+    Capture Length: 42 bytes (336 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:arp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: 14:ac:60:56:df:85, Dst: ff:ff:ff:ff:ff:ff
+    Destination: ff:ff:ff:ff:ff:ff
+        .... ..1. .... .... .... .... = LG bit: Locally administered address (this is NOT the factory default)
+        .... ...1 .... .... .... .... = IG bit: Group address (multicast/broadcast)
+    Source: 14:ac:60:56:df:85
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: ARP (0x0806)
+    [Stream index: 0]
+Address Resolution Protocol (ARP Announcement)
+    Hardware type: Ethernet (1)
+    Protocol type: IPv4 (0x0800)
+    Hardware size: 6
+    Protocol size: 4
+    Opcode: request (1)
+    [Is gratuitous: True]
+    [Is announcement: True]
+    Sender MAC address: 14:ac:60:56:df:85
+    Sender IP address: 172.31.240.50 (172.31.240.50)
+    Target MAC address: 00:00:00:00:00:00
+    Target IP address: 172.31.240.50 (172.31.240.50)
+
+Frame 11: Packet, 42 bytes on wire (336 bits), 42 bytes captured (336 bits) on interface \Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}, id 0
+    Section number: 1
+    Interface id: 0 (\Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039})
+        Interface name: \Device\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}
+        Interface description: WLAN
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Nov 10, 2026 15:05:53.242453000 中国标准时间
+    UTC Arrival Time: Nov 10, 2026 07:05:53.242453000 UTC
+    Epoch Arrival Time: 1794294353.242453000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 2.997624500 seconds]
+    [Time delta from previous displayed frame: 5.007624400 seconds]
+    [Time since reference or first frame: 9.182948700 seconds]
+    Frame Number: 11
+    Frame Length: 42 bytes (336 bits)
+    Capture Length: 42 bytes (336 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:arp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: 14:ac:60:56:df:85, Dst: 54:c6:ff:7b:38:02
+    Destination: 54:c6:ff:7b:38:02
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: 14:ac:60:56:df:85
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: ARP (0x0806)
+    [Stream index: 1]
+Address Resolution Protocol (request)
+    Hardware type: Ethernet (1)
+    Protocol type: IPv4 (0x0800)
+    Hardware size: 6
+    Protocol size: 4
+    Opcode: request (1)
+    Sender MAC address: 14:ac:60:56:df:85
+    Sender IP address: 172.31.240.50 (172.31.240.50)
+    Target MAC address: 54:c6:ff:7b:38:02
+    Target IP address: 172.31.0.1 (172.31.0.1)
+
