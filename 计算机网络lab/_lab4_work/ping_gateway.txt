@@ -1,0 +1,19 @@
+
+Pinging 172.31.0.1 from 172.31.240.50 with 32 bytes of data:
+Reply from 172.31.0.1: bytes=32 time=171ms TTL=255
+Reply from 172.31.0.1: bytes=32 time=253ms TTL=255
+Reply from 172.31.0.1: bytes=32 time=32ms TTL=255
+
+Ping statistics for 172.31.0.1:
+    Packets: Sent = 3, Received = 3, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 32ms, Maximum = 253ms, Average = 152ms
+
+Pinging 172.31.0.1 from 172.31.240.50 with 32 bytes of data:
+Reply from 172.31.0.1: bytes=32 time=66ms TTL=255
+Reply from 172.31.0.1: bytes=32 time=101ms TTL=255
+
+Ping statistics for 172.31.0.1:
+    Packets: Sent = 2, Received = 2, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 66ms, Maximum = 101ms, Average = 83ms
