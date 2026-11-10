@@ -2,6 +2,8 @@
 """Build the Lab4 report from the retained school template and the real trace."""
 from pathlib import Path
 import sys
+from zipfile import ZipFile
+from lxml import etree
 from PIL import Image, ImageDraw, ImageFont
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -124,7 +126,8 @@ def screenshot(doc):
     p.paragraph_format.first_line_indent=Cm(0); p.paragraph_format.keep_with_next=True
     p.paragraph_format.space_before=Pt(4); p.paragraph_format.space_after=Pt(1)
     pic=p.add_run().add_picture(str(WORK / 'Wireshark_请求应答.png'),width=Cm(16))
-    pic.crop_bottom=0.75
+    fill=pic._inline.xpath('.//pic:blipFill')[0]
+    crop=OxmlElement('a:srcRect'); crop.set('b','75000'); fill.insert(1,crop)
     pic.height=int(pic.height*.25)
     c=doc.add_paragraph(); c.alignment=WD_ALIGN_PARAGRAPH.CENTER
     c.paragraph_format.first_line_indent=Cm(0); c.paragraph_format.space_after=Pt(5)
@@ -159,8 +162,8 @@ def main():
     if fl is not None: meta._tbl.tblPr.remove(fl)
     # The school's horizontal rule is a floating VML shape. Once the metadata
     # table is inline, its original 75 pt offset would cross the first section.
-    for line in children[3].xpath('.//v:line'):
-        line.set('from','-4.15pt,0pt'); line.set('to','492.35pt,0pt')
+    for line in children[3].iter('{urn:schemas-microsoft-com:vml}line'):
+        line.set('from','-4.15pt,9pt'); line.set('to','492.35pt,9pt')
     vals={(0,0):'实验课程：计算机网络',(0,1):'年级：2024 级',(0,2):'实验成绩：',
           (1,0):'实验名称：ARP',(1,1):'姓名：刘小凡',(1,2):'实验日期：2026-11-10',
           (2,0):'实验编号：Lab4',(2,1):'学号：10244602411',(2,2):'实验时间：2 学时'}
@@ -177,7 +180,7 @@ def main():
 
     P(5,'通过捕获和分析真实 ARP 流量，理解 IPv4 地址如何解析为本链路的 MAC 地址；掌握请求、应答的字段及以太网封装，并能够用报文证据解释地址解析、地址探测和地址声明。')
     P(8,'先核对 WLAN 的 IP、MAC、网关及路由；以 arp 为捕获过滤器、关闭混杂模式，记录 WLAN 报文，并用绑定 WLAN 源地址的 ping 访问网关。随后检查第 5、6 帧，绘制交换图，回答手册问题，再分析其他可见 ARP 行为。')
-    P(11,'Windows 11；Wireshark / TShark 4.6.8 与 Npcap；WLAN 网卡 MediaTek Wi-Fi 6E MT7922；使用 ipconfig、路由与邻居表、ping 和 TShark 核对。抓包时间为 2026 年 11 月 10 日 15:05 左右（北京时间）。')
+    P(11,'Windows 11；Wireshark / TShark 4.6.8 与 Npcap；WLAN 网卡 MediaTek Wi-Fi 6E MT7922；使用系统网络配置、路由与邻居表、ping 和 TShark 核对。抓包时间为 2026 年 11 月 10 日 15:05 左右（北京时间）。')
 
     H(14,'4.1  网络环境与捕获方法')
     T(14,['项目','本次观测'],[
@@ -201,6 +204,7 @@ def main():
       ['发送方 IP / MAC','172.31.240.50\n14:ac:60:56:df:85','172.31.0.1\n54:c6:ff:7b:38:02'],
       ['目标 IP / MAC','172.31.0.1\n00:00:00:00:00:00','172.31.240.50\n14:ac:60:56:df:85']],[4.25,6.2,6.25],8.8)
     P(14,'请求中未知的是 ARP 目标 MAC，故该字段填零；外层 Ethernet 的目的 MAC 则为全 1 广播。应答中网关作为新的发送方，给出自己的 IP/MAC，本机作为目标；这两个不同层次的地址不能混为一谈。')
+    P(14,'第 5 帧的 Ethernet Type 字节为 08 06，之后的 ARP 前 8 字节为 00 01 08 00 06 04 00 01，依次对应硬件类型、协议类型、两种地址长度和请求操作码。这些原始字节可以独立核对字段显示。')
     H(14,'4.3  ARP 交换示意图')
     blocks[14].extend(figure(doc,'图 2  本机解析 WLAN 网关地址的请求与应答（依据第 5、6 帧绘制）'))
     H(14,'4.4  报文字节结构与长度核对')
@@ -240,6 +244,26 @@ def main():
         el=children[idx]; el.getparent().remove(el)
     doc.core_properties.author='刘小凡'; doc.core_properties.title='Lab4 ARP 实验报告'
     doc.save(str(OUT))
+    # Preserve template-only parts byte-for-byte. python-docx otherwise
+    # reserializes untouched headers, footers, styles, and numbering.
+    preserved={'_rels/.rels','word/header1.xml','word/footer1.xml',
+               'word/header2.xml','word/_rels/header2.xml.rels',
+               'word/numbering.xml','word/styles.xml'}
+    with ZipFile(TEMPLATE) as src, ZipFile(OUT) as edited:
+        parts=[(info, src.read(info.filename) if info.filename in preserved else edited.read(info.filename))
+               for info in edited.infolist()]
+        settings=etree.fromstring(src.read('word/settings.xml'))
+        tag='{http://schemas.openxmlformats.org/wordprocessingml/2006/main}updateFields'
+        node=settings.find(tag)
+        if node is None:
+            node=etree.SubElement(settings,tag)
+        node.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val','true')
+        settings_bytes=etree.tostring(settings,xml_declaration=True,encoding='UTF-8',standalone=True)
+    tmp=WORK / 'report_repacked.docx'
+    with ZipFile(tmp,'w') as dst:
+        for info,data in parts:
+            dst.writestr(info, settings_bytes if info.filename=='word/settings.xml' else data)
+    tmp.replace(OUT)
     print('SAVED',OUT)
 
 if __name__=='__main__': main()
