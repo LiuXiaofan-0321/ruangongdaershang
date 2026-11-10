@@ -1,0 +1,119 @@
+{
+  "capture": "Lab4_ARP.pcapng",
+  "frame_count": 53,
+  "request_frame": "1",
+  "reply_frame": "6",
+  "request": {
+    "b": {
+      "frame_len": 42,
+      "eth_dst": "ff:ff:ff:ff:ff:ff",
+      "eth_src": "14:ac:60:56:df:85",
+      "eth_type": "0x0806",
+      "arp_len": 28,
+      "hw_type": "0x0001",
+      "proto_type": "0x0800",
+      "hw_size": 6,
+      "proto_size": 4,
+      "opcode": 1,
+      "sha": "14:ac:60:56:df:85",
+      "spa": "172.31.240.50",
+      "tha": "00:00:00:00:00:00",
+      "tpa": "172.31.0.1",
+      "header_bytes": "000108000604000114ac6056df85ac1ff032000000000000ac1f0001",
+      "payload_after_arp": 0
+    },
+    "eth_dst": "ff:ff:ff:ff:ff:ff",
+    "eth_src": "14:ac:60:56:df:85",
+    "info": "Who has 172.31.0.1? Tell 172.31.240.50",
+    "time": "0.000000000",
+    "frame_len": 42
+  },
+  "reply": {
+    "b": {
+      "frame_len": 60,
+      "eth_dst": "14:ac:60:56:df:85",
+      "eth_src": "54:c6:ff:7b:38:02",
+      "eth_type": "0x0806",
+      "arp_len": 46,
+      "hw_type": "0x0001",
+      "proto_type": "0x0800",
+      "hw_size": 6,
+      "proto_size": 4,
+      "opcode": 2,
+      "sha": "54:c6:ff:7b:38:02",
+      "spa": "172.31.0.1",
+      "tha": "14:ac:60:56:df:85",
+      "tpa": "172.31.240.50",
+      "header_bytes": "000108000604000254c6ff7b3802ac1f000114ac6056df85ac1ff032",
+      "payload_after_arp": 18
+    },
+    "eth_dst": "14:ac:60:56:df:85",
+    "eth_src": "54:c6:ff:7b:38:02",
+    "info": "172.31.0.1 is at 54:c6:ff:7b:38:02",
+    "time": "1.300785200",
+    "frame_len": 60
+  },
+  "opcodes": {
+    "request": 1,
+    "reply": 2
+  },
+  "counts": {
+    "requests": 40,
+    "replies": 13,
+    "probes": 6,
+    "announcements": 4,
+    "gratuitous": 4,
+    "zero_sender": 6
+  },
+  "probe_frames": [
+    4,
+    7,
+    8,
+    33,
+    35,
+    46
+  ],
+  "announce_frames": [
+    9,
+    10,
+    48,
+    49
+  ],
+  "gratuitous_frames": [
+    9,
+    10,
+    48,
+    49
+  ],
+  "zero_sender_frames": [
+    4,
+    7,
+    8,
+    33,
+    35,
+    46
+  ],
+  "unicast_requests": [
+    {
+      "frame": 11,
+      "eth_dst": "54:c6:ff:7b:38:02",
+      "info": "Who has 172.31.0.1? Tell 172.31.240.50"
+    },
+    {
+      "frame": 12,
+      "eth_dst": "54:c6:ff:7b:38:02",
+      "info": "Who has 172.31.0.1? Tell 172.31.240.50"
+    },
+    {
+      "frame": 13,
+      "eth_dst": "54:c6:ff:7b:38:02",
+      "info": "Who has 172.31.0.1? Tell 172.31.240.50"
+    }
+  ],
+  "frame_lengths": {
+    "request": 42,
+    "reply": 60
+  },
+  "arp_message_len": 28,
+  "padding_on_reply": 18
+}
