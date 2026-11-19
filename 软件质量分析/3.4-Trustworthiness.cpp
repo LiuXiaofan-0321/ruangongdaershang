@@ -16,7 +16,6 @@ struct Attribute {
     std::size_t subattributeCount;
 };
 
-// 分组顺序来自第四题数据.xlsx 的合并单元格，名称对应第五章课件第 69 页。
 constexpr std::array<Attribute, attributeCount> attributes = {{
     {"Overall planning and execution",        0.05, 3},
     {"Analysis and design",                   0.17, 3},
@@ -67,7 +66,6 @@ int countBelow(const AttributeScores& scores, double threshold) {
         [threshold](double value) { return value < threshold; }));
 }
 
-// 第五章第 68 页出厂报告分级表：从 V 到 I 逐级检验总分和属性条件。
 const char* trustworthinessGrade(double total, const AttributeScores& scores) {
     constexpr int maxBelowThreshold = 3;
     if (total >= 9.5 && countBelow(scores, 9.5) <= maxBelowThreshold
