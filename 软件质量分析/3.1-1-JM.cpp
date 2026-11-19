@@ -1,5 +1,6 @@
 #include <array>
 #include <cmath>
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <numeric>
@@ -53,10 +54,11 @@ void runJm(double elapsed) {
     std::cout << "3.1 (1) Jelinski-Moranda model\n"
               << "n = " << intervals.size() << ", sum(x_i) = " << total
               << ", sum((i-1)*x_i) = " << weightedTotal << '\n'
-              << "N = " << initialFaults << ", k = " << k << ", lambda = " << lambda << '\n'
-              << "R_13(x) = exp(-lambda*x)\n"
-              << "F_13(x) = 1 - R_13(x)\n"
-              << "f_13(x) = lambda*R_13(x)\n"
+              << "N = " << initialFaults << ", k = " << k << '\n'
+              << std::setprecision(4)
+              << "R_13(x) = exp(-" << lambda << "*x)\n"
+              << "F_13(x) = 1 - exp(-" << lambda << "*x)\n"
+              << "f_13(x) = " << lambda << "*exp(-" << lambda << "*x)\n"
               << "MTTF_13 = " << 1.0 / lambda << " s\n"
               << "At x = " << elapsed << " s: R = " << reliability
               << ", F = " << unreliability << ", f = " << density << " /s\n";
@@ -81,4 +83,6 @@ int main(int argc, char* argv[]) {
         std::cerr << "Error: " << error.what() << '\n';
         return 1;
     }
+    std::cout << '\n' << std::flush;
+    std::system("pause");
 }

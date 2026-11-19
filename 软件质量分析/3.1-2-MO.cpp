@@ -1,5 +1,6 @@
 #include <array>
 #include <cmath>
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <numeric>
@@ -102,4 +103,6 @@ int main(int argc, char* argv[]) {
         std::cerr << "Error: " << error.what() << '\n';
         return 1;
     }
+    std::cout << '\n' << std::flush;
+    std::system("pause");
 }
