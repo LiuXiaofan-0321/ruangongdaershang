@@ -1,0 +1,978 @@
+@@ 1 
+Computer Networks
+王廷
+华东师范大学 软件工程学院Email: twang@sei.ecnu.edu.cn
+Office: 理科大楼B1116室
+@@ 2 
+Computer Networks, Chapter 1 Introduction
+Uses of Computer Networks
+Network Hardware
+Network Software
+Reference Models
+Example Networks
+Network Standardization
+Metric Units
+Chapter1：Introduction
+@@ 3 
+Network Example：A Typical Simple Scenario
+@@ 4 
+Network Example：Complex Scenario in Real World
+不同网络类型
+多样化接入技术
+网络基础设施
+网络通信协议
+现代网络环境不再是简单的点对点连接，而是一个集多种网络类型、接入技术和设备于一体的复杂系统。而且在持续演进。
+@@ 5 
+Network Example：Space Computing Network
+中国国家政策
+战略升级：“十五五”定位为航天强国核心引擎
+“十四五”首次鼓励社会资本全面参与，“十五五”规划进一步将商业航天定位为建设航天强国的核心引擎。
+政策落地：《行动计划》为航天发展指明发展路径
+2025年发布《推进商业航天高质量安全发展行动计划》提出五大方向22项举措，构建了全链条政策支撑体系。
+全球战略布局
+美国：市场主导 + 政府采购双轮驱动
+2015年《商业航天促进法》确立私营企业准入；2024 年国防部发布《国防部商业航天整合战略》；NASA向民营企业开放航天试验设施和技术专利；以NASA与军方订单培育SpaceX等龙头企业，抢先布局低轨星座频轨资源，确立全球市场主导地位。
+欧盟：规则先行，构建自主空天体系
+2025年出台《太空法案》商业航天统一监管框架，旨在统一欧盟27国碎片化航天规则，打造欧盟单一太空市场，降低对 Starlink 等境外巨型星座的依赖。典型代表：OneWeb。
+@@ 6 
+Network Example：Space Computing Network
+国际规则：ITU“先登先占”原则
+频轨资源是不可再生的战略稀缺资源，申报窗口期竞争激烈，谁先完成部署，谁就掌握主动权。7-9-12-14 刚性履约规则。
+中国行动：20万+资源申报，60+机构集结
+2025年12月我国已向ITU申报20.3万颗卫星频轨资源，凝聚央国企、科研院校与商业航天合力，筑牢太空战略根基。
+02. 核心博弈：频轨资源的战略争夺
+SpaceX 星链
+已部署卫星超 11,000 颗，覆盖全球150+国家，用户规模突破1200万，构建了成熟的低轨通信生态。
+中国星网 GW星座
+国家级旗舰工程，规划规模达 12,992 颗。截止2026年9月，在轨卫星195颗，稳步推进全球组网与基础设施建设。
+垣信卫星 千帆星座
+商业航天新势力，规划 >15,000 颗卫星布局。在轨数量已达238颗，加速商业化应用场景的落地与验证。
+01. 赛道格局：美国领跑与中国追赶
+@@ 7 
+Network Example：Space Computing Network
+2026年8月4日，SpaceX正式宣布：
+携手英伟达推出轨道AI计算网络——Starmind（星际大脑）
+Starmind AI1卫星：高约30米、翼展75米
+计算载荷峰值功率达250千瓦，平均功率约175千瓦
+SpaceX将完全基于NVIDIA的系统构建“数据中心级太空算力”
+搭载NVIDIA Rubin GPUs & Vera CPUs
+@@ 8 
+Question: What are the differences between various communication networks?
+At first glance: Terminals in the network.
+More technically: Services they provide.
+Computer Networks, Chapter 1 Introduction
+Question
+@@ 9 
+Computer Network: a collection of autonomous computers interconnected by a single technology
+autonomous: be able to compute independently
+interconnected: be able to exchange information
+Information today comes in different forms such as text, numbers, images, audio, and video.
+Computer Networks, Chapter 1 Introduction
+What is a Computer Network?
+@@ 10 
+Computer networks are collections of autonomous computers, e.g., the Internet
+They have many uses:
+Business Applications »
+Home Applications »
+Mobile Applications »
+These uses raise:
+Social Issues »
+This text covers networks for all of these uses
+Computer Networks, Chapter 1 Introduction
+Uses of Computer Networks
+@@ 11 
+Example Uses of Networks
+Computer Networks, Chapter 1 Introduction
+@@ 12 
+Computer Networks, Chapter 1 Introduction
+Business Applications
+@@ 13 
+Computer Networks, Chapter 1 Introduction
+Home Applications
+@@ 14 
+Computer Networks, Chapter 1 Introduction
+Home Applications
+Access to remote information
+Person-to-person communication
+Interactive entertainment
+Electronic commerce
+@@ 15 
+Tablets, laptops, and smart phones are popular devices; WiFi hotspots and 4G/5G cellular provide wireless connectivity.
+Mobile users communicate, e.g., voice and texts, consume content, e.g., video and Web, and use sensors, e.g., GPS.
+Wireless and mobile are related but different:
+Computer Networks, Chapter 1 Introduction
+Mobile Users
+@@ 16 
+From the telephone onwards:
+VoIP (voice-over-IP)
+Video conferencing
+Instant messaging
+Social networking
+Enables remote communication
+Need low latency for interactivity
+Computer Networks, Chapter 1 Introduction
+For User Communication
+@@ 17 
+Many users may access the same underlying resource:
+E.g., 3D printer, machines in the cloud
+More cost effective than dedicated resources per user
+Even network links are shared via statistical multiplexing
+Computer Networks, Chapter 1 Introduction
+For Resource Sharing
+@@ 18 
+Statistical Multiplexing
+统计复用，是指能在同一传输媒质中同时传输多路信号的技术，用以提高通信线路的利用率。常用的方式有频分复用、时分复用、码分复用等。主要应用于分组交换网。
+Sharing of network bandwidth between users according to the statistics of their demand:
+Multiplexing just means sharing
+Useful because users are mostly idle and their traffic is bursty.
+Key questions:
+How much does it help?
+Computer Networks, Chapter 1 Introduction
+Statistical Multiplexing
+@@ 19 
+Same content is delivered to many users
+Videos (large), songs, apps and upgrades, web pages…
+More efficient than sending a copy all the way to each user:
+Uses replicas in the network
+Computer Networks, Chapter 1 Introduction
+For Content Delivery
+@@ 20 
+To let computers interact with other computers
+E.g., e-commerce, distributed computing, M2M, …
+Enables automated information processing across different parties
+Computer Networks, Chapter 1 Introduction
+For Computer Communication
+@@ 21 
+Computer Networks, Chapter 1 Introduction
+Network neutrality – no network restrictions
+Content ownership, e.g., DMCA (Digital Millennium Copyright Act数字千年版权法案, 1998) notice-and-takedown
+Anonymity and censorship 匿名和审查
+Privacy, e.g., Web tracking and profiling网络跟踪和资料收集
+Theft, e.g., botnets and phishing 僵尸网络和网络钓鱼
+Social Issues
+随着全球各国《个人数据保护法》的陆续实施，欧盟《一般数据保护法案(General Data Protection Regulation, 679/2016, GDPR )》（简称GDPR）于 2018 年 5 月 25 日全面实施。
+@@ 22 
+Computer Networks, Chapter 1 Introduction
+Internet – Societal Impact
+@@ 23 
+Computer Networks, Chapter 1 Introduction
+Internet – Societal Impact
+@@ 24 
+Internet – Societal Impact：TOR (The Onion Routing)
+@@ 25 
+Computer Networks, Chapter 1 Introduction
+Internet – Economic Impact
+@@ 26 
+Computer Networks, Chapter 1 Introduction
+Focus of the course
+? ? ?
+Three “Networking” topics:
+Distributed Systems
+Networking
+Communications
+We’re in the middle
+@@ 27 
+The main point
+To learn how the Internet works
+What really happens when you “browse the web”?
+What are TCP/IP, DNS, HTTP, NAT, VPNs, 802.11 etc…
+To learn the fundamental of computer networks:
+What hard problems must they solve?
+What design strategies have proven valuable?
+Issue
+Example mechanisms at different layers
+Reliability despite failures
+Codes for error detection/correction (§3.2, 3.3)
+Routing around failures (§5.2)
+Network growth             and evolution
+Addressing (§5.6) and naming (§7.1)
+Protocol layering (§1.3)
+Allocation of resources like bandwidth
+Multiple access (§4.2)
+Congestion control (§5.3, 6.3)
+Security against various threats
+Confidentiality of messages (§8.2, 8.6)
+Authentication of communicating parties (§8.7)
+@@ 28 
+What really happens when you “browse the web”?
+① 浏览器
+输入 URL / 点击链接
+② DNS 解析
+域名 → IP 地址
+③ 本机协议栈
+Socket → TLS → TCP/QUIC
+④ 家庭/校园路由器
+NAT + 默认网关
+⑤ 运营商/Internet
+路由转发：逐跳查表
+⑥ Web / CDN 服务器
+处理请求并返回资源
+响应回程：HTML / CSS / JS / 图片
+经相反方向逐跳返回，浏览器解析并渲染页面
+1 URL
+浏览器解析 scheme/host/path
+2 DNS
+查缓存；递归/迭代查询
+3 连接
+TCP 三次握手 或 QUIC；TLS 握手
+4 HTTP
+发送 GET/POST，请求头/Body
+5 转发
+IP 路由 + NAT 地址/端口转换
+6 渲染
+收到响应，解析 DOM/CSSOM，加载子资源
+报文封装 / 解封装：每层只关心自己的“头部”
+HTTP
+Data
+TLS
+TCP / UDP
+IP
+Eth / Wi‑Fi
+到达服务器后逐层解封装
+应用层看到 HTTP 请求
+TCP/IP 协议栈中的关键职责
+应用层：DNS / HTTP / HTTPS
+传输层：TCP 可靠传输；UDP/QUIC 低时延
+网络层：IP 地址、路由、TTL、分片
+链路层：MAC、以太网/Wi‑Fi 帧、ARP/ND
+NAT 重点：内网 192.168.x.x:port
+⇄ 公网 IP:port；
+靠端口映射找回会话
+HTTPS 重点：HTTP 内容被 TLS 加密；
+中间路由器通常只看 IP/端口，不看网页正文
+@@ 29 
+Computer Networks, Chapter 1 Introduction
+Uses of Computer Networks
+Network Hardware
+Network Software
+Reference Models
+Example Networks
+Network Standardization
+Metric Units
+Chapter1：Introduction
+@@ 30 
+Types of connection
+Network Topologies
+Types of network
+Computer Networks, Chapter 1 Introduction
+Network Hardware
+@@ 31 
+Computer Networks, Chapter 1 Introduction
+Types of connection
+@@ 32 
+Computer Networks, Chapter 1 Introduction
+Network Topologies
+@@ 33 
+Computer Networks, Chapter 1 Introduction
+A fully-connected mesh topology
+优点：
+最短路径多，路由效率高；
+缺点：
+连线复杂，容易出错；
+链路故障定位困难；
+网卡端口数受限，影响组网规模；
+大量环路，易产生广播风暴，破坏代价高；
+@@ 34 
+Computer Networks, Chapter 1 Introduction
+A star topology
+优点：
+组网简单；
+数据交互简单。
+缺点：
+Hub端口数受限，组网规模小。
+@@ 35 
+Computer Networks, Chapter 1 Introduction
+A bus topology
+优点：
+网络结构简单，易于网络扩展；
+设备少、造价低，安装和使用方便；
+具有较高的可靠性。因为单个节点的故障不会涉及整个网络。
+缺点：
+总线传输距离有限，通信范围受到限制；
+故障诊断和隔离比较困难。当节点发生故障，隔离起来还比较方便，一旦传输介质出现故障时，就需要将整个总线切断；
+易于发生数据碰撞，线路争用现象比较严重
+@@ 36 
+Computer Networks, Chapter 1 Introduction
+A ring topology
+优点：
+电缆长度短，只需要将各节点逐次相连；
+可使用光纤。光纤的传输速率很高，十分适合于环形拓扑的单方面传输；
+所有站点都能公平访问网络的其他部分，网络性能稳定。
+缺点：
+Repeater节点故障会引起全网故障，是因为数据传输需要通过环上的每一个节点，如某一节点故障，则引起全网故障；
+节点的加入和撤出过程复杂；
+@@ 37 
+Computer Networks, Chapter 1 Introduction
+传统数据中心网络拓扑结构
+POD1
+POD2
+STP
+核心
+POD1
+POD2
+iStack
+核心
+POD1
+POD2
+核心
+Layer3
+Layer2
+Layer3
+Layer2
+汇聚
+接入
+汇聚
+接入
+汇聚
+接入
+3层架构
+方案：Ethernet，STP/MSTP
+问题：避免环路，阻塞一半端口，50%端口/链路利用率
+3层架构+交换机虚拟集群
+方案：交换机采用虚拟集群技术（M-LAG、vPC、CSS/iStack）,所有端口可用，提升组网效率。
+问题：L2网络规模小，扩展性差，不满足云化DC大二层（跨POD）需求；无法异厂家堆叠，且可能无法无损升级。
+扩展的L2架构
+方案：L3功能上移Core交换机。
+问题：云化DC东西流量巨大，Core交换机成为瓶颈。
+@@ 38 
+云数据中心网络诉求和关键技术
+“大”：支持数万甚至更多的服务器，百万级的VM接入，远超4K的租户网络；
+“低成本水平扩展”：不依赖于高端交换机的纵向扩展，而是采用普通盒式交换机的水平扩展；
+“位置无关”：逻辑网络和物理网络解耦，支持虚拟机迁移，网络策略跟着VM走（VM aware Network）；
+“胖”：云DC内东西流量大（收敛比2:1~7:1），而且能适应收敛比的变化（东西和南北流量可以独立扩容）；
+“自动化”：为不同租户动态、按需创建相互隔离的虚拟网络。
+1
+基于Leaf-Spine的full-mesh可扩展架构；
+overlay技术实现网络虚拟化，逻辑网络和物理网络解耦
+基于SDN技术的统一资源调度（集成到CloudOS）
+2
+3
+@@ 39 
+Leaf-Spine网络架构
+VNF1
+MANO
+Edge Node
+Compute Node
+Mgnt Node
+IPBB
+Spine
+Spine
+Leaf
+Leaf
+Leaf
+Leaf
+Border
+Leaf
+Border
+Leaf
+DC GW
+Spine
+Spine
+ECMP
+SDN Controller
+Openstack
+MANO
+OSS
+Server
+Server
+Server
+FW/NAT
+Gateway
+Server
+IP Routing:
+OSPF/BGP
+Overlay Tunnel
+Layer 3
+Layer 2
+IP Fabric
+(Static, OSPF, BGP routing)
+Overlay network
+(NVO3: VxLAN, GRE)
+Network Automation
+(Openstack integrated SDN)
+VNF2
+VM
+Container
+VM
+Container
+Container
+Bare Metal
+Container
+Container
+VNFM
+VIM
+NFVO
+PaaS
+IP Fabric
+NFV-based
+(VNF, MANO, VIM)
+Container-based
+(PaaS)
+Virtualization
+(VM, DPDK, SRIOV, vSwtich, IPVLAN )
+Key technologies
+高扩展、虚拟化和自动化推动云数据中心网络发展
+@@ 40 
+分层网络模型
+外部网络
+Server
+CE
+CE
+SDN GW
+SDN GW
+Spine
+OSPF
+IP Fabric
+VM
+VM
+VM
+VM
+业务接入
+物理层网络
+控制面：OSPF
+数据面：IP
+CE
+CE
+SDN GW
+SDN GW
+VM
+VM
+VM
+VM
+业务接入
+L2/L3 VNI
+BGP VXLAN EVPN
+VXLAN
+Overlay层网络
+控制面：iBGP EVPN
+数据面：VXLAN
+VLAN/QinQ
+CE
+CE
+SDN GW
+VRF
+BD
+Server
+VNF
+(router)
+VNF
+(host)
+VRF
+BD
+L3VPN Service
+业务接入
+eBGP/Static
+eBGP
+SDN GW
+业务层网络
+控制面：eBGP
+数据面：L3VPN
+L2/L3 VXLAN
+L2/L3 VXLAN
+L2/L3 VXLAN
+VTEP
+VTEP
+VTEP
+SR-IOV
+VM
+VM
+vSwitch
+VM
+VM
+SR-IOV
+VM
+VM
+vSwitch
+VM
+VM
+VRF
+BD
+VRF
+BD
+IP ECMP
+Spine
+双活网关
+DCGW
+BD
+VRF
+主FW
+备FW
+VRF
+Servers
+Servers
+@@ 41 
+小结：高扩展、虚拟化和自动化推动云数据中心网络的发展
+高扩展、低成本的物理网络
+虚拟化、大二层逻辑网络
+VM/容器感知和网络自动化
+IP Fabric架构
+基于Overlay逻辑和物理解耦
+SDN
+（集成到Cloud OS）
+SDN和Overlay本无关，为了DC网络自动化走到了一起
+“世界上没有什么网络问题是加一层(Overlay)不能解决的，如果有，就加两层！”
+--- 尼古拉斯.赵四
+@@ 42 
+关于计算机网络，没有一种被普遍接受的分类方法，但有两个因素是非常重要的：传输技术和距离尺度。
+Types of Network
+@@ 43 
+Networks can be classified by their transmission technology:
+Broadcast links
+Point-to-point links：Unicasting
+Computer Networks, Chapter 1 Introduction
+Types of Network – by transmission technology
+@@ 44 
+Computer Networks, Chapter 1 Introduction
+Networks can be classified by their scale:
+Scale
+Type
+Vicinity近邻
+PAN (Personal Area Network) » 个人网（个域网）
+Building大楼
+LAN (Local Area Network) » 局域网
+City城市
+MAN (Metropolitan Area Network) » 城域网
+Country国家
+WAN (Wide Area Network) » 广域网
+Planet地球
+The Internet (network of all networks) » 因特网
+Types of Network – by scale
+不同网络有各自的特征：范围（决定了传输时间）、传输技术（决定传输速率）、拓扑结构等。
+@@ 45 
+Computer Networks, Chapter 1 Introduction
+Connect devices over the range of a person
+Example of a Bluetooth (wireless) PAN:
+Personal Area Network
+@@ 46 
+Connect devices in a home or office building
+Called enterprise network in a company
+Computer Networks, Chapter 1 Introduction
+Wireless LAN
+with 802.11
+Wired LAN with
+switched Ethernet
+Local Area Networks
+To wired network
+@@ 47 
+Computer Networks, Chapter 1 Introduction
+Connect devices over a metropolitan area
+Example MAN based on cable TV:
+Metropolitan Area Networks
+@@ 48 
+Connect devices over a country
+Example WAN connecting three branch offices:
+Computer Networks, Chapter 1 Introduction
+Wide Area Networks (1)
+@@ 49  [hidden]
+An ISP (Internet Service Provider) network is also a WAN.
+Customers buy connectivity from the ISP to use it.
+Computer Networks, Chapter 1 Introduction
+Wide Area Networks (2)
+@@ 50 
+A VPN (Virtual Private Network) is a WAN built from virtual links that run on top of the Internet.
+Computer Networks, Chapter 1 Introduction
+Wide Area Networks (3)
+@@ 51 
+Computer Networks, Chapter 1 Introduction
+Uses of Computer Networks
+Network Hardware
+Network Software
+Reference Models
+Example Networks
+Network Standardization
+Metric Units
+Chapter1：Introduction
+@@ 52 
+Computer Networks, Chapter 1 Introduction
+Protocol Hierarchies (协议层次) »
+Design issues for the layers »
+Connection-oriented vs. connectionless service »
+Service primitives (服务原语) »
+Relationship of services to protocols »
+Network Software
+@@ 53 
+Computer Networks, Chapter 1 Introduction
+Protocol layering is the main structuring method used to divide up network functionality.
+Each protocol instance talks virtually to its peer (位于不同子系统的同一层的实体间的互称)
+Each layer communicates only by using the one below
+Lower layer services are accessed by an interface
+Interface is a connection point which exchange of information between two adjacent layers.
+At bottom, messages are carried by the medium
+Protocol Layers (1)
+offering certain services to the layer above it.
+an agreement between the communicating parties on how communication is to proceed.
+Defines which primitive operations and services the lower layer makes available to the upper one.
+Network Architecture: a set of layers and protocols.
+Layers, protocols, and interfaces.
+@@ 54 
+Computer Networks, Chapter 1 Introduction
+Protocol layering is the main structuring method used to divide up network functionality.
+网络的层次结构方法要解决的问题：
+网络应该具有哪些层次？每一层的功能是什么？（分层与功能）
+各层之间的关系是怎样的？它们如何进行交互？（服务与接口）
+通信双方的数据传输要遵循哪些规则？（协议）
+Protocol Layers (1)
+offering certain services to the layer above it.
+an agreement between the communicating parties on how communication is to proceed.
+Defines which primitive operations and services the lower layer makes available to the upper one.
+Network Architecture: a set of layers and protocols.
+Layers, protocols, and interfaces.
+@@ 55 
+Example: the philosopher-translator-secretary architecture
+Each protocol at different layers serves a different purpose
+Computer Networks, Chapter 1 Introduction
+The common Dutch
+can be replaced with another language.
+Email can be used
+instead of fax.
+Protocol Layers (2)
+@@ 56 
+层次化方法在其他领域的应用：邮政特快专递模型
+分层的好处：
+每一层不需要知道下一层是如何实现的，只需知道层间的接口和所提供的服务
+当某一层协议发生改变时不影响上下层协议；
+结构上分开，各层可采用最合适的技术；
+易于实现和维护；
+促进标准化
+Computer Networks, Chapter 1 Introduction
+Protocol Layers (3)
+@@ 57 
+Each lower layer adds its own header (with control information) to the message to transmit and removes it on receive
+Layers may also split and join messages, etc.
+Computer Networks, Chapter 1 Introduction
+水平通信/虚拟通信：对等实体进行的通信
+垂直通信/实际通信：相邻层进行的通信
+N层的PDU=N层PCI+N层SDU
+N层的SDU=(N+1)层的PDU
+一个SDU可能要封装在多个PDU中传输
+Protocol Layers (4)
+PDU由上层的服务数据单元SDU或其分段和协议控制信息PCI（Protocol Control Information）组成
+SDU即服务数据单元，是从高层协议来的信息单元传送到低层协议。
+进入每个子层未被处理的数据称为服务数据单元(SDU)，经过子层处理后形成特定格式的数据被称为协议数据单元(PDU)。
+同时，本层形成的PDU即为下一层的SDU。即第N层服务数据单元SDU，和上一层的协议数据单元（PDU）是一一对应的。
+根据协议数据单元的数据的不同，送到接收端的指定层。
+PDU(N) = SDU(N - 1) 　　SDU(N) = PDU(N + 1)
+@@ 58 
+Computer Networks, Chapter 1 Introduction
+数据单元Data Unit
+数据单元间关系
+服务访问点SAP（Service Access Point）：任何层间服务是在接口的SAP上进行的；每个SAP有唯一的识别地址；每个层间接口可以有多个SAP。
+数据单元：在网络中信息传送的单位。
+数据单元包括：
+服务数据单元 SDU：服务用户所要传递的逻辑数据单元。
+协议数据单元 PDU：不同系统对等实体为实现该层协议所交换的信息单位。 PDU=PCI+SDU
+接口数据单元 IDU：在同一系统的相邻两层实体的一次交互中，经过层间接口的信息单元。 IDU=ICI+SDU
+PCI（Protocol Control Information）
+ICI（Interface Control Information）
+@@ 59 
+Example Protocol Stack
+@@ 60 
+Merits & Defects of Protocol Hierarchies
+Merit of Protocol Hierarchies (分层的优点)
+Independence of layers: These layers are relative independence.(各层之间是相对独立的)
+If any layer is changed, other layers are not affected, so far （当某一层协议发生改变时不影响上下层协议）
+as not changing interface.  (灵活性好)
+Each layer can be realized in right technology.(结构上可以分割开)
+It is easy to realize and maintain. (易于实现和维护)
+Standardization (能促进标准化工作)
+Defect of Protocol Hierarchies:(分层的缺点)
+Some functions may be realized reduplicatively.(功能重复实现，资源浪费)
+The number of layer is not certain.(层次数难以确定)
+@@ 61 
+Computer Networks, Chapter 1 Introduction
+Each layer solves a particular problem but must include mechanisms to address a set of recurring design issues
+Issue
+Example mechanisms at different layers
+Reliability despite failures
+Codes for error detection/correction (§3.2, 3.3)
+Routing around failures (§5.2)
+Network growth             and evolution
+Addressing (§5.6) and naming (§7.1)
+Protocol layering (§1.3)
+Allocation of resources like bandwidth
+Multiple access (§4.2)
+Congestion control (§5.3, 6.3)
+Security against various threats
+Confidentiality of messages (§8.2, 8.6)
+Authentication of communicating parties (§8.7)
+Design Issues for the Layers
+@@ 62 
+Service provided by a layer may be kinds of either:
+Connection-oriented, must be set up for ongoing use (and torn down after use), e.g., phone call
+Connectionless, messages are handled separately, e.g., postal delivery
+Computer Networks, Chapter 1 Introduction
+面向连接的服务：建立连接（需要协商）、保持顺序。但是ACK过程会引入额外开销和时延。
+无连接的服务：不建连，不可靠，每个包独立进行路由选择，可能走不同的路径到达顺序可能不同，顺序性差。
+可靠：有确认和丢失处理
+不可靠：无确认，发送完就结束
+Qos：时延、抖动、传输时间、丢包率……
+Connection-Oriented vs. Connectionless
+TCP (Transmission Control Protocol) is a connection-oriented transport protocol providing a reliable bytesteam service at the Transport layer, while UDP (User Datagram Protocol) is a connectionless network protocol. Both operate over IP.
+IP provides unreliable datagram service at the Network layer.
+More examples: RTP (used to carry VoIP data) provides unreliable connection service;
+@@ 63 
+Number of Layers?
+若层数太少，就会使每一层的协议太复杂；
+若层数太多，又会在描述和综合各层功能的系统工程任务时遇到较多的困难，实现复杂。
+主流：OSI 七层模型和TCP/IP 四层模型
+@@ 64 
+网络体系结构的基本概念
+@@ 65 
+网络体系结构的基本概念
+@@ 66 
+网络体系结构的基本概念
+@@ 67 
+网络体系结构的基本概念
+@@ 68 
+网络体系结构的基本概念
+@@ 69 
+A service is provided to the layer above as primitives. 服务在形式上是由一组接口原语（或操作）来描述的。
+Each protocol which communicates in a layered architecture (e.g. based on the OSI Reference Model) communicates in a peer-to-peer manner with its remote protocol entity. Communication between adjacent protocol layers (i.e. within the same communications node) are managed by calling functions, called primitives, between the layers.
+The primitives are called at the client and server by the higher layer using the service.
+Hypothetical example of service primitives that may provide a reliable byte stream (connection-oriented) service:
+Computer Networks, Chapter 1 Introduction
+Service Primitives (1)
+@@ 70 
+Hypothetical example of how these primitives may be used for a client-server interaction
+Computer Networks, Chapter 1 Introduction
+Client
+Server
+LISTEN (0)
+ACCEPT
+RECEIVE
+SEND (4)
+DISCONNECT (6)
+CONNECT (1)
+SEND
+RECEIVE
+DISCONNECT (5)
+Connect request
+Accept response
+Request for data
+Reply
+Disconnect
+Disconnect
+(2)
+(3)
+Service Primitives (2)
+@@ 71 
+Computer Networks, Chapter 1 Introduction
+Recap:
+A layer provides a service to the one above	[vertical]
+A layer talks to its peer using a protocol   	[horizontal]
+Relationship of Services to Protocols
+Service: a set of primitives (operations) that a layer provides to the layer above it; it defines what operations the layer is prepared to perform on behalf of its users, but it says nothing at all about how these operations are implemented.
+Protocol, is a set of rules governing the format and meaning of the frames, packets, or messages that are exchanged by the peer entities within a layer.
+可以自由地改变协议，但不能改变服务，因为这些服务对于它们的用户是可见的，是提供给用户使用的。
+@@ 72 
+Computer Networks, Chapter 1 Introduction
+Principles of Layered Network Architecture
+“通信”。
+@@ 73 
+Computer Networks, Chapter 1 Introduction
+Reference models describe the layers in a network architecture
+OSI reference model »
+TCP/IP reference model »
+Model used for this text »
+Critique of OSI and TCP/IP »
+Reference Models
+@@ 74 
+Computer Networks, Chapter 1 Introduction
+OSI Reference Model
+A principled, international standard, seven layer model to connect different systems
+*PDU：*Protocol Data Unit
+@@ 75 
+A four layer model derived from experimentation; omits some OSI layers and uses the IP as the network layer.
+Computer Networks, Chapter 1 Introduction
+IP is the “narrow waist” of the Internet
+Protocols are shown in their respective layers
+TCP/IP Reference Model
+@@ 76 
+Computer Networks, Chapter 1 Introduction
+The TCP/IP Model vs. OSI
+@@ 77 
+Computer Networks, Chapter 1 Introduction
+It is based on the TCP/IP model but we include the physical layer and look beyond Internet protocols.
+Hybrid Model Used in this Book
+The hybrid reference model to be used in this book.
+@@ 78 
+Computer Networks, Chapter 1 Introduction
+Hybrid Model: Physical Layer
+@@ 79 
+Computer Networks, Chapter 1 Introduction
+Hybrid Model: Data Link Layer
+@@ 80 
+Computer Networks, Chapter 1 Introduction
+Hybrid Model: Network Layer
+@@ 81 
+Computer Networks, Chapter 1 Introduction
+Hybrid Model: Transport Layer
+@@ 82 
+Computer Networks, Chapter 1 Introduction
+Hybrid Model: Application Layer
+@@ 83 
+Computer Networks, Chapter 1 Introduction
+Host 1 sending data to Host 2
+@@ 84 
+Computer Networks, Chapter 1 Introduction
+Host 1 sending data to Host 2
+从层次上来看数据的流动
+路由器在转发分组时最高只用到网络层，而没有使用运输层和应用层
+@@ 85 
+Computer Networks, Chapter 1 Introduction
+OSI:
+Very influential model with clear concepts
+Models, protocols and adoption all bogged down by politics and complexity
+Bad timing: OSI提出时，TCP/IP已经被研究机构和大学广泛使用，并有很成熟的应用。生产商和公司不愿再投资支持第二种协议栈；
+Bad technology: 对比TCP/IP，OSI有应用层、表示层、会话层。但是，表示层、会话层对应的协议非常少，而且本身7层分的不是很均匀。层数的增多增加了理解和实现的难度。
+Bad implementation: OSI层数更多，设计更复杂，效率低下，并且出现的较晚，导致其初期的实现代价比较高，而且质量很差。
+Bad politics: OSI早期有欧美政府参与推广，包括european telecommunication ministries 、 European community、US Gov。政府部门强推这种质量很差的技术，引起了欧美从事网络的技术人员和科研人员的强烈反感和抵触。
+TCP/IP:
+Very successful protocols that worked well and thrived
+Weak model derived after the fact from protocols
+Not general: 不适用于描述其他非TCP/IP的协议栈，比如Bluetooth。
+Critique of OSI & TCP/IP
+@@ 86 
+Computer Networks, Chapter 1 Introduction
+The Internet »
+3G mobile phone networks »
+Wireless LANs »
+RFID and sensor networks »
+Example Networks
+@@ 87 
+Computer Networks, Chapter 1 Introduction
+Before the Internet was the ARPANET (20世纪50年代末由美国国防部高级研究计划局（ARPA）主持研制的), a decentralized, packet-switched network based on Baran’s ideas.
+ARPANET于1969年正式启用，当时仅连接了4台计算机，供科学家们进行计算机联网实验用，这就是因特网的前身。
+到70年代，ARPAnet已经有了好几十个计算机网络，但是每个网络只能在网络内部的计算机之间互联通信，不同计算机网络之间仍然不能互通。为此， ARPA又设立了新的研究项目，支持学术界和工业界进行有关的研究，研究的主要内容就是想用一种新的方法将不同的计算机局域网互联，形成“互联网”。研究人员称之为“internetwork”，简称“Internet”，这个名词就一直沿用到现在。
+1974年，出现了连接分组网络的协议（Pioneered by Vint Cerf & Bob Kahn，互联网之父），后续演变为了TCP/IP。ARPA在1982年接受了TCP/IP，选定Internet为主要的计算机通信系统，并把其它的军用计算机网络都转换到TCP/IP。
+ARPANET topology in Sept 1972.
+Nodes are IMPs, or early routers, linked to hosts
+56 kbps links
+Internet (1)
+ARPANET topology in 1969.
+@@ 88 
+Computer Networks, Chapter 1 Introduction
+The early Internet used NSFnet (1985-1995) as its backbone; universities connected to get on the Internet
+1986年，美国国家科学基金组织（NSF）将分布在美国各地的5个为科研教育服务的超级计算机中心互联，并支持地区网络，形成NSFnet。
+1988 年，NSFnet替代ARPAnet成为Internet的主干网。NSFnet主干网利用了在ARPAnet中已证明是非常成功的TCP/IP技术，准许各大学、政府或私人科研机构的网络加入。
+1989年，ARPAnet解散，Internet从军用转向民用。
+1995年4月30日，NSFnet正式宣布停止运作。而此时Internet的骨干网已经覆盖了全球91个国家，主机已超过400万台。
+NSFNET topology in 1988
+1.5 Mbps links
+Internet (2)
+@@ 89 
+Computer Networks, Chapter 1 Introduction
+The modern Internet is more complex:
+ISP networks serve as the Internet backbone
+ISPs connect or peer to exchange traffic at IXPs
+Within each network routers switch packets
+Between networks, traffic exchange is set by business agreements
+Customers connect at the edge by many means
+Cable, DSL, Fiber-to-the-Home, 3G/4G wireless, dialup
+Data centers concentrate many servers (“the cloud”)
+Most traffic is content from data centers (esp. video)
+The architecture continues to evolve
+Internet (3)
+@@ 90 
+Computer Networks, Chapter 1 Introduction
+Architecture of the Internet
+Internet (4)
+@@ 91 
+Computer Networks, Chapter 1 Introduction
+3G network is based on spatial cells; each cell provides wireless service to mobiles within it via a base station
+3G Mobile Phone Networks (1)
+@@ 92 
+Base stations connect to the core network to find other mobiles and send data to the phone network and Internet
+Computer Networks, Chapter 1 Introduction
+3G Mobile Phone Networks (2)
+@@ 93 
+Computer Networks, Chapter 1 Introduction
+As mobiles move, base stations hand them off from one cell to the next, and the network tracks their location
+3G Mobile Phone Networks (3)
+Handover
+@@ 94 
+Computer Networks, Chapter 1 Introduction
+In 802.11, clients communicate via an AP (Access Point) that is wired to the rest of the network.
+Wireless LANs（1）
+@@ 95 
+Computer Networks, Chapter 1 Introduction
+Signals in the 2.4GHz ISM band vary in strength due to many effects, such as multipath fading due to reflections
+requires complex transmission schemes, e.g., OFDM
+Wireless LANs（2）
+@@ 96 
+Computer Networks, Chapter 1 Introduction
+Radio broadcasts interfere with each other, and radio ranges may incompletely overlap
+CSMA (Carrier Sense Multiple Access 载波监听多路访问) designs are used
+Wireless LANs（3）
+@@ 97 
+Computer Networks, Chapter 1 Introduction
+Passive UHF RFID（无源 特高频 射频识别） networks everyday objects:
+Tags (stickers with not even a battery) are placed on objects
+Readers send signals that the tags reflect to communicate
+RFID and Sensor Networks (1)
+@@ 98 
+Computer Networks, Chapter 1 Introduction
+Sensor networks spread small devices over an area:
+Devices send sensed data to collector via wireless hops
+RFID and Sensor Networks (2)
+@@ 99 
+Computer Networks, Chapter 1 Introduction
+Standards define what is needed for interoperability
+Some of the many standards bodies:
+Body
+Area
+Examples
+Notes
+ITU
+Telecommunications
+G.992, ADSL
+H.264, MPEG4
+国际电信联盟，是联合国的一个重要专门机构，也是联合国机构中历史最长的一个国际组织
+IEEE
+Communications
+802.3, Ethernet
+802.11, WiFi
+电气和电子工程师协会，是一个美国的电子技术与信息科学工程师的协会，是世界上最大的非营利性专业技术学会，其会员人数超过40万人，遍布160多个国家
+IETF
+Internet
+RFC 2616, HTTP/1.1
+RFC 1034/1035, DNS
+互联网工程任务组，成立于1985年底，是全球互联网最具权威的技术标准化组织，主要任务是负责互联网相关技术规范的研发和制定，当前绝大多数国际互联网技术标准出自IETF
+W3C
+Web
+HTML5 standard
+CSS standard
+World Wide Web Consortium，万维网联盟，创建于1994年，是Web技术领域最具权威和影响力的国际中立性技术标准机构
+Network Standardization
+@@ 100 
+Computer Networks, Chapter 1 Introduction
+IEEE 802 Standards
+The 802 working groups.  The important ones are marked with *.  The ones marked with  are hibernating(休眠).  The one marked with  † gave up.
+@@ 101 
+Computer Networks, Chapter 1 Introduction
+The main prefixes we use:
+Use powers of 10 for rates, powers of 2 for storage
+E.g., 1 Mbps = 1,000,000 bps, 1 KB = 1024 bytes
+“B” is for bytes, “b” is for bits
+Metric Units
+@@ 102 
+Computer Networks, Chapter 1 Introduction
+P1. Imagine that you have trained your St. Bernard, Bernie, to carry a box of three 8-mm tapes instead of a flask of brandy. (When your disk fills up, you consider that an emergency.) These tapes each contain 7 gigabytes. The dog can travel to your side, wherever you may be, at 18 km/hour. For what range of distances does Bernie have a higher data rate than a transmission line whose data rate (excluding overhead) is 150 Mbps?
+Selected Problems
+Ans:.
+P2. A client-server system uses a satellite network, with the satellite at a height of 40,000 km. What is the best-case delay in response to a request?
+Ans:
+P3. What are two reasons for using layered protocols? What is one possible disadvantage of using layered protocols?
+Ans:
+P4. What is the main difference between TCP and UDP?
+Ans:
+@@ 103 
+Computer Networks, Chapter 1 Introduction
+Selected Problems
+P5. When a file is transferred between two computers, two acknowledgement strategies are possible. In the first one, the file is chopped up into packets, which are individually acknowledged by the receiver, but the file transfer as a whole is not acknowledged. In the second one, the packets are not acknowledged individually, but the entire file is acknowledged when it arrives. Discuss these two approaches.
+Ans:
+P6. A system has an n-layer protocol hierarchy. Applications generate messages of length M bytes. At each of the layers, an h-byte header is added. What fraction of the network bandwidth is filled with headers?
+Ans:
+@@ 104 
+End
+Chapter 1

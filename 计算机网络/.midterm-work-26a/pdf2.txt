@@ -1,0 +1,348 @@
+一. 单选题（共30题，100分）
+题量: 30 满分: 100
+作答时间: 09-22 13:16 至 10-08 13:17
+智能分析
+第一章自测题
+100分
+1. (单选题)
+Frequency of failure and network recovery time after a failure are measures of the _______ of a network.
+A.
+Performance
+B.
+Reliability
+C.
+Security
+D.
+Feasibility
+我的答案:B 正确答案:B  3.3 分
+AI讲解
+2. (单选题)An unauthorized user is a network _______ issue.
+A. Performance
+B. Reliability
+C. Security
+D. All the above
+我的答案:C 正确答案:C
+答案解析：
+ 3.3 分
+AI讲解
+3. (单选题)Which topology requires a central controller or hub?
+A. Mesh
+B. Star
+C. Bus
+D. Ring
+我的答案:B 正确答案:B
+答案解析：
+ 3.3 分
+AI讲解
+4. (单选题)A _______ connection provides a dedicated link between two devices. AI讲解
+1 2 3
+6 7 8
+11 12 13
+16 17 18
+21 22 23
+26 27 28
+一. 单选题（100分）
+作业详情
+A. point-to-point
+B. multipoint
+C. primary
+D. secondary
+我的答案:A 正确答案:A
+答案解析：
+ 3.3 分
+5. (单选题)"In a _______ connection, more than two devices can share a single link."
+A. point-to-point
+B. multipoint
+C. primary
+D. secondary
+我的答案:B 正确答案:B
+答案解析：
+ 3.3 分
+AI讲解
+6. (单选题)This was the first network.
+A. CSNET
+B. NSFNET
+C. ANSNET
+D. ARPANET
+我的答案:D 正确答案:D
+答案解析：
+ 3.3 分
+AI讲解
+7. (单选题)_______ is the protocol suite for the current Internet.
+A. TCP/IP
+B. NCP
+C. UNIX
+D. ACM
+我的答案:A 正确答案:A
+答案解析：
+ 3.3 分
+AI讲解
+8. (单选题)"_______ refers to the structure or format of the data, meaning the order in which they are presented."
+A. Semantics
+B. Syntax
+C. Timing
+D. All of the above
+AI讲解
+1 2 3
+6 7 8
+11 12 13
+16 17 18
+21 22 23
+26 27 28
+一. 单选题（100分）
+作业详情
+我的答案:B 正确答案:B
+答案解析：
+ 3.3 分
+9. (单选题)"________ defines how a particular pattern to be interpreted, and what action is to be taken based on that
+interpretation."
+A. Semantics
+B. Syntax
+C. Timing
+D. None of the above
+我的答案:A 正确答案:A
+答案解析：
+ 3.3 分
+AI讲解
+10. (单选题)_______ refers to two characteristics: when data should be sent and how fast it can be sent.
+A. Semantics
+B. Syntax
+C. Timing
+D. none of the above
+我的答案:C 正确答案:C
+答案解析：
+ 3.3 分
+AI讲解
+11. (单选题)"A _______ is a data communication system within a building, plant, or campus, or between nearby
+buildings."
+A. MAN
+B. LAN
+C. WAN
+D. none of the above
+我的答案:B 正确答案:B
+答案解析：
+ 3.3 分
+AI讲解
+12. (单选题)"A ______ is a data communication system spanning states, countries, or the whole world."
+A. MAN
+B. LAN
+C. WAN
+D. none of the above
+我的答案:C 正确答案:C
+答案解析：
+ 3.3 分
+AI讲解
+1 2 3
+6 7 8
+11 12 13
+16 17 18
+21 22 23
+26 27 28
+一. 单选题（100分）
+作业详情
+13. (单选题)________ is a collection of many separate networks.
+A. A WAN
+B. An internet
+C. a LAN
+D. None of the above
+我的答案:B 正确答案:B
+答案解析：
+ 3.3 分
+AI讲解
+14. (单选题)A ________ is a set of rules that governs data communication.
+A. forum
+B. protocol
+C. standard
+D. none of the above
+我的答案:B 正确答案:B
+答案解析：
+ 3.3 分
+AI讲解
+15. (单选题)________ is an idea or concept that is a precursor to an Internet standard.
+A. RCF
+B. RFC
+C. ID
+D. none of the above
+我的答案:B 正确答案:B
+答案解析：
+ 3.3 分
+AI讲解
+16. (单选题)The _______ layer changes bits into electromagnetic signals.
+A. Physical
+B. Data link
+C. Transport
+D. None of the above
+我的答案:A 正确答案:A
+答案解析：
+ 3.3 分
+AI讲解
+17. (单选题)Which of the following is an application layer service?
+A. Remote log-in
+B. File transfer and access
+C. Mail service
+AI讲解
+1 2 3
+6 7 8
+11 12 13
+16 17 18
+21 22 23
+26 27 28
+一. 单选题（100分）
+作业详情
+D. All the above
+我的答案:D 正确答案:D
+答案解析：
+ 3.3 分
+18. (单选题)Why was the OSI model developed?
+A. Manufacturers disliked the TCP/IP protocol suite.
+B. The rate of data transfer was increasing exponentially
+C. Standards were needed to allow any two systems to communicate
+D. None of the above
+我的答案:C 正确答案:C
+答案解析：
+ 3.3 分
+AI讲解
+19. (单选题)The OSI model consists of _______ layers.
+A. three
+B. five
+C. seven
+D. eight
+我的答案:C 正确答案:C
+答案解析：
+ 3.3 分
+AI讲解
+20. (单选题)"In the OSI model, as a data packet moves from the lower to the upper layers, headers are _______."
+A. added
+B. removed
+C. rearranged
+D. modified
+我的答案:B 正确答案:B
+答案解析：
+ 3.3 分
+AI讲解
+21. (单选题)"In the OSI model, when data is transmitted from device A to device B, the header from A's layer 5 is
+read by B's _______ layer."
+A. physical
+B. transport
+C. session
+D. presentation
+我的答案:C 正确答案:C  3.4 分
+AI讲解
+1 2 3
+6 7 8
+11 12 13
+16 17 18
+21 22 23
+26 27 28
+一. 单选题（100分）
+作业详情
+答案解析：
+22. (单选题)"In the OSI model, what is the main function of the transport layer?"
+A. node-to-node delivery
+B. process-to-process message delivery
+C. synchronization
+D. updating and maintenance of routing tables
+我的答案:B 正确答案:B
+答案解析：
+ 3.4 分
+AI讲解
+23. (单选题)"In the OSI model, encryption and decryption are functions of the ________ layer."
+A. transport
+B. session
+C. presentation
+D. application
+我的答案:C 正确答案:C
+答案解析：
+ 3.4 分
+AI讲解
+24. (单选题)The Internetworking Protocol (IP) is a ________ protocol.
+A. reliable
+B. connection-oriented
+C. both a and b
+D. none of the above
+我的答案:D 正确答案:D
+答案解析：
+ 3.4 分
+AI讲解
+25. (单选题)The seven-layer _____ model provides guidelines for the development of universally compatible
+networking protocols.
+A. OSI
+B. ISO
+C. IEEE
+D. none of the above
+我的答案:A 正确答案:A
+答案解析：
+ 3.4 分
+AI讲解
+1 2 3
+6 7 8
+11 12 13
+16 17 18
+21 22 23
+26 27 28
+一. 单选题（100分）
+作业详情
+26. (单选题)The _______ layer is responsible for delivering data units from one station to the next without errors.
+A. transport
+B. network
+C. data link
+D. physical
+我的答案:C 正确答案:C
+答案解析：
+ 3.4 分
+AI讲解
+27. (单选题)The ______ layer is responsible for the source-to-destination delivery of a packet across multiple
+network links.
+A. transport
+B. network
+C. data link
+D. physical
+我的答案:B 正确答案:B
+答案解析：
+ 3.4 分
+AI讲解
+28. (单选题)"The ______ layer establishes, maintains, and synchronizes the interactions between communicating
+devices."
+A. transport
+B. network
+C. session
+D. physical
+我的答案:C 正确答案:C
+答案解析：
+ 3.4 分
+AI讲解
+29. (单选题)The _______ layer ensures interoperability between communicating devices through transformation of
+data into a mutually agreed upon format.
+A. transport
+B. network
+C. data link
+D. presentation
+我的答案:D 正确答案:D
+答案解析：
+ 3.4 分
+AI讲解
+30. (单选题)"The TCP/IP _______ layer is equivalent to the combined session, presentation, and application layers of
+the OSI model."
+A. application
+AI讲解
+1 2 3
+6 7 8
+11 12 13
+16 17 18
+21 22 23
+26 27 28
+一. 单选题（100分）
+作业详情
+B. network
+C. data link
+D. physical
+我的答案:A 正确答案:A
+答案解析：
+ 3.4 分 1 2 3
+6 7 8
+11 12 13
+16 17 18
+21 22 23
+26 27 28
+一. 单选题（100分）
+作业详情

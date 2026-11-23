@@ -1,0 +1,139 @@
+第三章自测题
+题量: 20 满分: 100 作答时间: 10-12 10:23 至 11-24 10:25
+A Simple parity check
+B Two-dimensional parity check
+C CRC
+D Checksum
+A double-bit
+B burst
+C single-bit
+D none of the above
+A XOR
+B OR
+C AND
+D none of the above
+A Hamming code
+B Hamming distance
+C Hamming rule
+D none of the above
+A 5
+B 6
+一. 单选题（共20题，100分）
+1. (单选题) Which error detection method uses one's complement arithmetic?
+2. (单选题) A ________ error means that two or more bits in the data unit have changed.
+3. (单选题) In modulo-2 arithmetic, we use the ______ operation for both addition and subtraction.
+4. (单选题) The ________ between two words is the number of differences between corresponding bits.
+5. (单选题) To guarantee correction of up to 5 errors in all cases, the minimum Hamming distance in a block code must be ________.
+1 2 3
+6 7 8
+11 12 13
+16 17 18
+一. 单选题（100分）
+作业 暂时保存 提交
+C 11
+D none of the above
+A an even-number of
+B two
+C no errors
+D an odd-number of
+A 1
+B n
+C 0
+D none of the above
+A x
+B x + 1
+C 1
+D none of the above
+A 1111
+B 1101
+C 1000
+D none of the above
+A 1111
+B 0000
+C 1110
+6. (单选题) A simple parity-check code can detect __________ errors.
+7. (单选题) The Hamming distance between equal codewords is _________.
+8. (单选题) A generator that contains a factor of ____ can detect all odd-numbered errors.
+9. (单选题) In one's complement arithmetic, if positive 7 is 0111, then negative 7 is ________.
+10. (单选题) The checksum of 1111 and 1111 is _________.
+1 2 3
+6 7 8
+11 12 13
+16 17 18
+一. 单选题（100分）
+作业 暂时保存 提交
+D 111
+A Automatic repeat quantization
+B Automatic repeat request
+C Automatic retransmission request
+D Acknowledge repeat request
+A Stop-and-Wait ARQ
+B Go-Back-N ARQ
+C Selective-Repeat ARQ
+D none of the above
+A Stop-and-Wait ARQ
+B Go-Back-N ARQ
+C Selective-Repeat ARQ
+D none of the above
+A 15
+B 16
+C 31
+D 1
+A 15
+B 16
+C 31
+11. (单选题) ARQ stands for _______.
+12. (单选题) In the _________Protocol, if no acknowledgment for a frame has arrived, we resend all outstanding frames.
+13. (单选题) In the _________ protocol we avoid unnecessary transmission by sending only frames that are corrupted.
+14. (单选题) In Go-Back-N ARQ, if 5 is the number of bits for the sequence number, then the maximum size of the send window
+must be _____
+15. (单选题) In Go-Back-N ARQ, if 5 is the number of bits for the sequence number, then the maximum size of the receive window
+must be _____
+1 2 3
+6 7 8
+11 12 13
+16 17 18
+一. 单选题（100分）
+作业 暂时保存 提交
+D 1
+A 15
+B 16
+C 31
+D 1
+A 15
+B 16
+C 31
+D 1
+A bit-oriented
+B byte-oriented
+C character-oriented
+D none of the above
+A modulo-2
+B modulo- 8
+C modulo-256
+D none of the above
+A NCP
+B LCP
+C CHAP
+16. (单选题) In Selective Repeat ARQ, if 5 is the number of bits for the sequence number, then the maximum size of the send
+window must be _____
+17. (单选题) In Selective Repeat ARQ, if 5 is the number of bits for the sequence number, then the maximum size of the receive
+window must be _____
+18. (单选题) The most common protocol for point-to-point access is the Point-to-Point Protocol (PPP), which is a _________protocol.
+19. (单选题) In the Go-Back-N Protocol, if the size of the sequence number field is 8, the sequence numbers are in ________
+arithmetic,
+20. (单选题) In PPP, the ________ is responsible for establishing, maintaining, configuring, and terminating links.
+1 2 3
+6 7 8
+11 12 13
+16 17 18
+一. 单选题（100分）
+作业 暂时保存 提交
+D
+PAP
+123
+678
+11 12 13
+16 17 18
+一. 单选题（100分）
+作业 暂时保存 提交

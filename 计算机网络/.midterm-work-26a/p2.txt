@@ -1,0 +1,1416 @@
+@@ 1 
+Computer Networks
+王廷
+华东师范大学 软件工程学院Email: twang@sei.ecnu.edu.cn
+Office: 理科大楼B1116室
+@@ 2 
+Computer Networks, Chapter 2 Introduction
+Theoretical Basis for Data Communications
+Guided Transmission Media
+Wireless Transmission
+Communication Satellites
+Digital Modulation and Multiplexing
+Public Switched Telephone Network
+Mobile Telephone System
+Cable Television
+Chapter2：The Physical Layer
+@@ 3 
+Computer Networks, Chapter 2 The Physical Layer
+Foundation on which other layers build
+Properties of wires, fiber, wireless limit what the network can do
+Key problem is to send (digital) bits using only (analog) signals
+This is called modulation(调制)
+Physical
+Link
+Network
+Transport
+Application
+The Physical Layer
+调制解调器Modem（谐音“猫”）：
+是Modulator(调制器)与Demodulator(解调器)的简称。
+@@ 4 
+Computer Networks, Chapter 2 The Physical Layer
+Media: wires, fiber, satellites, radio
+Signal propagation: bandwidth, attenuation(衰减), noise
+Modulation: how bits are represented as physical signals
+Fundamental limits: Nyquist, Shannon
+Physical Layer Issues
+@@ 5 
+Abstract Model of a Link
+Bit rate: bits/sec depends on the channel’s bandwidth
+Delay: how long does it take a bit to get to the end?
+Error rate: what is the probability of a bit flipping（位反转）?
+@@ 6 
+Bandwidth-Delay Product
+Bits have a physical size on the channel!
+Storage capacity of a channel is: bit rate x delay
+Example:
+100 Mbps 5000-km fiber, delay = 50 msec
+In 50 msec we can pump out 5 million bits（100Mbps*0.05s）
+So the fiber can store 5 million bits in 5000 km
+1 km holds 1000 bits so a bit is 1 meter long
+At 200 Mbps, a bit is 0.5 m long
+@@ 7 
+Type of data（数据：运送的信息实体）
+Analog or digital
+Type of signals（信号：数据的电气的或电磁的表现）
+Analog or digital
+Periodic or non-periodic
+Terminology（术语） on transmission over a link
+Simplex（单工）, half-duplex（半双工）, or full-duplex（全双工）
+Parallel（并行） or serial （串行）
+Computer Networks, Chapter 2 The Physical Layer
+Data and Signals
+@@ 8 
+Analog data refers to information that is continuous
+an analog clock that has hour, minute, and second hands gives information in a continuous form;
+the movements of the hands are continuous.
+Digital data refers to information that has discrete states
+a digital clock that reports the hours and the minutes will change suddenly from 8:05 to 8:06.
+Computer Networks, Chapter 2 The Physical Layer
+Type of Data
+@@ 9 
+An analog signal has infinitely many levels of intensity over a period of time.
+A digital signal can have only a limited number of defined values.
+Computer Networks, Chapter 2 The Physical Layer
+Analog and Digital Signals
+@@ 10 
+Computer Networks, Chapter 2 The Physical Layer
+Analog, digital, data and Signals
+无论数据或信号，都可以是模拟的或数字的。所谓“模拟”就是连续变化的，而“数字”就表示取值是离散的；
+@@ 11 
+Computer Networks, Chapter 2 The Physical Layer
+Data Communication System Model
+@@ 12 
+A periodic signal completes a pattern within a measurable time frame, called a period, and repeats that pattern over subsequent identical periods.
+A simple periodic analog signal, a sine(正弦) wave, cannot be decomposed into simpler signals. A sine wave is defined by its amplitude(振幅), frequency(频率), phase(相位).
+A composite periodic analog signal is composed of multiple sine waves.
+A non-periodic signal changes without exhibiting a pattern or cycle that repeats over time.
+Most digital signals are non-periodic, and thus period and frequency are not appropriate characteristics.
+Computer Networks, Chapter 2 The Physical Layer
+Periodic and Non-periodic Signals
+@@ 13 
+Computer Networks, Chapter 2 The Physical Layer
+Units of period and frequency
+@@ 14 
+Computer Networks, Chapter 2 The Physical Layer
+Simplex, half-duplex, or full-duplex
+只能有一个方向的通信而没有反方向的交互
+通信的双方都可以发送信息，但双方不能同时发送/接收。
+允许数据同时在两个方向上传输
+@@ 15 
+Computer Networks, Chapter 2 The Physical Layer
+Data transmission modes
+@@ 16 
+
+@@ 17 
+Computer Networks, Chapter 2 The Physical Layer
+At the sender, digital data are encoded into a digital signal.
+At the receiver, the digital data are recreated by decoding the digital signal.
+Parallel Transmission
+@@ 18 
+Computer Networks, Chapter 2 The Physical Layer
+Serial Transmission
+@@ 19 
+Computer Networks, Chapter 2 The Physical Layer
+The timing of a signal is unimportant.
+Information is received and translated by agreed upon patterns.
+Asynchronous Transmission
+异步传输一般以字符为单位
+起始位：先发出一个逻辑”0”信号，表示传输字符的开始。
+停止位：处于逻辑“1”状态，表示当前线路上没有资料传送。
+@@ 20 
+Computer Networks, Chapter 2 The Physical Layer
+In synchronous transmission, we send bits one after another without start or stop bits or gaps. It is the responsibility of the receiver to group the bits.
+Timing is very important.
+Synchronous Transmission
+同步传输一般以帧为单位
+@@ 21 
+Communication rates have fundamental limits
+Fourier analysis 傅立叶分析»
+Bandwidth-limited signals 有限带宽的信号»
+Maximum data rate of a channel 信道的最大传输速率»
+Computer Networks, Chapter 2 The Physical Layer
+Theoretical Basis for Data Communication
+@@ 22 
+Computer Networks, Chapter 2 The Physical Layer
+The time-domain and frequency-domain plots of a sine wave
+@@ 23 
+The power company sends a single sine wave with a frequency of 60 Hz to distribute electric energy to houses and businesses.
+Use a single sine wave to send an alarm to a security center when a burglar opens a door or window in the house.
+Computer Networks, Chapter 2 The Physical Layer
+Applications of simple sine waves
+@@ 24 
+Computer Networks, Chapter 2 The Physical Layer
+The time domain and frequency domain of three sine waves
+单一频率的正弦波在数据通信中没有用处；我们需要发送复合信号，一个复合信号由许多简单的正弦波组成。
+信号的分析是非常复杂的，为了便于信号分析，通常把复杂信号分解成一些基本信号的组合，最简单的信号就是正弦信号。
+@@ 25 
+Decomposition of a composite periodic signal
+@@ 26 
+Time and frequency domain of a non-periodic composite signal
+Computer Networks, Chapter 2 The Physical Layer
+It can be the signal created by a microphone or a telephone set when a word or two is pronounced. In this case, the composite signal cannot be periodic, because that implies that we are repeating the same word or words with exactly the same tone.
+@@ 27 
+Computer Networks, Chapter 2 The Physical Layer
+Bandwidth of analog signals
+bandwidth=5000-1000=4000 Hz
+bandwidth=5000-1000=4000 Hz
+带宽计算：最高频率-最低频率
+@@ 28 
+
+@@ 29 
+A time-varying signal can be equivalently represented as a series of frequency components (harmonics谐波):
+傅立叶分析：将任意信号分解为简单正弦分量的一种数学工具。
+Computer Networks, Chapter 2 The Physical Layer
+a, b weights of harmonics(谐波)
+Signal over time
+=
+Fourier Analysis
+任何周期为T的周期阶梯函数g(t)，可展开傅立叶级数，如上式。其中f=1/T是基波频率，an和bn是正弦和余弦函数n次谐波的正/余弦振幅。
+字符“b”的二进制信号01100010
+其平方根傅立叶振幅
+@@ 30 
+Based on Fourier analysis, a digital signal is a composite analog signal. The bandwidth is infinite.
+Computer Networks, Chapter 2 The Physical Layer
+Bandwidth of digital signals
+带宽：无穷大  频率：离散的
+带宽：无穷大  频率：连续的
+周期信号：傅里叶级数
+非周期信号：傅里叶变换
+@@ 31 
+To electrical engineers, (analog) bandwidth is the range of frequencies, a quantity measured in Hz.
+To computer scientists, (digital) bandwidth is the maximum data rate of a channel, a quantity measured in bits/sec.
+The data rate is the end result of using the analog bandwidth of a physical channel for digital transmission.
+Computer Networks, Chapter 2 The Physical Layer
+Bandwidth in hertz and bandwidth in bits per second
+@@ 32 
+For digital signals, the bit rate is the number of bits sent in 1 second, expressed in bits per second (bps).
+Computer Networks, Chapter 2 The Physical Layer
+Bit Rate
+@@ 33 
+信号通道有限带宽，高频分量会被滤除
+信道的带宽越宽，那么能通过的谐波的次数就越高，接收端恢复的波形就越接近于原发送端的波形，相当于n越大则傅立叶级数中前n项求和得到的值越接近于原来的周期函数。
+Computer Networks, Chapter 2 The Physical Layer
+8 harmonics
+4 harmonics
+2 harmonics
+Lost!
+Bandwidth
+Lost!
+Lost!
+Bandwidth-Limited Signals
+Having less bandwidth(harmonics) degrades the signal.
+@@ 34 
+How fast we can send data, in bits per second, over a channel?
+Computer Networks, Chapter 2 The Physical Layer
+@@ 35 
+带宽：通常信道都有一个最高的信号频率（频率是指每秒钟的周期数，而每个周期都会有几次电平变化）和最低的信号频率，只有在这两个频率之间的信号才能通过这个信道，这两个频率的差值就叫做这个信道的带宽，单位是Hz。
+信道容量：数据在信道中传输会有他们的速度——比特率，这里面最高的比特率就叫做这个信道的容量，单位是bps。就好象每条公路都有他们的最高限速，那么所有在里面开的车都不会超过这个速度。
+注：通常习惯上，平时也会把信道容量叫做“带宽”，比如“带宽10Mbps的网络”，“网络带宽是10Mbps”等等。所以这两个概念也很容易混淆。我们平常所说的“带宽”不是带宽，而是信道容量。
+Bandwidth and Channel Capacity 带宽和信道容量
+@@ 36 
+波特率（也称线路信号速率、信息传送速率、码元速率、符号速率、或传码率），其定义为每秒钟传送码元的数目，码元速率的单位为“波特”，常用符号“Baud”表示，简写为“B”。
+码元：一个数字脉冲就是一个码元，我们用码元速率表示单位时间内信号波形的变换次数，即单位时间内通过信道传输的码元个数。
+电平级数：比如一个信号有两个2电平状态（即电平级数为2），那么这个时候可以把低电平理解为“0”，高电平理解为“1”。
+比特率（数据传输率）：单位bit/s
+比特率Rb和波特率RB的关系： Rb = RB log2V， V是信号电平级数。
+V=2时，2个电平状态（“0”，“1”），此时Rb = RB
+V=4时，4个电平状态（ “00”，“01”，“10”，“11” ），此时Rb =2 RB
+比特率和波特率
+@@ 37 
+Nyquist’s theorem relates the data rate to the bandwidth (B) and number of signal levels (V) for a noiseless channel
+Nyquist定理（1924年）：无噪声的理想低通信道注1，若带宽为B (Hz)，信号电平为V级，则最大数据传输速率（信道容量）为：
+Shannon’s theorem relates the data rate to the bandwidth (B) and signal strength (S) relative to the noise (N):香农定理（1948年）：S为信号功率，N为噪声功率，S/N称为信噪比（通常10log10S/N (dB)，比如S/N=1000则为30dB）。信噪比为S/N的信道，若带宽为B(Hz)，则最大数据传输速率（信道容量）为：
+Computer Networks, Chapter 2 The Physical Layer
+Max. data rate = 2B log2V bits/sec
+Max. data rate = B log2(1 + S/N) bits/sec
+Maximum Data Rate of a Channel
+注1：理想低通信道就是信号的所有低频分量，只要其频率不超过某个上限值，都能够不失真地通过此信道
+无噪声信道
+有噪声信道
+香农信道容量公式
+@@ 38 
+We need to send 265 kbps over a noiseless channel with a bandwidth of 20 kHz. How many signal levels do we need?
+Computer Networks, Chapter 2 The Physical Layer
+Exercises
+Since this result is not a power of 2, we need to either increase the number of levels or reduce the bit rate. If we have 128 levels, the bit rate is 280 kbps. If we have 64 levels, the bit rate is 240 kbps.
+假设一个传四进制（四个电平等级）数据信号的无噪声数字信道，带宽为3000Hz，求其信道容量C ?
+C = 2Blog2V = 2*3000*log24=12000 bits/s
+根据奈奎斯特准则我们可以推断出：
+（1）给定了信道的带宽和编码方式，则该信道的极限传输速率就确定了，不可能超过这个极限传输速率传输码元，除非改善该信道的带宽；
+（2）要想增加信道的比特传送率有两条途径，一方面可以增加该信道的带宽，另一方面可以选择更高的编码方式。
+@@ 39 
+A telephone line normally has a bandwidth of 3000 Hz (300 to 3300 Hz) assigned for data communications. The signal-to-noise ratio is usually 3162. The capacity of this channel is calculated as
+Computer Networks, Chapter 2 The Physical Layer
+The theoretical highest bit rate of a regular telephone line
+This means that the highest bit rate for a telephone line is 34.860 kbps. If we want to send data faster than this, we can either increase the bandwidth of the line or improve the signal-to-noise ratio.
+@@ 40 
+Signal-to-noise ratio(S/N)：signal strength (S) relative to the noise (N)
+SNRdB=10log10S/N, often given in decibels(dB, 分贝).
+Assume that SNRdB = 36 and the channel bandwidth is 2 MHz. The theoretical channel capacity can be calculated as
+Computer Networks, Chapter 2 The Physical Layer
+Decibel (dB)
+@@ 41 
+例题：假定PSTN的带宽是3000 Hz，典型的信噪功率比是20 dB，试确定可以取得的理论上最大的信息(数据)速率。
+解答：
+∵ 分贝（dB）=10*log 10 (S/N)
+∴ 20=10 log10 (S/N)  	   可以算出 S/N=100
+而根据香农定理有   C=Blog2 (1+S/N)
+因此，C = 3000×log2(1+100) = 19 936 bps
+Exercises
+@@ 42 
+Consider an extremely noisy channel in which the value of the signal-to-noise ratio is almost zero. In other words, the noise is so strong that the signal is faint. For this channel the capacity C is calculated as
+This means that the capacity of this channel is zero regardless of the bandwidth. In other words, we cannot receive any data through this channel.
+Computer Networks, Chapter 2 The Physical Layer
+Exercises
+@@ 43 
+Computer Networks, Chapter 1 Introduction
+Theoretical Basis for Data Communications
+Guided Transmission Media有导向的传输介质
+Wireless Transmission
+Communication Satellites
+Digital Modulation and Multiplexing
+Public Switched Telephone Network
+Mobile Telephone System
+Cable Television
+Chapter2：The Physical Layer
+@@ 44 
+Computer Networks, Chapter 2 The Physical Layer
+Media have different properties, hence performance
+Reality check
+Physical transport of storage media » 物理传输
+Magnetic Media » 磁性媒体
+Wires » 电线
+Twisted pairs » 双绞线
+Coaxial cable » 同轴电缆
+Power lines » 电力线
+Fiber cables » 光纤
+Guided Transmission (Wires & Fiber)
+@@ 45 
+Computer Networks, Chapter 2 The Physical Layer
+Never underestimate the bandwidth of a station wagon full of tapes hurtling down the highway.
+Ultrium 7 tape = 6 TB, 400 cm2
+Typical van has capacity of 7 x 106 cm2
+Van holds 17,500 tapes  holding 105 x 1015 bytes
+One person can drive NYC to LA in 5 days = 4 x 105 s
+This is a bandwidth of 2 Tbps or 2000 Gbps
+But, the message delay is very poor.
+Reality Check: Transporting Physical Media
+@@ 46 
+Magnetic Media
+@@ 47 
+Computer Networks, Chapter 2 The Physical Layer
+Very common, used in LANs, telephone lines
+Twists reduce radiated signal 信号辐射、interference干扰
+双绞线的芯线为软铜线，线径为0.4~1.4mm不等，好处是可减少相邻线对间的电磁干扰。
+Category 5 UTP cable with four twisted pairs
+Wires – Twisted Pair
+@@ 48 
+Computer Networks, Chapter 2 The Physical Layer
+UTP VS. STP
+双绞线可分为非屏蔽双绞线(UTP：Unshilded Twisted Pair)和屏蔽双绞线(STP：Shielded Twisted Pair)两种类型。
+在物理结构上，屏蔽双绞线比非屏蔽双绞线多了全屏蔽层，通过屏蔽的方式，减少了衰减和噪音，从而提供了更加洁净的电子信号，和更长的电缆长度，但是屏蔽双绞线价格更加昂贵，重量更重并且不易安装。
+@@ 49 
+Computer Networks, Chapter 2 The Physical Layer
+Twisted Pair
+（a）3类UTP； （b）5类UTP。
+@@ 50 
+Computer Networks, Chapter 2 The Physical Layer
+UTP-Connectors
+电流从一个设备流向另外一个设备的时候，连接器的公母座起到的作用就是加强安全性或者保证设备的正常运作，防止一些不安全因素的发生或者不恰当的连接。
+RJ-45（8根针脚，网络接口），RJ-11（4根针脚，电话接口）
+@@ 51 
+Computer Networks, Chapter 2 The Physical Layer
+Better shielding and more bandwidth for longer distances and higher rates than twisted pair.
+Wires – Coaxial Cable (“Co-ax”)
+铜芯
+绝缘材料
+编织外导体
+同轴电缆传导交流电而非直流电，也就是说每秒钟会有好几次的电流方向发生逆转
+塑料防护套
+同轴电缆既可传输模拟信号，也可传输数字信号，具有较好的屏蔽性能、较高带宽和较长传输距离。它长期用于有线电视与射频分配系统，也常见于宽带接入网络、监控视频传输以及各类射频连接场景。历史上，同轴电缆也曾广泛用于长途电话系统和早期局域网。如今，在长距离和超高带宽场景下，许多应用已逐步被光纤取代，但同轴电缆在有线电视接入和射频传输中仍然十分重要。
+@@ 52 
+BASEBAND COAXIAL CABLE(基带同轴电缆):
+基带同轴电缆的屏蔽层通常是用铜做成的网状结构，其特征阻抗为50Ω
+Used for digital transmissions (called baseband.)
+Good noise immunity 良好的抗噪性
+Data rates as high as 1 Gbps for short distances.
+Now being replaced by fiber.
+BROADBAND COAXIAL CABLE(宽带同轴电缆):
+宽带同轴电缆的屏蔽层通常是用铝冲压而成的，其特征阻抗为75Ω
+Used for analog transmissions (called broadband.)
+Can run 300 MHz for long distances.
+Analog signaling has better S/N than digital signaling.
+Designed for long distances - can use amplifiers.
+Coaxial Cable
+@@ 53 
+同轴电缆的优点：
+是可以在相对长的无中继器的线路上支持高带宽通信
+同轴电缆的缺点：
+一是体积大，细缆的直径就有3/8英寸粗，要占用电缆管道的大量空间；
+二是不能承受缠结、压力和严重的弯曲，这些都会损坏电缆结构，阻止信号的传输；
+最后就是成本高
+而所有这些缺点正是双绞线能克服的，因此在现在的局域网环境中，基本已被基于双绞线的以太网物理层规范所取代
+Coaxial Cable
+@@ 54 
+Computer Networks, Chapter 2 The Physical Layer
+Household electrical wiring is another example of wires
+Good: Convenient to use,
+Bad: horrible for sending data
+Wires – Power Lines
+@@ 55 
+Computer Networks, Chapter 2 The Physical Layer
+Common for high rates and long distances
+Long distance ISP links, Fiber-to-the-Home
+Light carried in very long, thin strand of glass细丝玻璃
+Three components: Light source(激光器/发光二极管LED), transmission medium(二氧化硅/石英玻璃), detector(光电二极管)
+Light through fiber
+Multimode & single mode fiber(多模,单模光纤)
+Light source
+(LED, laser)
+Photodetector
+Light trapped by
+total internal reflection
+Fiber Cables (1)
+@@ 56 
+Multimode & single mode fiber
+光源：单模光纤采用激光器做光源
+成本：因其需要激光源，成本较高
+传输模式数量：单模光纤芯径和色散小，仅允许一种模式传输
+传输距离：长，百公里以上
+带宽：光纤的色散是影响光纤带宽的因素，光纤色散越小，光纤带宽就越宽。单模光纤是几乎不存在色散，因此单模光纤的带宽比多模光纤的带宽宽。
+光源：多模光纤采用LED/发光二极管做光源
+成本：成本较低
+传输模式数量：多模光纤芯径和色散大，允许上百种模式传输，含有许多不同角度入射的光线
+传输距离：较短，通常小于2公里
+带宽：多模比单模低
+单模光纤
+多模光纤
+@@ 57 
+Computer Networks, Chapter 2 The Physical Layer
+Fiber has enormous bandwidth (THz) and tiny signal loss – hence high rates over long distances
+Fiber Cables (2)
+Attenuation(衰减) of light through fiber in the infrared region.
+衰减的分贝数=10*log10(传输能量/接收的能量)
+例如：如果损失了一半的能量，则衰减为10*log102=3dB
+衰减
+传输能量
+接收能量
+@@ 58 
+Computer Networks, Chapter 2 The Physical Layer
+Fiber Cables (3)
+单根光纤的结构
+三根光纤封起来的截面
+玻璃芯
+保护层
+塑料防护套
+@@ 59 
+A comparison of semiconductor laser and LEDs as light sources.
+LEDs (Light Emitting Diodes)
+Fiber Cables (4)
+@@ 60 
+Comparison of the properties of wires and fiber:
+Computer Networks, Chapter 2 The Physical Layer
+Property
+Wires
+Fiber
+Distance
+Short (100s of m)
+Long (tens of km)
+Bandwidth
+Moderate
+Very High
+Cost
+Inexpensive
+Less cheap
+Convenience
+Easy to use
+Less easy
+Security
+Easy to tap
+Hard to tap
+Fiber Cables (5)
+@@ 61 
+A fiber optic ring with active repeaters(有源中继器).
+带有有源中继器的光纤环网
+Fiber Optic Networks
+光电二极管
+（把光信号转换成电信号的光电传感器件）
+光发射机
+@@ 62  [hidden]
+A passive star connection in a fiber optics network.
+光纤网络中的无源星型连接
+Fiber Optic Networks (2)
+@@ 63 
+Frequency and wave length λf = c（3x108 m/s）
+Δf = c Δλ/ λ2
+Example: It is desired to send a sequence of computer screen images over an optical fiber. The screen is 1024x768 pixels, each pixel being 24 bits. There are 60 screen images per second. How much bandwidth is needed, and how many microns(微米) of wavelength  are needed for this band at 1.3 microns?
+Computer Networks, Chapter 2 The Physical Layer
+Information Wave Carried
+Solution:
+(1) The data rate is 1024 ×768 ×24 ×60 bps, which is 1080 Mbps (1.08 ×10 9 bps).
+(2) For simplicity, let us assume 1 bps per Hz.
+we  get Δ λ =λ2 Δ f /c. We have Δ f = 1.08 ×10 9 , λ = 1.3 ×10 -6 so Δ λ =1.69 ×10 -12 × 1.08 × 10 9 /(3x108) = 6.08 ×10 -12 meters = 6.08 ×10 -6 microns. The range of wavelengths used is very short.
+@@ 64 
+Computer Networks, Chapter 2 The Physical Layer
+Electromagnetic Spectrum » 电磁频谱
+Radio Transmission » 无线电传输
+Microwave Transmission » 微波传输
+Light Transmission » 光传输
+Wireless vs. Wires/Fiber » 无线 vs 有线/光纤
+Wireless Transmission
+@@ 65 
+Different bands have different uses:
+Radio: wide-area broadcast;
+Infrared/Light: line-of-sight视距无线传输/可见传输
+Microwave: LANs and 3G/4G/5G;
+Microwave
+Networking focus
+Electromagnetic Spectrum (1)
+电磁频谱和它在通信中的用途
+@@ 66 
+Computer Networks, Chapter 2 The Physical Layer
+To manage interference, spectrum is carefully divided, and its use regulated and licensed, e.g., sold at auction.
+Source: NTIA Office of Spectrum Management, 2003
+3 GHz
+30 GHz
+3 GHz
+300 MHz
+WiFi (ISM bands)
+Part of the US frequency allocations
+Electromagnetic Spectrum (2)
+@@ 67 
+
+@@ 68 
+Computer Networks, Chapter 2 The Physical Layer
+Bands
+@@ 69 
+Computer Networks, Chapter 2 The Physical Layer
+Propagation Methods
+@@ 70 
+Computer Networks, Chapter 2 The Physical Layer
+Fortunately, there are also unlicensed (“ISM”) bands:
+Free for use at low power; devices manage interference
+Widely used for networking; WiFi, Bluetooth, Zigbee, etc.
+802.11
+b/g/n
+802.11a/g/n
+Electromagnetic Spectrum (3)
+The ISM bands (Industrial, Scientific, Medical)
+@@ 71 
+Computer Networks, Chapter 2 The Physical Layer
+In the HF band, radio waves bounce off the ionosphere.
+In the VLF, LF, and MF bands, radio waves follow the curvature of the earth
+Radio signals penetrate(穿透) buildings well and propagate for long distances with path loss（传播损耗）
+Radio Transmission
+@@ 72 
+Microwaves have much bandwidth and are widely used indoors (WiFi) and outdoors (3G, satellites)
+Signal is attenuated衰减/reflected反射 by everyday objects
+信号强度随发送方/接收方移动而变化是无线通信的一个重要特征。这意味着无线链路上的数据速率会发生巨大变化；它们不像电线一样固定；
+Computer Networks, Chapter 2 The Physical Layer
+Microwave Transmission
+波段名称
+波长范围
+频率范围
+分米波
+1m - 10cm
+300MHz - 3GHz
+厘米波
+10cm - 1cm
+3GHz - 30GHz
+毫米波
+1cm - 1mm
+30GHz - 300GHz
+亚毫米波
+1mm - 0.1mm
+300GHz - 3000GHz
+常用微波波段划分表
+@@ 73 
+Computer Networks, Chapter 2 The Physical Layer
+Line-of-sight light (no fiber) can be used for links
+Light is highly directional(定向的), has much bandwidth
+Use of LEDs/cameras and lasers/photodetectors光电探测器
+Light Transmission
+气流可以干扰激光通信系统。
+这里显示了一个具有两个激光源的双向系统
+@@ 74 
+Computer Networks, Chapter 2 The Physical Layer
+Wireless:
+Easy and inexpensive to deploy
+Naturally supports mobility
+Naturally supports broadcast
+Transmissions interfere and must be managed
+Signal strengths hence data rates vary greatly
+Wires/Fiber:
+Easy to engineer a fixed data rate over point-to-point links
+Can be expensive to deploy, esp. over distances
+Doesn’t readily support mobility or broadcast
+Wireless vs. Wires/Fiber
+@@ 75 
+Computer Networks, Chapter 2 The Physical Layer
+Satellites are effective for broadcast distribution and anywhere/anytime communications
+Kinds of Satellites »
+Geostationary (GEO) Satellites » 地球同步卫星
+Medium-Earth Orbit Satellites » 中轨道卫星
+Low-Earth Orbit (LEO) Satellites » 低轨道卫星
+Satellites vs. Fiber » 卫星和光纤
+Communication Satellites
+@@ 76 
+Computer Networks, Chapter 2 The Physical Layer
+Satellites and their properties vary by altitude高度:
+Geostationary (GEO), Medium-Earth Orbit (MEO), and Low-Earth Orbit (LEO)
+Sats needed for global coverage
+Kinds of Satellites
+通信卫星和它们的一些特性：离地球的高度、往返的时延、为覆盖整个地球所需要的卫星数
+@@ 77 
+Computer Networks, Chapter 2 The Physical Layer
+Communication Satellites
+卫星微波的特点：
+通信覆盖面广，距离远；
+广播型信道，易于实现多地传输；
+成本高，卫星寿命8~10年，少则6~7年；
+传输时延大（约540ms往返）
+@@ 78 
+Computer Networks, Chapter 2 The Physical Layer
+1945年 Arthur C. Clarke：地球同步卫星（结论：impractical）
+关于卫星通信的科学设想论文《地球外的中继——卫星能给出全球范围的无线电覆盖吗？》
+1962年 Telstar：第一颗人造通信卫星；
+GEO：Geostationary Earth Orbit (satellites) 地球同步轨道卫星
+为了避免干扰：卫星间距不能小于2度，最多180个satellites（在赤道平面）
+为了防止在空中出现混乱：由ITU（国际电信联盟）分配轨道槽
+为了避免下行链路的干扰： 下行链路频率由ITU来分配。
+Geostationary Satellites地球同步卫星
+@@ 79 
+Computer Networks, Chapter 2 The Physical Layer
+Geostationary Satellites frequency bands
+基本的卫星频段
+波段名称
+波长范围
+频率范围
+Band
+分米波
+1m - 10cm
+300MHz - 3GHz
+特高频UHF
+厘米波
+10cm - 1cm
+3GHz - 30GHz
+超高频SHF
+毫米波
+1cm - 1mm
+30GHz - 300GHz
+极高频EHF
+亚毫米波
+1mm - 0.1mm
+300GHz - 3000GHz
+至高频THF
+常用微波波段划分表
+卫星微波
+@@ 80 
+Computer Networks, Chapter 2 The Physical Layer
+GEO satellites orbit 35,786 km above a fixed location
+通信卫星位于地球赤道上空35786公里处的对地静止的轨道上，24小时转一周，故称为同步地球卫星，它实际上是一个悬空的微波中继站。
+VSAT (Very Small Aperture Terminals 卫星通信地球站)
+小型化、低成本，天线1米或更小（对比：标准GEO天线10m）
+上行1Mbps，下行最大several Mbps
+由于微型基站功率较小 (1 watt of power)，通常没法直接与其他站通信，需要借助hub（具有大型高增益的天线）来relay流量，代价是更高的时延。
+在农村地区和第三世界国家有很广泛的应用。
+End-to-End transit latency is 250~300 msec. Typical value is 270 msec (540 msec for a VSAT system with a hub)
+Different bands (L, S, C, Ku, Ka) in the GHz are in use but may be crowded or susceptible易受影响 to rain.
+地球站发上行频段信号经卫星接收，然后以下行频段信号转发。GEO可连通地面最长达13000公里的两个地球站间的通信。理论上全球只需要三个同步通信卫星，就可以实现全球通信。（赤道周长40076km ）
+VSAT
+Geostationary Satellites地球同步卫星
+使用Hub的VSAT
+@@ 81 
+Systems such as Iridium(铱计划) use many low-latency satellites for coverage and route communications via them
+1990 Motorola计划发射77颗低轨道卫星（Iridium project），后修改为Dysprosium（镝dí ） project，共发射66颗低轨道卫星；
+1997年Iridium卫星成功发射，高度750km；1998年5月最后5颗通信卫星进入轨道，完成组网。
+铱系统耗资50亿美元，1998年11月开始运营，在正式开通运行16个月之后，由于不堪债务重负而结束其使命。
+价值50亿美元被一家投资商用2500万美元买去
+2001年3月Iridium卫星服务又重新开始； 2002年全部66颗美丽的铱星在大气层中焚毁，众多投资也随之消逝在茫茫太空之中。
+最多有48个小区（spot beams）/每颗卫星
+3840信道/每颗卫星
+The Iridium satellites form six necklaces around the earth.
+六条卫星项链覆盖全球
+每个卫星有四个邻居可以直接通信（2个同项链，2个相邻项链）
+Low-Earth Orbit Satellites低轨道卫星：Iridium
+1628 moving cells cover the earth.
+@@ 82 
+Low-Earth Orbit Satellites低轨道卫星： GlobalStar
+Iridium：在太空中转发信号。
+比如北极的人call南极的人：北极人首先直接链接头顶的卫星，每个卫星有四个邻居(其中2个图中未画出)，call会在这些卫星组成网格中relay，直到发送到南极的卫星。
+每个卫星需要复杂的交换转发设备
+Globalstar：在地面上转发信号
+由美国劳拉公司和高通公司倡导发起的卫星移动通信系统
+基于bent-pipe弯管技术设计；
+全球星系统用48颗绕地球运行的低轨道卫星外加8颗备份星组成
+比如：The call originating at the North Pole is sent back to earth and picked up by the large ground station. The call is then routed via a terrestrial network to the ground station nearest the callee and delivered by a bent-pipe connection.
+@@ 83 
+Computer Networks, Chapter 2 The Physical Layer
+Satellite:
+Can rapidly set up anywhere/anytime communications (after satellites have been launched)
+Can broadcast to large regions
+Limited bandwidth and interference to manage
+Fiber:
+Enormous bandwidth over long distances
+Installation can be more expensive/difficult
+Satellite vs. Fiber
+@@ 84 
+Computer Networks, Chapter 1 Introduction
+Theoretical Basis for Data Communications
+Guided Transmission Media
+Wireless Transmission
+Communication Satellites
+Digital Modulation and Multiplexing
+Public Switched Telephone Network
+Mobile Telephone System
+Cable Television
+Chapter2：The Physical Layer
+@@ 85 
+Computer Networks, Chapter 2 The Physical Layer
+Modulation schemes send bits as signals;
+Analog signals such as continuously varying voltage, light intensity, or sound intensity.
+To send digital information, we must devise analog signals to represent bits.
+The process of converting between bits and signals that represent them is called digital modulation.
+Baseband Transmission » It is common for wires
+Passband Transmission » It is common for wireless and optical channels
+multiplexing schemes share a channel among users.
+Channels are often shared by multiple signals.
+Frequency Division Multiplexing »
+Time Division Multiplexing »
+Code Division Multiple Access »
+Digital Modulation and Multiplexing
+@@ 86 
+Baseband signals
+Signals that run from 0 up to a maximum frequency.
+Passband signals
+Signals that are shifted to occupy a higher range of frequencies.
+一般将从0 到某个最大频率的信号称为基带（ baseband）信号，将被搬移并占用某个更大频率范围的信号称为通带（ passband ）信号
+Signals that are shifted to occupy a higher range of frequencies, as is the case for all wireless transmissions, are called passband signals.
+@@ 87 
+
+@@ 88  [hidden]
+Baseband bandwidth equals the upper frequency.
+We call the rate at which the signal changes the symbol rate符号率 to distinguish it from the bit rate. The bit rate is the symbol rate multiplied by the number of bits per symbol. An older name for the symbol rate, particularly in the context of devices called telephone modems that convey digital data over telephone lines, is the baud rate 波特率.
+@@ 89 
+NRZ: Non-Return-to-Zero不归零编码
+信号电平表示完一个码元后，电压不需回到0
+优点：编码效率高；
+缺点：存在发送方和接收方的同步问题，无自同步特性。某一位码元与其下一位码元之间没有间隙,不易区分识别。归零编码RZ可以改善这种状况。
+RZ： Return-to-Zero归零编码
+在RZ编码中，正电平代表逻辑1，负电平代表逻辑0，并且，每传输完一位数据，信号返回到零电平。也就是说，信号线上会出现3种电平：正电平、负电平、零电平。
+因为每位传输之后都要归零，所以接受者只要在信号归零后采样即可，这样就不再需要单独的时钟信号. 实际上，RZ 编码就是相当于把时钟信号用归零编码在了数据之内。这样的信号也叫做自同步（self-clocking）信号。
+缺点：很大部分的数据带宽，都用来传输“归零”而浪费掉。
+Baseband Transmission
+NRZ编码（Not Return to Zero）
+RZ编码（Return to Zero）
+@@ 90 
+Baseband Transmission
+NRZ简单而效率高，但是很少被实际应用。为了更好的满足工程需求，一些更复杂的调制机制（称为line codes）提了出来。可以更好的提升bandwidth efficiency、clock recovery。
+NRZ is the simplest, literal line code (+1V=“1”, -1V=“0”)
+Other codes tradeoff bandwidth and signal transitions
+Four different line codes
+@@ 91 
+Bandwidth Efficiency
+假设signal levels为2（ +1V=“1”, -1V=“0”），根据奈奎斯特定理如果要达到B bits/sec则至少需要B/2 HZ带宽。但是带宽通常是稀缺资源，信道容量很难提升。
+解决方案：use more than two signal level；比如， using four voltages， can send 2 bits at once as a single symbol.
+We call the rate at which the signal changes the symbol rate to distinguish it from the bit rate. The bit rate is the symbol rate multiplied by the number of bits per symbol. An older name for the symbol rate：baud rate.
+Bit rate Rb和symbol rate (baud rate)RB的关系： Rb = RB log2V， V是信号电平级数。
+V=2时，2个电平状态（“0”，“1”），此时Rb = RB
+V=4时，4个电平状态（ “00”，“01”，“10”，“11” ），此时Rb =2 RB
+Computer Networks, Chapter 2 The Physical Layer
+Baseband Transmission: Bandwidth Efficiency
+奈奎斯特定理：Max. data rate = 2B log2V bits/sec
+@@ 92 
+Clock Recovery
+对于所有的编码机制来说，接收方必须知道什么时候symbol结束，什么时候下一个symbol开始，以便能够正确的解码。
+发送单独的时钟信号（clock signal）给接收方。但是如果单独部署一条link专门用于时钟信号太过于浪费。可以将clock signal和data signal在同一链路上进行混合传输。
+Manchester编码机制：Clock signal XORed with data signal， was used for classic Ethernet
+The clock makes a clock transition in every bit time, so it runs at twice the bit rate.
+XORed with the 0 level： makes a low-to-high transition, and this transition is a logical 0；
+XORed with the 1 level： makes a high-to-low transition, and this transition is a logical 1.
+缺点：相比NRZ，Manchester需要2倍的带宽（2个码元表示一位二进制数）。 优化方案：NRZI编码机制。
+Computer Networks, Chapter 2 The Physical Layer
+Baseband Transmission: Clock Recovery
+@@ 93 
+NRZI（Non-Return-to-Zero Inverted）编码机制
+NRZI编码和NRZ的区别就是NRZI用信号的翻转代表一个逻辑，信号保持不变代表另外一个逻辑。比如电平翻转代表逻辑1，电平不变代表逻辑0（遇1翻转，遇0不变）。
+典型用例：USB传输的编码机制；
+但是长时间连续的0还是存在问题。
+方案1：要求不能连续传输太多0；比如旧时的美国电话T1线路，要求不能连续发送超过15个0.
+方案2：4B/5B码。根据固定的转换表，将每4 bits映射为一个5-bit pattern。这个 5-bit patterns保证不会存在连续发送超过3个0.
+Computer Networks, Chapter 2 The Physical Layer
+Baseband Transmission: Clock Recovery
+4B/5B mapping
+@@ 94  [hidden]
+Bandwidth efficiency
+DC(Direct-current) Components直流分量
+Baseline Wandering: When the voltage level in a digital signal is constant for a while, the spectrum creates very low frequencies (results of Fourier analysis) around zero, presenting problems for a system that cannot pass low frequencies.
+DC component means 0/1 parity that can cause baseline wandering, i.e., a long string of 0s or 1s can cause a drift in the baseline and make it difficult for the receiver to decode correctly.
+Clock recovery / Self-synchronization
+A self-synchronizing digital signal includes timing information in the data being transmitted.
+This can be achieved if there are transitions in the signal that alert the receiver to the beginning, middle, or end of the pulse.
+Computer Networks, Chapter 2 The Physical Layer
+Criteria of good line coding schemes
+@@ 95 
+Computer Networks, Chapter 2 The Physical Layer
+Unipolar NRZ scheme
+Polar schemes (RZ)
+Polar schemes  (NRZ-L and NRZ-I)
+Unipolar（单极） and Polar schemes
+两极NRZ-Level
+单极NRZ
+Unipolar是指信号仅表现在x轴坐标轴的一侧；而polar是指允许信号有y轴负值，出现在x轴的另一侧。
+两极 NRZ-Level：“1”由一物理电平表现（通常是负电压）。“0”由另一电平表现（通常是正电压）。
+两极NRZ-I：双极性不归零码（倒置）。当初始信号遇到1就跳变，遇到0则维持当前信号形状。
+@@ 96 
+Computer Networks, Chapter 2 The Physical Layer
+Manchester and Differential Manchester
+曼彻斯特编码：
+规定1是从高电压跳低电压，0是从低压跳到高压。
+缺点：码元两个才能表示一位二进制数，数据传输速率是原来的一半。
+差分曼彻斯特编码：
+高低跳变不由01决定，由下一位的码元决定。如果下一位是1，则不跳变。反之，如果下一位码元是0，则立刻跳变。
+缺点：码元两个才能表示一位二进制数，数据传输速率减半。
+@@ 97 
+Computer Networks, Chapter 2 The Physical Layer
+Bipolar schemes: AMI and pseudoternary(伪三元)
+Multilevel: 2B1Q
+Bipolar schemes and Multilevel
+AMI: 无电位表示0；第一个1出现时，用高电位表示，然后此后每一个1都用于上一个1相反的电位表示；
+Pseudoternary（伪三元）：无电位表示1，与AMI完全相反，第一个0用高电位表示，其他0根据上一个0的电位表示成完全相反的状态
+Multilevel：
+xByQ：x是bit数据的位数，y是码元数量。用y个码元表示x位二进制数据。
+我们希望尽可能让单位码元表达更多的数据，这样数据传输效率才会更高。
+@@ 98 
+Computer Networks, Chapter 2 The Physical Layer
+Summary of line coding schemes
+Polar schemes – In polar schemes, the voltages are on the both sides of the axis.
+Bipolar schemes – In this scheme there are three voltage levels positive, negative, and zero.
+Bipolar schemes: AMI and pseudoternary(伪三元)
+Polar schemes  (NRZ-L and NRZ-I)
+@@ 99  [hidden]
+Computer Networks, Chapter 2 The Physical Layer
+Summary of line coding schemes
+@@ 100 
+Computer Networks, Chapter 2 The Physical Layer
+Modulating the amplitude振幅, frequency频率/phase相位 of a carrier signal sends bits in a (non-zero) frequency range.
+NRZ signal of bits
+Amplitude shift keying
+Frequency shift keying
+Phase shift keying
+Passband Transmission (1)
+振幅调制
+频率调制
+相位调制
+@@ 101 
+BPSK
+2 symbols
+1 bit/symbol
+QPSK
+4 symbols
+2 bits/symbol
+QAM-16
+16 symbols
+4 bits/symbol
+QAM-64
+64 symbols
+6 bits/symbol
+QAM varies amplitude and phase
+BPSK/QPSK varies only phase
+Computer Networks, Chapter 2 The Physical Layer
+Constellation diagrams（星座图） are a shorthand to capture the amplitude and phase modulations of symbols:
+Passband Transmission (2)
+例如：QPSK（四相位调制，2Bits/symbol，00，01,10，11四种状态）
+QPSK信号接收解调的时候，则是根据接收信号与星座图上4个点的距离（一般称为欧式距离）来判断发送的是哪个信号，如果离00点最近，则判为00，否则判为其他点。
+@@ 102 
+Computer Networks, Chapter 2 The Physical Layer
+Gray-coding（格雷码）: map bits to symbols so that adjacent symbols differ in only 1 bit position.
+Gray-coding assigns bits to symbols so that small symbol errors cause few bit errors.
+if the receiver decodes the symbol in error, it will make only a single bit error in the expected case that the decoded symbol is close to the transmitted symbol.
+A
+B
+C
+D
+E
+Passband Transmission (3)
+在一组数的编码中，若任意两个相邻的代码只有一位二进制数不同，则称这种编码为格雷码（Gray Code）；
+另外由于最大数与最小数之间也仅一位数不同，即“首尾相连”，因此又称循环码或反射码；
+其循环和单步特性消除了随机取数时出现重大错误的可能，所以格雷码属于可靠性编码，是一种错误最小化的编码方式。
+@@ 103 
+Computer Networks, Chapter 2 The Physical Layer
+Dividing a link into channels
+Channel
+Channel
+A1
+A2
+B1
+B2
+C1
+C2
+Channel
+Channel
+A1
+A2
+B1
+B2
+C1
+C2
+M
+D
+(a) Non- Multiplexing
+(b) Multiplexing
+@@ 104 
+Computer Networks, Chapter 2 The Physical Layer
+Categories of multiplexing
+@@ 105 
+Computer Networks, Chapter 2 The Physical Layer
+FDM (Frequency Division Multiplexing频分多路复用) shares the channel by placing users on different frequencies:
+Overall FDM channel
+Frequency Division Multiplexing (1)
+频分多路复用是一种将多路基带信号调制到不同频率载波上再进行叠加形成一个复合信号的多路复用技术。
+@@ 106 
+Computer Networks, Chapter 2 The Physical Layer
+FDMA (Frequency Division Multiple Access/Address频分多址)
+频分复用（FDM）是指载波带宽被划分为多种不同频带的子信道，每个子信道可以并行传送一路信号的一种技术。频分复用技术下，多个用户可以共享一个物理通信信道，该过程即为频分多址复用（FDMA）。
+FDMA
+t
+f
+FDMA
+FDM: people being in widely separated clumps, talking independently.
+@@ 107 
+Computer Networks, Chapter 2 The Physical Layer
+OFDM (Orthogonal FDM正交频分复用技术) is an efficient FDM technique used for 802.11, 4G cellular and other communications
+Subcarriers are coordinated to be tightly packed
+OFDM中的各个载波是相互正交的，每个载波在一个符号时间内有整数个载波周期，每个载波的频谱零点和相邻载波的零点重叠，这样便减小了载波间的干扰。由于载波间有部分重叠，所以它比传统的FDMA提高了频带利用率。
+Frequency Division Multiplexing (2)
+@@ 108 
+Computer Networks, Chapter 2 The Physical Layer
+Time division multiplexing shares a channel over time:
+Users take turns on a fixed schedule;
+Widely used in telephone / cellular systems
+Time Division Multiplexing (TDM)
+@@ 109 
+Computer Networks, Chapter 2 The Physical Layer
+TDMA
+t
+f
+TDMA
+TDM :  people being in the middle of the room, taking turns speaking.
+时分多址（Time division multiple access，缩写：TDMA）
+允许多个用户在不同的时间片（时隙）来使用相同的频率。用户迅速的传输，一个接一个，每个用户使用他们自己的时间片。
+TDMA特点：多个用户共享一个载波频率；非连续传输，使切换更简单；时间插槽可以根据动态TDMA的需求分配；
+@@ 110 
+Computer Networks, Chapter 2 The Physical Layer
+TDM VS TDMA
+TDM： Time Division Multiplex 时分多路复用
+TMDA： Time Division Multiple Access时分多址
+相同点：两者都是将时间分为小的time slot ；
+不同点： TDM把time slot用在multiplexing，TDMA把time slot用在multiple access
+在802.16e中，可以这样认为：TDM使用由发送者已经预设好的频宽分配的方式；而TDMA则定义多个节点争取有限频宽的方式。
+比喻：
+假如某商家有N个供货商；该商家不定期需要供货商进行供货。
+如果该商家自己根据时间排好了一个供货次序表，决定好了什么时候由哪个供货商供货，则这种方式可以看作是是TDM；
+如果该商家没有一个明确的供货次序表，何时由哪家供货商供货完全取决于这N个供货商之间的竞争，竞争胜利者可以获得供货的机会，则对于这N个供货商而言，这种方式可以看作是TDMA。
+@@ 111 
+Computer Networks, Chapter 2 The Physical Layer
+Synchronous TDM vs. Statistical TDM
+同步时分复用（STDM）技术
+时隙预先分配且固定不变，无论时隙拥有者是否传输数据都占有一定时隙，这就形成了时隙浪费，其时隙的利用率很低，为了克服STDM的缺点，引入了异步/统计时分复用技术。
+统计时分复用(STDM)技术：
+又被称为异步时分复用技术，它能动态地按需分配时隙，以避免每个时间段中出现空闲时隙。STDM就是只有当某一个用户有数据要发送时才把时隙分配给它;当用户暂停发送数据时，则不给它分配时隙。电路的空闲时隙可用于其他用户的数据传输。另外，在STDM中，每个用户可以通过多占用时隙来获得更高的传输速率。
+@@ 112 
+Computer Networks, Chapter 2 The Physical Layer
+CDMA shares the channel by giving users a code
+Codes are orthogonal; can be sent at the same time
+CDMA的基本思想是靠不同的地址码来区分的地址。每个配有不同的地址码，用户所发射的载波(为同一载波)既受基带数字信号调制，又受地址码调制，接收时，只有确知其配给地址码的接收机，才能解调出相应的基带信号，而其他接收机因地址码不同，无法解调出信号。
+Widely used as part of 3G networks
+A =
++1
+-1
++1
+-1
+B =
++1
++1
+-1
+-1
++1
++1
+-1
+-1
+C =
+-2
++2
+0
+0
+S = +A -B
+S x A
++2
++2
+-2
+-2
+-2
++2
+0
+0
+S x B
+S x C
+Sum = 4
+A sent “1”
+Sum = -4
+B sent “0”
+Sum = 0
+C didn’t send
+Sender Codes
+Transmitted
+Signal
+Receiver Decoding
+0
+0
+0
+0
+Code Division Multiple Access (CDMA)
+码分多址是各发送端用各不相同的、相互正交的地址码调制其所发送的信号。在接收端利用码型的正交性，通过地址识别(相关检测)，从混合信号中选出相应的信号。
+码分多址的特点是：网内所有用户使用同一载波、占用相同的带宽、各个用户可以同时发送或接收信号。各用户的发射信号在时间上、频率上都可能互相重叠。因此，采用传统的滤波器或选通门是不能分离信号的，这样对某用户发送的信号，只有与其相匹配的接收机，通过相关检测器才可能正确接收。
+@@ 113 
+Computer Networks, Chapter 2 The Physical Layer
+每个站被指派一个唯一的m bits码片序列。
+如果发送比特1，则发送自己的m bits码片序列；
+如果发送比特0，则发送码片序列的二进制反码。
+如：S站的8 bit码片序列为0001 1011  (-1,-1,-1,+1,+1,-1,+1,+1)
+发送比特1时，就发送序列0001 1011 (-1,-1,-1,+1,+1,-1,+1,+1)
+发送比特0时，就发送序列1110 0100 (+1,+1,+1,-1,-1,+1,-1,-1)
+Code Division Multiple Access (CDMA)
+@@ 114 
+Computer Networks, Chapter 2 The Physical Layer
+Code Division Multiple Access (CDMA)
+CDMA : everybody talking at once, each pair in a different language.
+t
+f
+CDMA
+c
+@@ 115 
+Examples
+假设站点的码片序列为：A：00101110  B：01011100  C：00011011  D：01000010，假设A发送了数据0，C、D发送了数据1。试分析CDMA接收方收到的码片序列是什么。
+答：
+A发送数据0，对应的码片序列为（+1 +1 -1 +1 -1 -1 -1 +1）
+C发送数据1，对应的码片序列为（-1 -1 -1 +1 +1 -1 +1 +1）
+D发送数据1，对应的码片序列为（-1 +1 -1 -1 -1 -1 +1 -1）
+收到的码片序列（-1 +1 -3 +1 -1 -3 +1 +1）
+@@ 116 
+Examples
+假定四个站点使用CDMA码分多址技术在一条通讯线路上进行数据传输，其分配的序列号（码片）和各自传输的数据如下表所示。请根据表中的码片和数据依次计算接收站点接收到的信号。
+站点
+码片
+数据（从左至右传输）
+A
+1001
+1010
+B
+1010
+1001
+C
+1100
+0100
+D
+1111
+0110
+站点码片序列
+T0
+T1
+T2
+T3
+A
+(+1 -1 -1 +1 )
+(-1 +1 +1 -1)
+(+1 -1 -1 +1 )
+(-1 +1 +1 -1)
+B
+(+1 -1 +1 -1 )
+(-1 +1 -1 +1)
+(-1 +1 -1 +1)
+(+1 -1 +1 -1 )
+C
+(-1 -1 +1 +1)
+(+1 +1 -1 -1 )
+(-1 -1 +1 +1)
+(-1 -1 +1 +1)
+D
+(-1 -1 -1 -1)
+(+1 +1 +1 +1 )
+(+1 +1 +1 +1 )
+(-1 -1 -1 -1)
+接收到的信号
+(0 -4 0 0)
+(0 +4 0 0)
+(0 0 0 +4)
+（-2 -2 +2 -2）
+答案：
+@@ 117 
+Computer Networks, Chapter 2 The Physical Layer
+TDM，FDM，CDMA
+TDM is comparable to pairs of people in the room taking turns speaking.
+FDM is comparable to the pairs of people speaking at different pitches(音高), some high-pitched and some low-pitched such that each pair can hold its own conversation at the same time as but independently of the others.
+CDMA is comparable to each pair of people talking at once, but in a different language. The French-speaking couple just hones in on the French, rejecting everything that is not French as noise.
+@@ 118 
+Computer Networks, Chapter 2 The Physical Layer
+Structure of the telephone system »
+Politics of telephones »
+Local loop: modems, ADSL, and FTTH »
+Trunks and multiplexing »
+Switching »
+The Public Switched Telephone Network
+@@ 119 
+Computer Networks, Chapter 2 The Physical Layer
+Structure of the Telephone System
+(a) Fully-interconnected network.
+(b) Centralized switch.
+(c)  Two-level hierarchy.
+@@ 120 
+Computer Networks, Chapter 2 The Physical Layer
+公共交换电话网络PSTN：Public Switched Telephone Network
+本地回路local loop
+端局end office/本地中心局local central offices
+长途局toll offices/汇接局tandem offices
+准长途干线toll connecting trunks
+长途干线intertoll trunks/长途局干线interoffice trunks
+Structure of the Telephone System
+@@ 121 
+Computer Networks, Chapter 2 The Physical Layer
+Local loops本地回路, mostly analog twisted pairs to houses
+双绞线进入家庭和业务部门，模拟信号
+Trunks干线, digital fiber optic links that carry calls
+通过光纤将交换局连接起来，数字信号
+Switching offices交换局, that move calls among trunks
+电话呼叫从一条干线接入到另一条干线
+电话系统的三个主要部件
+一个中距离电话的典型路径
+@@ 122 
+Computer Networks, Chapter 2 The Physical Layer
+绝大多数为模拟信号
+计算机间传输：信号要经过多次变换：数字模拟数字模拟数字
+本地回路
+@@ 123 
+1984年 AT&T被分解为：
+AT&T长话公司
+贝尔运营公司：BOCs （Bell Operating Companies）
+其他一些部门（a few other pieces）
+整个美国被分为：本地通讯和长途通讯
+LATAs（本地接入和传输区）
+本地交换承运商：LEC（Local Exchange Carrier）
+LATA之间的业务：
+跨区交换承运商：IXC（IntereXchange Carrier）
+汇接点：POP（Point of Presence）或Switching Office
+IXC：AT&T、MCI或US Sprint
+Computer Networks, Chapter 2 The Physical Layer
+The Politics of Telephones
+促进竞争！
+@@ 124 
+In the U.S., there is a distinction for competition between serving a local area (LECs:Local Exchange Carrier本地交换电信公司) and connecting to a local area (at a POP交换局) to switch calls across areas (IXCs长途电信公司)
+Customers of a LEC can dial via any IXC they choose
+The Politics of Telephones
+LEC: Local Exchange Carrier
+IXC: IntereXchange Carrier
+POP: Point of Presence (switching office)
+LATA: local access and transport areas
+LATA，LEC和IXC之间的关系
+（所有的圆圈都是LEC交换局；六边形POP属于某一个IXC，内部数字标明了该IXC的号码）
+@@ 125 
+Computer Networks, Chapter 2 The Physical Layer
+Telephone modems send digital data over an 3.1 KHz（标准话路带宽） analog voice channel interface to the POTS (plain old telephone service)
+Rates <56 kbps; early way to connect to the Internet
+Local loop (1): modems
+调制解调器Modem
+调制器：把要发送的数字信号转换为频率范围在300~3400Hz之间的模拟信号，以便在电话用户线上传送。
+解调器：把电话用户线上传送的模拟信号转换为数字信号。
+调制器的主要作用就是个波形变换器，它把基带数字信号的波形变换成适合于模拟信道传输的波形
+解调器的作用就是个波形识别器，它将经过调制器变换过的模拟信号恢复成原来的数字信号。
+CodeC: 编译码器。指的是数字通信中具有编码、译码功能的器件
+@@ 126  [hidden]
+
+@@ 127 
+Computer Networks, Chapter 2 The Physical Layer
+DSL broadband sends data over the local loop to the local office using frequencies that are not used for POTS
+DSL提供全双工160k bits/s的数字传输，它是以铜质电话线为传输媒体的传输技术组合。
+Telephone/computers attach to the same old phone line
+Rates vary with line
+ADSL 下行1.544 Mbps~9.2 Mbps
+ADSL2 下行up to 12 Mbps
+ADSL2+ 下行up to 25 Mbps
+OFDM is used up to 1.1 MHz for ADSL2
+Most bandwidth down
+Local loop (2): Digital Subscriber Lines数字用户线
+@@ 128 
+Computer Networks, Chapter 2 The Physical Layer
+FTTH broadband relies on deployment of fiber optic cables to provide high data rates  customers
+One wavelength can be shared among many houses
+Fiber is passive无源的 (no amplifiers, etc.)
+Local loop (3): Fiber To The Home
+@@ 129 
+The most common technique to change an analog signal to digital data (digitization) is called pulse code modulation (PCM).
+PCM：Pulse Code Modulation脉冲编码调制
+@@ 130 
+Computer Networks, Chapter 2 The Physical Layer
+PCM：Pulse Code Modulation脉冲编码调制
+@@ 131 
+According to the Nyquist theorem, the sampling rate must be at least 2 times the highest frequency contained in the signal.
+ATTENTION: the highest frequency is not the bandwidth.
+Computer Networks, Chapter 2 The Physical Layer
+Nyquist Sampling Theory
+假设这个轮子以每秒45度转动，那么每个轴返回原位需要8秒（周期）；
+那么如果我们每8,16,24秒来用相机拍照，是不是每次都可以拍摄到原图像静止不动？这是因为在采样周期内，车轮旋转的整数周期都会回到原位，不论旋转方向如何。那么就有了一个非常重要的结论：周期的整数倍不能检测到相位（状态）变化。
+我们来减少一点拍摄周期，如果以每4秒的速度拍摄呢？每4秒拍照一次，轮子只能转一半，那么我们可以在照片中检测到轮子正在旋转，虽然依然不能区分它的旋转方向，但是轮子的状态（相位）已经可以区分了。
+那么再减少一点拍摄周期，以每3秒的速度拍摄呢？此时，无论顺时针还是逆时针，都可以看到轮轴的错位（相位的变化）。
+这就是Nyquist-Shannon采样定理，我们希望同时看到轮子的旋转和相位变化，采样周期要小于整数周期的1/2，采样频率应该大于原始频率的2倍。同理，对于模拟信号，我们希望同时看到信号的各种特性，采样频率应该大于原始模拟信号的最大频率的两倍，否则将发生混叠（相位/频率模糊）。
+@@ 132 
+Computer Networks, Chapter 2 The Physical Layer
+Calls are carried digitally on PSTN trunks using TDM
+A call is an 8-bit PCM sample each 125 μs (64 kbps)
+Traditional T1 carrier has 24 call channels each 125 μs (1.544 Mbps) with symbols based on AMI（信号交替翻转码，一种通信编码）
+Sampling rate: 2*4000 Hz  1/8000 s = 125 μs，语音信号最高频率为4000Hz
+Bit rate of a call: 8 bit /125 μs = 64 Kbps
+Bit rate of T1: (24*8+1) bit /125 μs = 1.544 Mbps
+Trunks and Multiplexing (1)
+每个Frame有193bits（8 bits*24+1 bit）
+@@ 133 
+Computer Networks, Chapter 2 The Physical Layer
+T1 Line
+Sampling rate: 2*4000 Hz  1/8000 s = 125 μs，语音信号最高频率为4000Hz
+Bit rate of a call: 8 bit /125 μs = 64 Kbps
+Bit rate of T1: (24*8+1) bit /125 μs = 1.544 Mbps
+@@ 134 
+Computer Networks, Chapter 2 The Physical Layer
+T-1 Line Frame Structure
+@@ 135 
+Computer Networks, Chapter 2 The Physical Layer
+Bit rate of E1: (30+2)*8 bit /125 μs = 2.048Mbps
+DS, T line and E line rates
+欧盟使用E系列
+@@ 136 
+为了在干线网上有效地传送高次群的比特流，1985年美国贝尔通信公司最早提出SONET，后来成为美国国家标准ANSI T1.105-107
+SONET (Synchronous Optical NETwork同步光纤网) is the worldwide standard for carrying digital signals on optical trunks
+Keeps 125 μs frame; base frame is 810 bytes (52Mbps)
+Payload “floats” within framing for flexibility
+Trunks and Multiplexing (2)
+两个背靠背的SONET帧
+数据速率（总）： 51.84Mbps =
+(3+87) * 9 * 8 bits * 8000samples/s
+SPE(Synchronous Payload Envelope)速率： 50.112 Mbps = 87 bytes * 9 * 8 bits * 8000samples/s
+用户速率： 49.536 Mbps =
+86 * 9 * 8 bits * 8000samples/s
+@@ 137 
+Computer Networks, Chapter 2 The Physical Layer
+Hierarchy at 3:1/4:1 per level is used for higher rates
+Each level also adds a small amount of framing
+Rates from 50 Mbps (STS-1) to 40 Gbps (STS-768)
+SONET/SDH rate hierarchy
+Trunks and Multiplexing (3)
+SDH(Synchronous Digital Hierarchy): 1988年ITU-T在SONET基础上经过修改制定了G.707,G.708,G.709国际标准。SDH以155.52Mbps的STM-1位第1级同步转移模式。较高等级的STM-N则是N个STM-1的复用。
+@@ 138 
+Computer Networks, Chapter 2 The Physical Layer
+WDM (Wavelength Division Multiplexing), another name for FDM, is used to carry many signals on one fiber:
+Trunks and Multiplexing (4)
+@@ 139 
+Computer Networks, Chapter 2 The Physical Layer
+Taxonomy of Switching
+@@ 140 
+PSTN uses circuit switching; Internet uses packet switching
+Computer Networks, Chapter 2 The Physical Layer
+PSTN:
+Internet:
+Switching (1)
+@@ 141 
+Computer Networks, Chapter 2 The Physical Layer
+Circuit switching requires call setup (connection) before data flows smoothly
+Also teardown at end (not shown)
+Packet switching treats messages independently
+No setup, but variable queuing delay at routers
+Circuits
+Packets
+Switching (2)
+@@ 142 
+Computer Networks, Chapter 2 The Physical Layer
+Comparison of circuit- and packet-switched networks
+Switching (3)
+@@ 143 
+Computer Networks, Chapter 2 The Physical Layer
+Generations of mobile telephone systems »
+Cellular mobile telephone systems »
+GSM, a 2G system »
+UMTS, a 3G system »
+Mobile Telephone System
+@@ 144 
+Computer Networks, Chapter 2 The Physical Layer
+1G, analog voice
+AMPS (Advanced Mobile Phone System) is example, deployed from 1980s. Modulation based on FM (as in radio).
+2G, analog voice and digital data
+GSM (Global System for Mobile communications) is example, deployed from 1990s. Modulation based on QPSK.
+3G, digital voice and data
+UMTS (Universal Mobile Telecommunications System) is example, deployed from 2000s. Modulation based on CDMA
+4G, digital data including voice
+LTE (Long Term Evolution) is example, deployed from 2010s. Modulation based on OFDM
+Generations of mobile telephone systems
+@@ 145 
+Huge Market..
+@@ 146 
+Time
+Bandwidth
+Applications
+@@ 147 
+Technology Evolution
+@@ 148 
+Computer Networks, Chapter 2 The Physical Layer
+All based on notion of spatial regions called cells
+Each mobile uses a frequency in a cell; moves cause handoff
+Frequencies are reused across non-adjacent cells
+To support more mobiles, smaller cells can be used
+Cellular reuse pattern
+在相邻的蜂窝中，频率不会被重用
+Smaller cells for dense mobiles
+为增加更多的用户，可以使用更小的蜂窝
+Cellular mobile phone systems
+@@ 149 
+Computer Networks, Chapter 2 The Physical Layer
+GSM全球移动通信系统，由欧洲电信标准组织ETSI制订的一个数字移动通信标准。被看作是第二代 (2G)移动电话系统。
+Mobile is divided into handset and SIM card  (Subscriber Identity Module) with credentials
+Mobiles tell their HLR (Home Location Register) their current whereabouts for incoming calls
+Cells keep track of visiting mobiles (in the Visitor LR)
+GSM – Global System for Mobile Communications (1)
+@@ 150 
+Computer Networks, Chapter 2 The Physical Layer
+Air interface is based on FDM channels of 200 KHz divided in an eight-slot TDM frame every 4.615 ms
+Mobile is assigned up- and down-stream slots to use
+Each slot is 148 bits long, gives rate of 27.4 kbps
+GSM – Global System for Mobile Communications (2)
+@@ 151 
+Computer Networks, Chapter 2 The Physical Layer
+UMTS通用移动通信系统， 3G移动通信技术标准
+Architecture is an evolution of GSM;
+Packets goes to/from the Internet via SGSN/GGSN
+Internet
+UMTS – Universal Mobile Telecommunications System (1)
+@@ 152 
+Computer Networks, Chapter 2 The Physical Layer
+Air interface based on CDMA over 5 MHz channels
+Rates  over users <14.4 Mbps (HSDPA) per 5 MHz
+CDMA allows frequency reuse over all cells
+CDMA permits soft handoff (connected to both cells)
+UMTS – Universal Mobile Telecommunications System (2)
+Soft
+handoff
+@@ 153 
+移动通信系统发展演进趋势
+@@ 154 
+Review
+@@ 155 
+Soft handoff, phone is acquired by the new BS before the previous one signs off.
+Hard handoff, old BS drops the phone before the new one acquires it.
+Handoff
+@@ 156 
+4G : TD-LTE 和 FDD-LTE 两种制式
+以正交频分多址（OFDMA）技术为核心，
+用户峰值速率可达 100Mbps至1Gbps，
+宽带接入和分布式的全IP 架构网络。
+网络扁平化，NodeB和RNC合一为eNB
+5G: “标志性能力指标”+“一组关键技术”
+标志性能力指标为“Gbps 用户体验速率”，
+关键技术包括:
+大规模天线阵列、
+超密集组网、
+新型多址、
+全频谱接入、
+新型网络架构。
+4G -> 5G
+@@ 157 
+大规模天线：更大规模的Massive MIMO，天线数目进一步增加（64-128），从而改善接收信号强度，抑制用户间干扰，实现更高的系统容量和频谱效率；
+超密集组网：通过更加“密集化”无线网络基础设施部署，获取更高的频率复用效率；
+全频谱接入：采用低频和高频混合网络，充分挖掘低频和高频的优势，实现无缝、高速、大容量覆盖；
+新型多址：通过多用户信息在相同资源上的叠加传输，在接收侧利用先进的接收算法分离多用户信息，代表为SCMA、PDMA 和MUSA 等；
+新型多载波：通过滤波减小子带或子载波频谱泄漏，放松对时频同步的要求，如F-OFDM 和UFMC 等；
+边缘计算：5G天然支持CU分离架构，提升last mile能力，计算能力更靠近用户、数据，请求和数据就近处理，无需上传云端。
+5G Key Technologies
+@@ 158  [hidden]
+先进调制编码：包括链路级调制编码、链路自适应、网络编码等，用以降低节点间干扰；
+终端直通技术：实现车车/ 车路/ 车人的车联网通信；
+灵活双工：根据上下行业务变化情况动态分配上下行资源，有效提升系统资源利用率；
+全双工：消除FDD 和TDD 对频谱资源使用的差异，包括自干扰信号抑制、全双工网络架构以及同半双工体制共存及优化等；
+频谱共享：跨越不同系统的最优动态频谱配置和管理功能，实现高效、动态的、灵活的频谱使用，提升空口效率、系统覆盖层次和密度。
+@@ 159 
+eMBB：增强移动宽带，顾名思义是针对的是大流量移动宽带业务；
+URLLC：超高可靠超低时延通信，例如无人驾驶等业务（3G响应为500ms，4G为50ms，5G要求0.5ms）；
+mMTC：大连接物联网，针对大规模物联网业务；
+5G三大应用场景
+@@ 160 
+5G Reference Architecture
+@@ 161 
+
+@@ 162 
+Comparisons between 4G and 5G
+@@ 163 
+Comparisons between 4G and 5G
+@@ 164 
+ITU-T（国际电信联盟电信标准化）:
+ITU-T SG15 是5G 承载标准研究的主战场，主要研究5G传送的需求和解决方案；
+移动优化的光传送网（M-OTN）/ 灵活光传送网（FlexO）和超高精度时间同步
+OIF（光互联论坛）:
+切片分组网（SPN）/ 灵活以太网（FlexE）；
+IEEE（电气与电子工程师协会）:
+TSN（时延敏感网络）
+5G标准主战场
+@@ 165 
+美国 Verizon 采用自定义5G 标准,2017年在美国11个城市采用28GHz开始建设5G 网络, 2020 年开始提供移动服务。
+美国 Sprint 在2019年采用2.5 GHz频段实现5G商用, 初期倾向于NSA模式组网,业务定位在eMBB场景。
+日本 NTT DoCoMo 2020在东京及其他部分地区启动5G服务,主要面向eMBB 场景和高带宽、低延时的AR/VR, V2X 场景。组网采用NSA模式。
+韩国 KT 宣布2018年冬奥会期间进行少量5G 商用部署,面向个人eMBB 场景。初期采用NSA模式。
+英国 Vodafone5G 关注eMBB 和URLLC ；在2019 年下半年开始5G 商用,初期倾向于NSA 模式组网。
+法国Orange 和德国DT 目标是2020年实现5G商用,2018年进行5G试验；业务关注eMBB 和URLLC、FWA、车联网等,初期优选NSA模式组网。
+中国2019年5G元年，5G商用
+各国5G布局
+从技术角度看，中国经历了“1G空白、2G跟随、3G突破、4G并跑”的不断努力后，5G实现了领先。
+@@ 166  [hidden]
+
+@@ 167 
+Computer Networks, Chapter 2 The Physical Layer
+Internet over cable »
+Spectrum allocation »
+Cable modems »
+ADSL vs. cable »
+Cable Television有线电视
+@@ 168 
+Computer Networks, Chapter 2 The Physical Layer
+Internet over cable reuses the cable television plant
+Data is sent on the shared cable tree from the head-end, not on a dedicated line per subscriber (DSL)
+ISP
+(Internet)
+Internet over Cable基于有线电视的Internet
+@@ 169 
+Computer Networks, Chapter 2 The Physical Layer
+Upstream and downstream data are allocated to frequency channels not used for TV channels:
+Spectrum Allocation
+有线电视系统用于Internet访问的频谱分配：
+上行信道Upstream Channel：5~42 MHz；
+下行信道Downstream Channel：
+TV：54~550 MHz，每信道6~8MHz
+数据：550~750MHz
+@@ 170 
+Computer Networks, Chapter 2 The Physical Layer
+Cable Modem：位于用户端，将数字信号与模拟射频信号互转。
+Cable modems at customer premises implement the physical layer of the DOCSIS (Data Over Cable Service Interface Specification) standard电缆调制解调器的标准
+QPSK/QAM（两种调制方式，上行QPSK，下行QAM-64） is used in timeslots on frequencies that are assigned for upstream/downstream data
+Cable Modems电缆调制解调器
+@@ 171 
+Computer Networks, Chapter 2 The Physical Layer
+Cable:
+Uses coaxial cable to customers (good bandwidth)
+Data is broadcast to all customers (less secure)
+Bandwidth is shared over customers so may vary
+ADSL:
+Bandwidth is dedicated for each customer
+Point-to-point link does not broadcast data
+Uses twisted pair to customers (lower bandwidth)
+Cable vs. ADSL
+@@ 172 
+End
+Chapter 2
