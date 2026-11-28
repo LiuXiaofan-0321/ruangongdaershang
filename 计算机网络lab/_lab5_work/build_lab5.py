@@ -261,20 +261,32 @@ def build_content(doc):
            9.6)
     figure("01b_route_udp.png",
            "图 2  默认路由表与 UDP 监听端口：singbox_tun 跃点数 0 优先于 WLAN 跃点数 40，"
-           "两个接口均监听 5353/1900 端口", 12.2)
+           "两个接口均监听 5353/1900 端口", 11.4)
     para("这一路由结构解释了先导探测中发现的现象：本机的普通单播 DNS 查询（nslookup）"
          f"默认经跃点数更低的 singbox_tun 发往 {H['tun_gw_dns']} 或直连 223.5.5.5，"
          "而局域网多播（mDNS）及直连外网时间同步/直连流量（NTP、部分 UDP/QUIC）经 WLAN "
          "发出。若仅捕获 WLAN 会丢失全部 53 端口 DNS 报文，若仅捕获 singbox_tun 则无标准 "
          "14 字节 Ethernet II 链路层首部。因此本次使用同一命令同时在 WLAN 与 singbox_tun "
          "两个接口上应用捕获过滤器 udp 并关闭混杂模式，写入单一文件 Lab5_UDP.pcapng。")
-    para("在开始捕获后前 15 秒内，依次运行 nslookup www.baidu.com、nslookup www.ecnu.edu.cn、"
-         "nslookup www.tsinghua.edu.cn 223.5.5.5、w32tm /stripchart /computer:ntp.aliyun.com "
-         "/samples:2 /dataonly（图 3）以及 Edge 浏览器访问百度与哔哩哔哩，随后停止主动操作并"
-         "静默等待约 60 秒，以完整采集系统后台周期性 UDP 通信。")
+    para("在开始捕获后前 15 秒内，依次运行以下命令行工作负载（图 3）以及 Edge 浏览器访问"
+         "百度与哔哩哔哩，随后停止主动操作并静默等待约 60 秒，以完整采集系统后台周期性 "
+         "UDP 通信：")
+    mono([
+        "# 1. 执行 DNS 查询与 NTP 同步产生主动 UDP 流量",
+        "nslookup www.baidu.com",
+        "nslookup www.ecnu.edu.cn",
+        "nslookup www.tsinghua.edu.cn 223.5.5.5",
+        "w32tm /stripchart /computer:ntp.aliyun.com /samples:2 /dataonly",
+        "",
+        "# 2. 双接口同步捕获（-f udp 仅收 UDP，-p 关闭混杂模式，时长 75 s）",
+        'tshark -i "\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}" -f udp -p \\',
+        '       -i "\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}" -f udp -p -a duration:75 -w Lab5_UDP.pcapng',
+    ])
+    para("上述参数中，-f udp 在内核驱动层过滤掉非 UDP 流量，-p 显式禁用混杂模式以仅记录与本机"
+         "接口通信及发往本机的报文，与手册 Step 1 的选项要求完全一致。")
     figure("02_workload.png",
            "图 3  工作负载命令行实测输出：nslookup 域名解析与 w32tm 阿里云 NTP 时间同步",
-           12.0)
+           11.2)
 
     heading("4.2  捕获选项配置与迹线总体构成", 11.5)
     para("在 Wireshark「捕获选项（Ctrl+K）」界面中（图 4），接口列表清晰区分了链路层为 "
@@ -282,7 +294,7 @@ def build_content(doc):
          "模式」，在捕获过滤器栏填入 udp（绿色表示语法有效）。")
     figure("03_capture_options.png",
            "图 4  Wireshark 捕获选项设置：选中 WLAN、捕获过滤器设为 udp、关闭混杂模式",
-           14.5)
+           13.8)
     para(f"打开捕获文件 Lab5_UDP.pcapng 后，主窗口概览如图 5 所示，状态栏显示共 {F['frame_count']} 帧。"
          "与手册 Step 2 所述一致，Protocol 列并未全部显示为 UDP，而是显示为 DNS、NTP、QUIC、"
          "MDNS 等应用层协议名称；这是因为 Wireshark 会依据 UDP 熟知端口或启发式解析器自动"
