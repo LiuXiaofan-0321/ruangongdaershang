@@ -17,6 +17,7 @@ from docx.text.paragraph import Paragraph
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 BLIP = "{http://schemas.openxmlformats.org/drawingml/2006/main}blip"
+VML_IMG = "{urn:schemas-microsoft-com:vml}imagedata"
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--doc", default=r"C:\University Courses\计算机网络lab\10244602411_刘小凡_IPv4.docx")
@@ -57,7 +58,11 @@ for el in body.iterchildren():
               f"first={first!r}{flag}")
     elif tag == "p":
         para = Paragraph(el, d)
-        if el.findall(f".//{BLIP}"):
+        # A picture can be DrawingML (<a:blip>) or legacy VML (<v:imagedata>).
+        # WPS/Word sometimes rewrite one picture per save as VML, so counting only
+        # a:blip produced a false "caption without image" alarm on a healthy file.
+        has_pic = bool(el.findall(f".//{BLIP}")) or bool(el.findall(f".//{VML_IMG}"))
+        if has_pic:
             n_img += 1
             pending_img = True
         elif para.text.strip().startswith("图 "):
