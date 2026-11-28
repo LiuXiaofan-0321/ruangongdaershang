@@ -1,0 +1,393 @@
+﻿1	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61338	53	54	0xb409	Standard query 0x4ea3 A pcapp-data-collect.youku.com
+2	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61338	54	0x0000	Standard query response 0x4ea3 No such name A pcapp-data-collect.youku.com
+3	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61338	53	54	0x0a1a	Standard query 0xf892 A pcapp-data-collect.youku.com
+4	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61338	54	0x0000	Standard query response 0xf892 No such name A pcapp-data-collect.youku.com
+5	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61813	53	49	0xc8d6	Standard query 0x0001 PTR 2.0.18.172.in-addr.arpa
+6	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61813	133	0x0000	Standard query response 0x0001 No such name PTR 2.0.18.172.in-addr.arpa SOA 18.172.in-addr.arpa OPT
+7	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61814	53	39	0xf9c9	Standard query 0x0002 A www.baidu.com
+8	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61814	146	0x0000	Standard query response 0x0002 A www.baidu.com CNAME www.a.shifen.com A 180.101.51.73 A 180.101.49.44
+9	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61815	53	39	0xdec7	Standard query 0x0003 AAAA www.baidu.com
+10	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	203.107.6.88			NTP	61823	123	56	0xa038	NTP Version 1, client
+11	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	203.107.6.88	192.168.31.134			NTP	123	61823	56	0x8df1	NTP Version 1, server
+12	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61815	170	0x0000	Standard query response 0x0003 AAAA www.baidu.com CNAME www.a.shifen.com AAAA 240e:e9:6002:1fd:0:ff:b0e1:fe69 AAAA 240e:e9:6002:1ac:0:ff:b07e:36c5
+13	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61816	53	49	0xc8d3	Standard query 0x0001 PTR 2.0.18.172.in-addr.arpa
+14	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61816	133	0x0000	Standard query response 0x0001 No such name PTR 2.0.18.172.in-addr.arpa SOA 18.172.in-addr.arpa OPT
+15	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61817	53	41	0x1d28	Standard query 0x0002 A www.ecnu.edu.cn
+16	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61817	83	0x0000	Standard query response 0x0002 A www.ecnu.edu.cn A 202.120.92.21 OPT
+17	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61818	53	41	0x0226	Standard query 0x0003 AAAA www.ecnu.edu.cn
+18	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61818	95	0x0000	Standard query response 0x0003 AAAA www.ecnu.edu.cn AAAA 2001:da8:8005:a492::21 OPT
+19	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	223.5.5.5			DNS	61819	53	48	0x306d	Standard query 0x0001 PTR 5.5.5.223.in-addr.arpa
+20	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	223.5.5.5	172.18.0.1			DNS	53	61819	102	0x0000	Standard query response 0x0001 PTR 5.5.5.223.in-addr.arpa PTR public1.alidns.com
+21	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	223.5.5.5			DNS	61820	53	45	0x0e40	Standard query 0x0002 A www.tsinghua.edu.cn
+22	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	223.5.5.5	172.18.0.1			DNS	53	61820	91	0x0000	Standard query response 0x0002 A www.tsinghua.edu.cn A 101.6.15.66 OPT
+23	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	223.5.5.5			DNS	61821	53	45	0xf33d	Standard query 0x0003 AAAA www.tsinghua.edu.cn
+24	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	223.5.5.5	172.18.0.1			DNS	53	61821	103	0x0000	Standard query response 0x0003 AAAA www.tsinghua.edu.cn AAAA 2402:f000:1:402:101:6:15:66 OPT
+25	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	203.107.6.88			NTP	61822	123	56	0xd454	NTP Version 1, client
+26	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	203.107.6.88	172.18.0.1			NTP	123	61822	56	0x0000	NTP Version 1, server
+27	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61338	53	54	0xf605	Standard query 0x0ca7 A pcapp-data-collect.youku.com
+28	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61338	54	0x0000	Standard query response 0x0ca7 No such name A pcapp-data-collect.youku.com
+29	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61338	53	54	0x7071	Standard query 0x923b A pcapp-data-collect.youku.com
+30	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61338	54	0x0000	Standard query response 0x923b No such name A pcapp-data-collect.youku.com
+31	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61338	53	54	0x113a	Standard query 0xf172 A pcapp-data-collect.youku.com
+32	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61338	54	0x0000	Standard query response 0xf172 No such name A pcapp-data-collect.youku.com
+33	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	81.69.145.161			UDP	65182	80	123	0xa49e	65182 → 80 Len=115
+34	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61338	53	56	0xec55	Standard query 0x3b36 A adblockplus.telemetry.eyeo.com
+35	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61338	56	0x0000	Standard query response 0x3b36 No such name A adblockplus.telemetry.eyeo.com
+36	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	81.69.145.161	172.18.0.1			UDP	80	65182	229	0x0000	80 → 65182 Len=221
+37	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	81.69.145.161	172.18.0.1			UDP	80	65182	40	0x0000	80 → 65182 Len=32
+38	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	81.69.145.161			UDP	65182	80	38	0xc1b7	65182 → 80 Len=30
+39	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	81.69.145.161			UDP	65183	80	123	0x7082	65183 → 80 Len=115
+40	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	81.69.145.161	192.168.31.134			UDP	80	65183	229	0xaaa9	80 → 65183 Len=221
+41	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	81.69.145.161	192.168.31.134			UDP	80	65183	40	0xca8e	80 → 65183 Len=32
+42	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	81.69.145.161			UDP	65183	80	38	0x8d9b	65183 → 80 Len=30
+43	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61338	53	80	0xaf73	Standard query 0x3496 A wxkb-user-data-1258344707.cos.ap-shanghai.myqcloud.com
+44	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61338	312	0x0000	Standard query response 0x3496 A wxkb-user-data-1258344707.cos.ap-shanghai.myqcloud.com CNAME sh.file.myqcloud.com A 121.229.155.235 A 117.68.29.203 A 117.68.29.199 A 117.68.29.183
+45	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	203.107.6.88			NTP	62806	123	56	0x742e	NTP Version 1, client
+46	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	203.107.6.88			NTP	62805	123	56	0xa84a	NTP Version 1, client
+47	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	203.107.6.88	192.168.31.134			NTP	123	62806	56	0x1dc1	NTP Version 1, server
+48	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	203.107.6.88	172.18.0.1			NTP	123	62805	56	0x0000	NTP Version 1, server
+49	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61338	53	44	0x4724	Standard query 0xad78 A edge.microsoft.com
+50	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53574	53	47	0x6080	Standard query 0x0e40 A config.edge.skype.com
+51	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61338	53	44	0x4724	Standard query 0xad78 A edge.microsoft.com
+52	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61338	265	0x0000	Standard query response 0xad78 A edge.microsoft.com CNAME edge-microsoft-com.ax-0002.ax-msedge.net CNAME ax-0002.ax-msedge.net A 150.171.27.11 A 150.171.28.11
+53	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61338	265	0x0000	Standard query response 0xad78 A edge.microsoft.com CNAME edge-microsoft-com.ax-0002.ax-msedge.net CNAME ax-0002.ax-msedge.net A 150.171.27.11 A 150.171.28.11
+54	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53574	53	47	0x6080	Standard query 0x0e40 A config.edge.skype.com
+55	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53428	53	46	0x3dec	Standard query 0xb2d4 A substrate.office.com
+56	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53574	388	0x0000	Standard query response 0x0e40 A config.edge.skype.com CNAME config.edge.skype.com.trafficmanager.net CNAME ln-0007.config.skype.com CNAME config-edge-skype.ln-0007.ln-msedge.net CNAME ln-0007.ln-msedge.net A 150.171.22.17
+57	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53574	388	0x0000	Standard query response 0x0e40 A config.edge.skype.com CNAME config.edge.skype.com.trafficmanager.net CNAME ln-0007.config.skype.com CNAME config-edge-skype.ln-0007.ln-msedge.net CNAME ln-0007.ln-msedge.net A 150.171.22.17
+58	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53428	53	46	0x3dec	Standard query 0xb2d4 A substrate.office.com
+59	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53428	272	0x0000	Standard query response 0xb2d4 A substrate.office.com CNAME outlook.cloud.microsoft CNAME acdcatm.outlook.mira.tm.svc.cloud.microsoft CNAME atm2.outlook.mira.tm.svc.cloud.microsoft A 52.96.70.130 A 52.96.165.66 A 52.96.166.130 A 52.96.190.194 A 40.104.55.210 A 40.104.55.226 A 52.96.10.82 A 52.96.42.82
+60	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53428	272	0x0000	Standard query response 0xb2d4 A substrate.office.com CNAME outlook.cloud.microsoft CNAME acdcatm.outlook.mira.tm.svc.cloud.microsoft CNAME atm2.outlook.mira.tm.svc.cloud.microsoft A 52.96.70.130 A 52.96.165.66 A 52.96.166.130 A 52.96.190.194 A 40.104.55.210 A 40.104.55.226 A 52.96.10.82 A 52.96.42.82
+61	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	52391	53	37	0x4601	Standard query 0xdd94 A cn.bing.com
+62	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51598	53	39	0x9600	Standard query 0x8bb3 A www.baidu.com
+63	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	52391	233	0x0000	Standard query response 0xdd94 A cn.bing.com CNAME cnbing-cn.bing.com.trafficmanager.net CNAME china.bing123.com A 202.89.233.101 A 202.89.233.100
+64	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51598	157	0x0000	Standard query response 0x8bb3 A www.baidu.com CNAME www.a.shifen.com A 180.101.51.73 A 180.101.49.44 OPT
+65	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	52391	53	60	0xe6f9	Standard query 0x1d5b A nav-edge.smartscreen.microsoft.com
+66	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	52391	53	60	0xe6f9	Standard query 0x1d5b A nav-edge.smartscreen.microsoft.com
+67	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51598	53	42	0x5a8b	Standard query 0x8229 A pss.bdstatic.com
+68	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	52391	308	0x0000	Standard query response 0x1d5b A nav-edge.smartscreen.microsoft.com CNAME prod-atm-wds-edge.trafficmanager.net CNAME prod-agic-ncu-4.northcentralus.cloudapp.azure.com A 65.52.241.40
+69	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	52391	308	0x0000	Standard query response 0x1d5b A nav-edge.smartscreen.microsoft.com CNAME prod-atm-wds-edge.trafficmanager.net CNAME prod-agic-ncu-4.northcentralus.cloudapp.azure.com A 65.52.241.40
+70	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51421	53	49	0x2209	Standard query 0x7621 A psstatic.cdn.bcebos.com
+71	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51598	254	0x0000	Standard query response 0x8229 A pss.bdstatic.com CNAME pss.bdstatic.com.a.bdydns.com CNAME opencdnbdpssv6.jomodns.com A 117.92.139.36 A 183.131.62.36
+72	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51598	53	43	0x62d6	Standard query 0xbc74 A dss0.bdstatic.com
+73	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	52450	53	43	0x9bd4	Standard query 0x7f22 A dss1.bdstatic.com
+74	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61230	53	42	0xef79	Standard query 0xc7d9 A ss1.bdstatic.com
+75	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51421	310	0x0000	Standard query response 0x7621 A psstatic.cdn.bcebos.com CNAME psstatic.cdn.bcebos.com.a.bdydns.com CNAME opencdnbdv6.jomodns.com CNAME opencdnbdv6.syscdn.hainanidc.cn A 117.92.139.38
+76	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51598	208	0x0000	Standard query response 0xbc74 A dss0.bdstatic.com CNAME sslbaiduv6.jomodns.com CNAME sslbaiduv6.syscdn.hainanidc.cn A 119.167.237.33
+77	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	52450	208	0x0000	Standard query response 0x7f22 A dss1.bdstatic.com CNAME sslbaiduv6.jomodns.com CNAME sslbaiduv6.syscdn.hainanidc.cn A 119.167.237.33
+78	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51421	53	39	0x60e5	Standard query 0xc8c8 A sp2.baidu.com
+79	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51421	39	0x0000	Standard query response 0xc8c8 No such name A sp2.baidu.com
+80	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	52450	53	39	0xa162	Standard query 0x8447 A sp1.baidu.com
+81	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	52450	39	0x0000	Standard query response 0x8447 No such name A sp1.baidu.com
+82	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61230	485	0x0000	Standard query response 0xc7d9 A ss1.bdstatic.com CNAME sslbdstatic.jomodns.com A 175.12.90.32 A 27.148.188.32 A 61.147.237.32 A 171.214.23.32 A 111.225.213.32 A 60.188.66.32 A 36.99.112.32 A 58.42.14.32 A 1.71.157.32 A 1.193.146.32
+83	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51598	53	39	0x68a7	Standard query 0xc057 A sp0.baidu.com
+84	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51598	39	0x0000	Standard query response 0xc057 No such name A sp0.baidu.com
+85	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51421	53	48	0x329d	Standard query 0xf4fb A hectorstatic.baidu.com
+86	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51421	306	0x0000	Standard query response 0xf4fb A hectorstatic.baidu.com CNAME hectorstatic.baidu.com.a.bdydns.com CNAME opencdnbdv6.jomodns.com CNAME opencdnbdv6.syscdn.hainanidc.cn A 117.92.139.38
+87	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	180.102.97.254			UDP	62706	8000	39	0x28b9	62706 → 8000 Len=31
+88	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	180.102.97.254	172.18.0.1			UDP	8000	62706	40	0x0000	8000 → 62706 Len=32
+89	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	180.102.97.254			UDP	62707	8000	39	0xf49c	62707 → 8000 Len=31
+90	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	180.102.97.254	192.168.31.134			UDP	8000	62707	40	0xb3cb	8000 → 62707 Len=32
+91	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	52450	53	39	0x711a	Standard query 0xc262 A mbd.baidu.com
+92	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	52450	53	39	0x711a	Standard query 0xc262 A mbd.baidu.com
+93	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	52450	146	0x0000	Standard query response 0xc262 A mbd.baidu.com CNAME mbd.n.shifen.com A 121.228.183.3 A 121.228.183.4
+94	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	52450	157	0x0000	Standard query response 0xc262 A mbd.baidu.com CNAME mbd.n.shifen.com A 121.228.183.3 A 121.228.183.4 OPT
+95	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61230	53	56	0xf386	Standard query 0xa8c1 A clients2.googleusercontent.com
+96	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61230	53	56	0xf386	Standard query 0xa8c1 A clients2.googleusercontent.com
+97	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51598	53	61	0x2440	Standard query 0xb503 A data-edge.smartscreen.microsoft.com
+98	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61230	102	0x0000	Standard query response 0xa8c1 A clients2.googleusercontent.com A 142.251.34.65
+99	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61230	102	0x0000	Standard query response 0xa8c1 A clients2.googleusercontent.com A 142.251.34.65
+100	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51598	53	61	0x2440	Standard query 0xb503 A data-edge.smartscreen.microsoft.com
+101	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51421	53	40	0x68e1	Standard query 0xf1f2 A mss.office.com
+102	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61370	53	72	0x537f	Standard query 0x247f A access-point.cloudmessaging.edge.microsoft.com
+103	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51598	310	0x0000	Standard query response 0xb503 A data-edge.smartscreen.microsoft.com CNAME prod-atm-wds-edge.trafficmanager.net CNAME prod-agic-ncu-3.northcentralus.cloudapp.azure.com A 20.25.227.174
+104	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51598	310	0x0000	Standard query response 0xb503 A data-edge.smartscreen.microsoft.com CNAME prod-atm-wds-edge.trafficmanager.net CNAME prod-agic-ncu-3.northcentralus.cloudapp.azure.com A 20.25.227.174
+105	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	55753	53	38	0x2901	Standard query 0x8345 A www.bing.com
+106	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	63908	53	42	0xdf18	Standard query 0x6a03 A hector.baidu.com
+107	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51421	53	40	0x68e1	Standard query 0xf1f2 A mss.office.com
+108	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61370	53	72	0x537f	Standard query 0x247f A access-point.cloudmessaging.edge.microsoft.com
+109	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	55753	53	38	0x2901	Standard query 0x8345 A www.bing.com
+110	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	63908	138	0x0000	Standard query response 0x6a03 A hector.baidu.com A 111.63.65.178 A 39.156.68.81 A 36.110.192.200
+111	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	63908	53	41	0x6bd0	Standard query 0x1eae A gips2.baidu.com
+112	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51421	204	0x0000	Standard query response 0xf1f2 A mss.office.com CNAME mss-office-com.b-0005.b-msedge.net CNAME b-0005.b-msedge.net A 13.107.6.158
+113	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51421	204	0x0000	Standard query response 0xf1f2 A mss.office.com CNAME mss-office-com.b-0005.b-msedge.net CNAME b-0005.b-msedge.net A 13.107.6.158
+114	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61370	420	0x0000	Standard query response 0x247f A access-point.cloudmessaging.edge.microsoft.com CNAME edge-cloudmessaging-access-point-prod.trafficmanager.net CNAME edge-cloudmessaging-access-point-aks-prod-wus2.westus2.cloudapp.azure.com A 74.179.65.112
+115	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61370	420	0x0000	Standard query response 0x247f A access-point.cloudmessaging.edge.microsoft.com CNAME edge-cloudmessaging-access-point-prod.trafficmanager.net CNAME edge-cloudmessaging-access-point-aks-prod-wus2.westus2.cloudapp.azure.com A 74.179.65.112
+116	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	63908	53	41	0x6bd0	Standard query 0x1eae A gips2.baidu.com
+117	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	63908	218	0x0000	Standard query response 0x1eae A gips2.baidu.com CNAME gips2.baidu.com.a.bdydns.com CNAME opencdnbdabroadzlv6.jomodns.com A 183.131.62.38
+118	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	63908	229	0x0000	Standard query response 0x1eae A gips2.baidu.com CNAME gips2.baidu.com.a.bdydns.com CNAME opencdnbdabroadzlv6.jomodns.com A 183.131.62.38 OPT
+119	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	55753	303	0x0000	Standard query response 0x8345 A www.bing.com CNAME www-www.bing.com.trafficmanager.net CNAME www.bing.com.edgekey.net CNAME e86303.dscx.akamaiedge.net A 23.199.47.68 A 23.199.47.75 A 23.199.47.85 A 23.199.47.91 A 23.199.47.69 A 23.199.47.70 A 23.199.47.86 A 23.199.47.73 A 23.199.47.87
+120	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	55753	303	0x0000	Standard query response 0x8345 A www.bing.com CNAME www-www.bing.com.trafficmanager.net CNAME www.bing.com.edgekey.net CNAME e86303.dscx.akamaiedge.net A 23.199.47.68 A 23.199.47.75 A 23.199.47.85 A 23.199.47.91 A 23.199.47.69 A 23.199.47.70 A 23.199.47.86 A 23.199.47.73 A 23.199.47.87
+121	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	224.0.0.251			MDNS	5353	5353	48	0xfe94	Standard query 0x0000 PTR _googlecast._tcp.local, "QM" question
+122	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	224.0.0.251			MDNS	5353	5353	48	0xfe94	Standard query 0x0000 PTR _googlecast._tcp.local, "QM" question
+123	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61841	53	67	0x6395	Standard query 0x06a9 A msedge.b.tlu.dl.delivery.mp.microsoft.com
+124	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	224.0.0.251			MDNS	5353	5353	48	0xca79	Standard query 0x0000 PTR _googlecast._tcp.local, "QM" question
+125	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61841	53	67	0x6395	Standard query 0x06a9 A msedge.b.tlu.dl.delivery.mp.microsoft.com
+126	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61841	512	0x0000	Standard query response 0x06a9 A msedge.b.tlu.dl.delivery.mp.microsoft.com CNAME star.b.tlu.dl.delivery.mp.microsoft.com.delivery.microsoft.com CNAME cdp-f-tlu-net.trafficmanager.net CNAME wildcard.f.tlu.dl.delivery.mp.microsoft.com.cdn.dnse8.com CNAME ty-wildcardtlu.sched.dma.tdnsdl1.cn A 59.52.143.85 A 182.84.202.17 A 182.84.202.93 A 58.222.51.56 A 59.53.192.168 A 117.21.10.139 A 59.53.162.222 A 58.223.168.67 A 59.53.162.220 A 58.223.168.222 A 58.223.168.59 A 58.223.168.72 A 58.223.168.223 OPT
+127	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61841	501	0x0000	Standard query response 0x06a9 A msedge.b.tlu.dl.delivery.mp.microsoft.com CNAME star.b.tlu.dl.delivery.mp.microsoft.com.delivery.microsoft.com CNAME cdp-f-tlu-net.trafficmanager.net CNAME wildcard.f.tlu.dl.delivery.mp.microsoft.com.cdn.dnse8.com CNAME ty-wildcardtlu.sched.dma.tdnsdl1.cn A 59.52.143.85 A 182.84.202.17 A 182.84.202.93 A 58.222.51.56 A 59.53.192.168 A 117.21.10.139 A 59.53.162.222 A 58.223.168.67 A 59.53.162.220 A 58.223.168.222 A 58.223.168.59 A 58.223.168.72 A 58.223.168.223
+128	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51134	53	60	0x5e71	Standard query 0x23ef A prod.rewardsplatform.microsoft.com
+129	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51134	53	60	0x5e71	Standard query 0x23ef A prod.rewardsplatform.microsoft.com
+130	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51134	284	0x0000	Standard query response 0x23ef A prod.rewardsplatform.microsoft.com CNAME rewardsplatformprod-d2g5g3cah3eza6gm.b01.azurefd.net CNAME mr-b01.tm-azurefd.net A 150.171.109.148
+131	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51134	284	0x0000	Standard query response 0x23ef A prod.rewardsplatform.microsoft.com CNAME rewardsplatformprod-d2g5g3cah3eza6gm.b01.azurefd.net CNAME mr-b01.tm-azurefd.net A 150.171.109.148
+132	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	57579	53	40	0x81bc	Standard query 0xc507 A api.github.com
+133	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	59259	53	40	0xcd61	Standard query 0x1c38 A ab.chatgpt.com
+134	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	52.96.70.130			QUIC	62096	443	1258	0x4638	Initial, DCID=42bb05bcc04d2fb3, PKN: 1, PADDING, PING, CRYPTO, PING, PADDING, CRYPTO, PING, PADDING, PING, PADDING, PING, PADDING, CRYPTO, PING, CRYPTO, CRYPTO, PING
+135	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	52.96.70.130			QUIC	62096	443	1258	0xa562	Initial, DCID=42bb05bcc04d2fb3, PKN: 2, CRYPTO, PADDING, PING, PADDING, PING, PING, CRYPTO, PING, PADDING, CRYPTO, PADDING
+136	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	57579	53	40	0x81bc	Standard query 0xc507 A api.github.com
+137	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	59259	53	40	0xcd61	Standard query 0x1c38 A ab.chatgpt.com
+138	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	57579	70	0x0000	Standard query response 0xc507 A api.github.com A 172.182.252.137
+139	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	57579	70	0x0000	Standard query response 0xc507 A api.github.com A 172.182.252.137
+140	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	224.0.0.251			MDNS	5353	5353	48	0xfe94	Standard query 0x0000 PTR _googlecast._tcp.local, "QM" question
+141	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	224.0.0.251			MDNS	5353	5353	48	0xfe94	Standard query 0x0000 PTR _googlecast._tcp.local, "QM" question
+142	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	59259	100	0x0000	Standard query response 0x1c38 A ab.chatgpt.com A 104.18.32.47 A 172.64.155.209
+143	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	59259	100	0x0000	Standard query response 0x1c38 A ab.chatgpt.com A 104.18.32.47 A 172.64.155.209
+144	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51784	53	40	0x588b	Standard query 0x01d3 A login.live.com
+145	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54622	53	78	0x108c	Standard query 0xcca1 A msedgeextensions.sf.tlu.dl.delivery.mp.microsoft.com
+146	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54622	378	0x0000	Standard query response 0xcca1 A msedgeextensions.sf.tlu.dl.delivery.mp.microsoft.com CNAME star.sf.tlu.dl.delivery.mp.microsoft.com.delivery.microsoft.com CNAME cdp-f-ssl-tlu-net.trafficmanager.net CNAME wildcard.sf.tlu.dl.delivery.mp.microsoft.com.cdn.dnse8.com CNAME wildcard.sf.tlu.dl.sched.dma.tdnsdl1.cn A 58.223.168.61 A 119.0.92.108 A 171.108.210.254 A 1.194.202.23
+147	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51784	53	40	0x588b	Standard query 0x01d3 A login.live.com
+148	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	224.0.0.251			MDNS	5353	5353	48	0xca79	Standard query 0x0000 PTR _googlecast._tcp.local, "QM" question
+149	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	52.96.70.130			QUIC	62096	443	1258	0x2039	Initial, DCID=42bb05bcc04d2fb3, PKN: 4, PADDING, CRYPTO, CRYPTO, CRYPTO, CRYPTO, CRYPTO, PING, PING, CRYPTO, PADDING, PING, CRYPTO, CRYPTO, CRYPTO, PADDING, CRYPTO, PADDING
+150	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51784	325	0x0000	Standard query response 0x01d3 A login.live.com CNAME login.msa.msidentity.com CNAME www.tm.lg.prod.aadmsa.trafficmanager.net CNAME prdv4a.aadg.msidentity.com CNAME www.tm.v4.a.prd.aadg.akadns.net A 20.190.190.131 A 20.190.190.130 A 20.190.190.194 A 40.126.62.129 A 40.126.62.130 A 20.190.190.132 A 20.190.190.193 A 20.190.190.196
+151	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51784	325	0x0000	Standard query response 0x01d3 A login.live.com CNAME login.msa.msidentity.com CNAME www.tm.lg.prod.aadmsa.trafficmanager.net CNAME prdv4a.aadg.msidentity.com CNAME www.tm.v4.a.prd.aadg.akadns.net A 20.190.190.131 A 20.190.190.130 A 20.190.190.194 A 40.126.62.129 A 40.126.62.130 A 20.190.190.132 A 20.190.190.193 A 20.190.190.196
+152	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	52.96.70.130			QUIC	62096	443	1258	0xc2e8	Initial, DCID=42bb05bcc04d2fb3, PKN: 6, CRYPTO, PING, PING, PADDING, CRYPTO, PING, CRYPTO, PADDING, PING, PING, PADDING, CRYPTO, PADDING, PING
+153	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	52.96.70.130			QUIC	62096	443	1258	0xbdaf	Initial, DCID=42bb05bcc04d2fb3, PKN: 8, PING, CRYPTO, PADDING, CRYPTO, CRYPTO, PADDING, PING, PING, PADDING, CRYPTO, CRYPTO, PING, PING, PING, PADDING
+154	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	224.0.0.251			MDNS	5353	5353	48	0xfe94	Standard query 0x0000 PTR _googlecast._tcp.local, "QM" question
+155	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	224.0.0.251			MDNS	5353	5353	48	0xfe94	Standard query 0x0000 PTR _googlecast._tcp.local, "QM" question
+156	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	224.0.0.251			MDNS	5353	5353	48	0xca79	Standard query 0x0000 PTR _googlecast._tcp.local, "QM" question
+157	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54622	53	58	0xabb8	Standard query 0xe65d A mobile.events.data.microsoft.com
+158	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54622	53	58	0xabb8	Standard query 0xe65d A mobile.events.data.microsoft.com
+159	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53755	53	39	0x9c85	Standard query 0x840a A sp2.baidu.com
+160	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54122	53	39	0x7d92	Standard query 0xa18f A sp1.baidu.com
+161	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53755	39	0x0000	Standard query response 0x840a No such name A sp2.baidu.com
+162	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54122	39	0x0000	Standard query response 0xa18f No such name A sp1.baidu.com
+163	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53755	53	39	0x44eb	Standard query 0xdba6 A sp0.baidu.com
+164	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53755	39	0x0000	Standard query response 0xdba6 No such name A sp0.baidu.com
+165	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54622	298	0x0000	Standard query response 0xe65d A mobile.events.data.microsoft.com CNAME mobile.events.data.trafficmanager.net CNAME onedscolprdcus73.centralus.cloudapp.azure.com A 13.89.179.12
+166	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54622	298	0x0000	Standard query response 0xe65d A mobile.events.data.microsoft.com CNAME mobile.events.data.trafficmanager.net CNAME onedscolprdcus73.centralus.cloudapp.azure.com A 13.89.179.12
+167	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54122	53	41	0xee68	Standard query 0xe428 A px.wpk.quark.cn
+168	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54122	41	0x0000	Standard query response 0xe428 No such name A px.wpk.quark.cn
+169	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	52.96.70.130			QUIC	62096	443	1258	0x4533	Initial, DCID=42bb05bcc04d2fb3, PKN: 9, CC, PADDING
+170	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53755	53	48	0xdf5e	Standard query 0xf011 A h-adashx.ut.taobao.com
+171	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53755	48	0x0000	Standard query response 0xf011 No such name A h-adashx.ut.taobao.com
+172	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54122	53	46	0x2e1b	Standard query 0xbfef A substrate.office.com
+173	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54122	53	46	0x2e1b	Standard query 0xbfef A substrate.office.com
+174	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54122	272	0x0000	Standard query response 0xbfef A substrate.office.com CNAME outlook.cloud.microsoft CNAME acdcatm.outlook.mira.tm.svc.cloud.microsoft CNAME atm2.outlook.mira.tm.svc.cloud.microsoft A 40.104.55.226 A 52.96.55.194 A 52.96.64.194 A 52.96.70.130 A 52.96.110.2 A 52.96.110.82 A 52.96.166.194 A 40.104.55.194
+175	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54122	272	0x0000	Standard query response 0xbfef A substrate.office.com CNAME outlook.cloud.microsoft CNAME acdcatm.outlook.mira.tm.svc.cloud.microsoft CNAME atm2.outlook.mira.tm.svc.cloud.microsoft A 40.104.55.226 A 52.96.55.194 A 52.96.64.194 A 52.96.70.130 A 52.96.110.2 A 52.96.110.82 A 52.96.166.194 A 40.104.55.194
+176	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53755	53	42	0x7377	Standard query 0x67c8 A www.bilibili.com
+177	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53755	389	0x0000	Standard query response 0x67c8 A www.bilibili.com CNAME a.w.bilicdn1.com A 116.207.163.64 A 114.230.222.172 A 116.207.163.63 A 114.230.222.142 A 116.207.163.66 A 117.21.179.20 A 61.147.236.101 A 114.230.222.140 A 61.147.236.104 A 183.131.147.48 A 61.147.236.103 A 114.230.222.173 A 117.21.179.19 A 117.21.179.18 A 114.230.222.138 A 116.207.163.65 A 183.131.147.30 A 61.147.236.102 A 114.230.222.141 A 114.230.222.139
+178	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53755	53	38	0xea15	Standard query 0xa874 A s1.hdslb.com
+179	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62690	53	38	0xa309	Standard query 0xcda3 A i0.hdslb.com
+180	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53755	248	0x0000	Standard query response 0xa874 A s1.hdslb.com CNAME bstatic.hdslb.com CNAME s1.hdslb.com.a.bdydns.com CNAME opencdncloudkav6.jomodns.com A 117.92.139.35
+181	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62690	268	0x0000	Standard query response 0xcda3 A i0.hdslb.com CNAME i0.hdslb.com.w.kunlunno.com A 117.85.70.7 A 117.85.70.6 A 58.222.29.25 A 117.85.70.11 A 117.85.70.13 A 117.85.70.10 A 221.229.209.21 A 117.85.70.8 A 117.85.70.12 A 58.222.29.24 A 221.229.209.22 A 58.222.29.23
+182	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53755	53	38	0x28f8	Standard query 0x689c A i2.hdslb.com
+183	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53755	200	0x0000	Standard query response 0x689c A i2.hdslb.com CNAME i0.hdslb.com.a.bdydns.com CNAME opencdnbilipicv6.jomodns.com A 49.67.74.35
+184	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62690	53	38	0x9b5c	Standard query 0xd450 A i1.hdslb.com
+185	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62690	255	0x0000	Standard query response 0xd450 A i1.hdslb.com CNAME i0.hdslb.com.cdn.dnsv1.com CNAME warm-m1.sched.sma-dk.tdnsv5.com A 59.63.201.73 A 59.63.201.122
+186	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53755	53	42	0x24e1	Standard query 0xbd82 A api.bilibili.com
+187	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62690	53	60	0xebe1	Standard query 0xf037 A nav-edge.smartscreen.microsoft.com
+188	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53755	389	0x0000	Standard query response 0xbd82 A api.bilibili.com CNAME a.w.bilicdn1.com A 116.207.163.64 A 114.230.222.172 A 116.207.163.63 A 114.230.222.142 A 116.207.163.66 A 117.21.179.20 A 61.147.236.101 A 114.230.222.140 A 61.147.236.104 A 183.131.147.48 A 61.147.236.103 A 114.230.222.173 A 117.21.179.19 A 117.21.179.18 A 114.230.222.138 A 116.207.163.65 A 183.131.147.30 A 61.147.236.102 A 114.230.222.141 A 114.230.222.139
+189	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53755	53	41	0xa925	Standard query 0xa93b A cm.bilibili.com
+190	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62690	53	60	0xebe1	Standard query 0xf037 A nav-edge.smartscreen.microsoft.com
+191	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53755	53	41	0xa925	Standard query 0xa93b A cm.bilibili.com
+192	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53755	388	0x0000	Standard query response 0xa93b A cm.bilibili.com CNAME a.w.bilicdn1.com A 114.230.222.142 A 116.207.163.66 A 117.21.179.20 A 61.147.236.101 A 114.230.222.140 A 61.147.236.104 A 183.131.147.48 A 61.147.236.103 A 114.230.222.173 A 117.21.179.19 A 117.21.179.18 A 114.230.222.138 A 116.207.163.65 A 183.131.147.30 A 61.147.236.102 A 114.230.222.141 A 114.230.222.139 A 116.207.163.64 A 114.230.222.172 A 116.207.163.63
+193	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53755	399	0x0000	Standard query response 0xa93b A cm.bilibili.com CNAME a.w.bilicdn1.com A 114.230.222.142 A 116.207.163.66 A 117.21.179.20 A 61.147.236.101 A 114.230.222.140 A 61.147.236.104 A 183.131.147.48 A 61.147.236.103 A 114.230.222.173 A 117.21.179.19 A 117.21.179.18 A 114.230.222.138 A 116.207.163.65 A 183.131.147.30 A 61.147.236.102 A 114.230.222.141 A 114.230.222.139 A 116.207.163.64 A 114.230.222.172 A 116.207.163.63 OPT
+194	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62690	308	0x0000	Standard query response 0xf037 A nav-edge.smartscreen.microsoft.com CNAME prod-atm-wds-edge.trafficmanager.net CNAME prod-agic-ncu-3.northcentralus.cloudapp.azure.com A 20.25.227.174
+195	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62690	308	0x0000	Standard query response 0xf037 A nav-edge.smartscreen.microsoft.com CNAME prod-atm-wds-edge.trafficmanager.net CNAME prod-agic-ncu-3.northcentralus.cloudapp.azure.com A 20.25.227.174
+196	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	57241	53	72	0xf18a	Standard query 0x9694 A access-point.cloudmessaging.edge.microsoft.com
+197	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	56101	53	60	0x4052	Standard query 0x2ea7 A prod.rewardsplatform.microsoft.com
+198	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	57241	53	72	0xf18a	Standard query 0x9694 A access-point.cloudmessaging.edge.microsoft.com
+199	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	56101	53	60	0x4052	Standard query 0x2ea7 A prod.rewardsplatform.microsoft.com
+200	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	56101	284	0x0000	Standard query response 0x2ea7 A prod.rewardsplatform.microsoft.com CNAME rewardsplatformprod-d2g5g3cah3eza6gm.b01.azurefd.net CNAME mr-b01.tm-azurefd.net A 150.171.109.151
+201	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	57241	420	0x0000	Standard query response 0x9694 A access-point.cloudmessaging.edge.microsoft.com CNAME edge-cloudmessaging-access-point-prod.trafficmanager.net CNAME edge-cloudmessaging-access-point-aks-prod-wus2.westus2.cloudapp.azure.com A 74.179.65.112
+202	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	56101	284	0x0000	Standard query response 0x2ea7 A prod.rewardsplatform.microsoft.com CNAME rewardsplatformprod-d2g5g3cah3eza6gm.b01.azurefd.net CNAME mr-b01.tm-azurefd.net A 150.171.109.151
+203	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	57241	420	0x0000	Standard query response 0x9694 A access-point.cloudmessaging.edge.microsoft.com CNAME edge-cloudmessaging-access-point-prod.trafficmanager.net CNAME edge-cloudmessaging-access-point-aks-prod-wus2.westus2.cloudapp.azure.com A 74.179.65.112
+204	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	81.69.145.161			UDP	65182	80	31	0xa531	65182 → 80 Len=23
+205	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	81.69.145.161	172.18.0.1			UDP	80	65182	40	0x0000	80 → 65182 Len=32
+206	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	81.69.145.161			UDP	65183	80	31	0x7115	65183 → 80 Len=23
+207	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	81.69.145.161	192.168.31.134			UDP	80	65183	40	0xafe7	80 → 65183 Len=32
+208	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	63654	53	58	0x29e9	Standard query 0x34d6 A server.events.data.microsoft.com
+209	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	63654	53	58	0x29e9	Standard query 0x34d6 A server.events.data.microsoft.com
+210	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	63654	292	0x0000	Standard query response 0x34d6 A server.events.data.microsoft.com CNAME server.events.data.trafficmanager.net CNAME onedscolprdeus51.eastus.cloudapp.azure.com A 74.151.238.130
+211	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	63654	292	0x0000	Standard query response 0x34d6 A server.events.data.microsoft.com CNAME server.events.data.trafficmanager.net CNAME onedscolprdeus51.eastus.cloudapp.azure.com A 74.151.238.130
+212	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53042	53	58	0xf4b2	Standard query 0xa38f A mobile.events.data.microsoft.com
+213	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	53042	53	58	0xf4b2	Standard query 0xa38f A mobile.events.data.microsoft.com
+214	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53042	292	0x0000	Standard query response 0xa38f A mobile.events.data.microsoft.com CNAME mobile.events.data.trafficmanager.net CNAME onedscolprdeus61.eastus.cloudapp.azure.com A 74.151.238.101
+215	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	53042	292	0x0000	Standard query response 0xa38f A mobile.events.data.microsoft.com CNAME mobile.events.data.trafficmanager.net CNAME onedscolprdeus61.eastus.cloudapp.azure.com A 74.151.238.101
+216	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	180.102.97.254			UDP	62706	8000	31	0x5855	62706 → 8000 Len=23
+217	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	180.102.97.254			UDP	62707	8000	31	0x2439	62707 → 8000 Len=23
+218	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	180.102.97.254			UDP	62706	8000	31	0x4761	62706 → 8000 Len=23
+219	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	180.102.97.254	172.18.0.1			UDP	8000	62706	40	0x0000	8000 → 62706 Len=32
+220	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	180.102.97.254			UDP	62706	8000	58	0xfdb1	62706 → 8000 Len=50
+221	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	180.102.97.254			UDP	62706	8000	57	0xb25f	62706 → 8000 Len=49
+222	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	180.102.97.254			UDP	62707	8000	31	0x1345	62707 → 8000 Len=23
+223	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	180.102.97.254	192.168.31.134			UDP	8000	62707	40	0xf740	8000 → 62707 Len=32
+224	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	180.102.97.254			UDP	62707	8000	58	0xc995	62707 → 8000 Len=50
+225	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	180.102.97.254			UDP	62707	8000	57	0x7e43	62707 → 8000 Len=49
+226	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	180.102.97.254	172.18.0.1			UDP	8000	62706	57	0x0000	8000 → 62706 Len=49
+227	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	180.102.97.254	172.18.0.1			UDP	8000	62706	37	0x0000	8000 → 62706 Len=29
+228	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	180.102.97.254	192.168.31.134			UDP	8000	62707	57	0x3147	8000 → 62707 Len=49
+229	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	180.102.97.254	192.168.31.134			UDP	8000	62707	37	0x4b54	8000 → 62707 Len=29
+230	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	65215	53	67	0x571a	Standard query 0x05f6 A msedge.b.tlu.dl.delivery.mp.microsoft.com
+231	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	65215	501	0x0000	Standard query response 0x05f6 A msedge.b.tlu.dl.delivery.mp.microsoft.com CNAME star.b.tlu.dl.delivery.mp.microsoft.com.delivery.microsoft.com CNAME cdp-f-tlu-net.trafficmanager.net CNAME wildcard.f.tlu.dl.delivery.mp.microsoft.com.cdn.dnse8.com CNAME ty-wildcardtlu.sched.dma.tdnsdl1.cn A 58.223.168.59 A 59.53.162.222 A 182.84.202.93 A 58.222.51.56 A 58.223.168.222 A 58.223.168.67 A 59.52.143.85 A 59.53.162.220 A 58.223.168.72 A 59.53.192.168 A 117.21.10.139 A 182.84.202.17 A 58.223.168.223
+232	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	65215	53	54	0x5579	Standard query 0x9e0e A pcapp-data-collect.youku.com
+233	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	65215	54	0x0000	Standard query response 0x9e0e No such name A pcapp-data-collect.youku.com
+234	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	65215	53	54	0x1156	Standard query 0xe231 A pcapp-data-collect.youku.com
+235	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	65215	54	0x0000	Standard query response 0xe231 No such name A pcapp-data-collect.youku.com
+236	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	65215	53	54	0xa9e4	Standard query 0x49a3 A pcapp-data-collect.youku.com
+237	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	65215	54	0x0000	Standard query response 0x49a3 No such name A pcapp-data-collect.youku.com
+238	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	65215	53	54	0xd331	Standard query 0x2056 A pcapp-data-collect.youku.com
+239	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	65215	54	0x0000	Standard query response 0x2056 No such name A pcapp-data-collect.youku.com
+240	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	65215	53	60	0x174a	Standard query 0x9cac A proxy.individual.githubcopilot.com
+241	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	65215	53	60	0x174a	Standard query 0x9cac A proxy.individual.githubcopilot.com
+242	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	65215	194	0x0000	Standard query response 0x9cac A proxy.individual.githubcopilot.com CNAME copilot-proxy.githubusercontent.com A 138.91.182.224
+243	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	65215	194	0x0000	Standard query response 0x9cac A proxy.individual.githubcopilot.com CNAME copilot-proxy.githubusercontent.com A 138.91.182.224
+244	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	64784	53	58	0xb46b	Standard query 0x75c1 A exp.individual.githubcopilot.com
+245	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51203	53	64	0x1837	Standard query 0x1691 A telemetry.individual.githubcopilot.com
+246	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51203	64	0x0000	Standard query response 0x1691 No such name A telemetry.individual.githubcopilot.com
+247	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	64784	53	58	0xb46b	Standard query 0x75c1 A exp.individual.githubcopilot.com
+248	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	64784	170	0x0000	Standard query response 0x75c1 A exp.individual.githubcopilot.com CNAME exp-tas.githubcopilot.com A 138.91.182.224
+249	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	64784	170	0x0000	Standard query response 0x75c1 A exp.individual.githubcopilot.com CNAME exp-tas.githubcopilot.com A 138.91.182.224
+250	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51203	53	58	0x66fe	Standard query 0x0047 A api.individual.githubcopilot.com
+251	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54290	53	65	0xdce3	Standard query 0xd87f A copilot-telemetry.githubusercontent.com
+252	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54290	65	0x0000	Standard query response 0xd87f No such name A copilot-telemetry.githubusercontent.com
+253	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51203	53	58	0x66fe	Standard query 0x0047 A api.individual.githubcopilot.com
+254	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51203	234	0x0000	Standard query response 0x0047 A api.individual.githubcopilot.com CNAME api.githubcopilot.com CNAME glb-db52c2cf8be544.github.com A 140.82.113.21
+255	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51203	234	0x0000	Standard query response 0x0047 A api.individual.githubcopilot.com CNAME api.githubcopilot.com CNAME glb-db52c2cf8be544.github.com A 140.82.113.21
+256	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54290	53	40	0xd1d3	Standard query 0x6de4 A api.openai.com
+257	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54290	53	40	0xd1d3	Standard query 0x6de4 A api.openai.com
+258	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54290	100	0x0000	Standard query response 0x6de4 A api.openai.com A 172.66.0.243 A 162.159.140.245
+259	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54290	100	0x0000	Standard query response 0x6de4 A api.openai.com A 172.66.0.243 A 162.159.140.245
+260	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.66.0.243			QUIC	49664	443	1258	0x6c10	Initial, DCID=a9bb3608cd7c08d9, PKN: 1, CRYPTO, CRYPTO, PING, PADDING, CRYPTO, PADDING, PING, CRYPTO, CRYPTO, PADDING, PING, PING, CRYPTO, PING, CRYPTO, PING, PING, PING, CRYPTO, CRYPTO, PADDING
+261	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.66.0.243			QUIC	49664	443	1258	0x8221	Initial, DCID=a9bb3608cd7c08d9, PKN: 2, CRYPTO, PING, PADDING, CRYPTO, PING, CRYPTO, PING, PADDING, CRYPTO, PADDING, CRYPTO, CRYPTO, PING, CRYPTO, PING, PING, PADDING, PING, CRYPTO, PING
+262	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.66.0.243			QUIC	49664	443	1258	0xe51d	Initial, DCID=a9bb3608cd7c08d9, PKN: 4, PING, PING, PING, CRYPTO, PADDING, CRYPTO, PING, PADDING, PING, CRYPTO, CRYPTO, CRYPTO, PADDING
+263	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	64999	53	38	0x9a8a	Standard query 0x96b6 A 365.kdocs.cn
+264	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	64999	258	0x0000	Standard query response 0x96b6 A 365.kdocs.cn CNAME 365.wpsdns.com A 39.105.102.99 A 47.94.178.233 A 8.141.83.103 A 8.141.13.65 A 123.56.236.147 A 39.97.249.220
+265	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.66.0.243			QUIC	49664	443	1258	0x16c5	Initial, DCID=a9bb3608cd7c08d9, PKN: 6, PADDING, PING, CRYPTO, PING, PING, PING, CRYPTO, PING, CRYPTO, PADDING, PING, PADDING, PING, PADDING, PING
+266	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	81.69.145.161			UDP	65182	80	39	0x5e06	65182 → 80 Len=31
+267	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	81.69.145.161	172.18.0.1			UDP	80	65182	40	0x0000	80 → 65182 Len=32
+268	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	81.69.145.161			UDP	65183	80	39	0x29ea	65183 → 80 Len=31
+269	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	81.69.145.161	192.168.31.134			UDP	80	65183	40	0x1d0a	80 → 65183 Len=32
+270	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.66.0.243			QUIC	49664	443	1258	0x6d5d	Initial, DCID=a9bb3608cd7c08d9, PKN: 8, CRYPTO, PING, PADDING, PING, CRYPTO, PADDING, PING, PING, PING, CRYPTO, CRYPTO, CRYPTO, PING, PADDING, CRYPTO
+271	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	64999	53	41	0xaad4	Standard query 0xfd3f A px.wpk.quark.cn
+272	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	64999	41	0x0000	Standard query response 0xfd3f No such name A px.wpk.quark.cn
+273	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.66.0.243			QUIC	49664	443	1258	0xfab8	Initial, DCID=a9bb3608cd7c08d9, PKN: 9, CC, PADDING
+274	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	64999	53	48	0x232f	Standard query 0x8055 A h-adashx.ut.taobao.com
+275	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	64999	48	0x0000	Standard query response 0x8055 No such name A h-adashx.ut.taobao.com
+276	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	64999	53	48	0xba2b	Standard query 0xe958 A h-adashx.ut.taobao.com
+277	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	64999	48	0x0000	Standard query response 0xe958 No such name A h-adashx.ut.taobao.com
+278	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	64999	53	48	0x59ef	Standard query 0x4995 A h-adashx.ut.taobao.com
+279	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	64999	48	0x0000	Standard query response 0x4995 No such name A h-adashx.ut.taobao.com
+280	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	64999	53	48	0xfdac	Standard query 0xa5d7 A h-adashx.ut.taobao.com
+281	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	64999	48	0x0000	Standard query response 0xa5d7 No such name A h-adashx.ut.taobao.com
+282	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	64999	53	48	0x5e63	Standard query 0x4521 A h-adashx.ut.taobao.com
+283	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	64999	48	0x0000	Standard query response 0x4521 No such name A h-adashx.ut.taobao.com
+284	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	64999	53	44	0x4a06	Standard query 0x9c49 A edge.microsoft.com
+285	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	64999	53	44	0x4a06	Standard query 0x9c49 A edge.microsoft.com
+286	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	64999	265	0x0000	Standard query response 0x9c49 A edge.microsoft.com CNAME edge-microsoft-com.ax-0002.ax-msedge.net CNAME ax-0002.ax-msedge.net A 150.171.27.11 A 150.171.28.11
+287	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	64999	265	0x0000	Standard query response 0x9c49 A edge.microsoft.com CNAME edge-microsoft-com.ax-0002.ax-msedge.net CNAME ax-0002.ax-msedge.net A 150.171.27.11 A 150.171.28.11
+288	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62307	53	64	0xb012	Standard query 0x5355 A telemetry.individual.githubcopilot.com
+289	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62307	64	0x0000	Standard query response 0x5355 No such name A telemetry.individual.githubcopilot.com
+290	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62307	53	54	0x2d8e	Standard query 0x0ff9 A update.code.visualstudio.com
+291	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62307	53	54	0x2d8e	Standard query 0x0ff9 A update.code.visualstudio.com
+292	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62307	260	0x0000	Standard query response 0x0ff9 A update.code.visualstudio.com CNAME vscode-update-g6gcb6ggdthkctd9.z01.azurefd.net CNAME mr-z01.tm-azurefd.net A 150.171.109.148
+293	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62307	260	0x0000	Standard query response 0x0ff9 A update.code.visualstudio.com CNAME vscode-update-g6gcb6ggdthkctd9.z01.azurefd.net CNAME mr-z01.tm-azurefd.net A 150.171.109.148
+294	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	58306	53	67	0x96a1	Standard query 0xe573 A westus-0.in.applicationinsights.azure.com
+295	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	58306	53	67	0x96a1	Standard query 0xe573 A westus-0.in.applicationinsights.azure.com
+296	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	58306	396	0x0000	Standard query response 0xe573 A westus-0.in.applicationinsights.azure.com CNAME westus-0.in.ai.monitor.azure.com CNAME westus-0.in.ai.privatelink.monitor.azure.com CNAME gig-ai-prod-westus-0.trafficmanager.net A 20.189.172.32
+297	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	58306	396	0x0000	Standard query response 0xe573 A westus-0.in.applicationinsights.azure.com CNAME westus-0.in.ai.monitor.azure.com CNAME westus-0.in.ai.privatelink.monitor.azure.com CNAME gig-ai-prod-westus-0.trafficmanager.net A 20.189.172.32
+298	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	81.69.145.161			UDP	65182	80	31	0xd219	65182 → 80 Len=23
+299	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	81.69.145.161			UDP	65183	80	31	0x9dfd	65183 → 80 Len=23
+300	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	81.69.145.161	192.168.31.134			UDP	80	65183	40	0x98e4	80 → 65183 Len=32
+301	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	81.69.145.161	172.18.0.1			UDP	80	65182	40	0x0000	80 → 65182 Len=32
+302	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62386	53	54	0xd8da	Standard query 0x25ba A pcapp-data-collect.youku.com
+303	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62386	54	0x0000	Standard query response 0x25ba No such name A pcapp-data-collect.youku.com
+304	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62386	53	45	0xedf9	Standard query 0xb5ac A main.vscode-cdn.net
+305	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62386	53	45	0xedf9	Standard query 0xb5ac A main.vscode-cdn.net
+306	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62386	202	0x0000	Standard query response 0xb5ac A main.vscode-cdn.net CNAME vscode-cdn.z01.azurefd.net CNAME mr-z01.tm-azurefd.net A 150.171.109.148
+307	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62386	202	0x0000	Standard query response 0xb5ac A main.vscode-cdn.net CNAME vscode-cdn.z01.azurefd.net CNAME mr-z01.tm-azurefd.net A 150.171.109.148
+308	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62796	53	48	0xe946	Standard query 0xc2d8 A h-adashx.ut.taobao.com
+309	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62796	48	0x0000	Standard query response 0xc2d8 No such name A h-adashx.ut.taobao.com
+310	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62796	53	48	0x36d7	Standard query 0x7548 A h-adashx.ut.taobao.com
+311	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62796	48	0x0000	Standard query response 0x7548 No such name A h-adashx.ut.taobao.com
+312	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62796	53	48	0x8b34	Standard query 0x20eb A h-adashx.ut.taobao.com
+313	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62796	48	0x0000	Standard query response 0x20eb No such name A h-adashx.ut.taobao.com
+314	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62796	53	48	0x54dc	Standard query 0x5743 A h-adashx.ut.taobao.com
+315	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62796	48	0x0000	Standard query response 0x5743 No such name A h-adashx.ut.taobao.com
+316	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62796	53	48	0x2715	Standard query 0x850a A h-adashx.ut.taobao.com
+317	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62796	48	0x0000	Standard query response 0x850a No such name A h-adashx.ut.taobao.com
+318	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62796	53	48	0x4314	Standard query 0x690b A h-adashx.ut.taobao.com
+319	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62796	48	0x0000	Standard query response 0x690b No such name A h-adashx.ut.taobao.com
+320	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62796	53	64	0x4bbe	Standard query 0xb5c0 A telemetry.individual.githubcopilot.com
+321	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62796	64	0x0000	Standard query response 0xb5c0 No such name A telemetry.individual.githubcopilot.com
+322	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62796	53	45	0x609a	Standard query 0x4172 A main.vscode-cdn.net
+323	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	62796	53	45	0x609a	Standard query 0x4172 A main.vscode-cdn.net
+324	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62796	202	0x0000	Standard query response 0x4172 A main.vscode-cdn.net CNAME vscode-cdn.z01.azurefd.net CNAME mr-z01.tm-azurefd.net A 150.171.109.148
+325	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	62796	202	0x0000	Standard query response 0x4172 A main.vscode-cdn.net CNAME vscode-cdn.z01.azurefd.net CNAME mr-z01.tm-azurefd.net A 150.171.109.148
+326	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	192.168.31.134	81.69.145.161			UDP	65183	80	39	0x20b4	65183 → 80 Len=31
+327	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	81.69.145.161			UDP	65182	80	39	0x54d0	65182 → 80 Len=31
+328	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	81.69.145.161	172.18.0.1			UDP	80	65182	40	0x0000	80 → 65182 Len=32
+329	\\Device\\NPF_{C59C96C9-17AD-4F4E-ADD7-2E166380D039}	81.69.145.161	192.168.31.134			UDP	80	65183	40	0x72a0	80 → 65183 Len=32
+330	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	57785	53	49	0x5e7b	Standard query 0x71ed A ctldl.windowsupdate.com
+331	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	57785	53	49	0x5e7b	Standard query 0x71ed A ctldl.windowsupdate.com
+332	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	57785	416	0x0000	Standard query response 0x71ed A ctldl.windowsupdate.com CNAME ctldl.windowsupdate.com.delivery.microsoft.com CNAME wu-b-net.trafficmanager.net CNAME download.windowsupdate.com.a.bdydns.com CNAME opencdnmsdl1.jomodns.com A 119.167.237.35
+333	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	57785	427	0x0000	Standard query response 0x71ed A ctldl.windowsupdate.com CNAME ctldl.windowsupdate.com.delivery.microsoft.com CNAME wu-b-net.trafficmanager.net CNAME download.windowsupdate.com.a.bdydns.com CNAME opencdnmsdl1.jomodns.com A 119.167.237.35 OPT
+334	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	50060	53	40	0x351f	Standard query 0xf2d4 A x2.c.lencr.org
+335	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	50060	53	40	0x351f	Standard query 0xf2d4 A x2.c.lencr.org
+336	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	50060	226	0x0000	Standard query response 0xf2d4 A x2.c.lencr.org CNAME crl.root-x1.letsencrypt.org.edgekey.net CNAME e8652.dscx.akamaiedge.net A 23.63.210.161
+337	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	50060	226	0x0000	Standard query response 0xf2d4 A x2.c.lencr.org CNAME crl.root-x1.letsencrypt.org.edgekey.net CNAME e8652.dscx.akamaiedge.net A 23.63.210.161
+338	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51111	53	43	0xcdfe	Standard query 0x503f A crl3.digicert.com
+339	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51111	53	43	0xcdfe	Standard query 0x503f A crl3.digicert.com
+340	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51111	270	0x0000	Standard query response 0x503f A crl3.digicert.com CNAME crl.edge.digicert.com CNAME ocsp.digicert.com.cdn.cloudflare.net A 162.159.142.9 A 172.66.2.5
+341	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51111	270	0x0000	Standard query response 0x503f A crl3.digicert.com CNAME crl.edge.digicert.com CNAME ocsp.digicert.com.cdn.cloudflare.net A 162.159.142.9 A 172.66.2.5
+342	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51614	53	37	0xb8e3	Standard query 0x5a53 A chatgpt.com
+343	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	51614	53	37	0xb8e3	Standard query 0x5a53 A chatgpt.com
+344	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54165	53	36	0x6d22	Standard query 0x1a7b A c.pki.goog
+345	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54165	118	0x0000	Standard query response 0x1a7b A c.pki.goog CNAME pki-goog.l.google.com A 202.101.48.98
+346	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51614	91	0x0000	Standard query response 0x5a53 A chatgpt.com A 104.18.32.47 A 172.64.155.209
+347	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	51614	91	0x0000	Standard query response 0x5a53 A chatgpt.com A 104.18.32.47 A 172.64.155.209
+348	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54165	53	40	0x18f3	Standard query 0xcbf6 A ye.c.lencr.org
+349	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	54165	53	40	0x18f3	Standard query 0xcbf6 A ye.c.lencr.org
+350	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54165	247	0x0000	Standard query response 0xcbf6 A ye.c.lencr.org CNAME e5.i.lencr.org.edgekey.net CNAME e192961.dscx.akamaiedge.net A 23.199.47.91 A 23.199.47.84
+351	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	54165	247	0x0000	Standard query response 0xcbf6 A ye.c.lencr.org CNAME e5.i.lencr.org.edgekey.net CNAME e192961.dscx.akamaiedge.net A 23.199.47.91 A 23.199.47.84
+352	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	60347	53	40	0x9b01	Standard query 0x24c2 A yr.c.lencr.org
+353	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	60347	53	40	0x9b01	Standard query 0x24c2 A yr.c.lencr.org
+354	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	60347	247	0x0000	Standard query response 0x24c2 A yr.c.lencr.org CNAME e5.i.lencr.org.edgekey.net CNAME e192961.dscx.akamaiedge.net A 23.199.47.91 A 23.199.47.84
+355	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	60347	247	0x0000	Standard query response 0x24c2 A yr.c.lencr.org CNAME e5.i.lencr.org.edgekey.net CNAME e192961.dscx.akamaiedge.net A 23.199.47.91 A 23.199.47.84
+356	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	59488	53	40	0x58f6	Standard query 0xab29 A x1.c.lencr.org
+357	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	59488	53	40	0x58f6	Standard query 0xab29 A x1.c.lencr.org
+358	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	59488	226	0x0000	Standard query response 0xab29 A x1.c.lencr.org CNAME crl.root-x1.letsencrypt.org.edgekey.net CNAME e8652.dscx.akamaiedge.net A 23.63.210.161
+359	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	59488	226	0x0000	Standard query response 0xab29 A x1.c.lencr.org CNAME crl.root-x1.letsencrypt.org.edgekey.net CNAME e8652.dscx.akamaiedge.net A 23.63.210.161
+360	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	60669	53	54	0x15f2	Standard query 0xef57 A pcapp-data-collect.youku.com
+361	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	60669	54	0x0000	Standard query response 0xef57 No such name A pcapp-data-collect.youku.com
+362	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	60669	53	54	0x1d48	Standard query 0xe801 A pcapp-data-collect.youku.com
+363	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	60669	54	0x0000	Standard query response 0xe801 No such name A pcapp-data-collect.youku.com
+364	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	60669	53	41	0x6915	Standard query 0x1ab9 A www.gstatic.com
+365	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	59553	53	40	0x4783	Standard query 0xe874 A www.google.com
+366	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	57046	53	47	0x6cd5	Standard query 0x9a3d A update.googleapis.com
+367	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	57046	84	0x0000	Standard query response 0x9a3d A update.googleapis.com A 180.163.150.161
+368	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	57046	53	54	0x3b8a	Standard query 0xd7e6 A pcapp-data-collect.youku.com
+369	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	57046	54	0x0000	Standard query response 0xd7e6 No such name A pcapp-data-collect.youku.com
+370	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	57046	53	45	0x34e9	Standard query 0x1db5 A accounts.google.com
+371	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	60669	53	41	0x6915	Standard query 0x1ab9 A www.gstatic.com
+372	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	59553	53	40	0x4783	Standard query 0xe874 A www.google.com
+373	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	52242	53	54	0xa47a	Standard query 0x81ba A pcapp-data-collect.youku.com
+374	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	52242	54	0x0000	Standard query response 0x81ba No such name A pcapp-data-collect.youku.com
+375	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	60669	289	0x0000	Standard query response 0x1ab9 A www.gstatic.com A 142.251.152.120 A 142.251.150.120 A 142.251.157.120 A 142.251.151.120 A 142.251.153.120 A 142.251.154.120 A 142.251.155.120 A 142.251.156.120
+376	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	60669	289	0x0000	Standard query response 0x1ab9 A www.gstatic.com A 142.251.152.120 A 142.251.150.120 A 142.251.157.120 A 142.251.151.120 A 142.251.153.120 A 142.251.154.120 A 142.251.155.120 A 142.251.156.120
+377	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	59553	280	0x0000	Standard query response 0xe874 A www.google.com A 142.251.150.119 A 142.251.156.119 A 142.251.157.119 A 142.251.152.119 A 142.251.151.119 A 142.251.154.119 A 142.251.153.119 A 142.251.155.119
+378	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	59553	280	0x0000	Standard query response 0xe874 A www.google.com A 142.251.150.119 A 142.251.156.119 A 142.251.157.119 A 142.251.152.119 A 142.251.151.119 A 142.251.154.119 A 142.251.153.119 A 142.251.155.119
+379	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	57046	53	45	0x34e9	Standard query 0x1db5 A accounts.google.com
+380	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	57046	80	0x0000	Standard query response 0x1db5 A accounts.google.com A 74.125.137.84
+381	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	57046	80	0x0000	Standard query response 0x1db5 A accounts.google.com A 74.125.137.84
+382	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	52242	53	35	0xd579	Standard query 0xb0a0 A unpkg.com
+383	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	52242	53	35	0xd579	Standard query 0xb0a0 A unpkg.com
+384	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	52242	85	0x0000	Standard query response 0xb0a0 A unpkg.com A 104.18.1.22 A 104.18.0.22
+385	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	52242	85	0x0000	Standard query response 0xb0a0 A unpkg.com A 104.18.1.22 A 104.18.0.22
+386	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61214	53	39	0xe1a9	Standard query 0xaf02 A dl.google.com
+387	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61214	68	0x0000	Standard query response 0xaf02 A dl.google.com A 180.163.151.161
+388	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	172.18.0.2			DNS	61214	53	38	0x0dbe	Standard query 0x8234 A ping.qwps.cn
+389	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.2	172.18.0.1			DNS	53	61214	66	0x0000	Standard query response 0x8234 A ping.qwps.cn A 113.44.253.43
+390	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	104.18.1.22			QUIC	60868	443	1258	0x1b8c	Initial, DCID=7e3d8f67af8a16bc, PKN: 1, CRYPTO, PADDING, PING, CRYPTO, PADDING, PING, CRYPTO, CRYPTO, CRYPTO, CRYPTO, CRYPTO, CRYPTO, PADDING, CRYPTO, CRYPTO, CRYPTO, PADDING, PING, PADDING
+391	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	104.18.1.22			QUIC	60868	443	1258	0x4cdb	Initial, DCID=7e3d8f67af8a16bc, PKN: 2, PING, CRYPTO, PING, CRYPTO, PADDING, PING, PING, CRYPTO, PING, PADDING, CRYPTO, CRYPTO, CRYPTO, PING, PADDING, PING, PING, PING
+392	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	104.18.1.22			QUIC	60868	443	1258	0xa864	Initial, DCID=7e3d8f67af8a16bc, PKN: 4, PADDING, CRYPTO, PING, CRYPTO, PING, PADDING, CRYPTO, PADDING, PING, PING, PADDING, CRYPTO, PING, PADDING, PING, PADDING, PING, PING, CRYPTO, PADDING, CRYPTO, PING, CRYPTO, CRYPTO, CRYPTO
+393	\\Device\\NPF_{B738A021-9842-444C-10B0-A4E3F65AB5B6}	172.18.0.1	104.18.1.22			QUIC	60868	443	1258	0x4b9a	Initial, DCID=7e3d8f67af8a16bc, PKN: 6, CRYPTO, PADDING, CRYPTO, CRYPTO, PING, PADDING, CRYPTO, PADDING, PING, CRYPTO, CRYPTO, CRYPTO, PING, PING, PADDING, PING, PING, PING, PING, PADDING, CRYPTO, PING

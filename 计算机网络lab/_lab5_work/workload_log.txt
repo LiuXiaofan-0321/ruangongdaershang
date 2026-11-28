@@ -1,0 +1,50 @@
+=== DNS lookup 1 (t=2.5s) ===
+$ nslookup www.baidu.com
+Server:  UnKnown
+Address:  172.18.0.2
+
+Name:    www.a.shifen.com
+Addresses:  240e:e9:6002:1fd:0:ff:b0e1:fe69
+	  240e:e9:6002:1ac:0:ff:b07e:36c5
+	  180.101.51.73
+	  180.101.49.44
+Aliases:  www.baidu.com
+[stderr] Non-authoritative answer:
+
+=== DNS lookup 2 (t=3.0s) ===
+$ nslookup www.ecnu.edu.cn
+Server:  UnKnown
+Address:  172.18.0.2
+
+Name:    www.ecnu.edu.cn
+Addresses:  2001:da8:8005:a492::21
+	  202.120.92.21
+[stderr] Non-authoritative answer:
+
+=== DNS lookup 3 (AliDNS) (t=3.0s) ===
+$ nslookup www.tsinghua.edu.cn 223.5.5.5
+Server:  public1.alidns.com
+Address:  223.5.5.5
+
+Name:    www.tsinghua.edu.cn
+Addresses:  2402:f000:1:402:101:6:15:66
+	  101.6.15.66
+[stderr] Non-authoritative answer:
+
+=== NTP stripchart (t=3.0s) ===
+$ w32tm /stripchart /computer:ntp.aliyun.com /samples:2 /dataonly
+���ڸ��� ntp.aliyun.com [203.107.6.88:123]��
+�����ռ� 2 ʾ����
+��ǰʱ���� 2026/11/28 18:29:31��
+18:29:31, -01.2456281s
+18:29:33, -01.2737164s
+
+=== Edge browse https://www.baidu.com (t=5.2s) ===
+[done/timeout] Command '['C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', '--headless=new', '--dump-dom', 'https://www.baidu.com']' timed out after 10 seconds
+
+=== Edge browse https://www.bilibili.com (t=15.5s) ===
+OK
+
+=== Activity stopped at t=25.3s; waiting for background UDP traffic until 75s ===
+tshark rc=0, stderr=Capturing on 2 interfaces
+393 packets captured
